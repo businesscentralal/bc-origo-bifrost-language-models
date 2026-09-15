@@ -12,8 +12,8 @@
 > **#21/#7 (2026-09-15):** the chat control add-in, FactBox/Focus pages, `Bifrost Chat Mgt ori`,
 > `Bifrost Chat Transfer ori`, `Chat Gate ori` and the MCP Tool Server (`MCP Tool Server ori`,
 > `MCP Tool Executor ori`) moved to **Bifrost Foundation**, identical behaviour. This app now
-> implements Foundation's `Chat Host ori` interface via `LangModel Chat Host ori` (still object
-> 10035382) and registers it on Foundation's `Chat Host Provider ori` enum. The object ID table and
+> implements Foundation's `Chat Provider ori` interface via `LangModel Chat Provider ori` (still object
+> 10035382) and registers it on Foundation's `Chat Provider Type ori` enum. The object ID table and
 > diagrams below still describe the pre-move object numbers in a few places pending a full docs
 > pass — treat `Bifrost Chat Mgt ori`, `Bifrost Chat Transfer ori`, `MCP Tool Server ori` and
 > `MCP Tool Executor ori` as Foundation objects from here on.
@@ -167,7 +167,7 @@ Permissions:
 | --- | --- |
 | `BIFROST LLM ori` | Full access to the module — but deliberately **not** write access to `Chat Gate ori`. |
 | `BIFROST LLM Rd ori` | Read-only access to language models. |
-| `BIFROST Chat ori` | The chat itself: the FactBox and Focus page, `LLM.Prompt.Complete`, and execute on every provider codeunit. Must be assigned explicitly on top of one of the two sets above. |
+| `BIFROST LLM Chat ori` | Execute on every LM provider codeunit + secrets. Assign with Foundation's `BIFROST Chat ori` (Chat Gate) on top of LLM/LLM Rd. |
 | `BIFROST ChatSvc ori` | View, set and clear the shared (service) API key. Assigned separately so "manage the company key" can be delegated without granting chat. |
 
 API keys do not migrate between extensions. After deployment every language model shows no key
@@ -309,7 +309,7 @@ again since `Chat Http Notif. Action ori` was removed with the setup notificatio
 
 | ID | Name | Purpose |
 | --- | --- | --- |
-| 10035398 | `BIFROST Chat ori` | The chat gate: FactBox and Focus page, `LLM.Prompt.Complete`, execute on every provider codeunit. Assigned explicitly. |
+| 10035398 | `BIFROST LLM Chat ori` | LM provider execute + secrets. Assign with Foundation `BIFROST Chat ori` (Chat Gate). |
 | 10035404 | `BIFROST LLM ori` | Full access to the module, without write access to `Chat Gate ori`. |
 | 10035405 | `BIFROST LLM Rd ori` | Read-only access to language models. |
 | 10035407 | `BIFROST ChatSvc ori` | The shared (service) API key gate. Assigned separately from `BIFROST Chat ori`. |

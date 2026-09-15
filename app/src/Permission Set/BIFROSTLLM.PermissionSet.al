@@ -4,7 +4,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Full access to Bifrost Language Models: the Bifrost Chat, language models, the Copilot provider,
 /// the MCP tool server and the LLM.Prompt.Complete message type.
-/// Write access to the Chat Gate is deliberately excluded — assign "BIFROST Chat ori"
+/// Write access to the Chat Gate is deliberately excluded — assign Foundation's "BIFROST Chat ori" (and "BIFROST LLM Chat ori" for providers)
 /// on top of this set to let a user actually open a chat.
 /// </summary>
 permissionset 10035404 "BIFROST LLM ori"
@@ -15,8 +15,6 @@ permissionset 10035404 "BIFROST LLM ori"
     Permissions =
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = RIMD,
-        table "Chat Gate ori" = X,
-        tabledata "Chat Gate ori" = R,
         table "Bifrost Chat Argument ori" = X,
         // RIMD, not R: "Bifrost Chat Argument ori" is TableType = Temporary — the in-memory DTO of
         // the provider interface. Every provider writes its output fields back into the record the
@@ -30,7 +28,7 @@ permissionset 10035404 "BIFROST LLM ori"
         page "LangModel Setup ori" = X,
         page "Chat Focus ori" = X,
         codeunit "Bifrost Chat Mgt ori" = X,
-        codeunit "LangModel Chat Host ori" = X,
+        codeunit "LangModel Chat Provider ori" = X,
         codeunit "LangModel Registration ori" = X,
         codeunit "LangModel Secrets ori" = X,
         codeunit "Secret Store ori" = X,
@@ -48,6 +46,5 @@ permissionset 10035404 "BIFROST LLM ori"
         codeunit "Copilot Upgrade ori" = X,
         codeunit "LLM Prompt Compl Help ori" = X,
         codeunit "LLM Prompt Compl Impl ori" = X,
-        codeunit "MCP Tool Executor ori" = X,
         codeunit "MCP Tool Server ori" = X;
 }

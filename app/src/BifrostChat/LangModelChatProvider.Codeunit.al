@@ -4,13 +4,13 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// Bifrost Foundation "Chat Host ori" implementation for Language Models. Resolves the active
+/// Bifrost Foundation "Chat Provider ori" implementation for Language Models. Resolves the active
 /// provider from the user's assigned Bifrost Language Model (or the default language model) and
 /// delegates through the "Bifrost LangModel Provider ori" interface. Registered on
-/// "Chat Host Provider ori" as LanguageModels; see "Copilot Install ori" for how
-/// "Setup ori"."Chat Host Provider" is claimed on install.
+/// "Chat Provider Type ori" as LanguageModels; see "Copilot Install ori" for how
+/// "Setup ori"."Chat Provider Type" is claimed on install.
 /// </summary>
-codeunit 10035382 "LangModel Chat Host ori" implements "Chat Host ori"
+codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
 {
     Access = Public;
 

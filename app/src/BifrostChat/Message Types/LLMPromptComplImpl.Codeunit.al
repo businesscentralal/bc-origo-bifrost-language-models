@@ -54,7 +54,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempChatArg: Record "Bifrost Chat Argument ori" temporary;
         BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
-        ChatHost: Codeunit "LangModel Chat Host ori";
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
         Provider: Interface "Bifrost LangModel Provider ori";
         RequestJson: JsonObject;
         PayloadJson: JsonObject;
@@ -91,7 +91,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori"
         if RoleCode <> '' then
             Provider := BifrostLanguageModel."Chat Provider"
         else
-            Provider := ChatHost.GetLangModelProviderWithModel(BifrostLanguageModel);
+            Provider := ChatProvider.GetLangModelProviderWithModel(BifrostLanguageModel);
         BuildChatArgument(BifrostLanguageModel, TempChatArg);
         TempChatArg."Procedure Type" := TempChatArg."Procedure Type"::IsConfigured;
         Provider.Execute(TempChatArg);
