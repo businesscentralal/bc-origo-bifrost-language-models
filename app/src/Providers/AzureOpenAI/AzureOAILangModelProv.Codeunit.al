@@ -152,8 +152,8 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         RequestBody.Add('max_completion_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
         RequestBody.Add('messages', Messages);
 
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, '')
-            + StrSubstNo(ChatPathTok, ProviderBase.GetModel(Argument, ''), ApiVersionTok);
+        SetAzureChatPath(Argument);
+        ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + Argument."Chat Path";
         Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         ApiClient.LogLastRequest();
@@ -220,7 +220,12 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         Argument."Output Tokens" := OutTokens;
     end;
 
-    local procedure SetAzureChatPath(var Argument: Record "Bifrost Chat Argument ori" temporary)
+    /// <summary>
+    /// Resolves Argument."Chat Path" for Azure OpenAI: blank uses the default
+    /// deployments/%1/chat/completions template; otherwise substitutes Model and
+    /// ApiVersionTok into the configured %1/%2 template.
+    /// </summary>
+    procedure SetAzureChatPath(var Argument: Record "Bifrost Chat Argument ori" temporary)
     begin
         if Argument."Chat Path" = '' then
             Argument."Chat Path" := StrSubstNo(ChatPathTok, ProviderBase.GetModel(Argument, ''), ApiVersionTok)

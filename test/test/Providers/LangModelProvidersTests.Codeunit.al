@@ -103,6 +103,57 @@ codeunit 96012 "LangModel Providers Tests"
         Assert.IsFalse(TempArg."Result Boolean", 'Custom LLM without a key should not be configured.');
     end;
 
+    [Test]
+    procedure SetAzureChatPath_Blank_UsesDefaultDeploymentPath()
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        AzureProvider: Codeunit "Azure OAI LangModel Prov. ori";
+        ExpectedPath: Text;
+    begin
+        // AC02: blank Chat Path → default /openai/deployments/<Model>/chat/completions?api-version=2024-12-01-preview
+        TempArg.Init();
+        TempArg.Model := 'gpt-6-astra';
+        TempArg."Chat Path" := '';
+        AzureProvider.SetAzureChatPath(TempArg);
+        ExpectedPath := '/openai/deployments/gpt-6-astra/chat/completions?api-version=2024-12-01-preview';
+        Assert.AreEqual(ExpectedPath, TempArg."Chat Path",
+            'Blank Chat Path should resolve to default Azure deployment path.');
+    end;
+
+    [Test]
+    procedure SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion()
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        AzureProvider: Codeunit "Azure OAI LangModel Prov. ori";
+        ExpectedPath: Text;
+    begin
+        // AC03: custom %1/%2 template substituted same as chat path
+        TempArg.Init();
+        TempArg.Model := 'gpt-6-astra';
+        TempArg."Chat Path" := '/openai/deployments/%1/chat/completions?api-version=%2';
+        AzureProvider.SetAzureChatPath(TempArg);
+        ExpectedPath := '/openai/deployments/gpt-6-astra/chat/completions?api-version=2024-12-01-preview';
+        Assert.AreEqual(ExpectedPath, TempArg."Chat Path",
+            'Custom %1/%2 Chat Path template should substitute Model and api-version.');
+    end;
+
+    [Test]
+    procedure SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment()
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        AzureProvider: Codeunit "Azure OAI LangModel Prov. ori";
+        ExpectedPath: Text;
+    begin
+        // AC03: literal-style custom path with %1/%2 still substitutes (e.g. different deployment than Model)
+        TempArg.Init();
+        TempArg.Model := 'gpt-6-astra';
+        TempArg."Chat Path" := '/openai/deployments/gpt-4o/chat/completions?api-version=%2';
+        AzureProvider.SetAzureChatPath(TempArg);
+        ExpectedPath := '/openai/deployments/gpt-4o/chat/completions?api-version=2024-12-01-preview';
+        Assert.AreEqual(ExpectedPath, TempArg."Chat Path",
+            'Chat Path with fixed deployment and %2 api-version should substitute api-version only.');
+    end;
+
     local procedure VerifyCommonMetadata(var Provider: Interface "Bifrost LangModel Provider ori"; ExpectedName: Text; ExpectRequiresApiKey: Boolean)
     var
         TempArg: Record "Bifrost Chat Argument ori" temporary;

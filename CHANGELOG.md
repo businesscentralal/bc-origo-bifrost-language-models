@@ -4,6 +4,20 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [28.0.0.0] - 2026-09-07
 
+### Fixed (2026-09-15) - Azure OpenAI CompletePrompt uses SetAzureChatPath / configured Chat Path (#11)
+
+- **`Azure OAI LangModel Prov. ori.DoCompletePrompt`** built `ChatUrl` with an inline
+  `StrSubstNo(ChatPathTok, Model, ApiVersionTok)`, so CompletePrompt always hit the default
+  `deployments/%1/chat/completions` path and ignored a Chat Path configured on the language
+  model. It now calls `SetAzureChatPath(Argument)` and appends `Argument."Chat Path"` — the
+  same path resolution already used by `DoSendChatMessage` / `DoContinueWithToolResults`.
+- **`SetAzureChatPath`** is no longer `local` (still `Access = Internal` on the codeunit) and
+  carries a `///` XML doc, so tests can call it via `internalsVisibleTo`. Blank Chat Path
+  still fills the default template; a configured template still substitutes Model (`%1`) and
+  ApiVersionTok (`%2`).
+- **Unit tests** in codeunit 96012 `LangModel Providers Tests`: blank default path, and `%1`/`%2`
+  template substitution (no live HTTP).
+
 ### Fixed (2026-09-15) - system message must be first in the chat payload (#12)
 
 - **`LangModel Chat Proxy ori`** assembled the payload messages first and then appended the system
