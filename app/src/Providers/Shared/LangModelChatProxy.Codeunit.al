@@ -125,6 +125,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         Reply: Text;
         FinishReason: Text;
     begin
+        ChatUtils.HoistSystemMessages(Messages);
         ChatUtils.CompactOlderToolResults(Messages, 5, 500);
         ChatUtils.TrimMessageHistory(Messages, 80000);
 
@@ -179,10 +180,20 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     local procedure AddSystemMessage(var Messages: JsonArray; SystemPrompt: Text)
     var
         SystemMsg: JsonObject;
+        MessageToken: JsonToken;
+        NewMessages: JsonArray;
     begin
         SystemMsg.Add('role', 'system');
         SystemMsg.Add('content', SystemPrompt);
-        Messages.Add(SystemMsg);
+
+        // The system message must be the first element. Strict OpenAI-compatible
+        // gateways (litellm) reject a payload whose system message appears later
+        // with "System message must be at the beginning."
+        NewMessages.Add(SystemMsg);
+        foreach MessageToken in Messages do
+            NewMessages.Add(MessageToken);
+
+        Messages := NewMessages;
     end;
 
     local procedure CopyMessageContent(Source: JsonObject; var Target: JsonObject)
