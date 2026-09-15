@@ -2,6 +2,24 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
+## [Unreleased]
+
+### Changed (2026-09-15) - permission-tolerant legacy Chat Providers take-over probe (#8)
+
+- **`Chat Providers Install ori`** gains `TryProbeTakeOverPermissions` / `TryRunTakeOverAtInstall`
+  mirroring Foundation core#43 / treasury#14: probe `ReadPermission` on legacy
+  `CE Chat Service Gate ori` (10035495) when Table Metadata exists; first denial skips the
+  whole take-over with one telemetry event (`ORI-BIF-0421`), never `Error`. Probe-then-direct
+  copy (no nested `Codeunit.Run` during `OnInstallAppPerCompany`). No Access Control role
+  pairs are moved by this take-over.
+- **`Chat Takeover State ori`** (10035424) — SingleInstance probe-denial / last-skip seam for
+  unit tests. A1: telemetry-only pending (no setup table).
+- **`Copilot Install ori`** calls `TryRunTakeOverAtInstall` instead of bare
+  `TakeOverChatProviderData`.
+- **Tests**: `Chat Takeover Probe Tests` (96017) AC01/AC02/AC03; probe-denial seam +
+  `TestPermissions = Disabled` (standing HARD — no `Test No Source Read`).
+- **Dependencies**: Bifrost Foundation pin → **28.0.0.102** (app + test); `.AL-Go` core probing `release_status` → **latestBuild**.
+
 ## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-09-15) - OB-2 Chat Host → Chat Provider rename (#16 amend)

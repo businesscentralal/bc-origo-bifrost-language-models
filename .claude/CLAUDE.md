@@ -22,7 +22,7 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation 28.0.0.0 (`7505e808-6e52-4b96-a328-82573391297a`)
+- Bifrost Foundation **28.0.0.102** (`7505e808-6e52-4b96-a328-82573391297a`) — standing HARD ≥28.0.0.97; never 28.0.0.87
 
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
@@ -64,9 +64,12 @@ gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
 Object ids 10035406-10035420 are used by the providers - except **10035408, which is free again** since
 `Chat Http Notif. Action ori` was deleted with the setup notifications (2026-09-07). 10035421
 (`LangModel Setup ori`), 10035422 (`LangModel Secrets ori`) and 10035423 (`LangModel Registration ori`)
-carry the setup/secret/registration block. **The free range is 10035424-10035484, plus 10035408.**
-Test ids used: 96000-96016 (96015 = `LLM Req Log Masker Tests`, 96016 = `LangModel Registration Tests`);
-free test ids: 96017-96199.
+carry the setup/secret/registration block. **10035424** = `Chat Takeover State ori` (language-models#8
+probe-denial seam). **The free range is 10035425-10035484, plus 10035408.**
+Test ids used: 96000-96017 (96015 = `LLM Req Log Masker Tests`, 96016 = `LangModel Registration Tests`,
+96017 = `Chat Takeover Probe Tests`); free test ids: 96018-96199.
+language-models#8: install take-over is probe-then-direct-copy (`TryRunTakeOverAtInstall`); A1 telemetry-only;
+Foundation pin **28.0.0.102**; AL-Go core probing **latestBuild** (never prerelease-only .87).
 
 ## Setup Page and Secrets (Bifrost Foundation platform rules)
 

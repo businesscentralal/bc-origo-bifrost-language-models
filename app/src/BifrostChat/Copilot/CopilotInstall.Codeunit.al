@@ -28,7 +28,9 @@ codeunit 10035390 "Copilot Install ori"
     var
         ChatProvidersInstall: Codeunit "Chat Providers Install ori";
     begin
-        ChatProvidersInstall.TakeOverChatProviderData();
+        // Probe-first then direct copy (language-models#8 / treasury#14 / Foundation TryRunTakeOverAtInstall):
+        // denial emits telemetry and never Error's the install.
+        ChatProvidersInstall.TryRunTakeOverAtInstall();
         RegisterSecrets();
         ClaimChatProvider();
     end;
