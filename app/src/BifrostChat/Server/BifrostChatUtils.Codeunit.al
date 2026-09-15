@@ -111,6 +111,52 @@ codeunit 10035388 "Bifrost Chat Utils ori"
     end;
 
     /// <summary>
+    /// Moves every system message to the front of the array, preserving the
+    /// relative order of system messages and of all other messages.
+    /// </summary>
+    /// <param name="Messages">The message array to normalise in place.</param>
+    procedure HoistSystemMessages(var Messages: JsonArray)
+    var
+        MessageToken: JsonToken;
+        MessageObject: JsonObject;
+        NewMessages: JsonArray;
+        FirstNonSystemSeen: Boolean;
+        NeedsHoist: Boolean;
+        i: Integer;
+    begin
+        // Skip the rebuild unless a system message actually sits after a
+        // non-system one, so the common case stays untouched.
+        for i := 0 to Messages.Count() - 1 do begin
+            Messages.Get(i, MessageToken);
+            MessageObject := MessageToken.AsObject();
+            if GetJsonText(MessageObject, 'role') = 'system' then begin
+                if FirstNonSystemSeen then
+                    NeedsHoist := true;
+            end else
+                FirstNonSystemSeen := true;
+        end;
+
+        if not NeedsHoist then
+            exit;
+
+        for i := 0 to Messages.Count() - 1 do begin
+            Messages.Get(i, MessageToken);
+            MessageObject := MessageToken.AsObject();
+            if GetJsonText(MessageObject, 'role') = 'system' then
+                NewMessages.Add(MessageToken);
+        end;
+
+        for i := 0 to Messages.Count() - 1 do begin
+            Messages.Get(i, MessageToken);
+            MessageObject := MessageToken.AsObject();
+            if GetJsonText(MessageObject, 'role') <> 'system' then
+                NewMessages.Add(MessageToken);
+        end;
+
+        Messages := NewMessages;
+    end;
+
+    /// <summary>
     /// Trims oldest user/assistant message pairs when total history exceeds the character budget.
     /// Preserves the system message and the most recent exchanges.
     /// </summary>

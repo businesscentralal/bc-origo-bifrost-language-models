@@ -276,6 +276,129 @@ codeunit 96005 "Bifrost Chat Utils Tests"
         end;
     end;
 
+    [Test]
+    procedure HoistSystemMessages_SystemLast_MovesToFront()
+    var
+        ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        Messages: JsonArray;
+        UserMsg: JsonObject;
+        AssistantMsg: JsonObject;
+        SystemMsg: JsonObject;
+    begin
+        // [SCENARIO] A system message appended after the conversation is moved to index 0.
+        // Strict OpenAI-compatible gateways reject "System message must be at the beginning."
+        UserMsg.Add('role', 'user');
+        UserMsg.Add('content', 'U');
+        Messages.Add(UserMsg);
+
+        AssistantMsg.Add('role', 'assistant');
+        AssistantMsg.Add('content', 'A');
+        Messages.Add(AssistantMsg);
+
+        SystemMsg.Add('role', 'system');
+        SystemMsg.Add('content', 'S');
+        Messages.Add(SystemMsg);
+
+        ChatUtils.HoistSystemMessages(Messages);
+
+        Assert.AreEqual(3, Messages.Count(), 'No message should be added or lost.');
+        Assert.AreEqual('system', GetMessageRole(Messages, 0), 'System should be first.');
+        Assert.AreEqual('S', GetMessageContent(Messages, 0), 'System content should be preserved.');
+        Assert.AreEqual('user', GetMessageRole(Messages, 1), 'User should follow the system message.');
+        Assert.AreEqual('assistant', GetMessageRole(Messages, 2), 'Assistant order should be preserved.');
+    end;
+
+    [Test]
+    procedure HoistSystemMessages_SystemAlreadyFirst_LeavesOrderUnchanged()
+    var
+        ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        Messages: JsonArray;
+        SystemMsg: JsonObject;
+        UserMsg: JsonObject;
+    begin
+        // [SCENARIO] A correctly ordered payload is not disturbed — endpoints that
+        // already work must keep sending the identical message order.
+        SystemMsg.Add('role', 'system');
+        SystemMsg.Add('content', 'S');
+        Messages.Add(SystemMsg);
+
+        UserMsg.Add('role', 'user');
+        UserMsg.Add('content', 'U');
+        Messages.Add(UserMsg);
+
+        ChatUtils.HoistSystemMessages(Messages);
+
+        Assert.AreEqual(2, Messages.Count(), 'No message should be added or lost.');
+        Assert.AreEqual('system', GetMessageRole(Messages, 0), 'System should remain first.');
+        Assert.AreEqual('user', GetMessageRole(Messages, 1), 'User should remain second.');
+    end;
+
+    [Test]
+    procedure HoistSystemMessages_NoSystemMessage_LeavesOrderUnchanged()
+    var
+        ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        Messages: JsonArray;
+        UserMsg: JsonObject;
+        AssistantMsg: JsonObject;
+    begin
+        // [SCENARIO] A conversation without a system message is untouched.
+        UserMsg.Add('role', 'user');
+        UserMsg.Add('content', 'U');
+        Messages.Add(UserMsg);
+
+        AssistantMsg.Add('role', 'assistant');
+        AssistantMsg.Add('content', 'A');
+        Messages.Add(AssistantMsg);
+
+        ChatUtils.HoistSystemMessages(Messages);
+
+        Assert.AreEqual(2, Messages.Count(), 'No message should be added or lost.');
+        Assert.AreEqual('user', GetMessageRole(Messages, 0), 'User should remain first.');
+        Assert.AreEqual('assistant', GetMessageRole(Messages, 1), 'Assistant should remain second.');
+    end;
+
+    [Test]
+    procedure HoistSystemMessages_MultipleSystem_KeepsRelativeOrder()
+    var
+        ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        Messages: JsonArray;
+        FirstSystemMsg: JsonObject;
+        UserMsg: JsonObject;
+        SecondSystemMsg: JsonObject;
+    begin
+        // [SCENARIO] Every system message is hoisted, in their original relative order.
+        FirstSystemMsg.Add('role', 'system');
+        FirstSystemMsg.Add('content', 'S1');
+        Messages.Add(FirstSystemMsg);
+
+        UserMsg.Add('role', 'user');
+        UserMsg.Add('content', 'U');
+        Messages.Add(UserMsg);
+
+        SecondSystemMsg.Add('role', 'system');
+        SecondSystemMsg.Add('content', 'S2');
+        Messages.Add(SecondSystemMsg);
+
+        ChatUtils.HoistSystemMessages(Messages);
+
+        Assert.AreEqual(3, Messages.Count(), 'No message should be added or lost.');
+        Assert.AreEqual('S1', GetMessageContent(Messages, 0), 'First system message should stay first.');
+        Assert.AreEqual('S2', GetMessageContent(Messages, 1), 'Second system message should follow it.');
+        Assert.AreEqual('user', GetMessageRole(Messages, 2), 'User should come after all system messages.');
+    end;
+
+    [Test]
+    procedure HoistSystemMessages_EmptyArray_DoesNotFail()
+    var
+        ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        Messages: JsonArray;
+    begin
+        // [SCENARIO] An empty conversation is handled without error.
+        ChatUtils.HoistSystemMessages(Messages);
+
+        Assert.AreEqual(0, Messages.Count(), 'Empty array should stay empty.');
+    end;
+
     local procedure GetMessageContent(Messages: JsonArray; Index: Integer): Text
     var
         Token: JsonToken;

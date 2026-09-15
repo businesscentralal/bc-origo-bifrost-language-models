@@ -4,6 +4,26 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [28.0.0.0] - 2026-09-07
 
+### Fixed (2026-09-15) - system message must be first in the chat payload (#12)
+
+- **`LangModel Chat Proxy ori`** assembled the payload messages first and then appended the system
+  message, so every chat request went out as `[user, assistant, ..., system]`. Strict
+  OpenAI-compatible gateways reject that with `System message must be at the beginning.`
+  (observed against a LiteLLM proxy); lenient endpoints had been masking it. `AddSystemMessage`
+  now prepends.
+- **`Bifrost Chat Utils ori`** gains `HoistSystemMessages`, called at the top of `CallModelOnce` -
+  the single point both `SendChatMessage` and `ContinueWithToolResults` pass through. Tool-call
+  continuation rebuilds its array from saved conversation state rather than calling
+  `AddSystemMessage`, so without it a conversation already in flight still failed on its second
+  turn. The helper returns early unless a system message actually sits after a non-system one, so
+  a correctly ordered payload is left untouched.
+- Affected every provider routed through the shared proxy (Custom LLM, OpenAI, Azure OpenAI, xAI).
+  The Responses path and the provider-local `DoCompletePrompt` methods already built system-first
+  and are unchanged.
+- **Unit tests** in codeunit 96005 `Bifrost Chat Utils Tests`: system-last is hoisted to the front;
+  an already-ordered payload is unchanged; no-system, multiple-system (relative order preserved)
+  and empty-array cases.
+
 ### Added (2026-09-07) - setup wizard action
 
 - `LangModel Setup ori` gains a **Setup Wizard** action (promoted, `Category_Process`) that opens
