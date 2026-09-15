@@ -9,6 +9,15 @@
 
 ---
 
+> **#21/#7 (2026-09-15):** the chat control add-in, FactBox/Focus pages, `Bifrost Chat Mgt ori`,
+> `Bifrost Chat Transfer ori`, `Chat Gate ori` and the MCP Tool Server (`MCP Tool Server ori`,
+> `MCP Tool Executor ori`) moved to **Bifrost Foundation**, identical behaviour. This app now
+> implements Foundation's `Chat Host ori` interface via `LangModel Chat Host ori` (still object
+> 10035382) and registers it on Foundation's `Chat Host Provider ori` enum. The object ID table and
+> diagrams below still describe the pre-move object numbers in a few places pending a full docs
+> pass — treat `Bifrost Chat Mgt ori`, `Bifrost Chat Transfer ori`, `MCP Tool Server ori` and
+> `MCP Tool Executor ori` as Foundation objects from here on.
+
 ## Overview
 
 Bifrost Language Models is the chat module of the Bifröst platform. It adds a conversational

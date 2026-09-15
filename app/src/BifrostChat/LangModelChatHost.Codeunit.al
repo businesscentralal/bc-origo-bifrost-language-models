@@ -4,26 +4,22 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// Public entry point for Bifrost Chat operations. Resolves the active provider
-/// from the user's assigned Bifrost Language Model (or the default language model) and delegates
-/// through the "Bifrost LangModel Provider ori" interface.
+/// Bifrost Foundation "Chat Host ori" implementation for Language Models. Resolves the active
+/// provider from the user's assigned Bifrost Language Model (or the default language model) and
+/// delegates through the "Bifrost LangModel Provider ori" interface. Registered on
+/// "Chat Host Provider ori" as LanguageModels; see "Copilot Install ori" for how
+/// "Setup ori"."Chat Host Provider" is claimed on install.
 /// </summary>
-codeunit 10035382 "Bifrost Chat Mgt ori"
+codeunit 10035382 "LangModel Chat Host ori" implements "Chat Host ori"
 {
     Access = Public;
 
-    /// <summary>
-    /// Returns whether the Bifrost Chat UI should be shown for the current user.
-    /// Requires Bifrost Chat permission and a role assignment (explicit or default).
-    /// </summary>
-    procedure ShowBifrostChat(): Boolean
+    procedure IsConfigured(): Boolean
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
-        if not HasChatPermission() then
-            exit(false);
         if not HasLanguageModelAssignment() then begin
             BifrostLanguageModel.ReadIsolation := IsolationLevel::ReadUncommitted;
             BifrostLanguageModel.SetRange(Default, true);
@@ -34,16 +30,6 @@ codeunit 10035382 "Bifrost Chat Mgt ori"
         BuildArgument(BifrostLanguageModel, TempArgument);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::IsConfigured);
         exit(TempArgument."Result Boolean");
-    end;
-
-    /// <summary>
-    /// Returns whether the current user holds the Bifrost Chat permission set.
-    /// </summary>
-    procedure HasChatPermission(): Boolean
-    var
-        ChatGate: Record "Chat Gate ori";
-    begin
-        exit(ChatGate.WritePermission());
     end;
 
     /// <summary>
@@ -124,9 +110,8 @@ codeunit 10035382 "Bifrost Chat Mgt ori"
     end;
 
     /// <summary>
-    /// Delegates to the current provider's BuildConfigJson.
+    /// Builds the JSON configuration the chat control add-in needs to initialize.
     /// </summary>
-    /// <returns>Serialized JSON config text for the chat control add-in.</returns>
     [NonDebuggable]
     procedure BuildConfigJson(): Text
     var

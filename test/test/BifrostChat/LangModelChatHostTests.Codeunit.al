@@ -7,11 +7,11 @@ using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Tests for the "Bifrost Chat Mgt ori" dispatcher. Verifies that the provider resolved from
+/// Tests for the "LangModel Chat Host ori" implementation of Foundation's "Chat Host ori". Verifies that the provider resolved from
 /// the user's Bifrost Language Model (via GetLangModelProvider) handles each interface call, using the
 /// configurable "Mock Bifrost Chat Provider" registered via the test enumextension.
 /// </summary>
-codeunit 96002 "Bifrost Chat Mgt Tests"
+codeunit 96002 "LangModel Chat Host Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
@@ -22,21 +22,21 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure GetLangModelProvider_NoSetup_FallsBackToNone()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] When no user setup or default role exists, ShowBifrostChat returns false.
         Initialize();
         DeleteCurrentUserSetup();
 
-        Assert.IsFalse(BifrostChatMgt.ShowBifrostChat(), 'ShowBifrostChat should be false with no setup or default role.');
+        Assert.IsFalse(ChatHost.IsConfigured(), 'ShowBifrostChat should be false with no setup or default role.');
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'Mock provider should not be invoked.');
     end;
 
     [Test]
     procedure GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] Default role with None provider returns false.
@@ -44,14 +44,14 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
         DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
 
-        Assert.IsFalse(BifrostChatMgt.ShowBifrostChat(), 'ShowBifrostChat should be false when default role has None provider.');
+        Assert.IsFalse(ChatHost.IsConfigured(), 'ShowBifrostChat should be false when default role has None provider.');
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'Mock should not be invoked for None provider.');
     end;
 
     [Test]
-    procedure ShowBifrostChat_RoleMock_ConfiguredTrue_ReturnsTrue()
+    procedure IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] ShowBifrostChat returns true when the role's provider reports configured.
@@ -60,14 +60,14 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
         CreateRole('MOCK-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
         MockProvider.SetIsConfigured(true);
 
-        Assert.IsTrue(BifrostChatMgt.ShowBifrostChat(), 'ShowBifrostChat should return true when mock reports configured.');
+        Assert.IsTrue(ChatHost.IsConfigured(), 'ShowBifrostChat should return true when mock reports configured.');
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'IsConfigured should have been called on mock.');
     end;
 
     [Test]
-    procedure ShowBifrostChat_RoleMock_ConfiguredFalse_ReturnsFalse()
+    procedure IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] ShowBifrostChat returns false when the role's provider reports not configured.
@@ -76,7 +76,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
         CreateRole('MOCK-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
         MockProvider.SetIsConfigured(false);
 
-        Assert.IsFalse(BifrostChatMgt.ShowBifrostChat(), 'ShowBifrostChat should return false when mock reports not configured.');
+        Assert.IsFalse(ChatHost.IsConfigured(), 'ShowBifrostChat should return false when mock reports not configured.');
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'IsConfigured should have been called on mock.');
     end;
 
@@ -84,7 +84,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields()
     var
         BifrostSetup: Record "Setup ori";
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
         ConfigText: Text;
@@ -128,7 +128,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure BuildConfigJson_NoneProvider_ReturnsDisabledFlag()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         ConfigJson: JsonObject;
         DisabledToken: JsonToken;
     begin
@@ -145,7 +145,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure SendChatMessage_RoleMock_RoundTrips()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         PayloadJson: Text;
         ExpectedResponse: Text;
@@ -165,7 +165,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure SendChatMessage_NoneProvider_ReturnsErrorJson()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         ResponseJson: JsonObject;
         ResponseToken: JsonToken;
     begin
@@ -182,7 +182,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure GetAvailableModels_RoleMock_PopulatesBuffer()
     var
         TempNameValueBuffer: Record "Name/Value Buffer" temporary;
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] GetAvailableModels populates buffer from role's provider.
@@ -199,7 +199,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure GetAvailableModels_RoleMock_NoModels_ReturnsFalse()
     var
         TempNameValueBuffer: Record "Name/Value Buffer" temporary;
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] GetAvailableModels returns false when provider has no models.
@@ -215,7 +215,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure GetLangModelProvider_DefaultRole_UsedWhenNoUserRole()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] When user has no role assigned, the default role's provider is used.
@@ -224,14 +224,14 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
         MockProvider.SetIsConfigured(true);
 
-        Assert.IsTrue(BifrostChatMgt.ShowBifrostChat(), 'Should use default role when user has no role assigned.');
+        Assert.IsTrue(ChatHost.IsConfigured(), 'Should use default role when user has no role assigned.');
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'Mock should be invoked via default role.');
     end;
 
     [Test]
     procedure GetLangModelProvider_UserRole_TakesPrecedenceOverDefault()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] User's explicit role takes precedence over the default role.
@@ -241,14 +241,14 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
         SetupUserWithRole('USER-ROLE');
         MockProvider.SetIsConfigured(true);
 
-        Assert.IsTrue(BifrostChatMgt.ShowBifrostChat(), 'User role should take precedence over default.');
+        Assert.IsTrue(ChatHost.IsConfigured(), 'User role should take precedence over default.');
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'Mock should be invoked via user role.');
     end;
 
     [Test]
     procedure ContinueWithToolResults_RoleMock_DelegatesToMock()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConversationState: Text;
         ToolResults: Text;
@@ -272,7 +272,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure ContinueWithToolResults_NoneProvider_ReturnsErrorJson()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         ResponseJson: JsonObject;
         ResponseToken: JsonToken;
     begin
@@ -289,7 +289,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure BuildConfigJson_DebugMode_IncludesDebugTrue()
     var
         BifrostSetup: Record "Setup ori";
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
         Token: JsonToken;
@@ -313,7 +313,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure BuildConfigJson_RoleWithSkill_IncludesContextSkill()
     var
         BifrostSetup: Record "Setup ori";
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
         Token: JsonToken;
@@ -339,7 +339,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure BuildConfigJson_RoleWithoutSkill_NoContextSkill()
     var
         BifrostSetup: Record "Setup ori";
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
         Token: JsonToken;
@@ -362,7 +362,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     procedure BuildConfigJson_NoUserSetup_NoContextSkill()
     var
         BifrostSetup: Record "Setup ori";
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         ConfigJson: JsonObject;
         Token: JsonToken;
     begin
@@ -382,7 +382,7 @@ codeunit 96002 "Bifrost Chat Mgt Tests"
     [Test]
     procedure SendChatMessage_ArgumentFieldsPopulated()
     var
-        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        BifrostChatMgt: Codeunit "LangModel Chat Host ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
         // [SCENARIO] All argument fields reach the provider when SendChatMessage is called
