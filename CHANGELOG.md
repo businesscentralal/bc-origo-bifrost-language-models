@@ -4,6 +4,49 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [28.0.0.0] - 2026-09-07
 
+### Changed (2026-09-15) - OB-2 Chat Host → Chat Provider rename (#16 amend)
+
+- Renamed Foundation contract consumption to match Bifrost Foundation OB-2 tip
+  (`e447a3e` / `bc-origo-bifrost-core#58`): interface `Chat Provider ori`, enum
+  `Chat Provider Type ori`, field `Setup ori`.`Chat Provider Type`.
+- Object renames (IDs unchanged): `LangModel Chat Host ori` → `LangModel Chat Provider ori`
+  (10035382); enumextension `LangModel Chat Host Provider` → `LangModel Chat Provider Type`
+  (10035384); tests `LangModel Chat Host Tests` → `LangModel Chat Provider Tests` (96002).
+- `Copilot Install ori.ClaimChatHost` → `ClaimChatProvider`.
+- Fixed undeclared `ChatHost` identifier in LangModel Chat Provider Tests (use declared
+  `ChatProvider` consistently).
+- Dropped inaccessible Foundation `Internal` objects from LM permission sets (`Chat Gate ori`,
+  `MCP Tool Executor ori`) so the app compiles against tip `e447a3e` (gate stays on Foundation's
+  `BIFROST Chat ori`).
+- Renamed LM permission set 10035398 `BIFROST Chat ori` → **`BIFROST LLM Chat ori`** to avoid
+  colliding with Foundation's Chat Gate set of the same name (publish blocker).
+
+### Changed (2026-09-15) - Consume Foundation's chat provider + MCP Tool Server (#7)
+
+- Deleted this app's copies of the control add-in, FactBox/Focus pages, `Bifrost Chat Mgt ori`,
+  `Bifrost Chat Transfer ori`, `Chat Gate ori`, `MCP Tool Server ori`, `MCP Tool Executor ori` and
+  `Bifrost Chat Utils ori` — all now owned by Bifrost Foundation (companion:
+  `OrigoSoftwareSolutions/bc-origo-bifrost-core#21`).
+- Added **`LangModel Chat Provider ori`** (object 10035382, reusing the old `Bifrost Chat Mgt ori`
+  slot), implementing Foundation's new `Chat Provider ori` interface. It keeps all the
+  language-model-specific behaviour: role resolution (`Bifrost Language Model Code` on User Setup,
+  the default language model), the `Bifrost LangModel Provider ori` provider dispatch, and secret
+  handling — unchanged from before the move.
+- Added **`LangModel Chat Provider Type`** (enum extension 10035384), registering `LanguageModels`
+  on Foundation's `Chat Provider Type ori` enum.
+- **`Copilot Install ori.ClaimChatProvider`** sets Foundation's `Setup ori`.`Chat Provider Type` to
+  `LanguageModels` on `OnInstallAppPerCompany`, but only while it is still `None`, so install never
+  overrides another app or an administrator that already claimed chat.
+- `LLM Prompt Compl Impl ori` now calls Foundation's `Bifrost Chat Mgt ori.HasChatPermission()` for
+  the permission gate and this app's own `LangModel Chat Provider ori.GetLangModelProviderWithModel`
+  for role resolution.
+- The 36 base-page extensions (Customer/Vendor/Item/Sales/Purchase/Entries/Incoming Documents)
+  need **no code changes** — they still reference `Bifrost Chat FactBox ori`, `Chat Focus ori` and
+  `Bifrost Chat Mgt ori` by name, now resolved against Foundation.
+- **Dependency**: this app requires the Foundation release that ships #21 (interface
+  `Chat Provider ori`, enum `Chat Provider Type ori`, field `Setup ori`.`Chat Provider Type`). Bump
+  `app/app.json` / `test/app.json` Foundation dependency version once that release is cut.
+
 ### Fixed (2026-09-15) - Azure OpenAI CompletePrompt uses SetAzureChatPath / configured Chat Path (#11)
 
 - **`Azure OAI LangModel Prov. ori.DoCompletePrompt`** built `ChatUrl` with an inline

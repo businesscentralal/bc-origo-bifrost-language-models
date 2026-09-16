@@ -76,13 +76,17 @@ live in `businesscentralal/bifrost` and are published at https://businesscentral
 
 ## Core Architectural Concepts
 
-### Provider dispatch
+### Chat provider dispatch (moved to Foundation, #21/#7)
 
-`Bifrost Chat Mgt ori` resolves the active language model — the user's `Bifrost Language Model Code`, else the default model — reads its `Chat Provider` enum value and calls through the `Bifrost LangModel Provider ori` interface. The interface has a **single** method taking a `Bifrost Chat Argument ori` temporary record; the requested operation is a `Bifrost Chat Proc. Type ori` enum value on that record. New operations are added as enum values, so the interface signature never changes and existing providers keep compiling.
+The chat control add-in, FactBox/Focus pages, `Bifrost Chat Mgt ori`, `Bifrost Chat Transfer ori`, `Chat Gate ori` and the MCP Tool Server now live in **Bifrost Foundation**. Foundation's `Bifrost Chat Mgt ori` is a thin facade: it checks the permission gate, resolves `Setup ori`.`Chat Provider Type` (a Foundation enum), and delegates every operation to the active `Chat Provider ori` implementation.
+
+Language Models registers itself on that enum (value `LanguageModels`) via `LangModel Chat Provider Type` and implements `Chat Provider ori` in `LangModel Chat Provider ori` (object 10035382, reusing the old `Bifrost Chat Mgt ori` slot). `Copilot Install ori.ClaimChatProvider` sets `Chat Provider Type` to `LanguageModels` on install, but only while it is still `None`, so it never overrides another app or an administrator.
+
+`LangModel Chat Provider ori` still owns everything LM-specific: it resolves the active language model — the user's `Bifrost Language Model Code`, else the default model — reads its `Chat Provider` enum value and calls through the `Bifrost LangModel Provider ori` interface. That interface has a **single** method taking a `Bifrost Chat Argument ori` temporary record; the requested operation is a `Bifrost Chat Proc. Type ori` enum value on that record. New operations are added as enum values, so the interface signature never changes and existing providers keep compiling.
 
 ### The permission gate
 
-`Chat Gate ori` is an empty table whose only purpose is `WritePermission()`. `Bifrost Chat Mgt ori.HasChatPermission()` reads it. Only `BIFROST Chat ori` grants write access — deliberately not `BIFROST LLM ori`, so a chat licence is an explicit administrative act. The FactBox hides itself when the gate is closed or no language model resolves.
+`Chat Gate ori` is now Foundation's empty table whose only purpose is `WritePermission()`; Foundation's `Bifrost Chat Mgt ori.HasChatPermission()` reads it. Only `BIFROST Chat ori` grants write access — deliberately not `BIFROST LLM ori`, so a chat licence is an explicit administrative act. The FactBox hides itself when the gate is closed or the active provider reports not configured.
 
 ### Skill injection
 

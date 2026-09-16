@@ -30,6 +30,22 @@ codeunit 10035390 "Copilot Install ori"
     begin
         ChatProvidersInstall.TakeOverChatProviderData();
         RegisterSecrets();
+        ClaimChatProvider();
+    end;
+
+    /// <summary>
+    /// Claims "Setup ori"."Chat Provider Type" for Language Models, but only while it is still
+    /// None, so an app (or administrator) that already claimed it is never overridden.
+    /// </summary>
+    procedure ClaimChatProvider()
+    var
+        BifrostSetup: Record "Setup ori";
+    begin
+        BifrostSetup.GetRecordOnce();
+        if BifrostSetup."Chat Provider Type" <> Enum::"Chat Provider Type ori"::None then
+            exit;
+        BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
+        BifrostSetup.Modify();
     end;
 
     /// <summary>

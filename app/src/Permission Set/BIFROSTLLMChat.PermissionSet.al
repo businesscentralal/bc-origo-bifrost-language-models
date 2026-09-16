@@ -2,21 +2,17 @@ namespace Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
-/// Grants Bifrost Chat capability.
-/// Users with this permission set may use the Bifrost Chat FactBox/Focus page,
-/// invoke LLM.Prompt.Complete via the API, and execute any of the registered
-/// chat provider codeunits (Copilot, OpenAI, Azure OpenAI, Custom LLM, Anthropic,
-/// xAI, Google/Gemini).
-/// Not bundled into Bifrost Read or Bifrost Full — administrators must assign explicitly.
+/// Grants Language Models chat-provider capability (provider codeunits + secrets).
+/// Named "BIFROST LLM Chat ori" so it does not collide with Foundation's "BIFROST Chat ori"
+/// (the Chat Gate write licence). Assign Foundation's "BIFROST Chat ori" together with this set
+/// so a user can open chat. Not bundled into Bifrost Read or Bifrost Full.
 /// </summary>
-permissionset 10035398 "BIFROST Chat ori"
+permissionset 10035398 "BIFROST LLM Chat ori"
 {
     Assignable = true;
-    Caption = 'Chat Gate', MaxLength = 30, Comment = 'is-IS=Spjallhlið';
+    Caption = 'Bifrost LLM Chat', MaxLength = 30, Comment = 'is-IS=Bifröst LLM-spjall';
 
     Permissions =
-        table "Chat Gate ori" = X,
-        tabledata "Chat Gate ori" = RIMD,
         codeunit "LangModel Secrets ori" = X,
         codeunit "Secret Store ori" = X,
         codeunit "LangModel Prov. Base ori" = X,
