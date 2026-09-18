@@ -2,7 +2,7 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
-## [Unreleased]
+## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-09-15) - permission-tolerant legacy Chat Providers take-over probe (#8)
 
@@ -18,9 +18,6 @@ All notable changes to Bifrost Language Models are documented here.
   `TakeOverChatProviderData`.
 - **Tests**: `Chat Takeover Probe Tests` (96017) AC01/AC02/AC03; probe-denial seam +
   `TestPermissions = Disabled` (standing HARD — no `Test No Source Read`).
-- **Dependencies**: Bifrost Foundation pin → **28.0.0.102** (app + test); `.AL-Go` core probing `release_status` → **latestBuild**.
-
-## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-09-15) - OB-2 Chat Host → Chat Provider rename (#16 amend)
 
