@@ -9,7 +9,7 @@
   "help": "https://businesscentralal.github.io/bifrost/en-us/bragi/",
   "privacyStatement": "https://www.origo.is/um-origo/stefnur/personuverndarstefna",
   "EULA": "https://www.origo.is/skilmalar-og-oryggismal",
-  "applicationInsightsConnectionString": "InstrumentationKey=3077f718-8ed2-4e41-92f6-467d9965d2c9;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=9816fb58-2673-4567-b2f0-4b7db8dadae3",
+  "applicationInsightsConnectionString": "InstrumentationKey=cd4b8e49-e0d1-4d12-8b62-6a12289b7613;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=33b94278-f311-4634-9d8c-672629fdffef",
   "keyVaultUrls": [
     "https://kv-bc-ktahn486.vault.azure.net/"
   ],
