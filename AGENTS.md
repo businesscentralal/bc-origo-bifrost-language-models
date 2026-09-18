@@ -103,3 +103,7 @@ The language model's Markdown skill text is prepended to the system prompt of ev
 - Compile with CodeCop + UICop + AppSourceCop and accept nothing but zero errors and zero warnings.
 - Implementation means code **and** tests **and** documentation. Publish and run the tests on both containers before calling anything done.
 - Never print, log or store the `BC28IS_USER` / `BC28IS_PASSWORD` values.
+
+## Agent Notes
+
+- #8 (2026-09-15): legacy Chat Providers take-over is permission-tolerant (`TryProbeTakeOverPermissions` / `TryRunTakeOverAtInstall`); skip = telemetry only (A1); never read Foundation `Setup ori` for migration; Foundation pin ≥28.0.0.97 prefer 28.0.0.102 via AL-Go latestBuild.
