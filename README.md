@@ -347,7 +347,7 @@ Origo PR gateway check 8.
 | Release notes | [CHANGELOG.md](CHANGELOG.md) |
 
 The message-type contract is also served by the app at runtime: `LLM.Prompt.Complete` answers its
-own Markdown help through `get_message_type_help` / `Help.Implementation.Get`.
+own Markdown help through `describe_message_type` / `Help.Implementation.Get`.
 
 ### Context-Sensitive Help
 
