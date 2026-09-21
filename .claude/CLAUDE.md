@@ -176,6 +176,6 @@ Key rules always in effect:
   directly on a temporary `Message Argument ori` when that Impl does not call `AssertIsLicensed`.
 
 ## Testing Through the MCP Server
-- `get_message_type_help` and `invoke_message_type` on the `origo-bc-bc28-is` server hit Bifrost Language Models through
+- `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-is` server hit Bifrost Language Models through
   Foundation's route (`origo/bifrost/v1.0`). Keep calls serial - parallel bursts crash the server.
   Test data uses the `BIFT-<letter>` prefix in CRONUS IS.
