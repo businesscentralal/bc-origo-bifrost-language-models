@@ -2,13 +2,11 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
-## [Unreleased]
+## [28.0.0.0] - 2026-09-07
 
-### Changed
+### Changed (2026-09-20)
 
 - Docs: renamed MCP tool references `get_message_type_help` → `describe_message_type` in `.claude/CLAUDE.md` and `README.md`, matching the Foundation tool rename in core#64.
-
-## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-09-15) - permission-tolerant legacy Chat Providers take-over probe (#8)
 
