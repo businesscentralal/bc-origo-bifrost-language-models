@@ -12,7 +12,7 @@ using Origo.Bifrost;
 page 10035421 "LangModel Setup ori"
 {
     Caption = 'Bifrost Language Models Setup', Comment = 'is-IS=Uppsetning Bifröst mállíkana';
-    ContextSensitiveHelpPage = 'bragi-setup';
+    ContextSensitiveHelpPage = 'language-models-setup';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = None;
