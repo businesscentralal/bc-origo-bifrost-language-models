@@ -558,10 +558,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         Logger: Codeunit "Request Logger ori";
         ServiceNameTok: Label 'LLM', Locked = true;
     begin
-        Setup.SetLoadFields("Request Debug Mode");
-        if not Setup.Get() then
-            exit;
-        if not Setup."Request Debug Mode" then
+        if not Setup.GetRequestDebugMode() then
             exit;
 
         Logger.Log(Operation, HttpMethod, RequestUrl, ServiceNameTok,

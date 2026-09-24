@@ -34,11 +34,12 @@ codeunit 10035420 "Chat Providers Install ori"
     /// <returns>True when take-over ran; false when skipped after a permission probe denial.</returns>
     internal procedure TryRunTakeOverAtInstall(): Boolean
     var
+        ReadDeniedErr: Label 'TableData %1 Read denied (install probe)', Locked = true;
         DeniedTableId: Integer;
         ProbeErrorText: Text;
     begin
         if not TryProbeTakeOverPermissions(DeniedTableId) then begin
-            ProbeErrorText := StrSubstNo('TableData %1 Read denied (install probe)', DeniedTableId);
+            ProbeErrorText := StrSubstNo(ReadDeniedErr, DeniedTableId);
             LogTakeOverSkipped(DeniedTableId, ProbeErrorText);
             exit(false);
         end;
