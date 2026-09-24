@@ -115,7 +115,6 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     [NonDebuggable]
     procedure BuildConfigJson(): Text
     var
-        BifrostSetup: Record "Setup ori";
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         BifrostUserSetup: Record "User Setup ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
@@ -130,7 +129,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::BuildConfigJson);
         ConfigText := TempArgument.GetResultText();
         if ConfigObject.ReadFrom(ConfigText) then begin
-            SetJsonProperty(ConfigObject, 'debug', BifrostSetup.GetRequestDebugMode());
+            SetJsonProperty(ConfigObject, 'debug', GetRequestDebugMode());
             SetJsonProperty(ConfigObject, 'hasServiceKey', LangModelSecrets.HasServiceKey(BifrostLanguageModel.Code));
             SetJsonProperty(ConfigObject, 'canManageServiceKey', GetProviderBool(Provider, TempArgument, TempArgument."Procedure Type"::HasServiceKeyPermission));
             SetJsonProperty(ConfigObject, 'requiresApiKey', GetProviderBool(Provider, TempArgument, TempArgument."Procedure Type"::RequiresApiKey));
@@ -155,6 +154,20 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
             ConfigObject.WriteTo(ConfigText);
         end;
         exit(ConfigText);
+    end;
+
+    [NonDebuggable]
+    local procedure GetRequestDebugMode() RequestDebugMode: Boolean
+    var
+        BifrostSetup: Record "Setup ori";
+    begin
+        RequestDebugMode := BifrostSetup.GetRequestDebugMode();
+        OnAfterReadRequestDebugMode(RequestDebugMode);
+    end;
+
+    [InternalEvent(false, false)]
+    local procedure OnAfterReadRequestDebugMode(var RequestDebugMode: Boolean)
+    begin
     end;
 
     /// <summary>
@@ -267,7 +280,6 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     [NonDebuggable]
     local procedure BuildArgument(var BifrostLanguageModel: Record "Bifrost Language Model ori"; var TempArgument: Record "Bifrost Chat Argument ori" temporary)
     var
-        BifrostSetup: Record "Setup ori";
         BifrostUserSetup: Record "User Setup ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKeyValue: SecretText;
@@ -286,7 +298,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         if BifrostUserSetup.Get(UserSecurityId()) then
             TempArgument.SetUserPrompt(BifrostUserSetup.GetSystemPrompt());
 
-        TempArgument."Debug Mode" := BifrostSetup.GetRequestDebugMode();
+        TempArgument."Debug Mode" := GetRequestDebugMode();
 
         if LangModelSecrets.TryGetApiKey(BifrostLanguageModel.Code, ApiKeyValue) then
             TempArgument.SetApiKey(ApiKeyValue);
