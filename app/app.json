@@ -6,14 +6,14 @@
   "brief": "Bifrost Language Models - chat and language models for Business Central",
   "description": "Bifrost Language Models: Bifrost Chat, language models, Copilot/OpenAI/Azure OpenAI/Custom LLM/Anthropic/xAI/Google (Gemini) chat providers, MCP tool server and the LLM.Prompt.Complete message type on top of Bifrost Foundation",
   "url": "https://www.origo.is/",
-  "help": "https://businesscentralal.github.io/bifrost/en-us/bragi/",
-  "privacyStatement": "https://www.origo.is/um-origo/stefnur/personuverndarstefna",
-  "EULA": "https://www.origo.is/skilmalar-og-oryggismal",
-  "applicationInsightsConnectionString": "InstrumentationKey=cd4b8e49-e0d1-4d12-8b62-6a12289b7613;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=33b94278-f311-4634-9d8c-672629fdffef",
+  "help": "https://businesscentralal.github.io/bifrost/en-us/language-models/",
+  "privacyStatement": "https://businesscentralal.github.io/bifrost/en-us/foundation/privacy/",
+  "EULA": "https://businesscentralal.github.io/bifrost/en-us/foundation/eula/",
+  "applicationInsightsConnectionString": "InstrumentationKey=af411133-5e22-486f-b23a-081b79ed4168;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=c4476f32-5dfb-490a-8ad0-fb8ffad1c050",
   "keyVaultUrls": [
     "https://kv-bc-ktahn486.vault.azure.net/"
   ],
-  "contextSensitiveHelpUrl": "https://businesscentralal.github.io/bifrost/{0}/help/bragi/",
+  "contextSensitiveHelpUrl": "https://businesscentralal.github.io/bifrost/{0}/help/language-models/",
   "supportedLocales": [
     "en-US",
     "is-IS"
@@ -24,7 +24,7 @@
       "id": "7505e808-6e52-4b96-a328-82573391297a",
       "name": "Bifrost Foundation",
       "publisher": "Origo",
-      "version": "28.0.0.0"
+      "version": "28.0.0.100"
     }
   ],
   "screenshots": [],
