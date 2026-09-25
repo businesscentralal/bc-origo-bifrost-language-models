@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-09-25) - install claim skips when Setup ori is not permitted (core#122)
+
+- **`Copilot Install ori.ClaimChatProvider`**, called from `OnInstallAppPerCompany`, no longer reads Foundation `Setup ori` unless `ReadPermission` and `WritePermission` both succeed. Publishing Foundation re-ran this install in a context with no TableData Read on `Setup ori` (id 10077901), and `GetRecordOnce` failed the deploy (OrigoSoftwareSolutions/bc-origo-bifrost-core#122). The claim is skipped instead; an existing chat provider is left unchanged.
+- **Test**: `Copilot Install Tests` (96018) `ClaimChatProvider_WithoutSetupPermission_SkipsWithoutError` — restrictive permissions (`Library - Lower Permissions`, O365 Basic + `BIFROST LLM ori`) skip without error.
+
 ### Fixed (2026-09-25) - main build AL0132 on GetRequestDebugMode
 
 - CI/CD run [36117014819](https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/36117014819) on `aec4d53` failed both builds with AL0132: `Record "Setup ori"` does not contain `GetRequestDebugMode` (LangModelAPIClient, LangModelChatProvider, CopilotChatProxy, AnthropicLangModelProxy, GeminiLangModelProv).
