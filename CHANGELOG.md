@@ -2,6 +2,14 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
+## [Unreleased]
+
+### Fixed (2026-09-25) - main build AL0132 on GetRequestDebugMode
+
+- CI/CD run [36117014819](https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/36117014819) on `aec4d53` failed both builds with AL0132: `Record "Setup ori"` does not contain `GetRequestDebugMode` (LangModelAPIClient, LangModelChatProvider, CopilotChatProxy, AnthropicLangModelProxy, GeminiLangModelProv).
+- Cause: `.AL-Go/settings.json` `appDependencyProbingPaths` for bc-origo-bifrost-core pinned `version: 1.0.0.102`, which predates `GetRequestDebugMode` (added in core build 1.0.0.124).
+- Fix: probing version raised to `1.0.0.132`, the core build live on the Bifrost sandbox as Foundation 28.0.0.132 (includes core#107 and core#114). App/test app.json unchanged.
+
 ## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-09-20)
