@@ -33,7 +33,7 @@ codeunit 10035390 "Copilot Install ori"
     /// <summary>
     /// Claims "Setup ori"."Chat Provider Type" for Language Models, but only while it is still
     /// None, so an app (or administrator) that already claimed it is never overridden.
-    /// Skips without error when the caller cannot read, insert or modify "Setup ori". Publishing Foundation
+    /// Skips without error when the caller cannot read or write "Setup ori". Publishing Foundation
     /// re-runs OnInstallAppPerCompany in a context with no TableData permission on that table
     /// (OrigoSoftwareSolutions/bc-origo-bifrost-core#122); the read must not fail the install.
     /// </summary>
@@ -42,17 +42,13 @@ codeunit 10035390 "Copilot Install ori"
         BifrostSetup: Record "Setup ori";
     begin
         // GetRecordOnce reads "Setup ori" and inserts the singleton when it is missing; the claim then Modify()s it.
-        // Read, Insert and Modify are checked before that data action. A Delete-only grant must not reach either call.
+        // Read and Write are checked before that data action (a Record exposes only ReadPermission and WritePermission).
         if not BifrostSetup.ReadPermission() then begin
             LogClaimSkipped('Read');
             exit;
         end;
-        if not BifrostSetup.InsertPermission() then begin
-            LogClaimSkipped('Insert');
-            exit;
-        end;
-        if not BifrostSetup.ModifyPermission() then begin
-            LogClaimSkipped('Modify');
+        if not BifrostSetup.WritePermission() then begin
+            LogClaimSkipped('Write');
             exit;
         end;
 
