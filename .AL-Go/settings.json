@@ -26,6 +26,9 @@
     "Default",
     "Test"
   ],
+  "fullBuildPatterns": [
+    ".AL-Go/settings.json"
+  ],
   "keyVaultCodesignCertificateName": "CodeSigning-2025",
   "conditionalSettings": [
     {
