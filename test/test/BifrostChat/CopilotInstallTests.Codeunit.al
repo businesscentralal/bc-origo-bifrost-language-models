@@ -34,17 +34,23 @@ codeunit 96018 "Copilot Install Tests"
         CopilotInstall.ClaimChatProvider();
 
         // [THEN] it returns without error (no GetRecordOnce / Modify on Setup ori) and logs ORI-BIF-0422
+        LibraryLowerPermissions.SetOutsideO365Scope();
     end;
 
     [Test]
+    [TestPermissions(TestPermissions::Disabled)]
     procedure ClaimChatProvider_WhenNone_ClaimsLanguageModels()
     var
         BifrostSetup: Record "Setup ori";
         ClaimedSetup: Record "Setup ori";
         CopilotInstall: Codeunit "Copilot Install ori";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        OriginalChatProviderType: Enum "Chat Provider Type ori";
     begin
-        // [GIVEN] a permitted caller and "Chat Provider Type" still None
+        // [GIVEN] a permitted caller (lowered permissions from the restrictive test persist per codeunit) and "Chat Provider Type" still None
+        LibraryLowerPermissions.SetOutsideO365Scope();
         BifrostSetup.GetRecordOnce();
+        OriginalChatProviderType := BifrostSetup."Chat Provider Type";
         BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::None;
         BifrostSetup.Modify();
 
@@ -54,5 +60,9 @@ codeunit 96018 "Copilot Install Tests"
         // [THEN] Language Models owns the chat provider
         ClaimedSetup.GetRecordOnce();
         Assert.AreEqual(Enum::"Chat Provider Type ori"::LanguageModels, ClaimedSetup."Chat Provider Type", 'The permitted claim must set Chat Provider Type to LanguageModels.');
+
+        // Restore the original value so later tests see the same setup
+        ClaimedSetup."Chat Provider Type" := OriginalChatProviderType;
+        ClaimedSetup.Modify();
     end;
 }
