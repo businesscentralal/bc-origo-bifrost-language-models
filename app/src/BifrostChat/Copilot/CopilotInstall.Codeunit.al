@@ -7,9 +7,7 @@ using System.AI;
 /// Install codeunit of Bifrost Language Models.
 /// Per database it registers the Copilot capability with Microsoft's Copilot framework; the same
 /// registration runs again from "Copilot Upgrade ori".
-/// Per company it takes over the data of the published Origo Cloud Events Chat app, which the chat
-/// providers (OpenAI, Azure OpenAI, Custom LLM, Anthropic, xAI, Google/Gemini) replace, and registers
-/// the API key secrets of every existing language model with the Foundation secret store.
+/// Per company it registers the API key secrets of every existing language model with the Foundation secret store.
 /// It never creates a language model: InitDefaultLanguageModel is called only on demand, from the
 /// "Init Copilot Defaults" action on the Bifrost Language Model List page, so that installing the
 /// app writes no setup data on its own.
@@ -25,12 +23,7 @@ codeunit 10035390 "Copilot Install ori"
     end;
 
     trigger OnInstallAppPerCompany()
-    var
-        ChatProvidersInstall: Codeunit "Chat Providers Install ori";
     begin
-        // Probe-first then direct copy (language-models#8 / treasury#14 / Foundation TryRunTakeOverAtInstall):
-        // denial emits telemetry and never Error's the install.
-        ChatProvidersInstall.TryRunTakeOverAtInstall();
         RegisterSecrets();
         ClaimChatProvider();
     end;

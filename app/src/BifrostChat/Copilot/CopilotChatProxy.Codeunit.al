@@ -237,10 +237,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     var
         Setup: Record "Setup ori";
     begin
-        Setup.SetLoadFields("Request Debug Mode");
-        if not Setup.Get() then
-            exit;
-        if not Setup."Request Debug Mode" then
+        if not Setup.GetRequestDebugMode() then
             exit;
 
         RequestLogger.Log(

@@ -83,7 +83,6 @@ codeunit 96002 "LangModel Chat Provider Tests"
     [Test]
     procedure BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields()
     var
-        BifrostSetup: Record "Setup ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
@@ -92,9 +91,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] BuildConfigJson enriches the provider config with metadata fields.
         Initialize();
-        BifrostSetup.GetRecordOnce();
-        BifrostSetup."Request Debug Mode" := false;
-        BifrostSetup.Modify();
+        SetRequestDebugModeOverride(false);
 
         SetupUserWithRole('MOCK-ROLE');
         CreateRole('MOCK-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
@@ -288,7 +285,6 @@ codeunit 96002 "LangModel Chat Provider Tests"
     [Test]
     procedure BuildConfigJson_DebugMode_IncludesDebugTrue()
     var
-        BifrostSetup: Record "Setup ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
@@ -296,9 +292,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] BuildConfigJson reflects debug mode from setup.
         Initialize();
-        BifrostSetup.GetRecordOnce();
-        BifrostSetup."Request Debug Mode" := true;
-        BifrostSetup.Modify();
+        SetRequestDebugModeOverride(true);
 
         SetupUserWithRole('MOCK-ROLE');
         CreateRole('MOCK-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
@@ -312,7 +306,6 @@ codeunit 96002 "LangModel Chat Provider Tests"
     [Test]
     procedure BuildConfigJson_RoleWithSkill_IncludesContextSkill()
     var
-        BifrostSetup: Record "Setup ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
@@ -321,9 +314,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] BuildConfigJson includes the role's skill blob as contextSkill
         Initialize();
-        BifrostSetup.GetRecordOnce();
-        BifrostSetup."Request Debug Mode" := false;
-        BifrostSetup.Modify();
+        SetRequestDebugModeOverride(false);
 
         SkillText := '# Test Skill' + '\n' + 'Use search_tables before guessing.';
         CreateRoleWithSkill('SKILL-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock, SkillText);
@@ -338,7 +329,6 @@ codeunit 96002 "LangModel Chat Provider Tests"
     [Test]
     procedure BuildConfigJson_RoleWithoutSkill_NoContextSkill()
     var
-        BifrostSetup: Record "Setup ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ConfigJson: JsonObject;
@@ -346,9 +336,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] BuildConfigJson omits contextSkill when role has no skill blob
         Initialize();
-        BifrostSetup.GetRecordOnce();
-        BifrostSetup."Request Debug Mode" := false;
-        BifrostSetup.Modify();
+        SetRequestDebugModeOverride(false);
 
         CreateRole('EMPTY-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
         SetupUserWithRole('EMPTY-ROLE');
@@ -361,16 +349,13 @@ codeunit 96002 "LangModel Chat Provider Tests"
     [Test]
     procedure BuildConfigJson_NoUserSetup_NoContextSkill()
     var
-        BifrostSetup: Record "Setup ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         ConfigJson: JsonObject;
         Token: JsonToken;
     begin
         // [SCENARIO] BuildConfigJson omits contextSkill when user has no setup record
         Initialize();
-        BifrostSetup.GetRecordOnce();
-        BifrostSetup."Request Debug Mode" := false;
-        BifrostSetup.Modify();
+        SetRequestDebugModeOverride(false);
 
         DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
@@ -404,9 +389,18 @@ codeunit 96002 "LangModel Chat Provider Tests"
     local procedure Initialize()
     var
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        TestSetupEvents: Codeunit "LangModel Test Setup Events";
     begin
         MockProvider.Reset();
+        TestSetupEvents.Reset();
         DeleteAllRoles();
+    end;
+
+    local procedure SetRequestDebugModeOverride(Value: Boolean)
+    var
+        TestSetupEvents: Codeunit "LangModel Test Setup Events";
+    begin
+        TestSetupEvents.SetRequestDebugModeOverride(Value);
     end;
 
     local procedure SetupUserWithRole(RoleCode: Code[20])

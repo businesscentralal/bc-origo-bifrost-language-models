@@ -41,10 +41,7 @@ codeunit 10035411 "LangModel API Client ori"
             exit;
         HasPendingLog := false;
 
-        Setup.SetLoadFields("Request Debug Mode");
-        if not Setup.Get() then
-            exit;
-        if not Setup."Request Debug Mode" then
+        if not Setup.GetRequestDebugMode() then
             exit;
 
         Logger.Log(
