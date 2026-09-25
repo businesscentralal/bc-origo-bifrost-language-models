@@ -82,6 +82,9 @@ codeunit 10035422 "LangModel Secrets ori"
     /// Registers the API key secrets of every language model that exists in this company.
     /// Called from the install and the upgrade codeunit so that an administrator sees the
     /// missing keys on the Bifrost App Secrets page right after deployment.
+    /// Those callers go through "Copilot Install ori".RegisterSecrets, which returns before
+    /// this read when TableData Read on "Bifrost Language Model ori" is missing. This procedure
+    /// still reads the table, so a setup page without that permission gets the platform error.
     /// </summary>
     procedure RegisterAll()
     var
