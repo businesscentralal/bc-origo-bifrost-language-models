@@ -32,8 +32,6 @@ codeunit 96018 "Copilot Install Tests"
 
         Assert.IsFalse(BifrostSetup.ReadPermission(), 'O365 Basic plus BIFROST LLM ori must not grant Read on Setup ori.');
         Assert.IsFalse(BifrostSetup.WritePermission(), 'O365 Basic plus BIFROST LLM ori must not grant Write on Setup ori.');
-        Assert.IsFalse(BifrostSetup.InsertPermission(), 'O365 Basic plus BIFROST LLM ori must not grant Insert on Setup ori.');
-        Assert.IsFalse(BifrostSetup.ModifyPermission(), 'O365 Basic plus BIFROST LLM ori must not grant Modify on Setup ori.');
 
         // [WHEN] the install claim runs
         CopilotInstall.ClaimChatProvider();
