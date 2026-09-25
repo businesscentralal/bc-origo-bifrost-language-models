@@ -33,6 +33,26 @@ codeunit 96018 "Copilot Install Tests"
         // [WHEN] the install claim runs
         CopilotInstall.ClaimChatProvider();
 
-        // [THEN] it returns without error (no GetRecordOnce / Modify on Setup ori)
+        // [THEN] it returns without error (no GetRecordOnce / Modify on Setup ori) and logs ORI-BIF-0422
+    end;
+
+    [Test]
+    procedure ClaimChatProvider_WhenNone_ClaimsLanguageModels()
+    var
+        BifrostSetup: Record "Setup ori";
+        ClaimedSetup: Record "Setup ori";
+        CopilotInstall: Codeunit "Copilot Install ori";
+    begin
+        // [GIVEN] a permitted caller and "Chat Provider Type" still None
+        BifrostSetup.GetRecordOnce();
+        BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::None;
+        BifrostSetup.Modify();
+
+        // [WHEN] the install claim runs
+        CopilotInstall.ClaimChatProvider();
+
+        // [THEN] Language Models owns the chat provider
+        ClaimedSetup.GetRecordOnce();
+        Assert.AreEqual(Enum::"Chat Provider Type ori"::LanguageModels, ClaimedSetup."Chat Provider Type", 'The permitted claim must set Chat Provider Type to LanguageModels.');
     end;
 }
