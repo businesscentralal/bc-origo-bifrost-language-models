@@ -41,16 +41,36 @@ codeunit 10035390 "Copilot Install ori"
         BifrostSetup: Record "Setup ori";
     begin
         // GetRecordOnce reads "Setup ori" and inserts the singleton when it is missing; the claim then Modify()s it.
-        if not BifrostSetup.ReadPermission() then
+        if not BifrostSetup.ReadPermission() then begin
+            LogClaimSkipped('Read');
             exit;
-        if not BifrostSetup.WritePermission() then
+        end;
+        if not BifrostSetup.WritePermission() then begin
+            LogClaimSkipped('Write');
             exit;
+        end;
 
         BifrostSetup.GetRecordOnce();
         if BifrostSetup."Chat Provider Type" <> Enum::"Chat Provider Type ori"::None then
             exit;
         BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
         BifrostSetup.Modify();
+    end;
+
+    /// <summary>
+    /// Emits the admin signal for a skipped claim: "Chat Provider Type" stays None and nothing retries
+    /// automatically, so an administrator must set it on Bifrost Setup or rerun the install with permission.
+    /// </summary>
+    local procedure LogClaimSkipped(DeniedPermission: Text)
+    var
+        CustomDimensions: Dictionary of [Text, Text];
+        ClaimSkippedTok: Label 'ORI-BIF-0422', Locked = true;
+        ClaimSkippedMsg: Label 'Bifrost Language Models skipped claiming the chat provider on Setup ori at install: missing TableData permission. Chat Provider Type stays unchanged until an administrator sets it.', Locked = true;
+    begin
+        CustomDimensions.Add('tableId', Format(Database::"Setup ori", 0, 9));
+        CustomDimensions.Add('deniedPermission', DeniedPermission);
+        Session.LogMessage(ClaimSkippedTok, ClaimSkippedMsg, Verbosity::Warning,
+            DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
     end;
 
     /// <summary>
