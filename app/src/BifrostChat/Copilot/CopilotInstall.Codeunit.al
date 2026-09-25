@@ -32,19 +32,15 @@ codeunit 10035390 "Copilot Install ori"
     /// <summary>
     /// Claims "Setup ori"."Chat Provider Type" for Language Models, but only while it is still
     /// None, so an app (or administrator) that already claimed it is never overridden.
-    /// Skips without error when the caller cannot read or write "Setup ori", or when GetRecordOnce
-    /// or Modify still fails under a partial grant. Each skip emits telemetry ORI-BIF-0422.
-    /// Publishing Foundation re-runs OnInstallAppPerCompany in a context with no TableData permission
-    /// on that table (OrigoSoftwareSolutions/bc-origo-bifrost-core#122); that read must not fail the install.
-    /// Chat Provider Type stays None until a user with permission claims it.
+    /// Skips without error when the caller cannot read or write "Setup ori". Publishing Foundation
+    /// re-runs OnInstallAppPerCompany in a context with no TableData permission on that table
+    /// (OrigoSoftwareSolutions/bc-origo-bifrost-core#122); the read must not fail the install.
     /// </summary>
     procedure ClaimChatProvider()
     var
         BifrostSetup: Record "Setup ori";
     begin
         // GetRecordOnce reads "Setup ori" and inserts the singleton when it is missing; the claim then Modify()s it.
-        // Probe first so a missing grant never raises during OnInstallAppPerCompany. TryFunctions cover a partial
-        // grant (WritePermission true for any of insert/modify/delete, or an indirect permission the write still rejects).
         if not BifrostSetup.ReadPermission() then begin
             LogClaimSkipped('Read');
             exit;
@@ -53,51 +49,28 @@ codeunit 10035390 "Copilot Install ori"
             LogClaimSkipped('Write');
             exit;
         end;
-        if not TryGetSetupOnce(BifrostSetup) then begin
-            LogClaimSkipped('Write');
-            exit;
-        end;
 
+        BifrostSetup.GetRecordOnce();
         if BifrostSetup."Chat Provider Type" <> Enum::"Chat Provider Type ori"::None then
             exit;
-
-        if not BifrostSetup.WritePermission() then begin
-            LogClaimSkipped('Write');
-            exit;
-        end;
-
         BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
-        if not TryModifyClaim(BifrostSetup) then
-            LogClaimSkipped('Modify');
+        BifrostSetup.Modify();
     end;
 
     /// <summary>
-    /// Emits the admin signal for a skipped claim: "Chat Provider Type" stays None until a user
-    /// with permission claims it. Event ORI-BIF-0422. Dimensions are system metadata only.
+    /// Emits the admin signal for a skipped claim: "Chat Provider Type" stays None and nothing retries
+    /// automatically, so an administrator must set it on Bifrost Setup or rerun the install with permission.
     /// </summary>
-    /// <param name="DeniedPermission">Read, Write, or Modify. No customer data.</param>
     local procedure LogClaimSkipped(DeniedPermission: Text)
     var
         CustomDimensions: Dictionary of [Text, Text];
         ClaimSkippedTok: Label 'ORI-BIF-0422', Locked = true;
-        ClaimSkippedMsg: Label 'Chat provider claim skipped at install (permission missing).', Locked = true;
+        ClaimSkippedMsg: Label 'Bifrost Language Models skipped claiming the chat provider on Setup ori at install: missing TableData permission. Chat Provider Type stays unchanged until an administrator sets it.', Locked = true;
     begin
         CustomDimensions.Add('tableId', Format(Database::"Setup ori", 0, 9));
-        CustomDimensions.Add('deniedPermission', CopyStr(DeniedPermission, 1, 250));
+        CustomDimensions.Add('deniedPermission', DeniedPermission);
         Session.LogMessage(ClaimSkippedTok, ClaimSkippedMsg, Verbosity::Warning,
-            DataClassification::SystemMetadata, TelemetryScope::All, CustomDimensions);
-    end;
-
-    [TryFunction]
-    local procedure TryGetSetupOnce(var BifrostSetup: Record "Setup ori")
-    begin
-        BifrostSetup.GetRecordOnce();
-    end;
-
-    [TryFunction]
-    local procedure TryModifyClaim(var BifrostSetup: Record "Setup ori")
-    begin
-        BifrostSetup.Modify();
+            DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
     end;
 
     /// <summary>
