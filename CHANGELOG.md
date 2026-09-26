@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-09-25) - build against the latest Foundation CI build
+
+- `.AL-Go/settings.json` `appDependencyProbingPaths` for bc-origo-bifrost-core sets `version` to `latest`. `release_status` stays `latestBuild`. AL-Go GetArtifacts matches a specific version exactly; only `latest` uses the last successful CICD run.
+- The app builds against that latest Foundation CI build. The Foundation dependency floor is `28.0.0.0` in `app/app.json` and `test/app.json`.
+- `fullBuildPatterns` lists `.AL-Go/settings.json`, so a settings-only change runs the full Build (Default) and Build (Test) instead of being skipped by incremental builds.
 ### Security
 
 - Default (release) builds no longer ship the test app's internalsVisibleTo grant; the strip moved to PipelineInitialize.ps1 because Alpaca never ran PreCompileApp.ps1 (core#129).
