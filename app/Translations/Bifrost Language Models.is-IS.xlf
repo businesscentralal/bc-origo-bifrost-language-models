@@ -850,9 +850,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Code - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 1383905037 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies whether this is the default language model assigned to users without an explicit language model setup.</source>
-          <target>Tilgreinir hvort þetta sé sjálfgefið mállíkan sem er úthlutað notendum sem hafa ekki sérstaka mállíkansstillingu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hvort þetta sé sjálfgefið mállíkan sem er úthlutað notendum sem hafa ekki sérstaka mállíkansstillingu.</note>
+          <source>Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat.</source>
+          <target>Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Default - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1156,9 +1156,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control LanguageModels - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1983071002 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the language model used by everyone who has no language model assigned in user setup.</source>
-          <target>Tilgreinir mállíkanið sem allir nota sem hafa ekki mállíkan í notandauppsetningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mállíkanið sem allir nota sem hafa ekki mállíkan í notandauppsetningu.</note>
+          <source>Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat.</source>
+          <target>Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control DefaultLanguageModel - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1983071002 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1462,9 +1462,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Setup LangModel ori - Action LangModelSetup - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 1187635734 - Control 1905762929 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 709338957">
-          <source>Specifies the language model whose skill is injected into Chat via Bifrost. If empty, a default who_am_i instruction is used.</source>
-          <target>Tilgreinir mállíkanið sem hæfnin er sótt úr fyrir Spjalla við Bifröst. Ef tómt eru sjálfgefnu who_am_i-leiðbeiningarnar notaðar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mállíkanið sem hæfni er sótt úr fyrir Spjalla með Bifröst. Ef tómt eru sjálfgefnar who_am_i leiðbeiningar notaðar.</note>
+          <source>Specifies the language model this user chats with in Bifrost Chat. If empty, Bifrost Chat is not available for this user.</source>
+          <target>Tilgreinir mállíkanið sem þessi notandi spjallar við í Bifröst Chat. Ef tómt er Bifröst Chat ekki tiltækt fyrir þennan notanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mállíkanið sem þessi notandi spjallar við í Bifröst Chat. Ef tómt er Bifröst Chat ekki tiltækt fyrir þennan notanda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension User Setup Editor LangMdl ori - Control Bifrost Language Model Code - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 1187635734 - Control 1905762929 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 709338957">
