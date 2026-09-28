@@ -1762,6 +1762,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bifröst mállíkön lestur</note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST LLM Rd ori - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2369826372 - Method 3154970495 - NamedType 1992335285" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.</source>
+          <target>Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Chat Provider ori - Method ChatNotEnabledResponse - NamedType ChatNotEnabledErr</note>
+        </trans-unit>
       </group>
     </body>
   </file>
