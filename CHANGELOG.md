@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-09-29) - Language Model Code moves to the General group on User Setup (#42)
+
+- On the Bifrost User Setup card, Language Model Code is shown in General, after Foundation's Charge Type and Session Source Approval Type, instead of at the end of Linked Records.
+- The Bifrost Foundation dependency floor in `app/app.json` and `test/app.json` is raised to `28.0.0.152`, the first Foundation build with the User Setup `group(General)` anchor.
+
 ### Changed
 
 - Bifrost Chat is only shown to users with a Language Model Code. Users who relied on the Default language model for chat no longer see Bifrost Chat until a Language Model Code is set on their Bifrost User Setup. To assign a code to many users at once, import a configuration package for User Setup ori that fills in "Bifrost Language Model Code".
