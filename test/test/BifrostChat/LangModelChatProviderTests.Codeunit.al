@@ -39,10 +39,10 @@ codeunit 96002 "LangModel Chat Provider Tests"
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
-        // [SCENARIO] Default role with None provider returns false.
+        // [SCENARIO] An assigned None provider returns false.
         Initialize();
-        DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
+        SetupUserWithRole('DEFAULT');
 
         Assert.IsFalse(ChatProvider.IsConfigured(), 'ShowBifrostChat should be false when default role has None provider.');
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'Mock should not be invoked for None provider.');
@@ -131,8 +131,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] None provider returns disabled config.
         Initialize();
-        DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
+        SetupUserWithRole('DEFAULT');
 
         Assert.IsTrue(ConfigJson.ReadFrom(ChatProvider.BuildConfigJson()), 'Config should be valid JSON.');
         Assert.IsTrue(ConfigJson.Get('disabled', DisabledToken), 'Should contain disabled field.');
@@ -168,8 +168,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] None provider returns error JSON from SendChatMessage.
         Initialize();
-        DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
+        SetupUserWithRole('DEFAULT');
 
         Assert.IsTrue(ResponseJson.ReadFrom(ChatProvider.SendChatMessage('{}')), 'Response should be valid JSON.');
         Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
@@ -210,19 +210,142 @@ codeunit 96002 "LangModel Chat Provider Tests"
     end;
 
     [Test]
-    procedure GetLangModelProvider_DefaultRole_UsedWhenNoUserRole()
+    procedure IsConfigured_BlankCode_IgnoresDefaultModel()
     var
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
     begin
-        // [SCENARIO] When user has no role assigned, the default role's provider is used.
+        // [SCENARIO] AC1: a blank Language Model Code disables chat even when a Default model exists.
+        Initialize();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        MockProvider.SetIsConfigured(true);
+        MockProvider.SetConfigJson('{"model":"default-model"}');
+
+        Assert.IsFalse(ChatProvider.IsConfigured(), 'ShowBifrostChat should be false when the user has no Language Model Code.');
+        Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'The Default model provider must not be called.');
+        ChatProvider.BuildConfigJson();
+        Assert.IsFalse(MockProvider.WasBuildConfigCalled(), 'BuildConfigJson must not call the Default model.');
+    end;
+
+    [Test]
+    procedure IsConfigured_UserCode_UsesThatModelNotDefault()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+    begin
+        // [SCENARIO] AC2: a valid Language Model Code shows chat and sends through that model.
+        Initialize();
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        CreateRole('USER-ROLE', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetRoleModel('DEFAULT', 'default-model');
+        SetRoleModel('USER-ROLE', 'user-model');
+        SetupUserWithRole('USER-ROLE');
+        MockProvider.SetIsConfigured(true);
+        MockProvider.SetSendResponse('{"content":"ok"}');
+
+        Assert.IsTrue(ChatProvider.IsConfigured(), 'Chat should be shown when the user has a valid Language Model Code.');
+        Assert.AreEqual('{"content":"ok"}', ChatProvider.SendChatMessage('{}'), 'Send should return the assigned model response.');
+        Assert.AreEqual('user-model', MockProvider.GetLastModel(), 'Send should use the user model, not the Default model.');
+    end;
+
+    [Test]
+    procedure IsConfigured_MissingModel_ReturnsFalse()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+    begin
+        // [SCENARIO] AC3: a code that points at no language model disables chat without an error.
+        Initialize();
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetupUserWithRole('MISSING');
+        MockProvider.SetIsConfigured(true);
+
+        Assert.IsFalse(ChatProvider.IsConfigured(), 'ShowBifrostChat should be false when the Language Model Code does not exist.');
+        Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'A missing model must not fall back to the Default model.');
+    end;
+
+    [Test]
+    procedure SendChatMessage_BlankCode_ReturnsNotEnabledError()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        ResponseToken: JsonToken;
+    begin
+        // [SCENARIO] AC4: a chat send while resolution fails returns the not-enabled error, not the Default model.
+        Initialize();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        MockProvider.SetSendResponse('{"content":"from-default"}');
+
+        Assert.IsTrue(ResponseJson.ReadFrom(ChatProvider.SendChatMessage('{}')), 'Response should be valid JSON.');
+        Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
+        Assert.AreEqual(ChatNotEnabledErr(), ResponseToken.AsValue().AsText(), 'Error should say chat is not enabled for this user.');
+        Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'The Default model must not receive the chat send.');
+    end;
+
+    [Test]
+    procedure ContinueWithToolResults_BlankCode_ReturnsNotEnabledError()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        ResponseToken: JsonToken;
+    begin
+        // [SCENARIO] AC4: tool-result continuation while resolution fails returns the not-enabled error.
+        Initialize();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        MockProvider.SetContinueResponse('{"type":"reply","reply":"from-default"}');
+
+        Assert.IsTrue(ResponseJson.ReadFrom(ChatProvider.ContinueWithToolResults('{}', '[]')), 'Response should be valid JSON.');
+        Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
+        Assert.AreEqual(ChatNotEnabledErr(), ResponseToken.AsValue().AsText(), 'Error should say chat is not enabled for this user.');
+        Assert.IsFalse(MockProvider.WasContinueWithToolResultsCalled(), 'The Default model must not receive the continuation.');
+    end;
+
+    [Test]
+    procedure TryIt_BlankUserCode_UsesTestContextModel()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        TestCtx: Codeunit "Bifrost LangModel Test Ctx ori";
+    begin
+        // [SCENARIO] AC5: the language model card Try It still works for a user with no code.
+        Initialize();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        CreateRole('TRY-MODEL', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetRoleModel('DEFAULT', 'default-model');
+        SetRoleModel('TRY-MODEL', 'try-model');
+        TestCtx.SetLanguageModel('TRY-MODEL');
+        MockProvider.SetIsConfigured(true);
+        MockProvider.SetSendResponse('{"content":"try-it"}');
+
+        Assert.IsTrue(ChatProvider.IsConfigured(), 'Try It should enable chat without a user Language Model Code.');
+        Assert.AreEqual('{"content":"try-it"}', ChatProvider.SendChatMessage('{}'), 'Try It send should return the test model response.');
+        Assert.AreEqual('try-model', MockProvider.GetLastModel(), 'Try It should use the card model, not the Default model.');
+        TestCtx.ClearLanguageModel();
+    end;
+
+    [Test]
+    procedure GetLangModelProviderWithModel_BlankCode_UsesDefaultModel()
+    var
+        BifrostLanguageModel: Record "Bifrost Language Model ori";
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+    begin
+        // [SCENARIO] AC6: LLM.Prompt.Complete resolution still uses the Default model when the user has no code.
         Initialize();
         SetupUserWithRole('');
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
         MockProvider.SetIsConfigured(true);
 
-        Assert.IsTrue(ChatProvider.IsConfigured(), 'Should use default role when user has no role assigned.');
-        Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'Mock should be invoked via default role.');
+        ChatProvider.GetLangModelProviderWithModel(BifrostLanguageModel);
+        Assert.AreEqual('DEFAULT', BifrostLanguageModel.Code, 'Prompt completion should resolve the Default model.');
+        Assert.IsFalse(ChatProvider.IsConfigured(), 'Chat stays disabled for the same user.');
+        Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'The chat IsConfigured path must not call the Default model.');
     end;
 
     [Test]
@@ -275,8 +398,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // [SCENARIO] None provider returns error JSON from ContinueWithToolResults.
         Initialize();
-        DeleteCurrentUserSetup();
         CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::None);
+        SetupUserWithRole('DEFAULT');
 
         Assert.IsTrue(ResponseJson.ReadFrom(ChatProvider.ContinueWithToolResults('{}', '[]')), 'Response should be valid JSON.');
         Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
@@ -389,11 +512,27 @@ codeunit 96002 "LangModel Chat Provider Tests"
     local procedure Initialize()
     var
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        TestCtx: Codeunit "Bifrost LangModel Test Ctx ori";
         TestSetupEvents: Codeunit "LangModel Test Setup Events";
     begin
         MockProvider.Reset();
+        TestCtx.ClearLanguageModel();
         TestSetupEvents.Reset();
         DeleteAllRoles();
+    end;
+
+    local procedure ChatNotEnabledErr(): Text
+    begin
+        exit('Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.');
+    end;
+
+    local procedure SetRoleModel(RoleCode: Code[20]; Model: Text[100])
+    var
+        BifrostLanguageModel: Record "Bifrost Language Model ori";
+    begin
+        BifrostLanguageModel.Get(RoleCode);
+        BifrostLanguageModel.Model := Model;
+        BifrostLanguageModel.Modify(true);
     end;
 
     local procedure SetRequestDebugModeOverride(Value: Boolean)
