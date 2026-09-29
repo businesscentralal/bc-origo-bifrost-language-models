@@ -10,7 +10,7 @@ pageextension 10035402 "User Setup Editor LangMdl ori" extends "User Setup Edito
 {
     layout
     {
-        addlast(LinkedRecords)
+        addlast(General)
         {
             field("Bifrost Language Model Code"; Rec."Bifrost Language Model Code")
             {
