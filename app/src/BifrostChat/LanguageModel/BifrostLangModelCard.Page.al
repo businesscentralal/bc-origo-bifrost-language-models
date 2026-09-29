@@ -40,7 +40,7 @@ page 10035343 "Bifrost LangModel Card ori"
                 field(Default; Rec.Default)
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies whether this is the default language model assigned to users without an explicit language model setup.', Comment = 'is-IS=Tilgreinir hvort þetta sé sjálfgefið mállíkan sem er úthlutað notendum sem hafa ekki sérstaka mállíkansstillingu.';
+                    ToolTip = 'Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat.', Comment = 'is-IS=Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.';
                 }
                 field("Chat Provider"; Rec."Chat Provider")
                 {

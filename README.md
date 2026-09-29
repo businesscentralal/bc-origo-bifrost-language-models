@@ -146,7 +146,7 @@ Supporting paths:
 | 2 | **Bifröst Setup** → *Apps* → **Bifröst mállíkön** | Open `LangModel Setup ori` (page 10035421), the single place this module is configured. It reports the number of language models, the default one, the MCP tool count and how many models still need an API key. |
 | 3 | `Bifrost LangModel List ori` / `Bifrost LangModel Card ori` | Create one row per language model and fill in the provider and endpoint fields. |
 | 4 | `Bifrost LangModel Card ori` actions | **Set / Clear Shared API Key** (needs `BIFROST ChatSvc ori`) and **Set / Clear Personal API Key**. Both use Foundation's shared masked dialog. |
-| 5 | `User Setup Editor LangMdl ori` | Assign a language model to each user in **Bifrost Language Model Code**. Users without an assignment get the default model. |
+| 5 | `User Setup Editor LangMdl ori` | Assign a language model to each user in **Bifrost Language Model Code**. Bifrost Chat is hidden when the code is empty. |
 
 `Bifrost Language Model ori` (table 10035335) fields:
 
@@ -155,7 +155,7 @@ Supporting paths:
 | `Code` | The model code. It is also the `roleCode` in the JSON contract and the `<Code>` part of the secret codes. |
 | `Description` | Free text shown in lists and lookups. |
 | `Skill` | Markdown blob injected as the system-level instruction for this model. |
-| `Default` | The model used by a user who has none assigned. |
+| `Default` | Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat. |
 | `Chat Provider` | Selects the `Bifrost LangModel Provider ori` implementation; `None` inherits the user-level provider. |
 | `Base URL`, `Chat Path`, `Models Path` | Endpoint of the external provider. |
 | `Model` | The provider's model identifier. |

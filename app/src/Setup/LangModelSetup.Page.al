@@ -43,7 +43,7 @@ page 10035421 "LangModel Setup ori"
                 field(DefaultLanguageModel; DefaultLanguageModelCode)
                 {
                     Caption = 'Default Language Model', Comment = 'is-IS=Sjálfgefið mállíkan';
-                    ToolTip = 'Specifies the language model used by everyone who has no language model assigned in user setup.', Comment = 'is-IS=Tilgreinir mállíkanið sem allir nota sem hafa ekki mállíkan í notandauppsetningu.';
+                    ToolTip = 'Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat.', Comment = 'is-IS=Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst Chat.';
                 }
             }
             group(ToolServer)

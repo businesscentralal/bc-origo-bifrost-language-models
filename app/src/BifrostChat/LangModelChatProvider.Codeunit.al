@@ -5,9 +5,9 @@ using Origo.Bifrost;
 
 /// <summary>
 /// Bifrost Foundation "Chat Provider ori" implementation for Language Models. Resolves the active
-/// provider from the user's assigned Bifrost Language Model (or the default language model) and
-/// delegates through the "Bifrost LangModel Provider ori" interface. Registered on
-/// "Chat Provider Type ori" as LanguageModels; see "Copilot Install ori" for how
+/// provider from the user's assigned Bifrost Language Model and delegates through the
+/// "Bifrost LangModel Provider ori" interface. A blank Language Model Code disables Bifrost Chat.
+/// Registered on "Chat Provider Type ori" as LanguageModels; see "Copilot Install ori" for how
 /// "Setup ori"."Chat Provider Type" is claimed on install.
 /// </summary>
 codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
@@ -20,13 +20,9 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
-        if not HasLanguageModelAssignment() then begin
-            BifrostLanguageModel.ReadIsolation := IsolationLevel::ReadUncommitted;
-            BifrostLanguageModel.SetRange(Default, true);
-            if BifrostLanguageModel.IsEmpty() then
-                exit(false);
-        end;
-        Provider := GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            exit(false);
+        Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::IsConfigured);
         exit(TempArgument."Result Boolean");
@@ -74,30 +70,18 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
 
     /// <summary>
     /// Resolves the provider and returns the resolved role record.
+    /// Keeps the Default-model fallback for LLM.Prompt.Complete. Bifrost Chat does not use it.
     /// </summary>
     procedure GetLangModelProviderWithModel(var ResolvedRole: Record "Bifrost Language Model ori") Provider: Interface "Bifrost LangModel Provider ori"
     var
-        BifrostUserSetup: Record "User Setup ori";
         BifrostLanguageModel: Record "Bifrost Language Model ori";
-        TestCtx: Codeunit "Bifrost LangModel Test Ctx ori";
     begin
-        // Role card "Try It" override
-        if TestCtx.TryGetLanguageModel(BifrostLanguageModel) then begin
-            ResolvedRole := BifrostLanguageModel;
-            Provider := BifrostLanguageModel."Chat Provider";
+        if ResolveChatLanguageModel(ResolvedRole) then begin
+            Provider := ResolvedRole."Chat Provider";
             exit;
         end;
 
-        BifrostUserSetup.SetLoadFields("Bifrost Language Model Code");
-        if BifrostUserSetup.Get(UserSecurityId()) and (BifrostUserSetup."Bifrost Language Model Code" <> '') then
-            if BifrostLanguageModel.Get(BifrostUserSetup."Bifrost Language Model Code") then begin
-                ResolvedRole := BifrostLanguageModel;
-                Provider := BifrostLanguageModel."Chat Provider";
-                exit;
-            end;
-
-
-        // Fall back to the default language model
+        // LLM.Prompt.Complete only. Bifrost Chat stops in ResolveChatLanguageModel.
         BifrostLanguageModel.SetRange(Default, true);
         if BifrostLanguageModel.FindFirst() then begin
             ResolvedRole := BifrostLanguageModel;
@@ -105,7 +89,6 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
             exit;
         end;
 
-        // No role found — use None (disabled)
         Provider := Enum::"Bifrost LangModel Prov. ori"::None;
     end;
 
@@ -116,7 +99,6 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     procedure BuildConfigJson(): Text
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
-        BifrostUserSetup: Record "User Setup ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         Provider: Interface "Bifrost LangModel Provider ori";
@@ -124,7 +106,10 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         ConfigText: Text;
         RoleSkill: Text;
     begin
-        Provider := GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            Provider := Enum::"Bifrost LangModel Prov. ori"::None
+        else
+            Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::BuildConfigJson);
         ConfigText := TempArgument.GetResultText();
@@ -142,14 +127,11 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
             SetJsonProperty(ConfigObject, 'supportsToolLoop', GetProviderBool(Provider, TempArgument, TempArgument."Procedure Type"::SupportsSplitToolExecution));
             AddChatLabels(ConfigObject);
 
-            // Inject the language model's skill content so the JS sends it in every payload
-            BifrostUserSetup.SetLoadFields("Bifrost Language Model Code");
-            if BifrostUserSetup.Get(UserSecurityId()) and (BifrostUserSetup."Bifrost Language Model Code" <> '') then
-                if BifrostLanguageModel.Get(BifrostUserSetup."Bifrost Language Model Code") then begin
-                    RoleSkill := BifrostLanguageModel.GetSkill();
-                    if RoleSkill <> '' then
-                        SetJsonProperty(ConfigObject, 'contextSkill', RoleSkill);
-                end;
+            if BifrostLanguageModel.Code <> '' then begin
+                RoleSkill := BifrostLanguageModel.GetSkill();
+                if RoleSkill <> '' then
+                    SetJsonProperty(ConfigObject, 'contextSkill', RoleSkill);
+            end;
 
             ConfigObject.WriteTo(ConfigText);
         end;
@@ -181,8 +163,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
     begin
-        GetLangModelProviderWithModel(BifrostLanguageModel);
-        if BifrostLanguageModel.Code = '' then
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
             exit;
         if ApiKey = '' then
             LangModelSecrets.ClearUserKey(BifrostLanguageModel.Code)
@@ -201,8 +182,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
     begin
-        GetLangModelProviderWithModel(BifrostLanguageModel);
-        if BifrostLanguageModel.Code = '' then
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
             exit;
         if ApiKey = '' then
             LangModelSecrets.ClearServiceKey(BifrostLanguageModel.Code)
@@ -222,7 +202,9 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
-        Provider := GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            exit(ChatNotEnabledResponse());
+        Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         TempArgument.SetPayload(PayloadJson);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::SendChatMessage);
@@ -239,7 +221,9 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
-        Provider := GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            exit(ChatNotEnabledResponse());
+        Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         TempArgument.SetConversationState(ConversationState);
         TempArgument.SetToolResults(ToolResultsJson);
@@ -258,7 +242,10 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
-        Provider := GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            Provider := Enum::"Bifrost LangModel Prov. ori"::None
+        else
+            Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::GetAvailableModels);
         TempArgument.GetModels(TempNameValueBuffer);
@@ -273,8 +260,46 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
     begin
-        GetLangModelProviderWithModel(BifrostLanguageModel);
+        if not ResolveChatLanguageModel(BifrostLanguageModel) then
+            exit;
         LangModelSecrets.ClearUserKey(BifrostLanguageModel.Code);
+    end;
+
+    /// <summary>
+    /// Resolves the language model for interactive Bifrost Chat.
+    /// Try It wins, then the user's Language Model Code when that record exists. No Default fallback.
+    /// </summary>
+    local procedure ResolveChatLanguageModel(var LanguageModel: Record "Bifrost Language Model ori"): Boolean
+    var
+        BifrostUserSetup: Record "User Setup ori";
+        Resolved: Record "Bifrost Language Model ori";
+        TestCtx: Codeunit "Bifrost LangModel Test Ctx ori";
+    begin
+        if TestCtx.TryGetLanguageModel(Resolved) then begin
+            LanguageModel := Resolved;
+            exit(true);
+        end;
+
+        BifrostUserSetup.SetLoadFields("Bifrost Language Model Code");
+        if BifrostUserSetup.Get(UserSecurityId()) and (BifrostUserSetup."Bifrost Language Model Code" <> '') then
+            if Resolved.Get(BifrostUserSetup."Bifrost Language Model Code") then begin
+                LanguageModel := Resolved;
+                exit(true);
+            end;
+
+        Clear(LanguageModel);
+        exit(false);
+    end;
+
+    local procedure ChatNotEnabledResponse(): Text
+    var
+        ErrorJson: JsonObject;
+        ResponseText: Text;
+        ChatNotEnabledErr: Label 'Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.', Comment = 'is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.';
+    begin
+        ErrorJson.Add('error', ChatNotEnabledErr);
+        ErrorJson.WriteTo(ResponseText);
+        exit(ResponseText);
     end;
 
     [NonDebuggable]
