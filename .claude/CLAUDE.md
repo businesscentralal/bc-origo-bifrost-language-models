@@ -22,12 +22,12 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation **28.0.0.0** in `app.json` (`7505e808-6e52-4b96-a328-82573391297a`); symbols come from core build 1.0.0.132 via AL-Go probing (`GetRequestDebugMode` needs core build 124 or later)
+ Bifrost Foundation **28.0.0.152** in `app.json` (`7505e808-6e52-4b96-a328-82573391297a`); symbols come from core build 1.0.0.132 via AL-Go probing (`GetRequestDebugMode` needs core build 124 or later)
 
-## Naming Rules
+ Foundation dependency **28.0.0.152**; AL-Go core probing **latestBuild**, version **1.0.0.132**.
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
 - Permission set object names are at most 20 characters (`BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST Chat ori`).
-- The brand name "Bifrost" lives in the namespace, the app name and user-facing captions - never as an object-name prefix. Exception: the chat feature is a product name, "Bifrost Chat" (objects `Bifrost Chat ... ori`, folder `app/src/BifrostChat`, Icelandic "Spjalla við Bifröst").
+ **10035397** (`LLM Prompt Compl Help ori`) was freed by message contract rollout #45. The free range is 10035425-10035484, plus 10035408 and 10035397.
 - The chat "role" concept is the **Language Model**: table `Bifrost Language Model ori`, sub-objects `Bifrost LangModel ... ori` (Card, List, Prov., Provider, None, Test Ctx - `LangModel` keeps them within 30 characters), User Setup field `Bifrost Language Model Code`, Icelandic "mállíkan". The JSON request key `roleCode` stays (API contract).
 - "MCP Tool Server" keeps its protocol name (Model Context Protocol).
 - Icelandic captions use "Bifröst".
@@ -161,8 +161,8 @@ Key rules always in effect:
 
 ## Message Type Conventions
 - Bifrost Language Models owns exactly one message type, `LLM.Prompt.Complete`, registered on Foundation's `Message Type ori`
-  enum by `LangModel Message Type ori`. It has an `LLM Prompt Compl Impl ori` codeunit (`ExecuteBifrostTask`),
-  an `LLM Prompt Compl Help ori` help codeunit and a section in the message-type reference on
+  enum by `LangModel Message Type ori`. Its `LLM Prompt Compl Impl ori` codeunit (`ExecuteBifrostTask`) implements
+  discovery and contract chapters, with the reference section on
   bifrost.origo.is (`docs/bragi/message-types.md` in the `businesscentralal/bifrost` repository).
 - Errors must be returned as `status = Error` with a helpful message via `Argument.RespondWithError`;
   never let an unhandled exception reach the API.

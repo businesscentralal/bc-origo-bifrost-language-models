@@ -4,6 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-09-29) - Message contract for LLM.Prompt.Complete (#45)
+
+- `LLM.Prompt.Complete` now exposes Foundation message contract chapters for its envelope, parameters, response, errors, effect, examples, overview and notes.
+- Added bilingual discovery keywords and a selection description that distinguishes one-shot completion from interactive Bifrost Chat.
+- Removed the per-type Markdown help codeunit; the legacy Foundation help procedure remains as an empty compatibility shim until the removal issue is completed.
+- Added contract and discovery tests and released object id 10035397.
+
 ### Changed (2026-09-29) - Language Model Code moves to the General group on User Setup (#42)
 
 - On the Bifrost User Setup card, Language Model Code is shown in General, after Foundation's Charge Type and Session Source Approval Type, instead of at the end of Linked Records.

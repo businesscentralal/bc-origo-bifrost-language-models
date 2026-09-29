@@ -55,7 +55,7 @@ app/                          AppSource app "Bifrost Language Models" (Origo, ra
       Copilot/                Copilot provider, chat proxy, AOAI function, masker, install, upgrade
       Extensions/             36 page extensions that add the chat FactBox to standard pages
       LanguageModel/          Bifrost Language Model table, Card/List pages, provider enum + interface
-      Message Types/          LLM.Prompt.Complete implementation + help codeunit
+      Message Types/          LLM.Prompt.Complete implementation + contract chapters
       Server/                 MCP tool server, tool executor, chat utils
     Extensions/               Extensions of Bifrost Foundation objects (enum, table, page)
     ChatGate.Table.al         "Chat Gate ori" — the permission gate table

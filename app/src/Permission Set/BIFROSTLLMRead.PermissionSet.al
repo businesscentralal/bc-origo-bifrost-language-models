@@ -41,7 +41,6 @@ permissionset 10035405 "BIFROST LLM Rd ori"
         codeunit "Copilot Default Skill ori" = X,
         codeunit "Copilot LangModel Prov. ori" = X,
         codeunit "Copilot Req Log Masker ori" = X,
-        codeunit "LLM Prompt Compl Help ori" = X,
         codeunit "LLM Prompt Compl Impl ori" = X,
         codeunit "MCP Tool Server ori" = X;
 }
