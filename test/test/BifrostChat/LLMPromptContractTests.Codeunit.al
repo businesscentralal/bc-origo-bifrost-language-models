@@ -2,11 +2,12 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Tests the LLM.Prompt.Complete discovery and message contract.
 /// </summary>
-codeunit 96019 "LLM Prompt Compl Contract Tests"
+codeunit 96019 "LLM Prompt Contract Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;

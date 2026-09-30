@@ -633,13 +633,13 @@
           <note from="Developer" annotates="general" priority="2">%1 = message type name, is-IS=Óþekkt skilaboðategund: %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit MCP Tool Server ori - NamedType UnknownMessageTypeErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 250906932 - Method 1000000001 - NamedType 1000000001" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 250906932 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI</source>
           <target>einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í áætluðu verki</target>
           <note from="Developer" annotates="general" priority="2">is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í áætluðu verki</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 250906932 - Method 1000000002 - NamedType 1000000002" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 250906932 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
           <source>Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.</source>
           <target>Býr til textasvar úr kvaðningu án tóla, færslusamhengis eða samtalsstöðu; notaðu sérstaka boðgerð þegar hún er til.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Býr til textasvar úr kvaðningu án tóla, færslusamhengis eða samtalsstöðu; notaðu sérstaka boðgerð þegar hún er til.</note>

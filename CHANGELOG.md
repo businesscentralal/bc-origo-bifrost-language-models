@@ -10,6 +10,7 @@ All notable changes to Bifrost Language Models are documented here.
 - Added bilingual discovery keywords and a selection description that distinguishes one-shot completion from interactive Bifrost Chat.
 - Removed the per-type Markdown help codeunit; the legacy Foundation help procedure remains as an empty compatibility shim until the removal issue is completed.
 - Added contract and discovery tests and released object id 10035397.
+- The Bifrost Foundation dependency floor in `app/app.json` and `test/app.json` is raised to `28.0.0.166`, the first Foundation build that contains the message contract APIs.
 
 ### Changed (2026-09-29) - Language Model Code moves to the General group on User Setup (#42)
 
