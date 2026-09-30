@@ -57,6 +57,7 @@ codeunit 96019 "LLM Prompt Contract Tests"
     begin
         // [SCENARIO] The current Foundation interface still accepts the legacy help call, but the contract owns the content.
         Implementation.GetMessageHelpAsMarkdownDocument(Argument);
-        Assert.AreEqual('', Argument.GetResponseMarkdown(), 'legacy markdown help');
+        Assert.AreEqual('', Argument.GetResponseText(), 'legacy markdown help');
+        Assert.AreEqual('text/markdown', Argument."Content Type", 'legacy markdown content type');
     end;
 }
