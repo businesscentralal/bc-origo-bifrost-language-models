@@ -15,6 +15,6 @@ enumextension 10035399 "LangModel Message Type ori" extends "Message Type ori"
     value(10035399; "LLM.Prompt.Complete")
     {
         Caption = 'LLM.Prompt.Complete', Locked = true;
-        Implementation = "Msg Interface ori" = "LLM Prompt Compl Impl ori";
+        Implementation = "Msg Interface ori" = "LLM Prompt Compl Impl ori", "Msg Discovery ori" = "LLM Prompt Compl Impl ori", "Msg Contract ori" = "LLM Prompt Compl Impl ori";
     }
 }

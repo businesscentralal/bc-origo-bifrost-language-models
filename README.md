@@ -289,7 +289,7 @@ again since `Chat Http Notif. Action ori` was removed with the setup notificatio
 | 10035394 | `Copilot Req Log Masker ori` | Masker for Copilot request log entries; logging happens only in debug mode. |
 | 10035395 | `Copilot Default Skill ori` | Ships the default skill text of the Copilot language model, kept in sync with the tool server. |
 | 10035396 | `LLM Prompt Compl Impl ori` | `LLM.Prompt.Complete` — one-shot completion, no tools and no conversation state. |
-| 10035397 | `LLM Prompt Compl Help ori` | Runtime Markdown help contract for `LLM.Prompt.Complete`. |
+| 10035397 | Freed by the message contract rollout; `LLM.Prompt.Complete` now describes itself through Foundation contract chapters. |
 | 10035409 | `LLM Req Log Masker ori` | Strips API keys from logged LLM requests and redacts bodies outside debug mode. |
 | 10035410 | `LangModel Prov. Base ori` | Shared helpers: config resolution, service-key permission check, token-usage parsing, multi-modal message building. |
 | 10035411 | `LangModel API Client ori` | Thin HTTP client for the OpenAI-compatible providers: chat completions and model list, with a caller-supplied auth header. |
@@ -378,7 +378,7 @@ its Icelandic translation under
 | `app/src/BifrostChat/LanguageModel/` | `Bifrost Language Model ori` table, Card/List pages, provider enum and interface |
 | `app/src/BifrostChat/Copilot/` | Copilot provider, chat proxy, AOAI function, request log masker, install and upgrade |
 | `app/src/BifrostChat/Server/` | MCP tool server and tool executor |
-| `app/src/BifrostChat/Message Types/` | `LLM.Prompt.Complete` implementation and help codeunit |
+| `app/src/BifrostChat/Message Types/` | `LLM.Prompt.Complete` implementation and contract chapters |
 | `app/src/Extensions/` | Extensions of Bifrost Foundation objects (enum, table, page) |
 | `app/src/Providers/Shared/` | `LangModel Prov. Base ori`, `LangModel API Client ori`, `LangModel Chat Proxy ori`, `Chat Svc Gate ori`, `LLM Req Log Masker ori`, take-over codeunit |
 | `app/src/Providers/OpenAI/`, `AzureOpenAI/`, `CustomLLM/`, `Anthropic/`, `xAI/`, `Gemini/` | The six external chat provider codeunits, one folder per provider |
