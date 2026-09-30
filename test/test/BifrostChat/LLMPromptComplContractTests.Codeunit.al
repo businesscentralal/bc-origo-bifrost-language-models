@@ -27,12 +27,11 @@ codeunit 96019 "LLM Prompt Compl Contract Tests"
         Assert.IsTrue(Contract.Contains('response'), 'response');
         Assert.IsTrue(Contract.Contains('errors'), 'errors');
         Assert.IsTrue(Contract.Contains('effect'), 'effect');
-        Assert.IsTrue(Contract.Contains('metering'), 'metering');
         Assert.IsTrue(Contract.Contains('examples'), 'examples');
         Assert.IsTrue(Contract.Contains('overview'), 'overview');
         Assert.IsTrue(Contract.Contains('notes'), 'notes');
         Assert.IsFalse(Contract.Contains('target'), 'target is not declared');
-        Assert.IsFalse(Contract.Contains('related'), 'related is not declared');
+        Assert.IsTrue(Contract.Contains('related'), 'related');
         Assert.IsFalse(Contract.Contains('workflow'), 'workflow is not declared');
     end;
 

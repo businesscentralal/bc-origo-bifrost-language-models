@@ -123,8 +123,12 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     end;
 
     procedure GetRelated(var Related: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Related.Add(ContractMgt.RelatedEntry('Data.Records.Get', 'Read Business Central data first, then use the returned values in the prompt.'));
+        Related.Add(ContractMgt.RelatedEntry('Data.Records.Set', 'Use the completion as input for structured record updates only after validating the generated values.'));
+        exit(true);
     end;
 
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
