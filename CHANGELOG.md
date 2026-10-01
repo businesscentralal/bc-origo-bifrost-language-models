@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Security (01.10.2026) - generic data API field restrictions (core#344)
+
+- `Data.Records.Set` now refuses to set the endpoint fields on `Bifrost Language Model ori` (Base URL 20, Chat Path 24, Models Path 25). Each row's endpoint is the address the provider API key is sent to, so a generic-write caller could otherwise redirect that key to a server of their choice. New `LangModel Field Restrict ori` (10035408) subscribes to Foundation's `OnAfterIsFieldWriteRestrictedForDataRecords` and `OnGetDedicatedMessageTypeHintForField`. Reading the fields, and the card / list / setup page / chat message types (which fill them from code), are unchanged.
+
 ### Removed (2026-10-01) - markdown help procedure (#46)
 
 - `LLM Prompt Compl Impl ori` drops `GetMessageHelpAsMarkdownDocument`, the empty compatibility shim. Foundation removed the procedure from `Msg Interface ori` (core#198); the help of `LLM.Prompt.Complete` is its contract chapters, unchanged.
