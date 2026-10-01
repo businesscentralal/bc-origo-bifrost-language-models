@@ -48,16 +48,4 @@ codeunit 96019 "LLM Prompt Contract Tests"
         Assert.IsTrue(Discovery.GetKeywords().Contains('one-shot AI completion'), 'English keywords');
         Assert.IsTrue(Discovery.GetSelectionDescription().Contains('without tools'), 'selection description');
     end;
-
-    [Test]
-    procedure CompatibilityMarkdownHelp_IsEmpty()
-    var
-        Argument: Record "Message Argument ori";
-        Implementation: Codeunit "LLM Prompt Compl Impl ori";
-    begin
-        // [SCENARIO] The current Foundation interface still accepts the legacy help call, but the contract owns the content.
-        Implementation.GetMessageHelpAsMarkdownDocument(Argument);
-        Assert.AreEqual('', Argument.GetResponseText(), 'legacy markdown help');
-        Assert.AreEqual('text/markdown', Argument."Content Type", 'legacy markdown content type');
-    end;
 }

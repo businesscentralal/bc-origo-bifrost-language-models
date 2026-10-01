@@ -161,11 +161,6 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(Enum::"Msg Direction ori"::Outbound);
     end;
 
-    procedure GetMessageHelpAsMarkdownDocument(var Argument: Record "Message Argument ori")
-    begin
-        Argument.SetResponseMarkdown('');
-    end;
-
     [NonDebuggable]
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
