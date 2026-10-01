@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Removed (2026-10-01) - markdown help procedure (#46)
+
+- `LLM Prompt Compl Impl ori` drops `GetMessageHelpAsMarkdownDocument`, the empty compatibility shim. Foundation removed the procedure from `Msg Interface ori` (core#198); the help of `LLM.Prompt.Complete` is its contract chapters, unchanged.
+- The test that checked the empty shim is removed.
+- Bifrost Foundation dependency raised to 28.0.0.186, the first Foundation build without the procedure, in `app/app.json` and `test/app.json`.
+
 ### Changed (2026-09-29) - Message contract for LLM.Prompt.Complete (#45)
 
 - `LLM.Prompt.Complete` now exposes Foundation message contract chapters for its envelope, parameters, response, errors, effect, examples, overview and notes.
