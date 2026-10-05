@@ -66,15 +66,18 @@ function Get-UserEnv([string]$Name) {
 }
 
 function Resolve-ApiKey($ApiKey, [string]$ModelCode) {
+    # A key that is not there yet is skipped with a warning, so keys can be added one provider at a time.
     if ($ApiKey.secret) {
         if (-not (Get-Command Get-Secret -ErrorAction SilentlyContinue)) {
             throw "$ModelCode : apiKey.secret needs the Microsoft.PowerShell.SecretManagement module (Install-Module Microsoft.PowerShell.SecretManagement, Microsoft.PowerShell.SecretStore)."
         }
-        return Get-Secret -Name $ApiKey.secret -AsPlainText
+        $value = Get-Secret -Name $ApiKey.secret -AsPlainText -ErrorAction SilentlyContinue
+        if (-not $value) { Write-Warning "$ModelCode : no secret '$($ApiKey.secret)' in the vault; the key is left as it is." }
+        return $value
     }
     if ($ApiKey.env) {
         $value = Get-UserEnv $ApiKey.env
-        if (-not $value) { throw "$ModelCode : the environment variable $($ApiKey.env) is not set." }
+        if (-not $value) { Write-Warning "$ModelCode : the environment variable $($ApiKey.env) is not set; the key is left as it is." }
         return $value
     }
     throw "$ModelCode : apiKey needs 'secret' or 'env'."
@@ -131,7 +134,9 @@ $models = foreach ($entry in $entries) {
     }
     if ($entry.apiKey) {
         $keyName = if ($entry.keyScope -eq 'personal') { 'personalApiKey' } else { 'sharedApiKey' }
-        $model[$keyName] = Resolve-ApiKey $entry.apiKey $entry.code
+        $keyValue = Resolve-ApiKey $entry.apiKey $entry.code
+        if ($keyValue) { $model[$keyName] = $keyValue }
+        $keyValue = $null
     }
     $model
 }
