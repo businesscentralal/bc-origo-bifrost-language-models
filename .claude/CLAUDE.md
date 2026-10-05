@@ -62,7 +62,7 @@ Shared infrastructure lives in `app/src/Providers/Shared/`: `LangModel Prov. Bas
 `LangModel API Client ori`, `LangModel Chat Proxy ori`, table `Chat Svc Gate ori` (shared-key permission
 gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
 Object ids 10035406-10035420 are used by the providers - **10035408** = `LangModel Field Restrict ori`
-(language-models#49, Data.Records endpoint write-block, 01.10.2026). 10035421
+(language-models#49, Data.Records endpoint write-block, 05.10.2026). 10035421
 (`LangModel Setup ori`), 10035422 (`LangModel Secrets ori`) and 10035423 (`LangModel Registration ori`)
 carry the setup/secret/registration block. **10035424** = `Chat Takeover State ori` (language-models#8
 probe-denial seam). **The free range is 10035425-10035484.**
