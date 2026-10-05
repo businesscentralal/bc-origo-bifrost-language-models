@@ -111,7 +111,6 @@ function Invoke-BifrostType([string]$Type, $Data) {
         type            = $Type
         source          = 'Set-TestLanguageModels'
         id              = $id
-        subject         = ''
         datacontenttype = 'application/json'
         data            = ($Data | ConvertTo-Json -Depth 20 -Compress)
     } | ConvertTo-Json -Compress
