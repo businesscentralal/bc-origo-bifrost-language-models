@@ -95,7 +95,8 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
 - A new install on a container needs outbound HTTP for the app (the Bifrost setup wizard, or Foundation's
   `Test.Records.Set` on `NAV App Setting` with this app's id); otherwise every provider answers "Could not reach the LLM API".
 - Live chat results 05.10.2026 on bc28-is (CRONUS IS): Anthropic, Azure OpenAI (`gpt-6-sol`, `/openai/v1/chat/completions`),
-  Custom LLM, Gemini (`gemini-3.8-flash`) and xAI answer with tools; OpenAI refused with 429 (no credits on the account).
+  Custom LLM, Gemini (`gemini-3.8-flash`), OpenAI (`gpt-6-astra`, Responses API) and xAI all answer with tools.
+  Copilot is not testable on the on-premises containers (it needs Business Central online).
 
 ## Setup Page and Secrets (Bifrost Foundation platform rules)
 
