@@ -8,7 +8,7 @@ using System.AI;
 /// Per database it registers the Copilot capability with Microsoft's Copilot framework; the same
 /// registration runs again from "Copilot Upgrade ori".
 /// Per company it registers the API key secrets of every existing language model with the Foundation secret store
-/// and claims the chat provider on "Setup ori" when that table is readable and writable.
+/// and claims the chat provider through Foundation's "Setup ori".TryClaimChatProvider.
 /// It never creates a language model: InitDefaultLanguageModel is called only on demand, from the
 /// "Init Copilot Defaults" action on the Bifrost Language Model List page, so that installing the
 /// app writes no setup data on its own.
@@ -30,47 +30,19 @@ codeunit 10035390 "Copilot Install ori"
     end;
 
     /// <summary>
-    /// Claims "Setup ori"."Chat Provider Type" for Language Models, but only while it is still
-    /// None, so an app (or administrator) that already claimed it is never overridden.
-    /// Skips without error when the caller cannot read or write "Setup ori". Publishing Foundation
-    /// re-runs OnInstallAppPerCompany in a context with no TableData permission on that table
-    /// (OrigoSoftwareSolutions/bc-origo-bifrost-core#122); the read must not fail the install.
+    /// Claims "Setup ori"."Chat Provider Type" for Language Models through Foundation's
+    /// TryClaimChatProvider, which carries its own inherent permissions, so the caller needs no
+    /// permission on "Setup ori" (OrigoSoftwareSolutions/bc-origo-bifrost-core#122, #251, #881).
+    /// The claim succeeds only while the value is None or already LanguageModels; another app or an
+    /// administrator that holds it is never overridden. Called from install and from upgrade.
     /// </summary>
     procedure ClaimChatProvider()
     var
         BifrostSetup: Record "Setup ori";
     begin
-        // GetRecordOnce reads "Setup ori" and inserts the singleton when it is missing; the claim then Modify()s it.
-        if not BifrostSetup.ReadPermission() then begin
-            LogClaimSkipped('Read');
+        // False means another provider already holds the claim; it is left unchanged, without telemetry or error.
+        if BifrostSetup.TryClaimChatProvider(Enum::"Chat Provider Type ori"::LanguageModels) then
             exit;
-        end;
-        if not BifrostSetup.WritePermission() then begin
-            LogClaimSkipped('Write');
-            exit;
-        end;
-
-        BifrostSetup.GetRecordOnce();
-        if BifrostSetup."Chat Provider Type" <> Enum::"Chat Provider Type ori"::None then
-            exit;
-        BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
-        BifrostSetup.Modify();
-    end;
-
-    /// <summary>
-    /// Emits the admin signal for a skipped claim: "Chat Provider Type" stays None and nothing retries
-    /// automatically, so an administrator must set it on Bifrost Setup or rerun the install with permission.
-    /// </summary>
-    local procedure LogClaimSkipped(DeniedPermission: Text)
-    var
-        CustomDimensions: Dictionary of [Text, Text];
-        ClaimSkippedTok: Label 'ORI-BIF-0422', Locked = true;
-        ClaimSkippedMsg: Label 'Bifrost Language Models skipped claiming the chat provider on Setup ori at install: missing TableData permission. Chat Provider Type stays unchanged until an administrator sets it.', Locked = true;
-    begin
-        CustomDimensions.Add('tableId', Format(Database::"Setup ori", 0, 9));
-        CustomDimensions.Add('deniedPermission', DeniedPermission);
-        Session.LogMessage(ClaimSkippedTok, ClaimSkippedMsg, Verbosity::Warning,
-            DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
     end;
 
     /// <summary>
