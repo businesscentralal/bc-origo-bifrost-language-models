@@ -32,8 +32,11 @@ codeunit 10035425 "LangModel Turn Guard ori"
     begin
         if ContextTokens <= 0 then
             ContextTokens := FallbackContextTokens();
-        ToolDefinitions.WriteTo(ToolsText);
-        AvailableTokens := ContextTokens - MaxTokens - Round(StrLen(ToolsText) / 3.5, 1, '>');
+        AvailableTokens := ContextTokens - MaxTokens;
+        if ToolDefinitions.Count() > 0 then begin
+            ToolDefinitions.WriteTo(ToolsText);
+            AvailableTokens -= Round(StrLen(ToolsText) / 3.5, 1, '>');
+        end;
         if AvailableTokens < MinimumHistoryTokens() then
             AvailableTokens := MinimumHistoryTokens();
         exit(Round(AvailableTokens * 3.5 * 0.9, 1, '<'));
