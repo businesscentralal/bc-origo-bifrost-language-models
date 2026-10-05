@@ -25,6 +25,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
         CallFailedErr: Label 'Could not reach the Google AI API. %1', Comment = '%1 = error detail, is-IS=Náði ekki sambandi við Google AI API. %1';
         ApiStatusErr: Label 'Google AI API returned status %1. %2', Comment = '%1 = status code, %2 = detail, is-IS=Google AI API skilaði stöðu %1. %2';
+        InvalidResponseJsonTxt: Label 'The answer is not valid JSON.', Comment = 'is-IS=Svarið er ekki gilt JSON.';
 
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
@@ -84,8 +85,8 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
                 Argument."Result Integer" := 120;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 16384;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 800000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 128000;
             ProcType::GetDefaultSkillUrl:
                 Argument.SetResultText('');
             ProcType::GetDefaultSkillText:
@@ -116,7 +117,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
     begin
         Argument."Base URL" := CopyStr(GetOpenAICompatBaseUrl(Argument), 1, MaxStrLen(Argument."Base URL"));
-        exit(LangModelChatProxy.SendChatMessage(Argument, Argument.GetPayload(), AuthHeaderNameTok, BuildGeminiExtraFields()));
+        exit(LangModelChatProxy.SendChatMessage(Argument, Argument.GetPayload(), AuthHeaderNameTok));
     end;
 
     local procedure DoContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
@@ -124,24 +125,11 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
     begin
         Argument."Base URL" := CopyStr(GetOpenAICompatBaseUrl(Argument), 1, MaxStrLen(Argument."Base URL"));
-        exit(LangModelChatProxy.ContinueWithToolResults(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok, BuildGeminiExtraFields()));
+        exit(LangModelChatProxy.ContinueWithToolResults(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok));
     end;
 
-    // Force text-only responses so Gemini doesn't return audio/mpeg or other modalities the OpenAI-compat layer can't map.
-    // Google's OpenAI-compat layer reads Gemini-native config from extra_body.google.*.
-    local procedure BuildGeminiExtraFields() ExtraFields: JsonObject
-    var
-        GoogleObj: JsonObject;
-        GenerationConfig: JsonObject;
-        Modalities: JsonArray;
-        ExtraBody: JsonObject;
-    begin
-        Modalities.Add('TEXT');
-        GenerationConfig.Add('response_modalities', Modalities);
-        GoogleObj.Add('generation_config', GenerationConfig);
-        ExtraBody.Add('google', GoogleObj);
-        ExtraFields.Add('extra_body', ExtraBody);
-    end;
+    // No extra request fields: Google's OpenAI-compatible endpoint refuses extra_body.google.generation_config
+    // ("Unknown name generation_config"), and a chat model answers in text without it (#40 live test, 05.10.2026).
 
     [NonDebuggable]
     local procedure DoCompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
@@ -338,7 +326,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
             Error(ApiStatusErr, Format(HttpResponse.HttpStatusCode()), GetErrorDetail(ResponseText));
 
         if not Response.ReadFrom(ResponseText) then
-            Error(CallFailedErr, 'Invalid response JSON.');
+            Error(CallFailedErr, InvalidResponseJsonTxt);
 
         LogApiCall('generateContent', 'POST', Url,
             HttpResponse.HttpStatusCode(), CurrentDateTime() - StartTime, RequestText, ResponseText);
@@ -433,7 +421,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
             exit(false);
         end;
         if not Response.ReadFrom(ResponseText) then begin
-            Argument.SetErrorMessage(StrSubstNo(CallFailedErr, 'Invalid response JSON.'));
+            Argument.SetErrorMessage(StrSubstNo(CallFailedErr, InvalidResponseJsonTxt));
             exit(false);
         end;
         if not Response.Get('models', ModelsToken) then begin

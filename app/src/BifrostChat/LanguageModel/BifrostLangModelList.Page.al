@@ -11,6 +11,7 @@ page 10035344 "Bifrost LangModel List ori"
     Caption = 'Bifrost Language Models', Comment = 'is-IS=Bifröst mállíkön';
     ContextSensitiveHelpPage = 'bifrost-lang-model-list';
     PageType = List;
+    Extensible = false;
     SourceTable = "Bifrost Language Model ori";
     ApplicationArea = All;
     UsageCategory = None;

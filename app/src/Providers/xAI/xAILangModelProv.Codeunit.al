@@ -81,8 +81,8 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
                 Argument."Result Integer" := 120;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 16384;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 80000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 128000;
             ProcType::GetDefaultSkillUrl:
                 Argument.SetResultText('');
             ProcType::GetDefaultSkillText:

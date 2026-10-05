@@ -16,6 +16,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     var
         ToolServer: Codeunit "MCP Tool Server ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        TurnGuard: Codeunit "LangModel Turn Guard ori";
         RequestLogger: Codeunit "Request Logger ori";
         UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot líkanið.';
         MissingMessagesLbl: Label 'Payload must contain a messages array with at least one entry.', Comment = 'is-IS=Inntak verður að innihalda skilaboðalista með að minnsta kosti einu atriði.';
@@ -36,6 +37,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         Iteration: Integer;
         MaxIterations: Integer;
         StartTime: DateTime;
+        FiguresVerified: Boolean;
     begin
         StartTime := CurrentDateTime();
 
@@ -52,6 +54,9 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         AOAIChatMessages.SetPrimarySystemMessage(SystemPrompt);
         ParseMessages(PayloadObject, AOAIChatMessages);
         AddToolDefinitions(AOAIChatMessages);
+        // AOAI Chat Messages sends only the last 10 messages by default, which drops the question in a turn with several
+        // tool calls; the history is kept for the whole loop instead (#40).
+        AOAIChatMessages.SetHistoryLength(CopilotHistoryLength());
         AOAIChatCompletionParams.SetMaxTokens(4096);
 
         MaxIterations := 25;
@@ -66,6 +71,12 @@ codeunit 10035393 "Copilot Chat Proxy ori"
 
             if not AOAIOperationResponse.IsFunctionCall() then begin
                 Reply := AOAIChatMessages.GetLastMessage();
+                // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
+                if (ToolTrace.Count() = 0) and (not FiguresVerified) and TurnGuard.ContainsFigures(Reply) then begin
+                    FiguresVerified := true;
+                    AOAIChatMessages.AddUserMessage(TurnGuard.GetVerifyFiguresPrompt());
+                    continue;
+                end;
                 ResponseJson := BuildSuccessResponse(Reply, ToolTrace);
                 LogRequest('ChatCompletion', SystemPrompt, ResponseJson, true, '', StartTime);
                 exit(ResponseJson);
@@ -85,7 +96,6 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         PromptBuilder: TextBuilder;
         RecordContextToken: JsonToken;
         RecordContext: Text;
-        UserPrompt: Text;
         UserSkill: Text;
     begin
         PromptBuilder.Append(ToolServer.Bootstrap(''));
@@ -101,13 +111,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
             end;
         end;
 
-        UserPrompt := GetTextProperty(PayloadObject, 'systemPrompt');
-        if UserPrompt <> '' then begin
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine('USER INSTRUCTIONS:');
-            PromptBuilder.Append(UserPrompt);
-        end;
+        // The user's own prompt is not appended here: Foundation's Bootstrap carries it once, under USER INSTRUCTIONS (#40, core#157).
 
         UserSkill := GetTextProperty(PayloadObject, 'contextSkill');
         if UserSkill <> '' then begin
@@ -118,6 +122,11 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         end;
 
         SystemPrompt := PromptBuilder.ToText();
+    end;
+
+    local procedure CopilotHistoryLength(): Integer
+    begin
+        exit(100);
     end;
 
     local procedure AddToolDefinitions(var AOAIChatMessages: Codeunit "AOAI Chat Messages")

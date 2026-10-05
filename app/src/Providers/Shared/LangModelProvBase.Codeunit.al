@@ -11,7 +11,6 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     var
         HttpClientBlockedMsg: Label 'HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.', Comment = 'is-IS=HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.';
-        ServiceGateDeniedErr: Label 'No language model is configured with a chat provider. Set up a Bifrost Language Model with a Chat Provider.', Comment = 'is-IS=Ekkert mállíkan er stillt með spjallveitanda. Settu upp Bifröst mállíkan með spjallveitanda.';
 
     /// <summary>
     /// Returns whether the current user may view, set or clear the shared (service) API key.
@@ -98,29 +97,6 @@ codeunit 10035410 "LangModel Prov. Base ori"
             InputTokens := PromptToken.AsValue().AsInteger();
         if UsageObject.Get('completion_tokens', CompletionToken) then
             OutputTokens := CompletionToken.AsValue().AsInteger();
-    end;
-
-    /// <summary>
-    /// Returns whether any Bifrost Language Model is configured with an external chat provider.
-    /// </summary>
-    procedure HasServiceGate(): Boolean
-    var
-        BifrostLanguageModel: Record "Bifrost Language Model ori";
-    begin
-        BifrostLanguageModel.ReadIsolation := IsolationLevel::ReadUncommitted;
-        BifrostLanguageModel.SetFilter("Chat Provider", '<>%1', BifrostLanguageModel."Chat Provider"::None);
-        exit(not BifrostLanguageModel.IsEmpty());
-    end;
-
-    /// <summary>
-    /// Asserts that a language model with a chat provider exists; responds with error if not.
-    /// </summary>
-    procedure AssertServiceGate(var Argument: Record "Message Argument ori"): Boolean
-    begin
-        if HasServiceGate() then
-            exit(true);
-        Argument.RespondWithError(ServiceGateDeniedErr);
-        exit(false);
     end;
 
     /// <summary>

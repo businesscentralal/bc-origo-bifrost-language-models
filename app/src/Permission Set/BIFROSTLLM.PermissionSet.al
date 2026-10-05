@@ -38,6 +38,7 @@ permissionset 10035404 "BIFROST LLM ori"
         codeunit "Bifrost LangModel Test Ctx ori" = X,
         codeunit "Copilot AOAI Func Impl ori" = X,
         codeunit "Copilot Chat Proxy ori" = X,
+        codeunit "LangModel Turn Guard ori" = X,
         codeunit "Copilot Default Skill ori" = X,
         codeunit "Copilot Install ori" = X,
         codeunit "Copilot LangModel Prov. ori" = X,

@@ -15,6 +15,7 @@ page 10035343 "Bifrost LangModel Card ori"
     Caption = 'Bifrost Language Model', Comment = 'is-IS=Bifröst mállíkan';
     ContextSensitiveHelpPage = 'bifrost-lang-model-card';
     PageType = Card;
+    Extensible = false;
     SourceTable = "Bifrost Language Model ori";
     ApplicationArea = All;
     UsageCategory = None;
@@ -75,6 +76,12 @@ page 10035343 "Bifrost LangModel Card ori"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the maximum number of tokens in the response. 0 uses the provider default.', Comment = 'is-IS=Tilgreinir hámarksfjölda tókena í svari. 0 notar sjálfgefin gildi veitanda.';
+                    Enabled = HasExternalEndpoint;
+                }
+                field("Context Tokens"; Rec."Context Tokens")
+                {
+                    ApplicationArea = All;
+                    BlankZero = true;
                     Enabled = HasExternalEndpoint;
                 }
                 field("Chat Path"; Rec."Chat Path")
@@ -460,6 +467,7 @@ page 10035343 "Bifrost LangModel Card ori"
         TempArgument.Model := Rec.Model;
         TempArgument."Timeout Ms" := Rec."Timeout Seconds" * 1000;
         TempArgument."Max Tokens" := Rec."Max Tokens";
+        TempArgument."Context Tokens" := Rec.GetContextTokens();
         TempArgument."Chat Path" := Rec."Chat Path";
         TempArgument."Models Path" := Rec."Models Path";
         if LangModelSecrets.TryGetApiKey(Rec.Code, ApiKeyValue) then

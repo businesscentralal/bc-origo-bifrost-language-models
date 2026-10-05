@@ -14,6 +14,7 @@ page 10035421 "LangModel Setup ori"
     Caption = 'Bifrost Language Models Setup', Comment = 'is-IS=Uppsetning Bifröst mállíkana';
     ContextSensitiveHelpPage = 'language-models-setup';
     PageType = Card;
+    Extensible = false;
     ApplicationArea = All;
     UsageCategory = None;
     InsertAllowed = false;

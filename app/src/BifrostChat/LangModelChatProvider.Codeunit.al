@@ -200,6 +200,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
         if not ResolveChatLanguageModel(BifrostLanguageModel) then
@@ -208,6 +209,8 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BuildArgument(BifrostLanguageModel, TempArgument);
         TempArgument.SetPayload(PayloadJson);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::SendChatMessage);
+        // After the provider call: the stamp is a write, and Bootstrap runs message types through Codeunit.Run.
+        LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         exit(TempArgument.GetResultText());
     end;
 
@@ -219,6 +222,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
         if not ResolveChatLanguageModel(BifrostLanguageModel) then
@@ -228,6 +232,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument.SetConversationState(ConversationState);
         TempArgument.SetToolResults(ToolResultsJson);
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::ContinueWithToolResults);
+        LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         exit(TempArgument.GetResultText());
     end;
 
@@ -315,6 +320,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument.Model := BifrostLanguageModel.Model;
         TempArgument."Timeout Ms" := BifrostLanguageModel."Timeout Seconds" * 1000;
         TempArgument."Max Tokens" := BifrostLanguageModel."Max Tokens";
+        TempArgument."Context Tokens" := BifrostLanguageModel.GetContextTokens();
         TempArgument."Chat Path" := BifrostLanguageModel."Chat Path";
         TempArgument."Models Path" := BifrostLanguageModel."Models Path";
         TempArgument.SetSkill(BifrostLanguageModel.GetSkill());

@@ -76,8 +76,8 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
                 Argument."Result Integer" := 300;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 8192;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 80000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 32000;
             ProcType::GetDefaultSkillUrl:
                 Argument.SetResultText('');
             ProcType::GetDefaultSkillText:

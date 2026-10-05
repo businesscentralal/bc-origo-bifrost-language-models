@@ -80,8 +80,8 @@ codeunit 10035416 "Anthropic LangModel Prov. ori" implements "Bifrost LangModel 
                 Argument."Result Integer" := 300;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 16384;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 160000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 200000;
             ProcType::GetDefaultSkillUrl:
                 Argument.SetResultText('');
             ProcType::GetDefaultSkillText:

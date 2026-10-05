@@ -22,11 +22,11 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation **28.0.0.0** in `app.json` (`7505e808-6e52-4b96-a328-82573391297a`); symbols come from core build 1.0.0.132 via AL-Go probing (`GetRequestDebugMode` needs core build 124 or later)
+- Bifrost Foundation **28.0.1.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): the first Foundation version with `Setup ori.TryClaimChatProvider` public again (core#881). AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
 
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
-- Permission set object names are at most 20 characters (`BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST Chat ori`).
+- Permission set object names are at most 20 characters (`BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST LLM Chat ori`, `BIFROST ChatSvc ori`). `BIFROST Chat ori` is Foundation's chat gate set, not this app's.
 - The brand name "Bifrost" lives in the namespace, the app name and user-facing captions - never as an object-name prefix. Exception: the chat feature is a product name, "Bifrost Chat" (objects `Bifrost Chat ... ori`, folder `app/src/BifrostChat`, Icelandic "Spjalla við Bifröst").
 - The chat "role" concept is the **Language Model**: table `Bifrost Language Model ori`, sub-objects `Bifrost LangModel ... ori` (Card, List, Prov., Provider, None, Test Ctx - `LangModel` keeps them within 30 characters), User Setup field `Bifrost Language Model Code`, Icelandic "mállíkan". The JSON request key `roleCode` stays (API contract).
 - "MCP Tool Server" keeps its protocol name (Model Context Protocol).
@@ -56,9 +56,39 @@ as values on the base enum `Bifrost LangModel Prov. ori` (2-7): `OpenAI LangMode
 `Azure OAI LangModel Prov. ori`, `Custom LLM LangModel Prov. ori`, `Anthropic LangModel Prov. ori`
 (+ `Anthropic LangModel Proxy ori` for its own Messages API), `xAI LangModel Prov. ori`,
 `Gemini LangModel Prov. ori`. They were migrated from the standalone *Origo Cloud Events Chat* app
-(businesscentralal/origo-bc-cloudevents-chat), which Bifrost Language Models replaces - see CHANGELOG 28.0.0.0 for the full
-rename table and the `Chat Providers Install ori` data take-over.
+(businesscentralal/origo-bc-cloudevents-chat), which Bifrost Language Models replaces - see CHANGELOG 28.0.0.0 for the
+rename table. The install take-over from that app was removed in #27 (no data to take over).
 Shared infrastructure lives in `app/src/Providers/Shared/`: `LangModel Prov. Base ori`,
+`LangModel API Client ori`, `LangModel Chat Proxy ori`, `LangModel Turn Guard ori` (the rules of one chat turn, #40),
+table `Chat Svc Gate ori` (shared-key permission gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
+Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 OpenAI/Azure OpenAI/xAI/Gemini,
+200,000 Anthropic, 0 Copilot/None); `Bifrost Language Model ori.GetContextTokens()` returns `Context Tokens` or that default.
+
+### Object ids (re-derived 05.10.2026 from `main` and open PRs)
+- App, in use: 10035335, 10035337-10035340, 10035342-10035382, 10035384-10035396, 10035398-10035407,
+  10035409-10035419, 10035421-10035423, **10035425** `LangModel Turn Guard ori` (#40). Enumextension 10035384
+  `LangModel Chat Provider Type` shares its number with codeunit 10035384 (object ids are per type).
+- App, claimed by PR #50: codeunit **10035408** `LangModel Field Restrict ori` (#49).
+- App, free (reusable, codeunits/pages): 10035336, 10035341, 10035383, 10035397, 10035420, 10035424 and 10035426-10035484.
+  10035336 (table `Chat Gate ori`, moved to Foundation) and 10035420/10035424 (take-over codeunits, #27) stay free
+  for their own object type only; never reuse a freed table id.
+- `Bifrost Language Model ori` field numbers in use: 1, 2, 10-12, 20-26 (26 `Context Tokens`, #40). Next free: 27.
+- `Bifrost Chat Argument ori` field numbers in use: 1, 2, 10-16 (16 `Context Tokens`), 40, 50-53. Next free below 40: 17.
+- Tests, in use: 96000-96003, 96009-96019 (96017 `Copilot Upgrade Tests`, 96018 `Copilot Install Tests`, 96019
+  `LLM Prompt Contract Tests`), enumextension 96000 `Mock Bifrost LangModel Prov.`, enumextension **96020**
+  `Mock Chat Provider Type`, codeunit **96021** `Mock Chat Provider`, codeunit **96022** `LangModel Turn Guard Tests`.
+  Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
+  codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
+  `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
+  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
+
+### Testing the chat of every provider
+- `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
+  (outside every repo; it names where each key is, never the key) and stores the keys through **Test.LanguageModel.Set**.
+  Keys come from the SecretManagement vault (`Set-Secret`) or a user-level environment variable; they never go into a
+  file in a repository, a command line, a chat or an MCP call. `-Chat` runs **Test.LanguageModel.Chat** against each model.
+- Do not call Test.LanguageModel.Set with a key through the MCP server: the key would end up in the conversation.
+  Test.LanguageModel.Chat and .Delete are fine through MCP.
 `LangModel API Client ori`, `LangModel Chat Proxy ori`, table `Chat Svc Gate ori` (shared-key permission
 gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
 Object ids 10035406-10035420 are used by the providers - **10035408** = `LangModel Field Restrict ori`
@@ -76,7 +106,7 @@ Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version 
 
 - **Setup**: `Setup LangModel ori` (pageextension 10035403) contains **only** `addlast(Apps)` with the
   `LangModelSetup` action and `addlast(Category_Apps)` with its actionref - no fields, no other groups, no
-  trigger. Everything else lives on `LangModel Setup ori` (page 10035421, help slug `bragi-setup`), which
+  trigger. Everything else lives on `LangModel Setup ori` (page 10035421, help slug `language-models-setup`), which
   shows the language models, the MCP tool count and the missing API keys and opens **Bifrost App Secrets**
   filtered to Bifrost Language Models.
 - **Setup notifications**: this app raises **none**, anywhere. Across the Bifröst family setup
@@ -114,13 +144,15 @@ Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version 
 Documentation lives in businesscentralal/bifrost (site bifrost.origo.is); no Help/ or docs/ folders in
 this repo - deviation from the Origo PR gateway check 8 approved by the user 2026-09-06.
 
-- Product documentation: https://businesscentralal.github.io/bifrost/en-us/bragi/ (`docs/bragi/` in the site repository)
-- In-product help: https://businesscentralal.github.io/bifrost/en-us/help/bragi/ (`help/bragi/`)
+- Product documentation: https://businesscentralal.github.io/bifrost/en-us/language-models/ (`docs/language-models/` in the site repository)
+- In-product help: https://businesscentralal.github.io/bifrost/en-us/help/language-models/ (`help/language-models/`)
 - `app.json` points at those URLs through `help` and `contextSensitiveHelpUrl`; `ContextSensitiveHelpPage`
-  on every page and page extension carries the Docusaurus slug (`bragi-setup`,
+  on every page and page extension carries the Docusaurus slug (`language-models-setup`,
   `bifrost-chat`, `bifrost-lang-model-card`, `bifrost-lang-model-list`), not an HTML file name. When you add a page,
-  add the matching `help/bragi/<slug>.md` in the site repository - and its Icelandic translation under
-  `i18n/is-IS/docusaurus-plugin-content-docs-help-bragi/current/`.
+  add the matching `help/language-models/<slug>.md` in the site repository - and its Icelandic translation under
+  `i18n/is-IS/docusaurus-plugin-content-docs-help-language-models/current/`. `tools/Test-HelpLinks.ps1` checks it.
+- Until the app is published on the site, its pages wait in `businesscentralal/bifrost-support` under `scratchpad/`
+  (same paths); keep them current with every user-visible change.
 
 ## Development Standards
 
@@ -142,12 +174,13 @@ Key rules always in effect:
 - Implementation = code + tests + documentation (help codeunit, markdown docs, HTML help)
 
 ## Development Environment
-- Two COSMO Alpaca containers, both defined in `app/.vscode/launch.json` (git-ignored, the authority for
-  instance ids): `launch: bc28-is` (Icelandic CRONUS IS, used for the MCP message-type tests) and
-  `launch: bc28-w1` (W1 CRONUS International Ltd.). Publish and run the unit tests on **both**; select the
-  target with `-LaunchConfiguration 'launch: bc28-w1'`.
-- Compile locally with alc.exe + CodeCop/UICop/AppSourceCop, zero errors and zero warnings.
-  Symbols: `app/.alpackages` (Microsoft symbols + the current `Origo_Bifrost Foundation_28.0.0.0.app`),
+- One COSMO Alpaca container (Gunnar, 05.10.2026: only bc28-w1 is needed now): `launch: bc28-w1` (W1 CRONUS
+  International Ltd.) in `app/.vscode/launch.json` (git-ignored, the authority for the instance id). Publish and
+  run the unit tests there with `-LaunchConfiguration 'launch: bc28-w1'`.
+- Compile locally with alc.exe + CodeCop/UICop/AppSourceCop, zero errors and zero warnings. After a caption change
+  run `tools/Update-IcelandicXlf.ps1` and compile again; before a PR run every guard in `tools/` (the *Source Guards*
+  workflow runs all but `Test-IcelandicXlfInSync`, which needs a build).
+  Symbols: `app/.alpackages` (Microsoft symbols + a Foundation 28.0.1.x `.app`),
   `test/.alpackages` (Microsoft test libraries + Foundation + the freshly built Bifrost Language Models app).
 - Publish and test without VS Code (pwsh 7, credential from the user-level env vars `BC28IS_USER` /
   `BC28IS_PASSWORD`, never from files) with the Foundation tooling:
@@ -162,11 +195,11 @@ Key rules always in effect:
 
 ## Message Type Conventions
 - Bifrost Language Models owns exactly one message type, `LLM.Prompt.Complete`, registered on Foundation's `Message Type ori`
-  enum by `LangModel Message Type ori`. It has an `LLM Prompt Compl Impl ori` codeunit (`ExecuteBifrostTask`),
-  an `LLM Prompt Compl Help ori` help codeunit and a section in the message-type reference on
-  bifrost.origo.is (`docs/bragi/message-types.md` in the `businesscentralal/bifrost` repository).
-- Errors must be returned as `status = Error` with a helpful message via `Argument.RespondWithError`;
-  never let an unhandled exception reach the API.
+  enum by `LangModel Message Type ori`. `LLM Prompt Compl Impl ori` implements `Msg Interface ori`, `Msg Discovery ori`
+  and `Msg Contract ori`; its contract chapters are its help (no help codeunit, no message-type page on the site).
+- Errors are returned as `status = Error` through the coded `Argument.RespondWithError(code, message, parameter,
+  received, expected, nextStep)`; never an uncoded text and never an unhandled exception. The errors chapter uses the
+  same labels as the live answers. Texts a caller reads are translated (not `Locked`).
 
 ## Test App Rules
 - **The test app uses Bifröst Foundation's public API only.** Bifrost Language Models - Tests is not listed in
@@ -177,6 +210,6 @@ Key rules always in effect:
   directly on a temporary `Message Argument ori` when that Impl does not call `AssertIsLicensed`.
 
 ## Testing Through the MCP Server
-- `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-is` server hit Bifrost Language Models through
+- `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-w1` server hit Bifrost Language Models through
   Foundation's route (`origo/bifrost/v1.0`). Keep calls serial - parallel bursts crash the server.
-  Test data uses the `BIFT-<letter>` prefix in CRONUS IS.
+  Test data uses the `BIFT-<letter>` prefix.

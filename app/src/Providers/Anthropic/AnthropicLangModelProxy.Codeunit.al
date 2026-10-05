@@ -16,6 +16,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         ToolServer: Codeunit "MCP Tool Server ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        TurnGuard: Codeunit "LangModel Turn Guard ori";
         AnthropicVersionTok: Label '2023-06-01', Locked = true;
         MessagesPathTok: Label '%1/v1/messages', Locked = true;
         ModelsPathTok: Label '%1/v1/models?limit=100', Locked = true;
@@ -54,7 +55,8 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             Messages, AnthropicTools, Model, SystemPrompt, ApiKey,
             ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok),
             ProviderBase.GetTimeoutMs(Argument, 300000),
-            ProviderBase.GetMaxTokens(Argument, 16384)));
+            ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens"));
     end;
 
     [NonDebuggable]
@@ -215,22 +217,25 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             Messages, AnthropicTools, Model, SystemPrompt, ApiKey,
             ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok),
             ProviderBase.GetTimeoutMs(Argument, 300000),
-            ProviderBase.GetMaxTokens(Argument, 16384)));
+            ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens"));
     end;
 
     [NonDebuggable]
-    local procedure CallAnthropicOnce(var Messages: JsonArray; AnthropicTools: JsonArray; Model: Text; SystemPrompt: Text; ApiKey: SecretText; BaseUrl: Text; TimeoutMs: Integer; MaxTokens: Integer): Text
+    local procedure CallAnthropicOnce(var Messages: JsonArray; AnthropicTools: JsonArray; Model: Text; SystemPrompt: Text; ApiKey: SecretText; BaseUrl: Text; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer): Text
     var
         Response: JsonObject;
         RequestBody: JsonObject;
         ContentToken: JsonToken;
         AssistantMessage: JsonObject;
+        VerifyMessage: JsonObject;
         UsageObject: JsonObject;
         UsageToken: JsonToken;
         Reply: Text;
     begin
         ChatUtils.CompactOlderToolResults(Messages, 5, 500);
-        ChatUtils.TrimMessageHistory(Messages, 160000);
+        // The budget follows the model's context size (#40).
+        ChatUtils.TrimMessageHistory(Messages, TurnGuard.HistoryBudgetChars(ContextTokens, MaxTokens, AnthropicTools));
         RemoveOrphanedToolMessages(Messages);
 
         RequestBody.Add('model', Model);
@@ -260,6 +265,14 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             exit(BuildToolCallsResponse(ContentToken.AsArray(), Messages, Model, SystemPrompt, UsageObject));
 
         Reply := ExtractText(Response);
+        // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
+        if TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+            Clear(VerifyMessage);
+            VerifyMessage.Add('role', 'user');
+            VerifyMessage.Add('content', TurnGuard.GetVerifyFiguresPrompt());
+            Messages.Add(VerifyMessage);
+            exit(CallAnthropicOnce(Messages, AnthropicTools, Model, SystemPrompt, ApiKey, BaseUrl, TimeoutMs, MaxTokens, ContextTokens));
+        end;
         exit(BuildSuccessResponse(Reply, UsageObject));
     end;
 
@@ -357,7 +370,6 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         PromptBuilder: TextBuilder;
         RecordContextToken: JsonToken;
         RecordContext: Text;
-        UserPrompt: Text;
         RoleSkill: Text;
         ContextSkill: Text;
     begin
@@ -390,13 +402,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             PromptBuilder.Append(ContextSkill);
         end;
 
-        UserPrompt := Argument.GetUserPrompt();
-        if UserPrompt <> '' then begin
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine('USER INSTRUCTIONS:');
-            PromptBuilder.Append(UserPrompt);
-        end;
+        // The user's own prompt is not appended here: Foundation's Bootstrap carries it once, under USER INSTRUCTIONS (#40, core#157).
 
         SystemPrompt := PromptBuilder.ToText();
     end;

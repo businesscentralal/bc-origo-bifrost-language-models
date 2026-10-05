@@ -12,7 +12,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
     Access = Internal;
 
     var
-        CopilotNotEnabledLbl: Label 'Copilot is not enabled for Bifrost Chat. Ask your administrator to enable it in Copilot & AI Capabilities.', Comment = 'is-IS=Copilot er ekki virkjað fyrir Bifröst Chat. Biddu kerfisstjóra um að virkja það í Copilot og gervigreind.';
+        CopilotNotEnabledLbl: Label 'Copilot is not enabled for Bifrost Chat. Ask your administrator to enable it on the Copilot & agent capabilities page.', Comment = 'is-IS=Copilot er ekki virkjað fyrir Bifröst spjall. Biddu kerfisstjóra um að virkja það á síðunni Copilot og eiginleikar fulltrúa.';
         FilesNotSupportedErr: Label 'The Copilot provider does not support file attachments. Use an external provider (OpenAI, Azure OpenAI, Anthropic) for document processing.', Comment = 'is-IS=Copilot veitandi styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.';
 
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
@@ -66,7 +66,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
                 Argument.SetResultText(GetDefaultSkillTextInternal());
             ProcType::GetDefaultTimeoutSeconds,
             ProcType::GetDefaultMaxTokens,
-            ProcType::GetContextWindowChars:
+            ProcType::GetDefaultContextTokens:
                 Argument."Result Integer" := 0;
         end;
     end;

@@ -14,6 +14,7 @@ table 10035337 "Bifrost Chat Argument ori"
     Caption = 'Bifrost Chat Argument', Comment = 'is-IS=Bifröst spjallviðfang';
     DataClassification = SystemMetadata;
     TableType = Temporary;
+    Extensible = false;
 
     fields
     {
@@ -55,6 +56,11 @@ table 10035337 "Bifrost Chat Argument ori"
         field(15; "Models Path"; Text[250])
         {
             Caption = 'Models Path';
+            DataClassification = SystemMetadata;
+        }
+        field(16; "Context Tokens"; Integer)
+        {
+            Caption = 'Context Tokens', Comment = 'is-IS=Samhengistákn';
             DataClassification = SystemMetadata;
         }
         field(40; "Debug Mode"; Boolean)
