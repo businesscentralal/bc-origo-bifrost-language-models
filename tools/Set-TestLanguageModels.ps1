@@ -33,6 +33,8 @@
     redacts the request in the message queue before storing the key in Foundation's secret store, and answers only
     whether each key is stored. This script never prints a key.
 
+    With -ChatOnly, the models are not set up and no key is read (the vault is not opened): only the chat turns run.
+
     With -Chat, Test.LanguageModel.Chat runs one turn (tool calls included) against every model in the file and prints
     the provider, the number of tool rounds, the tools called and the reply.
 
@@ -51,6 +53,7 @@ param(
     [string]$LaunchConfiguration = 'launch: bc28-w1',
     [string]$CompanyName,
     [switch]$Chat,
+    [switch]$ChatOnly,
     [string]$Prompt = 'How many customers are there, and what is the balance of the first one? Use the tools.',
     [switch]$Remove,
     [string]$UserVariable = 'BC28IS_USER',
@@ -127,7 +130,8 @@ if ($Remove) {
     return
 }
 
-$models = foreach ($entry in $entries) {
+if ($ChatOnly) { $Chat = $true }
+$models = if ($ChatOnly) { @() } else { foreach ($entry in $entries) {
     $model = [ordered]@{}
     foreach ($p in $entry.PSObject.Properties) {
         if ($p.Name -notin 'apiKey', 'keyScope') { $model[$p.Name] = $p.Value }
@@ -139,11 +143,13 @@ $models = foreach ($entry in $entries) {
         $keyValue = $null
     }
     $model
+} }
+if (-not $ChatOnly) {
+    $answer = Invoke-BifrostType 'Test.LanguageModel.Set' @{ models = @($models) }
+    $models = $null
+    if ($answer.status -ne 'Success') { throw "Test.LanguageModel.Set: $($answer.error) $($answer.errors | ConvertTo-Json -Compress)" }
+    $answer.models | Select-Object code, chatProvider, model, effectiveContextTokens, sharedKeyStored, personalKeyStored | Format-Table -AutoSize | Out-Host
 }
-$answer = Invoke-BifrostType 'Test.LanguageModel.Set' @{ models = @($models) }
-$models = $null
-if ($answer.status -ne 'Success') { throw "Test.LanguageModel.Set: $($answer.error) $($answer.errors | ConvertTo-Json -Compress)" }
-$answer.models | Select-Object code, chatProvider, model, effectiveContextTokens, sharedKeyStored, personalKeyStored | Format-Table -AutoSize | Out-Host
 
 # --- chat -------------------------------------------------------------------------------------------------------
 if ($Chat) {
