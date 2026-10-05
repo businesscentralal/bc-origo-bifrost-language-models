@@ -68,7 +68,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
 - App, in use: 10035335, 10035337-10035340, 10035342-10035382, 10035384-10035396, 10035398-10035407,
   10035409-10035419, 10035421-10035423, **10035425** `LangModel Turn Guard ori` (#40). Enumextension 10035384
   `LangModel Chat Provider Type` shares its number with codeunit 10035384 (object ids are per type).
-- App, claimed by PR #50: codeunit **10035408** `LangModel Field Restrict ori` (#49).
+- App, from #50 (#49): codeunit **10035408** `LangModel Field Restrict ori`.
 - App, free (reusable, codeunits/pages): 10035336, 10035341, 10035383, 10035397, 10035420, 10035424 and 10035426-10035484.
   10035336 (table `Chat Gate ori`, moved to Foundation) and 10035420/10035424 (take-over codeunits, #27) stay free
   for their own object type only; never reuse a freed table id.
@@ -80,7 +80,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
   codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
   `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
-  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
+  From #50 (#49): **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
 
 ### Testing the chat of every provider
 - `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
