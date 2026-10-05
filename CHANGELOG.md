@@ -2,13 +2,43 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
-## Unreleased
+## [Unreleased]
+
+### Changed (2026-10-05) - Aligned with Bifrost Foundation 28.0.1
+
+- The Bifrost Foundation dependency floor in `app/app.json` and `test/app.json` is **28.0.1.0**, the first Foundation version with `Setup ori.TryClaimChatProvider` public again (core#881).
+- Every table and page declares `Extensible`: `Bifrost Language Model ori`, `Bifrost Chat Argument ori`, `Chat Svc Gate ori`, `Bifrost LangModel Card ori`, `Bifrost LangModel List ori`, `Bifrost Chat Model List ori` and `LangModel Setup ori` are `Extensible = false` (no other app extends them; they can be opened later).
+- `tools/` carries Foundation's source guards (`Test-PermissionCoverage`, `Test-MixedLanguageLabels`, `Test-IcelandicXlfInSync`, `Test-IcelandicKeywordCounts`, `Test-ContractParameterKeys`, `Test-NoObsolete`, `Test-NoClientCallstack`, `Test-ValidatedTableView`, `Test-HelpLinks`) and `Update-IcelandicXlf.ps1`. New workflows *Source Guards* and *Help Links* run them on pull requests. The Icelandic xlf is rebuilt with the script.
+- Google Gemini: the "invalid response" error detail is translated instead of an English literal inside an Icelandic sentence.
+- Removed the unused `LangModel Prov. Base ori.AssertServiceGate` and `HasServiceGate`, the last uncoded error answer in the app.
+- README, AGENTS.md and `.claude/CLAUDE.md` describe the app as it is: the chat UI, chat gate and MCP Tool Server are Foundation's, help lives under `help/language-models/`, and the object-id registry is re-derived.
+
+### Changed (2026-10-05) - The chat provider claim goes through Foundation (#34, #35)
+
+- `Copilot Install ori.ClaimChatProvider` calls Foundation's `Setup ori.TryClaimChatProvider(LanguageModels)`, which carries its own inherent permissions (core#122, core#251, core#881). An install or upgrade under restricted permissions now **claims** the chat provider instead of skipping. The claim still happens only while `Chat Provider Type` is None or already Language Models; another app or an administrator's choice is never overridden.
+- `Copilot Upgrade ori.OnUpgradePerCompany` also claims, so a tenant whose install skipped the claim is finished by the next upgrade.
+- The local `ReadPermission` / `WritePermission` probe and telemetry event **ORI-BIF-0422** are gone; remove any alert on that event.
+- Tests: `Copilot Install Tests` (96018) `ClaimChatProvider_WithoutSetupPermission_Claims`, `_WhenAnotherProviderHolds_LeavesItUnchanged`, `_WhenNone_ClaimsLanguageModels`, `_Twice_IsIdempotent`, `_MissingSetupRow_CreatesAndClaims`; new `Copilot Upgrade Tests` (96017). Test-only `Mock Chat Provider Type` (enumextension 96020) and `Mock Chat Provider` (codeunit 96021) stand for another app holding the claim.
+
+### Fixed (2026-10-05) - Bifrost Chat keeps the question and checks figures (#40)
+
+- New field **Context Tokens** on `Bifrost Language Model ori` (field 26, on the card next to Max Tokens): the model's context size. 0 uses the provider default (32,000 Custom LLM; 128,000 OpenAI, Azure OpenAI, xAI and Gemini; 200,000 Anthropic), answered by each provider through `GetDefaultContextTokens` (the never-read `GetContextWindowChars` procedure type is renamed).
+- The history budget of each chat request is (context − Max Tokens − tool definitions) × 3.5 characters, less a 10 % margin, instead of the fixed 80,000 (Chat Completions) and 160,000 (Anthropic) characters. The Responses path, which did not trim at all, uses the same budget.
+- After the trim, tool messages whose partner was removed are dropped on the Chat Completions and Responses paths, so no request starts with an orphaned tool message.
+- When a final reply states figures (four or more digits, or a number with a separator) and no tool was called in the turn, the model is asked once to verify them with a tool or say it cannot. At most one follow-up per turn, on every provider including Copilot.
+- The user's own prompt is sent once: Foundation's `Bootstrap` carries it under `USER INSTRUCTIONS:` (core#157), so the providers no longer append it again.
+- Copilot keeps the whole turn in its history (`SetHistoryLength(100)` instead of the platform default of 10 messages), so a turn with several tool calls keeps the question.
+- New codeunit `LangModel Turn Guard ori` (10035425); tests `LangModel Turn Guard Tests` (96022) and `Bifrost Language Model Tests` (96003) `GetContextTokens_*`.
+
+### Fixed (2026-10-05) - LLM.Prompt.Complete answers coded errors (#32)
+
+- Every error answer carries Foundation's structure (`code`, `parameter`, `received`, `expected`, `nextStep`): PermissionDenied for a caller without `BIFROST Chat ori`, MissingParameter on `prompt`, RecordNotFound on `roleCode` (a code longer than 20 characters is no longer cut and matched), PreconditionFailed when no usable language model is set up and when the provider fails.
+- The errors chapter of the contract uses the same labels as the live answers and names both permission sets: Foundation's `BIFROST Chat ori`, and `BIFROST LLM Chat ori` for a language model whose provider is not Copilot.
+- Tests: `LLM Prompt Contract Tests` (96019) `Contract_NamesBothPermissionSets`, `Execute_MissingPrompt_IsCodedMissingParameter`, `Execute_UnknownRoleCode_IsCodedRecordNotFound`, `Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut`.
 
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.
-
-## [Unreleased]
 
 ### Removed (2026-10-01) - markdown help procedure (#46)
 

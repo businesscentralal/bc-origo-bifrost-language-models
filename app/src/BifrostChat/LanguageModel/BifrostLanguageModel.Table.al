@@ -13,6 +13,7 @@ using System.Utilities;
 table 10035335 "Bifrost Language Model ori"
 {
     Access = Public;
+    Extensible = false;
     Caption = 'Bifrost Language Model', Comment = 'is-IS=Bifröst mállíkan';
     DataClassification = CustomerContent;
     LookupPageId = "Bifrost LangModel List ori";

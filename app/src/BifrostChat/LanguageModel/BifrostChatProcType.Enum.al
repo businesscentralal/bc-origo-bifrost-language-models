@@ -42,7 +42,7 @@ enum 10035338 "Bifrost Chat Proc. Type ori"
     value(121; GetDefaultModel) { Caption = 'GetDefaultModel'; }
     value(122; GetDefaultTimeoutSeconds) { Caption = 'GetDefaultTimeoutSeconds'; }
     value(123; GetDefaultMaxTokens) { Caption = 'GetDefaultMaxTokens'; }
-    value(124; GetDefaultContextTokens) { Caption = 'GetDefaultContextTokens'; }
+    value(124; GetDefaultContextTokens) { Caption = 'GetDefaultContextTokens', Comment = 'is-IS=GetDefaultContextTokens'; }
     value(125; GetDefaultSkillUrl) { Caption = 'GetDefaultSkillUrl'; }
     value(126; GetDefaultSkillText) { Caption = 'GetDefaultSkillText'; }
 }

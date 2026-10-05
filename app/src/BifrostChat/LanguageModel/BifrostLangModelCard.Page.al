@@ -15,6 +15,7 @@ page 10035343 "Bifrost LangModel Card ori"
     Caption = 'Bifrost Language Model', Comment = 'is-IS=Bifröst mállíkan';
     ContextSensitiveHelpPage = 'bifrost-lang-model-card';
     PageType = Card;
+    Extensible = false;
     SourceTable = "Bifrost Language Model ori";
     ApplicationArea = All;
     UsageCategory = None;

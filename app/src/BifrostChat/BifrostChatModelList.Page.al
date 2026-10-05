@@ -12,6 +12,9 @@ page 10035342 "Bifrost Chat Model List ori"
 {
     Caption = 'Available Models', Comment = 'is-IS=Tiltæk líkön';
     PageType = List;
+    // Opened from the Model lookup on the language model card, whose help page describes it.
+    ContextSensitiveHelpPage = 'bifrost-lang-model-card';
+    Extensible = false;
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = "Name/Value Buffer";

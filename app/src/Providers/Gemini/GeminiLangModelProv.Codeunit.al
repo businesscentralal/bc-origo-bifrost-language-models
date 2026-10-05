@@ -25,6 +25,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
         CallFailedErr: Label 'Could not reach the Google AI API. %1', Comment = '%1 = error detail, is-IS=Náði ekki sambandi við Google AI API. %1';
         ApiStatusErr: Label 'Google AI API returned status %1. %2', Comment = '%1 = status code, %2 = detail, is-IS=Google AI API skilaði stöðu %1. %2';
+        InvalidResponseJsonTxt: Label 'The answer is not valid JSON.', Comment = 'is-IS=Svarið er ekki gilt JSON.';
 
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
@@ -338,7 +339,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
             Error(ApiStatusErr, Format(HttpResponse.HttpStatusCode()), GetErrorDetail(ResponseText));
 
         if not Response.ReadFrom(ResponseText) then
-            Error(CallFailedErr, 'Invalid response JSON.');
+            Error(CallFailedErr, InvalidResponseJsonTxt);
 
         LogApiCall('generateContent', 'POST', Url,
             HttpResponse.HttpStatusCode(), CurrentDateTime() - StartTime, RequestText, ResponseText);
@@ -433,7 +434,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
             exit(false);
         end;
         if not Response.ReadFrom(ResponseText) then begin
-            Argument.SetErrorMessage(StrSubstNo(CallFailedErr, 'Invalid response JSON.'));
+            Argument.SetErrorMessage(StrSubstNo(CallFailedErr, InvalidResponseJsonTxt));
             exit(false);
         end;
         if not Response.Get('models', ModelsToken) then begin
