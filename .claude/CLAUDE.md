@@ -61,12 +61,13 @@ rename table and the `Chat Providers Install ori` data take-over.
 Shared infrastructure lives in `app/src/Providers/Shared/`: `LangModel Prov. Base ori`,
 `LangModel API Client ori`, `LangModel Chat Proxy ori`, table `Chat Svc Gate ori` (shared-key permission
 gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
-Object ids 10035406-10035420 are used by the providers - except **10035408, which is free again** since
-`Chat Http Notif. Action ori` was deleted with the setup notifications (2026-09-07). 10035421
+Object ids 10035406-10035420 are used by the providers - **10035408** = `LangModel Field Restrict ori`
+(language-models#49, Data.Records endpoint write-block, 05.10.2026). 10035421
 (`LangModel Setup ori`), 10035422 (`LangModel Secrets ori`) and 10035423 (`LangModel Registration ori`)
 carry the setup/secret/registration block. **10035424** = `Chat Takeover State ori` (language-models#8
-probe-denial seam). **The free range is 10035425-10035484, plus 10035408.**
-Test ids used: 96000-96016 and 96018 (96015 = `LLM Req Log Masker Tests`, 96016 = `LangModel Registration Tests`,
+probe-denial seam). **The free range is 10035425-10035484.**
+Test ids used: 96000-96016, 96018 and **96004** (`LangModel Field Restrict Tests`, language-models#49)
+(96015 = `LLM Req Log Masker Tests`, 96016 = `LangModel Registration Tests`,
 96018 = `Copilot Install Tests`); 96017 was freed when #27 removed `Chat Takeover Probe Tests`; free test ids: 96017, 96019-96199.
 language-models#8: install take-over is probe-then-direct-copy (`TryRunTakeOverAtInstall`); A1 telemetry-only;
 Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version **1.0.0.132**.

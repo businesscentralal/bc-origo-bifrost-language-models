@@ -2,13 +2,16 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
-## Unreleased
+## [Unreleased]
+
+### Security (2026-10-05) - generic data API field restrictions (#49, core#344)
+
+- `Data.Records.Set` refuses to set the endpoint fields on `Bifrost Language Model ori` (Base URL 20, Chat Path 24, Models Path 25), also with force. Each row's endpoint is the address the provider API key is sent to, so a generic-write caller could otherwise redirect that key to a server of their choice. New `LangModel Field Restrict ori` (10035408) subscribes to Foundation's `OnAfterIsFieldWriteRestrictedForDataRecords` and `OnGetDedicatedMessageTypeHintForField`; the refusal's nextStep names the Bifrost Language Model card and the Bifrost Language Models setup page. Reading the fields, and the card, list, setup page and install code (which fill them directly), are unchanged.
+- Tests: `LangModel Field Restrict Tests` (96004) read the field flags through the public `Help.Fields.Get` message type (#51), since Foundation keeps `IsFieldWriteRestrictedForDataRecords` and `IsFieldReadRestrictedForDataRecords` internal.
 
 ### Changed (2026-10-04) - CI/CD builds only main; every pull request gets a Pull Request Build
 
 - Build policy only, no app change. `CI/CD` runs on pushes to `main` only, and `Pull Request Build` runs for pull requests into any branch. `.github/AL-Go-Settings.json` sets `CICDPushBranches` to `main` and `CICDPullRequestBranches` to `**`, so Update AL-Go System Files keeps the triggers.
-
-## [Unreleased]
 
 ### Removed (2026-10-01) - markdown help procedure (#46)
 
