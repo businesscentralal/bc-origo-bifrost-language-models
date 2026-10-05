@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
+
+- `LangModel Secrets ori.TryGetApiKey` stamped the key as used on Bifrost App Secrets (a write, once a day per key) before the provider call. Foundation's `Bootstrap` then runs message types through `Codeunit.Run`, which the platform refuses in an open write transaction, so the first chat of the day failed with *An error occurred and the transaction is stopped*, and the rolled-back stamp made every later attempt fail the same way. `TryGetApiKey` now only reads; the new `MarkApiKeyUsed` stamps the key after the provider call (chat send and continue, `LLM.Prompt.Complete`). Found by the live chat test through `Test.LanguageModel.Chat` on bc28-is.
+
+### Fixed (2026-10-05) - Google Gemini chat refused by Google
+
+- The Gemini provider sent `extra_body.google.generation_config` with every chat request; Google's OpenAI-compatible endpoint refuses it (*Unknown name "generation_config"*), so no Gemini chat worked. The field is no longer sent; a chat model answers in text without it. Verified live with `gemini-3.8-flash`: two tool rounds and the right answer.
+
 ### Added (2026-10-05) - Test message types to set up language models and test the chat of every provider
 
 - Test app only, refused in SaaS production: **Test.LanguageModel.Set** creates or updates language models (provider, endpoint, model, limits, Context Tokens, default, skill) and stores their shared or personal API keys; the request is redacted in the queue before a key is stored and no key is ever answered. **Test.LanguageModel.Delete** deletes them with their keys. **Test.LanguageModel.Chat** runs one Bifrost Chat turn against a chosen model through the same path as the chat add-in (`LangModel Chat Provider ori`, tool calls through Foundation's MCP Tool Server, `ContinueWithToolResults`) and answers the reply, the tool rounds and the tools called.
