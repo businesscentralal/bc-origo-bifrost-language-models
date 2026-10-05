@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-10-05) - Test message types to set up language models and test the chat of every provider
+
+- Test app only, refused in SaaS production: **Test.LanguageModel.Set** creates or updates language models (provider, endpoint, model, limits, Context Tokens, default, skill) and stores their shared or personal API keys; the request is redacted in the queue before a key is stored and no key is ever answered. **Test.LanguageModel.Delete** deletes them with their keys. **Test.LanguageModel.Chat** runs one Bifrost Chat turn against a chosen model through the same path as the chat add-in (`LangModel Chat Provider ori`, tool calls through Foundation's MCP Tool Server, `ContinueWithToolResults`) and answers the reply, the tool rounds and the tools called.
+- `tools/Set-TestLanguageModels.ps1` sets the models up from a JSON file outside every repository (default `%USERPROFILE%\.bifrost\test-language-models.json`) and resolves each API key on the local machine from the PowerShell SecretManagement vault or a user-level environment variable, then posts straight to the container's task API; `-Chat` runs one turn against every model, `-Remove` deletes them.
+- Test objects: enumextension 96023 `LangModel Test MsgType` (values 96023-96025), codeunits 96024 `Test LangModel Set Impl`, 96025 `Test LangModel Delete Impl`, 96026 `Test LangModel Chat Impl`, 96027 `LangModel Test Tools`, test codeunit 96028 `LangModel Test Tools Tests`.
+
 ### Changed (2026-10-05) - Aligned with Bifrost Foundation 28.0.1
 
 - The Bifrost Foundation dependency floor in `app/app.json` and `test/app.json` is **28.0.1.0**, the first Foundation version with `Setup ori.TryClaimChatProvider` public again (core#881).

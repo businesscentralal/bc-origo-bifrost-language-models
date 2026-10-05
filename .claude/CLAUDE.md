@@ -77,7 +77,18 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
 - Tests, in use: 96000-96003, 96009-96019 (96017 `Copilot Upgrade Tests`, 96018 `Copilot Install Tests`, 96019
   `LLM Prompt Contract Tests`), enumextension 96000 `Mock Bifrost LangModel Prov.`, enumextension **96020**
   `Mock Chat Provider Type`, codeunit **96021** `Mock Chat Provider`, codeunit **96022** `LangModel Turn Guard Tests`.
-  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96023-96199.
+  Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
+  codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
+  `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
+  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
+
+### Testing the chat of every provider
+- `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
+  (outside every repo; it names where each key is, never the key) and stores the keys through **Test.LanguageModel.Set**.
+  Keys come from the SecretManagement vault (`Set-Secret`) or a user-level environment variable; they never go into a
+  file in a repository, a command line, a chat or an MCP call. `-Chat` runs **Test.LanguageModel.Chat** against each model.
+- Do not call Test.LanguageModel.Set with a key through the MCP server: the key would end up in the conversation.
+  Test.LanguageModel.Chat and .Delete are fine through MCP.
 
 ## Setup Page and Secrets (Bifrost Foundation platform rules)
 

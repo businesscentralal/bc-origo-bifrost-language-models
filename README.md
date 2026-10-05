@@ -256,7 +256,7 @@ translation under `i18n/is-IS/docusaurus-plugin-content-docs-help-language-model
 | `app/Translations/` | Icelandic translation (`Bifrost Language Models.is-IS.xlf`, built by `tools/Update-IcelandicXlf.ps1`) |
 | `test/` | Test app (`Bifrost Language Models - Tests`, object range 96000–96199) |
 | `test/reports/` | Internal test reports, not published |
-| `tools/` | Source guards and the Icelandic xlf builder, the same scripts Bifrost Foundation uses |
+| `tools/` | Source guards and the Icelandic xlf builder (the same scripts Bifrost Foundation uses), and `Set-TestLanguageModels.ps1`, which sets up one language model per provider with its key from a local secret store and runs a chat turn against each |
 | `.AL-Go/`, `.github/` | AL-Go for GitHub / COSMO Alpaca pipeline configuration and the *Source Guards* and *Help Links* workflows |
 
 ---
