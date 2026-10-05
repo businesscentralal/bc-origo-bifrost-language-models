@@ -315,6 +315,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         TempArgument.Model := BifrostLanguageModel.Model;
         TempArgument."Timeout Ms" := BifrostLanguageModel."Timeout Seconds" * 1000;
         TempArgument."Max Tokens" := BifrostLanguageModel."Max Tokens";
+        TempArgument."Context Tokens" := BifrostLanguageModel.GetContextTokens();
         TempArgument."Chat Path" := BifrostLanguageModel."Chat Path";
         TempArgument."Models Path" := BifrostLanguageModel."Models Path";
         TempArgument.SetSkill(BifrostLanguageModel.GetSkill());

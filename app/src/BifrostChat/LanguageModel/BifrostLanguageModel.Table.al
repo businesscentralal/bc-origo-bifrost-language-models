@@ -133,6 +133,18 @@ table 10035335 "Bifrost Language Model ori"
             Caption = 'Models Path', Comment = 'is-IS=Líkanaslóð';
             DataClassification = CustomerContent;
         }
+        /// <summary>
+        /// The model's context size in tokens (#40). It sets how much earlier conversation a chat request carries; the
+        /// current question is always kept. 0 uses the provider's default (GetContextTokens).
+        /// </summary>
+        field(26; "Context Tokens"; Integer)
+        {
+            Caption = 'Context Tokens', Comment = 'is-IS=Samhengistákn';
+            ToolTip = 'Specifies the context size of the model in tokens: how much text the model can read in one request. Bifrost uses it to decide how much of the earlier conversation it sends with each chat message; the current question is always kept. 0 uses the provider default.', Comment = 'is-IS=Tilgreinir samhengisstærð líkansins í tókenum: hversu mikinn texta líkanið getur lesið í einni beiðni. Bifröst notar hana til að ákveða hversu mikið af fyrra samtali er sent með hverjum spjallskilaboðum; núverandi spurning er alltaf send. 0 notar sjálfgefið gildi veitanda.';
+            DataClassification = CustomerContent;
+            MinValue = 0;
+            MaxValue = 10000000;
+        }
     }
 
     keys
@@ -162,6 +174,26 @@ table 10035335 "Bifrost Language Model ori"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
     begin
         LangModelSecrets.ClearSecrets(Code);
+    end;
+
+    /// <summary>
+    /// The context size of this language model in tokens: "Context Tokens" when set, otherwise the default of its chat
+    /// provider (32,000 Custom LLM, 128,000 OpenAI, Azure OpenAI, xAI and Google Gemini, 200,000 Anthropic).
+    /// </summary>
+    /// <returns>The context size in tokens; 0 when the provider names none (Copilot, None).</returns>
+    procedure GetContextTokens(): Integer
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        Provider: Interface "Bifrost LangModel Provider ori";
+        ProcType: Enum "Bifrost Chat Proc. Type ori";
+    begin
+        if "Context Tokens" > 0 then
+            exit("Context Tokens");
+        Provider := "Chat Provider";
+        TempArg.Init();
+        TempArg."Procedure Type" := ProcType::GetDefaultContextTokens;
+        Provider.Execute(TempArg);
+        exit(TempArg."Result Integer");
     end;
 
     /// <summary>

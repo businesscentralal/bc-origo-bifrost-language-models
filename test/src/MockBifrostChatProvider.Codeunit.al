@@ -118,8 +118,8 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                 Argument."Result Integer" := 120;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 4096;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 80000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 32000;
         end;
     end;
 

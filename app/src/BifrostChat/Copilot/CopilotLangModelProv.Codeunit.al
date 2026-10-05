@@ -66,7 +66,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
                 Argument.SetResultText(GetDefaultSkillTextInternal());
             ProcType::GetDefaultTimeoutSeconds,
             ProcType::GetDefaultMaxTokens,
-            ProcType::GetContextWindowChars:
+            ProcType::GetDefaultContextTokens:
                 Argument."Result Integer" := 0;
         end;
     end;

@@ -16,6 +16,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     var
         ToolServer: Codeunit "MCP Tool Server ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
+        TurnGuard: Codeunit "LangModel Turn Guard ori";
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=AI mállíkan skilaði svari án "message"-reits. Sýnishorn af svari: %1';
 
     [NonDebuggable]
@@ -62,6 +63,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
             ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens",
             Messages, OpenAITools, Model, ExtraRequestFields));
     end;
 
@@ -104,11 +106,12 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
             ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens",
             Messages, OpenAITools, Model, ExtraRequestFields));
     end;
 
     [NonDebuggable]
-    local procedure CallModelOnce(var ApiClient: Codeunit "LangModel API Client ori"; ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; var Messages: JsonArray; OpenAITools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text
+    local procedure CallModelOnce(var ApiClient: Codeunit "LangModel API Client ori"; ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer; var Messages: JsonArray; OpenAITools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text
     var
         Response: JsonObject;
         RequestBody: JsonObject;
@@ -127,7 +130,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     begin
         ChatUtils.HoistSystemMessages(Messages);
         ChatUtils.CompactOlderToolResults(Messages, 5, 500);
-        ChatUtils.TrimMessageHistory(Messages, 80000);
+        // The budget follows the model's context size, and no tool message may lose its partner to the trim (#40).
+        ChatUtils.TrimMessageHistory(Messages, TurnGuard.HistoryBudgetChars(ContextTokens, MaxTokens, OpenAITools));
+        TurnGuard.RemoveOrphanedToolMessages(Messages);
 
         RequestBody.Add('model', Model);
         RequestBody.Add('max_completion_tokens', MaxTokens);
@@ -174,7 +179,21 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         end;
 
         Reply := GetTextProperty(MessageObject, 'content');
+        // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
+        if TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+            AddUserMessage(Messages, TurnGuard.GetVerifyFiguresPrompt());
+            exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Messages, OpenAITools, Model, ExtraRequestFields));
+        end;
         exit(BuildSuccessResponse(Reply, UsageObject));
+    end;
+
+    local procedure AddUserMessage(var Messages: JsonArray; Content: Text)
+    var
+        UserMessage: JsonObject;
+    begin
+        UserMessage.Add('role', 'user');
+        UserMessage.Add('content', Content);
+        Messages.Add(UserMessage);
     end;
 
     local procedure AddSystemMessage(var Messages: JsonArray; SystemPrompt: Text)
@@ -214,7 +233,6 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         PromptBuilder: TextBuilder;
         RecordContextToken: JsonToken;
         RecordContext: Text;
-        UserPrompt: Text;
         RoleSkill: Text;
         ContextSkill: Text;
     begin
@@ -247,13 +265,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             PromptBuilder.Append(ContextSkill);
         end;
 
-        UserPrompt := Argument.GetUserPrompt();
-        if UserPrompt <> '' then begin
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine();
-            PromptBuilder.AppendLine('USER INSTRUCTIONS:');
-            PromptBuilder.Append(UserPrompt);
-        end;
+        // The user's own prompt is not appended here: Foundation's Bootstrap carries it once, under USER INSTRUCTIONS (#40, core#157).
 
         SystemPrompt := PromptBuilder.ToText();
     end;
@@ -463,6 +475,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
             ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens",
             Input, ResponsesTools, Model, ExtraRequestFields));
     end;
 
@@ -497,11 +510,12 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
             ProviderBase.GetMaxTokens(Argument, 16384),
+            Argument."Context Tokens",
             Input, ResponsesTools, Model, ExtraRequestFields));
     end;
 
     [NonDebuggable]
-    local procedure CallResponsesOnce(var ApiClient: Codeunit "LangModel API Client ori"; Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; var Input: JsonArray; ResponsesTools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text
+    local procedure CallResponsesOnce(var ApiClient: Codeunit "LangModel API Client ori"; Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer; var Input: JsonArray; ResponsesTools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text
     var
         Response: JsonObject;
         RequestBody: JsonObject;
@@ -521,6 +535,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ReplyBuilder: TextBuilder;
         Reply: Text;
     begin
+        // The Responses input is trimmed with the same budget as Chat Completions (#40).
+        ChatUtils.TrimMessageHistory(Input, TurnGuard.HistoryBudgetChars(ContextTokens, MaxTokens, ResponsesTools));
+        TurnGuard.RemoveOrphanedResponsesItems(Input);
+
         RequestBody.Add('model', Model);
         RequestBody.Add('input', Input);
         if ResponsesTools.Count() > 0 then
@@ -579,6 +597,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             exit(BuildResponsesToolCallsResponse(ToolCalls, Input, Model, UsageObject));
 
         Reply := ReplyBuilder.ToText();
+        if TurnGuard.NeedsFigureCheck(Input, Reply) then begin
+            AddUserMessage(Input, TurnGuard.GetVerifyFiguresPrompt());
+            exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Input, ResponsesTools, Model, ExtraRequestFields));
+        end;
         exit(BuildSuccessResponse(Reply, UsageObject));
     end;
 

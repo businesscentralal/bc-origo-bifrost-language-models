@@ -131,4 +131,54 @@ codeunit 96003 "Bifrost Language Model Tests"
         BifrostLanguageModel.Get(BifrostLanguageModel.Code);
         Assert.AreEqual(SecondSkill, BifrostLanguageModel.GetSkill(), 'GetSkill should return the overwritten skill text.');
     end;
+
+    [Test]
+    procedure GetContextTokens_ZeroUsesTheProviderDefault()
+    var
+        TempLanguageModel: Record "Bifrost Language Model ori" temporary;
+    begin
+        // [SCENARIO] #40 AC1: a model with Context Tokens 0 uses its provider's default context size
+        Initialize();
+        TempLanguageModel."Chat Provider" := TempLanguageModel."Chat Provider"::Mock;
+        TempLanguageModel."Context Tokens" := 0;
+
+        // [THEN] the Mock provider's default (32,000) is used
+        Assert.AreEqual(32000, TempLanguageModel.GetContextTokens(), 'The provider default applies when Context Tokens is 0.');
+    end;
+
+    [Test]
+    procedure GetContextTokens_SetValueWins()
+    var
+        TempLanguageModel: Record "Bifrost Language Model ori" temporary;
+    begin
+        // [SCENARIO] #40 AC1: a model's own context size is used instead of the provider default
+        Initialize();
+        TempLanguageModel."Chat Provider" := TempLanguageModel."Chat Provider"::Mock;
+        TempLanguageModel."Context Tokens" := 262144;
+
+        Assert.AreEqual(262144, TempLanguageModel.GetContextTokens(), 'Context Tokens is used when set.');
+    end;
+
+    [Test]
+    procedure GetContextTokens_ProviderDefaults()
+    var
+        TempLanguageModel: Record "Bifrost Language Model ori" temporary;
+    begin
+        // [SCENARIO] #40: the fallback per provider is 32k Custom LLM, 128k OpenAI/Azure OpenAI/xAI/Gemini, 200k Anthropic
+        Initialize();
+        Assert.AreEqual(32000, ContextTokensOf(TempLanguageModel."Chat Provider"::"Custom LLM"), 'Custom LLM');
+        Assert.AreEqual(128000, ContextTokensOf(TempLanguageModel."Chat Provider"::OpenAI), 'OpenAI');
+        Assert.AreEqual(128000, ContextTokensOf(TempLanguageModel."Chat Provider"::"Azure OpenAI"), 'Azure OpenAI');
+        Assert.AreEqual(128000, ContextTokensOf(TempLanguageModel."Chat Provider"::xAI), 'xAI');
+        Assert.AreEqual(128000, ContextTokensOf(TempLanguageModel."Chat Provider"::Google), 'Gemini');
+        Assert.AreEqual(200000, ContextTokensOf(TempLanguageModel."Chat Provider"::Anthropic), 'Anthropic');
+    end;
+
+    local procedure ContextTokensOf(Provider: Enum "Bifrost LangModel Prov. ori"): Integer
+    var
+        TempLanguageModel: Record "Bifrost Language Model ori" temporary;
+    begin
+        TempLanguageModel."Chat Provider" := Provider;
+        exit(TempLanguageModel.GetContextTokens());
+    end;
 }

@@ -57,7 +57,7 @@ codeunit 10035389 "Bifrost LangModel None ori" implements "Bifrost LangModel Pro
             ProcType::GetMaxToolCount,
             ProcType::GetDefaultTimeoutSeconds,
             ProcType::GetDefaultMaxTokens,
-            ProcType::GetContextWindowChars:
+            ProcType::GetDefaultContextTokens:
                 Argument."Result Integer" := 0;
         end;
     end;

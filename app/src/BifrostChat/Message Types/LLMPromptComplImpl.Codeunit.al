@@ -278,6 +278,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         TempChatArg.Model := BifrostLanguageModel.Model;
         TempChatArg."Timeout Ms" := BifrostLanguageModel."Timeout Seconds" * 1000;
         TempChatArg."Max Tokens" := BifrostLanguageModel."Max Tokens";
+        TempChatArg."Context Tokens" := BifrostLanguageModel.GetContextTokens();
         if LangModelSecrets.TryGetApiKey(BifrostLanguageModel.Code, ApiKeyValue) then
             TempChatArg.SetApiKey(ApiKeyValue);
     end;

@@ -57,6 +57,11 @@ table 10035337 "Bifrost Chat Argument ori"
             Caption = 'Models Path';
             DataClassification = SystemMetadata;
         }
+        field(16; "Context Tokens"; Integer)
+        {
+            Caption = 'Context Tokens';
+            DataClassification = SystemMetadata;
+        }
         field(40; "Debug Mode"; Boolean)
         {
             Caption = 'Debug Mode';

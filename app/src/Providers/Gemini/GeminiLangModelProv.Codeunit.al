@@ -84,8 +84,8 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
                 Argument."Result Integer" := 120;
             ProcType::GetDefaultMaxTokens:
                 Argument."Result Integer" := 16384;
-            ProcType::GetContextWindowChars:
-                Argument."Result Integer" := 800000;
+            ProcType::GetDefaultContextTokens:
+                Argument."Result Integer" := 128000;
             ProcType::GetDefaultSkillUrl:
                 Argument.SetResultText('');
             ProcType::GetDefaultSkillText:
