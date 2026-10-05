@@ -89,6 +89,13 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   file in a repository, a command line, a chat or an MCP call. `-Chat` runs **Test.LanguageModel.Chat** against each model.
 - Do not call Test.LanguageModel.Set with a key through the MCP server: the key would end up in the conversation.
   Test.LanguageModel.Chat and .Delete are fine through MCP.
+- Run the unit tests with Foundation's **Request Debug Mode** off in the company (`Test.Setup.Set`
+  `{"fields":{"Request Debug Mode":false}}`, restore it afterwards): with it on, a tool call logs through a background
+  session, which test isolation refuses (`Chat_RunsToolCallsAndReturnsTheReply`). bc28-is has it on.
+- A new install on a container needs outbound HTTP for the app (the Bifrost setup wizard, or Foundation's
+  `Test.Records.Set` on `NAV App Setting` with this app's id); otherwise every provider answers "Could not reach the LLM API".
+- Live chat results 05.10.2026 on bc28-is (CRONUS IS): Anthropic, Azure OpenAI (`gpt-6-sol`, `/openai/v1/chat/completions`),
+  Custom LLM, Gemini (`gemini-3.8-flash`) and xAI answer with tools; OpenAI refused with 429 (no credits on the account).
 
 ## Setup Page and Secrets (Bifrost Foundation platform rules)
 
