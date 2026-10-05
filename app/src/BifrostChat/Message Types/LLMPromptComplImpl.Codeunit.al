@@ -181,6 +181,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         TempChatArg: Record "Bifrost Chat Argument ori" temporary;
         BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
         Provider: Interface "Bifrost LangModel Provider ori";
         RequestJson: JsonObject;
         PayloadJson: JsonObject;
@@ -247,6 +248,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         TempChatArg.SetResultText('');
         Provider.Execute(TempChatArg);
         ResponseText := TempChatArg.GetResultText();
+        LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
 
         if not ResponseJson.ReadFrom(ResponseText) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ProviderFailedErr, ResponseText), '', '', ProviderExpectedTxt, ProviderFailedNextStepTxt);

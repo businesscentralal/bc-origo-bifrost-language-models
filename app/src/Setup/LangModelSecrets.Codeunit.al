@@ -279,8 +279,9 @@ codeunit 10035422 "LangModel Secrets ori"
 
     /// <summary>
     /// Reads the API key a chat request must use for a language model: the current user's
-    /// personal key when one is stored, otherwise the shared key.
-    /// Stamps the registry row of the key that was used.
+    /// personal key when one is stored, otherwise the shared key. It only reads: the key is stamped
+    /// as used by MarkApiKeyUsed after the provider call, because a write here opens a transaction
+    /// in which Foundation's Bootstrap may not run its message types (Codeunit.Run).
     /// </summary>
     /// <param name="LangModelCode">The code of the language model.</param>
     /// <param name="Value">Receives the API key when one is stored.</param>
@@ -296,19 +297,39 @@ codeunit 10035422 "LangModel Secrets ori"
             exit(false);
 
         if SecretStore.TryGet(GetAppId(), GetUserKeyCode(LangModelCode), Value) then
-            if not Value.IsEmpty() then begin
-                SecretStore.MarkUsed(GetAppId(), GetUserKeyCode(LangModelCode));
+            if not Value.IsEmpty() then
                 exit(true);
-            end;
 
         if SecretStore.TryGet(GetAppId(), GetServiceKeyCode(LangModelCode), Value) then
-            if not Value.IsEmpty() then begin
-                SecretStore.MarkUsed(GetAppId(), GetServiceKeyCode(LangModelCode));
+            if not Value.IsEmpty() then
                 exit(true);
-            end;
 
         Value := EmptyValue;
         exit(false);
+    end;
+
+    /// <summary>
+    /// Stamps the key TryGetApiKey returns for a language model (the personal key when one is stored, otherwise the
+    /// shared key) as used today on Bifrost App Secrets. Call it after the provider call: it writes once a day per
+    /// key, and nothing that runs a message type through Codeunit.Run may follow it in the same transaction.
+    /// </summary>
+    /// <param name="LangModelCode">The code of the language model.</param>
+    [NonDebuggable]
+    procedure MarkApiKeyUsed(LangModelCode: Code[20])
+    var
+        SecretStore: Codeunit "Secret Store ori";
+        Value: SecretText;
+    begin
+        if LangModelCode = '' then
+            exit;
+        if SecretStore.TryGet(GetAppId(), GetUserKeyCode(LangModelCode), Value) then
+            if not Value.IsEmpty() then begin
+                SecretStore.MarkUsed(GetAppId(), GetUserKeyCode(LangModelCode));
+                exit;
+            end;
+        if SecretStore.TryGet(GetAppId(), GetServiceKeyCode(LangModelCode), Value) then
+            if not Value.IsEmpty() then
+                SecretStore.MarkUsed(GetAppId(), GetServiceKeyCode(LangModelCode));
     end;
 
     /// <summary>
