@@ -117,6 +117,6 @@ the HTTP header. Foundation's chat gate (`BIFROST Chat ori`) decides who may cha
 - Every table, page and enum declares `Extensible`; new objects are `Extensible = false` unless another app extends them.
 - Compile with CodeCop + UICop + AppSourceCop and accept nothing but zero errors and zero warnings. Run the guards
   in `tools/` before a PR.
-- Implementation means code **and** tests **and** documentation. Publish and run the tests on both containers
-  before calling anything done.
+- Implementation means code **and** tests **and** documentation. Publish and run the tests on bc28-w1 before
+  calling anything done.
 - Never print, log or store the `BC28IS_USER` / `BC28IS_PASSWORD` values.

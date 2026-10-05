@@ -5,7 +5,7 @@
 **App ID:** `f1722684-0c24-4022-a2e0-0f63154aca76` — **Test app ID:** `9c452c6e-df9b-4eb0-9a54-7ea8f32483ec`  
 **Object ID range:** 10035335–10035484 (tests 96000–96199) — **Namespace:** `Origo.Bifrost.LanguageModels`  
 **Depends on:** Bifrost Foundation 28.0.1.0 or later  
-**Environments:** Business Central online (SaaS) and the COSMO Alpaca development containers `bc28-is` (CRONUS IS) and `bc28-w1` (CRONUS International Ltd.)
+**Environments:** Business Central online (SaaS) and the COSMO Alpaca development container `bc28-w1` (CRONUS International Ltd.)
 
 ---
 
@@ -264,9 +264,9 @@ translation under `i18n/is-IS/docusaurus-plugin-content-docs-help-language-model
 ## Development
 
 - Open `al.code-workspace` in VS Code.
-- Development containers: COSMO Alpaca `bc28-is` (CRONUS IS) and `bc28-w1` (CRONUS International Ltd.), both
-  defined in `app/.vscode/launch.json`, which is git-ignored and the authority for the instance ids. Publish
-  and run the unit tests on **both**; select the target with `-LaunchConfiguration 'launch: bc28-w1'`.
+- Development container: COSMO Alpaca `bc28-w1` (CRONUS International Ltd.), defined in
+  `app/.vscode/launch.json`, which is git-ignored and the authority for the instance id. Publish and run the unit
+  tests there with `-LaunchConfiguration 'launch: bc28-w1'`.
 - Compile locally with `alc.exe` plus CodeCop, UICop and AppSourceCop. Zero errors and zero warnings beyond the
   suppressions in `app.json` is the bar. Symbols live in `app/.alpackages` (Microsoft symbols plus the current
   Bifrost Foundation `.app`); test symbols in `test/.alpackages`.

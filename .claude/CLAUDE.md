@@ -151,10 +151,9 @@ Key rules always in effect:
 - Implementation = code + tests + documentation (help codeunit, markdown docs, HTML help)
 
 ## Development Environment
-- Two COSMO Alpaca containers, both defined in `app/.vscode/launch.json` (git-ignored, the authority for
-  instance ids): `launch: bc28-is` (Icelandic CRONUS IS, used for the MCP message-type tests) and
-  `launch: bc28-w1` (W1 CRONUS International Ltd.). Publish and run the unit tests on **both**; select the
-  target with `-LaunchConfiguration 'launch: bc28-w1'`.
+- One COSMO Alpaca container (Gunnar, 05.10.2026: only bc28-w1 is needed now): `launch: bc28-w1` (W1 CRONUS
+  International Ltd.) in `app/.vscode/launch.json` (git-ignored, the authority for the instance id). Publish and
+  run the unit tests there with `-LaunchConfiguration 'launch: bc28-w1'`.
 - Compile locally with alc.exe + CodeCop/UICop/AppSourceCop, zero errors and zero warnings. After a caption change
   run `tools/Update-IcelandicXlf.ps1` and compile again; before a PR run every guard in `tools/` (the *Source Guards*
   workflow runs all but `Test-IcelandicXlfInSync`, which needs a build).
@@ -188,6 +187,6 @@ Key rules always in effect:
   directly on a temporary `Message Argument ori` when that Impl does not call `AssertIsLicensed`.
 
 ## Testing Through the MCP Server
-- `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-is` server hit Bifrost Language Models through
+- `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-w1` server hit Bifrost Language Models through
   Foundation's route (`origo/bifrost/v1.0`). Keep calls serial - parallel bursts crash the server.
-  Test data uses the `BIFT-<letter>` prefix in CRONUS IS.
+  Test data uses the `BIFT-<letter>` prefix.

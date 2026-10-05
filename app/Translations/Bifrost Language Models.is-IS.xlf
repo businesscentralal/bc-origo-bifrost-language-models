@@ -340,9 +340,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install ori - Method InitDefaultLanguageModel - NamedType CopilotDescTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 3872182412 - NamedType 46612548" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Copilot is not enabled for Bifrost Chat. Ask your administrator to enable it in Copilot &amp; AI Capabilities.</source>
-          <target>Copilot er ekki virkjað fyrir Bifröst Chat. Biddu kerfisstjóra um að virkja það í Copilot og gervigreind.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot er ekki virkjað fyrir Bifröst Chat. Biddu kerfisstjóra um að virkja það í Copilot og gervigreind.</note>
+          <source>Copilot is not enabled for Bifrost Chat. Ask your administrator to enable it on the Copilot &amp; agent capabilities page.</source>
+          <target>Copilot er ekki virkjað fyrir Bifröst spjall. Biddu kerfisstjóra um að virkja það á síðunni Copilot og eiginleikar fulltrúa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot er ekki virkjað fyrir Bifröst spjall. Biddu kerfisstjóra um að virkja það á síðunni Copilot og eiginleikar fulltrúa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot LangModel Prov. ori - NamedType CopilotNotEnabledLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3872182412 - NamedType 3154972853" size-unit="char" translate="yes" xml:space="preserve">
