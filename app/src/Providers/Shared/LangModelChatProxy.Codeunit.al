@@ -146,7 +146,15 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         if not TrySendToModel(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
             ApiClient.LogLastRequest();
-            exit(BuildErrorResponse(GetLastErrorText()));
+            // A reasoning model (e.g. Azure OpenAI gpt-6-sol) refuses function tools unless reasoning is off and says so.
+            // Resend once with reasoning_effort "none"; a model that does not know the parameter never receives it.
+            if not NeedsReasoningOff(RequestBody, GetLastErrorText()) then
+                exit(BuildErrorResponse(GetLastErrorText()));
+            RequestBody.Add('reasoning_effort', 'none');
+            if not TrySendToModel(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
+                ApiClient.LogLastRequest();
+                exit(BuildErrorResponse(GetLastErrorText()));
+            end;
         end;
         ApiClient.LogLastRequest();
 
@@ -292,6 +300,17 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             OpenAITool.Add('function', FunctionDef);
             OpenAITools.Add(OpenAITool);
         end;
+    end;
+
+    /// <summary>
+    /// True when a refused request carried tools but no reasoning_effort, and the provider's error asks for
+    /// reasoning_effort 'none' to use function tools.
+    /// </summary>
+    local procedure NeedsReasoningOff(RequestBody: JsonObject; ErrorText: Text): Boolean
+    begin
+        if RequestBody.Contains('reasoning_effort') or not RequestBody.Contains('tools') then
+            exit(false);
+        exit(ErrorText.Contains('reasoning_effort') and ErrorText.Contains('''none'''));
     end;
 
     [TryFunction]
