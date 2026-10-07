@@ -68,7 +68,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
 - App, in use: 10035335, 10035337-10035340, 10035342-10035382, 10035384-10035396, 10035398-10035407,
   10035409-10035419, 10035421-10035423, **10035425** `LangModel Turn Guard ori` (#40). Enumextension 10035384
   `LangModel Chat Provider Type` shares its number with codeunit 10035384 (object ids are per type).
-- App, claimed by PR #50: codeunit **10035408** `LangModel Field Restrict ori` (#49).
+- App, from #50 (#49): codeunit **10035408** `LangModel Field Restrict ori`.
 - App, free (reusable, codeunits/pages): 10035336, 10035341, 10035383, 10035397, 10035420, 10035424 and 10035426-10035484.
   10035336 (table `Chat Gate ori`, moved to Foundation) and 10035420/10035424 (take-over codeunits, #27) stay free
   for their own object type only; never reuse a freed table id.
@@ -80,7 +80,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
   codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
   `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
-  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
+  From #50 (#49): **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
 
 ### Testing the chat of every provider
 - `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
@@ -89,18 +89,14 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   file in a repository, a command line, a chat or an MCP call. `-Chat` runs **Test.LanguageModel.Chat** against each model.
 - Do not call Test.LanguageModel.Set with a key through the MCP server: the key would end up in the conversation.
   Test.LanguageModel.Chat and .Delete are fine through MCP.
-`LangModel API Client ori`, `LangModel Chat Proxy ori`, table `Chat Svc Gate ori` (shared-key permission
-gate, permission set `BIFROST ChatSvc ori`), `LLM Req Log Masker ori`.
-Object ids 10035406-10035420 are used by the providers - **10035408** = `LangModel Field Restrict ori`
-(language-models#49, Data.Records endpoint write-block, 05.10.2026). 10035421
-(`LangModel Setup ori`), 10035422 (`LangModel Secrets ori`) and 10035423 (`LangModel Registration ori`)
-carry the setup/secret/registration block. **10035424** = `Chat Takeover State ori` (language-models#8
-probe-denial seam). **The free range is 10035425-10035484.**
-Test ids used: 96000-96016, 96018 and **96004** (`LangModel Field Restrict Tests`, language-models#49)
-(96015 = `LLM Req Log Masker Tests`, 96016 = `LangModel Registration Tests`,
-96018 = `Copilot Install Tests`); 96017 was freed when #27 removed `Chat Takeover Probe Tests`; free test ids: 96017, 96019-96199.
-language-models#8: install take-over is probe-then-direct-copy (`TryRunTakeOverAtInstall`); A1 telemetry-only;
-Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version **1.0.0.132**.
+- Run the unit tests with Foundation's **Request Debug Mode** off in the company (`Test.Setup.Set`
+  `{"fields":{"Request Debug Mode":false}}`, restore it afterwards): with it on, a tool call logs through a background
+  session, which test isolation refuses (`Chat_RunsToolCallsAndReturnsTheReply`). bc28-is has it on.
+- A new install on a container needs outbound HTTP for the app (the Bifrost setup wizard, or Foundation's
+  `Test.Records.Set` on `NAV App Setting` with this app's id); otherwise every provider answers "Could not reach the LLM API".
+- Live chat results 05.10.2026 on bc28-is (CRONUS IS): Anthropic, Azure OpenAI (`gpt-6-sol`, `/openai/v1/chat/completions`),
+  Custom LLM, Gemini (`gemini-3.8-flash`), OpenAI (`gpt-6-astra`, Responses API) and xAI all answer with tools.
+  Copilot is not testable on the on-premises containers (it needs Business Central online).
 
 ## Setup Page and Secrets (Bifrost Foundation platform rules)
 
