@@ -777,7 +777,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
 
     /// <summary>
     /// Verifies that the actual Purchase Orders chat action opens Foundation's focus for a selected source record.
-    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// Preserves the legacy header-table/line-SystemId mapping; does not prove valid header context.
     /// </summary>
     [Test]
     procedure OpenRecordChat_PurchaseOrders_OpensFocus()
@@ -793,8 +793,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
         OriginalProvider := InitializeRouting();
         SourceRecord.Init();
         SourceRecord."Document Type" := SourceRecord."Document Type"::Order;
-        SourceRecord."No." := 'X57-PURCHASEORDE';
-        SourceRecord."Document No." := 'X57-PURCHASEORDE';
+        SourceRecord."No." := 'X57-ITEM-ORDER';
+        SourceRecord."Document No." := 'X57-DOC-ORDER';
         SourceRecord."Line No." := 10000;
         SourceRecord.Description := 'X57 Purchase Orders context';
         SourceRecord.Insert(false);
@@ -854,7 +854,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
 
     /// <summary>
     /// Verifies that the actual Purchase Return Orders chat action opens Foundation's focus for a selected source record.
-    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// Preserves the legacy header-table/line-SystemId mapping; does not prove valid header context.
     /// </summary>
     [Test]
     procedure OpenRecordChat_PurchaseReturnOrders_OpensFocus()
@@ -870,8 +870,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
         OriginalProvider := InitializeRouting();
         SourceRecord.Init();
         SourceRecord."Document Type" := SourceRecord."Document Type"::"Return Order";
-        SourceRecord."No." := 'X57-PURCHASERETU';
-        SourceRecord."Document No." := 'X57-PURCHASERETU';
+        SourceRecord."No." := 'X57-ITEM-RETURN';
+        SourceRecord."Document No." := 'X57-DOC-RETURN';
         SourceRecord."Line No." := 10000;
         SourceRecord.Description := 'X57 Purchase Return Orders context';
         SourceRecord.Insert(false);
