@@ -1,15 +1,15 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Utilities;
 
-/// <summary>
-/// Card page for editing an Bifrost Language Model, including its skill content (markdown).
-/// Provides an Import Defaults action to fetch skill content from the standard URL.
-/// </summary>
 
 using Origo.Bifrost;
 using System.Reflection;
 using System.Utilities;
 
+/// <summary>
+/// Card page for editing an Bifrost Language Model, including its skill content (markdown).
+/// Provides an Import Defaults action to fetch skill content from the standard URL.
+/// </summary>
 page 10035343 "Bifrost LangModel Card ori"
 {
     Caption = 'Bifrost Language Model', Comment = 'is-IS=Bifröst mállíkan';

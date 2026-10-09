@@ -16,26 +16,41 @@ codeunit 96025 "Test LangModel Delete Impl" implements "Msg Interface ori"
         Tools: Codeunit "LangModel Test Tools";
         MissingCodesErr: Label 'Send "codes", an array of language model codes.', Locked = true;
 
+    /// <summary>
+    /// Reports that this test-only message type is enabled.
+    /// </summary>
     procedure IsEnabled(): Boolean
     begin
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns the language model table number used by this test-only message type.
+    /// </summary>
     procedure GetFilterTableNo(): Integer
     begin
         exit(Database::"Bifrost Language Model ori");
     end;
 
+    /// <summary>
+    /// Describes the test-only language model delete operation.
+    /// </summary>
     procedure GetDescription(): Text[250]
     begin
         exit('TEST ONLY: deletes language models and their stored API keys.');
     end;
 
+    /// <summary>
+    /// Returns Inbound for this test-only message type.
+    /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
+    /// <summary>
+    /// Deletes the requested language models and reports unknown codes after refusing production execution.
+    /// </summary>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         LanguageModel: Record "Bifrost Language Model ori";

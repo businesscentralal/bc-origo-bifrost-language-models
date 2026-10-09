@@ -38,6 +38,9 @@ codeunit 96009 "LangModel Secrets Tests"
         IsInitialized := true;
     end;
 
+    /// <summary>
+    /// Verifies that the two secret codes of a language model follow the documented layout.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_BuildBothCodesFromLanguageModelCode()
     var
@@ -53,6 +56,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('LANGMODEL-COPILOT-USER-API-KEY', LangModelSecrets.GetUserKeyCode('COPILOT'), 'Unexpected personal key code.');
     end;
 
+    /// <summary>
+    /// Verifies that a language model code of the maximum length never has to be truncated.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_LongestLanguageModelCode_FitsInCode50()
     var
@@ -70,6 +76,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('LANGMODEL-' + LongCode + '-USER-API-KEY', LangModelSecrets.GetUserKeyCode(LongCode), 'Personal key code must not be truncated.');
     end;
 
+    /// <summary>
+    /// Verifies that a blank language model code produces no secret code.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_BlankLanguageModelCode_ReturnsBlank()
     var
@@ -83,6 +92,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('', LangModelSecrets.GetUserKeyCode(''), 'A blank model code must produce no personal key code.');
     end;
 
+    /// <summary>
+    /// Verifies that inserting a language model registers both API key secrets.
+    /// </summary>
     [Test]
     procedure Insert_LanguageModel_RegistersBothSecretsWithCorrectScope()
     var
@@ -109,6 +121,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreNotEqual('', UserSecret.Description, 'The personal key must have a description.');
     end;
 
+    /// <summary>
+    /// Verifies that Register can be called again from install or upgrade without creating duplicates.
+    /// </summary>
     [Test]
     procedure Register_CalledTwice_IsIdempotent()
     var
@@ -133,6 +148,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual(CountBefore, AppSecret.Count(), 'Register must be idempotent.');
     end;
 
+    /// <summary>
+    /// Verifies that the shared API key can be stored, detected and removed.
+    /// </summary>
     [Test]
     procedure ServiceKey_SetIsSetClear_RoundTrips()
     var
@@ -163,6 +181,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'No key must be readable after Clear.');
     end;
 
+    /// <summary>
+    /// Verifies that the personal API key can be stored, detected and removed.
+    /// </summary>
     [Test]
     procedure UserKey_SetIsSetClear_RoundTrips()
     var
@@ -193,6 +214,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'No key must be readable after Clear.');
     end;
 
+    /// <summary>
+    /// Verifies that clearing the personal key leaves the shared key in place.
+    /// </summary>
     [Test]
     procedure ServiceAndUserKey_AreStoredIndependently()
     var
@@ -289,6 +313,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared fallback key must be marked as used.');
     end;
 
+    /// <summary>
+    /// Verifies that a language model without any key reports no key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_NoKeyStored_ReturnsFalse()
     var
@@ -307,6 +334,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsTrue(ApiKey.IsEmpty(), 'The returned value must stay empty.');
     end;
 
+    /// <summary>
+    /// Verifies that reading a key for a blank language model code fails safely.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_BlankLanguageModelCode_ReturnsFalse()
     var
@@ -381,6 +411,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Blank input must not stamp another shared key.');
     end;
 
+    /// <summary>
+    /// Verifies that storing a key without a language model is rejected with a helpful message.
+    /// </summary>
     [Test]
     procedure SetServiceKey_BlankLanguageModelCode_Errors()
     var
@@ -396,6 +429,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.ExpectedError('A language model code must be specified');
     end;
 
+    /// <summary>
+    /// Verifies that deleting a language model removes both of its stored API keys.
+    /// </summary>
     [Test]
     procedure Delete_LanguageModel_ClearsBothSecrets()
     var
@@ -422,6 +458,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.HasUserKey(ModelCode), 'The personal key must be cleared on delete.');
     end;
 
+    /// <summary>
+    /// Verifies that renaming a language model carries its keys over to the new code.
+    /// </summary>
     [Test]
     procedure Rename_LanguageModel_MovesSecretsToTheNewCode()
     var

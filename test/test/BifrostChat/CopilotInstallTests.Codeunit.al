@@ -20,6 +20,9 @@ codeunit 96018 "Copilot Install Tests"
         OriginalChatProviderType: Enum "Chat Provider Type ori";
         HadSetupRow: Boolean;
 
+    /// <summary>
+    /// Verifies that install claims Language Models without direct setup permission.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure ClaimChatProvider_WithoutSetupPermission_Claims()
@@ -45,6 +48,9 @@ codeunit 96018 "Copilot Install Tests"
         RestoreSetup();
     end;
 
+    /// <summary>
+    /// Verifies that install preserves another provider claim.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure ClaimChatProvider_WhenAnotherProviderHolds_LeavesItUnchanged()
@@ -65,6 +71,9 @@ codeunit 96018 "Copilot Install Tests"
         RestoreSetup();
     end;
 
+    /// <summary>
+    /// Verifies that install claims Language Models when no provider is selected.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
     procedure ClaimChatProvider_WhenNone_ClaimsLanguageModels()
@@ -82,6 +91,9 @@ codeunit 96018 "Copilot Install Tests"
         RestoreSetup();
     end;
 
+    /// <summary>
+    /// Verifies that claiming Language Models twice is idempotent.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
     procedure ClaimChatProvider_Twice_IsIdempotent()
@@ -102,6 +114,9 @@ codeunit 96018 "Copilot Install Tests"
         RestoreSetup();
     end;
 
+    /// <summary>
+    /// Verifies that install creates missing setup and claims Language Models.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure ClaimChatProvider_MissingSetupRow_CreatesAndClaims()

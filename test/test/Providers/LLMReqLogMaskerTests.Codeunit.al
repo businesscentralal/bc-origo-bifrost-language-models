@@ -18,6 +18,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert: Codeunit "Library Assert";
         RedactedTok: Label '***REDACTED***', Locked = true;
 
+    /// <summary>
+    /// Verifies that debug mode preserves the request body.
+    /// </summary>
     [Test]
     procedure MaskRequestBody_DebugMode_ReturnsBodyUnchanged()
     var
@@ -33,6 +36,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual(Body, Masker.MaskRequestBody(Body, true), 'Debug mode must keep the request body.');
     end;
 
+    /// <summary>
+    /// Verifies that normal mode redacts the request body.
+    /// </summary>
     [Test]
     procedure MaskRequestBody_NormalMode_IsRedacted()
     var
@@ -46,6 +52,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual(RedactedTok, Masker.MaskRequestBody(Body, false), 'Normal mode must redact the request body.');
     end;
 
+    /// <summary>
+    /// Verifies that debug mode preserves the response body.
+    /// </summary>
     [Test]
     procedure MaskResponseBody_DebugMode_ReturnsBodyUnchanged()
     var
@@ -56,6 +65,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual(Body, Masker.MaskResponseBody(Body, true), 'Debug mode must keep the response body.');
     end;
 
+    /// <summary>
+    /// Verifies that normal mode redacts the response body.
+    /// </summary>
     [Test]
     procedure MaskResponseBody_NormalMode_IsRedacted()
     var
@@ -66,6 +78,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual(RedactedTok, Masker.MaskResponseBody(Body, false), 'Normal mode must redact the response body.');
     end;
 
+    /// <summary>
+    /// Verifies that an empty response stays empty in debug mode.
+    /// </summary>
     [Test]
     procedure MaskResponseBody_EmptyBody_StaysEmptyInDebugMode()
     var
@@ -76,6 +91,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual('', Masker.MaskResponseBody('', true), 'An empty body must stay empty in debug mode.');
     end;
 
+    /// <summary>
+    /// Verifies that error text remains available for diagnostics.
+    /// </summary>
     [Test]
     procedure MaskErrorText_IsNeverRedacted()
     var
@@ -91,6 +109,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual(ErrorText, Masker.MaskErrorText(ErrorText, true), 'Error text must survive debug mode.');
     end;
 
+    /// <summary>
+    /// Verifies that the logged base URL excludes the path and query.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_StripsPathAndQuery()
     var
@@ -106,6 +127,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
             'Path and query must be stripped.');
     end;
 
+    /// <summary>
+    /// Verifies that a host-only URL is preserved.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_HostOnly_ReturnsHost()
     var
@@ -115,6 +139,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
             Masker.GetBaseUrl('https://api.anthropic.com'), 'A host without a path is already the base URL.');
     end;
 
+    /// <summary>
+    /// Verifies that schemeless URL input is preserved.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_NoScheme_ReturnsInput()
     var
@@ -125,6 +152,9 @@ codeunit 96015 "LLM Req Log Masker Tests"
         Assert.AreEqual('not-a-url', Masker.GetBaseUrl('not-a-url'), 'A value without a scheme is returned as is.');
     end;
 
+    /// <summary>
+    /// Verifies that an empty URL remains empty.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_Empty_ReturnsEmpty()
     var

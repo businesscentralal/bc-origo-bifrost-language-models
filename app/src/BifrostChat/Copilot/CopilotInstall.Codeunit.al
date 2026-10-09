@@ -57,6 +57,9 @@ codeunit 10035390 "Copilot Install ori"
         LangModelSecrets.RegisterAll();
     end;
 
+    /// <summary>
+    /// Registers or updates the Bifrost Chat Copilot capability with Microsoft billing.
+    /// </summary>
     procedure RegisterCapability()
     var
         CopilotCapability: Codeunit "Copilot Capability";
@@ -76,6 +79,9 @@ codeunit 10035390 "Copilot Install ori"
                 LearnMoreUrlTok);
     end;
 
+    /// <summary>
+    /// Creates the COPILOT language model when missing and refreshes its skill; preserves an existing default model.
+    /// </summary>
     procedure InitDefaultLanguageModel()
     var
         LangModel: Record "Bifrost Language Model ori";

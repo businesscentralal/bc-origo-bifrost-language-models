@@ -3,6 +3,9 @@ using Microsoft.Sales.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Sales Credit Memos.
+/// </summary>
 pageextension 10035371 "Bifrost Chat SalesCrMemos ori" extends "Sales Credit Memos"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

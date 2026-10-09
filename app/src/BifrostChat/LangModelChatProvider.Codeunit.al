@@ -14,6 +14,9 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
 {
     Access = Public;
 
+    /// <summary>
+    /// Reports whether the current user resolves to a language model whose provider is configured.
+    /// </summary>
     procedure IsConfigured(): Boolean
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";

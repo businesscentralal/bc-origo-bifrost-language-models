@@ -19,6 +19,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies that when no user setup or default role exists, ShowBifrostChat returns false.
+    /// </summary>
     [Test]
     procedure GetLangModelProvider_NoSetup_FallsBackToNone()
     var
@@ -33,6 +36,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'Mock provider should not be invoked.');
     end;
 
+    /// <summary>
+    /// Verifies that an assigned None provider returns false.
+    /// </summary>
     [Test]
     procedure GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse()
     var
@@ -48,6 +54,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'Mock should not be invoked for None provider.');
     end;
 
+    /// <summary>
+    /// Verifies that ShowBifrostChat returns true when the role's provider reports configured.
+    /// </summary>
     [Test]
     procedure IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue()
     var
@@ -64,6 +73,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'IsConfigured should have been called on mock.');
     end;
 
+    /// <summary>
+    /// Verifies that ShowBifrostChat returns false when the role's provider reports not configured.
+    /// </summary>
     [Test]
     procedure IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse()
     var
@@ -80,6 +92,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'IsConfigured should have been called on mock.');
     end;
 
+    /// <summary>
+    /// Verifies that BuildConfigJson enriches the provider config with metadata fields.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields()
     var
@@ -122,6 +137,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(Token.AsValue().AsBoolean(), 'supportsToolLoop from mock is true.');
     end;
 
+    /// <summary>
+    /// Verifies that none provider returns disabled config.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_NoneProvider_ReturnsDisabledFlag()
     var
@@ -139,6 +157,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(DisabledToken.AsValue().AsBoolean(), 'disabled should be true.');
     end;
 
+    /// <summary>
+    /// Verifies that SendChatMessage forwards payload and returns provider response.
+    /// </summary>
     [Test]
     procedure SendChatMessage_RoleMock_RoundTrips()
     var
@@ -159,6 +180,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual(PayloadJson, MockProvider.GetLastSendPayload(), 'Mock should have received the payload.');
     end;
 
+    /// <summary>
+    /// Verifies that none provider returns error JSON from SendChatMessage.
+    /// </summary>
     [Test]
     procedure SendChatMessage_NoneProvider_ReturnsErrorJson()
     var
@@ -175,6 +199,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
     end;
 
+    /// <summary>
+    /// Verifies that GetAvailableModels populates buffer from role's provider.
+    /// </summary>
     [Test]
     procedure GetAvailableModels_RoleMock_PopulatesBuffer()
     var
@@ -192,6 +219,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual(3, TempNameValueBuffer.Count(), 'Buffer should contain 3 models.');
     end;
 
+    /// <summary>
+    /// Verifies that GetAvailableModels returns false when provider has no models.
+    /// </summary>
     [Test]
     procedure GetAvailableModels_RoleMock_NoModels_ReturnsFalse()
     var
@@ -209,6 +239,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual(0, TempNameValueBuffer.Count(), 'Buffer should be empty.');
     end;
 
+    /// <summary>
+    /// Verifies that a blank Language Model Code disables chat even when a Default model exists.
+    /// </summary>
     [Test]
     procedure IsConfigured_BlankCode_IgnoresDefaultModel()
     var
@@ -228,6 +261,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasBuildConfigCalled(), 'BuildConfigJson must not call the Default model.');
     end;
 
+    /// <summary>
+    /// Verifies that a valid Language Model Code shows chat and sends through that model.
+    /// </summary>
     [Test]
     procedure IsConfigured_UserCode_UsesThatModelNotDefault()
     var
@@ -249,6 +285,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual('user-model', MockProvider.GetLastModel(), 'Send should use the user model, not the Default model.');
     end;
 
+    /// <summary>
+    /// Verifies that a code that points at no language model disables chat without an error.
+    /// </summary>
     [Test]
     procedure IsConfigured_MissingModel_ReturnsFalse()
     var
@@ -265,6 +304,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'A missing model must not fall back to the Default model.');
     end;
 
+    /// <summary>
+    /// Verifies that a chat send while resolution fails returns the not-enabled error, not the Default model.
+    /// </summary>
     [Test]
     procedure SendChatMessage_BlankCode_ReturnsNotEnabledError()
     var
@@ -285,6 +327,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'The Default model must not receive the chat send.');
     end;
 
+    /// <summary>
+    /// Verifies that tool-result continuation while resolution fails returns the not-enabled error.
+    /// </summary>
     [Test]
     procedure ContinueWithToolResults_BlankCode_ReturnsNotEnabledError()
     var
@@ -305,6 +350,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasContinueWithToolResultsCalled(), 'The Default model must not receive the continuation.');
     end;
 
+    /// <summary>
+    /// Verifies that the language model card Try It still works for a user with no code.
+    /// </summary>
     [Test]
     procedure TryIt_BlankUserCode_UsesTestContextModel()
     var
@@ -329,6 +377,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         TestCtx.ClearLanguageModel();
     end;
 
+    /// <summary>
+    /// Verifies that LLM.Prompt.Complete resolution still uses the Default model when the user has no code.
+    /// </summary>
     [Test]
     procedure GetLangModelProviderWithModel_BlankCode_UsesDefaultModel()
     var
@@ -348,6 +399,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(MockProvider.WasIsConfiguredCalled(), 'The chat IsConfigured path must not call the Default model.');
     end;
 
+    /// <summary>
+    /// Verifies that user's explicit role takes precedence over the default role.
+    /// </summary>
     [Test]
     procedure GetLangModelProvider_UserRole_TakesPrecedenceOverDefault()
     var
@@ -365,6 +419,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(MockProvider.WasIsConfiguredCalled(), 'Mock should be invoked via user role.');
     end;
 
+    /// <summary>
+    /// Verifies that ContinueWithToolResults forwards state and results to the provider.
+    /// </summary>
     [Test]
     procedure ContinueWithToolResults_RoleMock_DelegatesToMock()
     var
@@ -389,6 +446,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual(ToolResults, MockProvider.GetLastToolResultsJson(), 'Mock should receive tool results.');
     end;
 
+    /// <summary>
+    /// Verifies that none provider returns error JSON from ContinueWithToolResults.
+    /// </summary>
     [Test]
     procedure ContinueWithToolResults_NoneProvider_ReturnsErrorJson()
     var
@@ -405,6 +465,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(ResponseJson.Get('error', ResponseToken), 'Response should contain error field.');
     end;
 
+    /// <summary>
+    /// Verifies that BuildConfigJson reflects debug mode from setup.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_DebugMode_IncludesDebugTrue()
     var
@@ -426,6 +489,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsTrue(Token.AsValue().AsBoolean(), 'debug should be true when Request Debug Mode is on.');
     end;
 
+    /// <summary>
+    /// Verifies that BuildConfigJson includes the role's skill blob as contextSkill.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_RoleWithSkill_IncludesContextSkill()
     var
@@ -449,6 +515,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual(SkillText, Token.AsValue().AsText(), 'contextSkill should match stored skill text.');
     end;
 
+    /// <summary>
+    /// Verifies that BuildConfigJson omits contextSkill when role has no skill blob.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_RoleWithoutSkill_NoContextSkill()
     var
@@ -469,6 +538,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(ConfigJson.Get('contextSkill', Token), 'Config should not contain contextSkill when skill is empty.');
     end;
 
+    /// <summary>
+    /// Verifies that BuildConfigJson omits contextSkill when user has no setup record.
+    /// </summary>
     [Test]
     procedure BuildConfigJson_NoUserSetup_NoContextSkill()
     var
@@ -487,6 +559,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.IsFalse(ConfigJson.Get('contextSkill', Token), 'Config should not contain contextSkill without user setup.');
     end;
 
+    /// <summary>
+    /// Verifies that all argument fields reach the provider when SendChatMessage is called.
+    /// </summary>
     [Test]
     procedure SendChatMessage_ArgumentFieldsPopulated()
     var

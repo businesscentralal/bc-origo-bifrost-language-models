@@ -3,6 +3,9 @@ using Microsoft.Sales.Receivables;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Customer Ledger Entries.
+/// </summary>
 pageextension 10035350 "Bifrost Chat CustLedgEntr ori" extends "Customer Ledger Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

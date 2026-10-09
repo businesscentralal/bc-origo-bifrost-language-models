@@ -17,6 +17,9 @@ codeunit 96012 "LangModel Providers Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies the OpenAI provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure OpenAI_Metadata()
     var
@@ -27,6 +30,9 @@ codeunit 96012 "LangModel Providers Tests"
         VerifyNoKeyBlocksConnection(Provider);
     end;
 
+    /// <summary>
+    /// Verifies the AzureOpenAI provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure AzureOpenAI_Metadata()
     var
@@ -37,6 +43,9 @@ codeunit 96012 "LangModel Providers Tests"
         VerifyNoKeyBlocksConnection(Provider);
     end;
 
+    /// <summary>
+    /// Verifies the CustomLLM provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure CustomLLM_Metadata()
     var
@@ -46,6 +55,9 @@ codeunit 96012 "LangModel Providers Tests"
         VerifyCommonMetadata(Provider, 'Custom LLM', true);
     end;
 
+    /// <summary>
+    /// Verifies the Anthropic provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure Anthropic_Metadata()
     var
@@ -64,6 +76,9 @@ codeunit 96012 "LangModel Providers Tests"
         Assert.IsTrue(TempArg."Result Boolean", 'Anthropic should be configured from key + default base URL.');
     end;
 
+    /// <summary>
+    /// Verifies the xAI provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure xAI_Metadata()
     var
@@ -74,6 +89,9 @@ codeunit 96012 "LangModel Providers Tests"
         VerifyNoKeyBlocksConnection(Provider);
     end;
 
+    /// <summary>
+    /// Verifies the Gemini provider metadata and advertised capabilities.
+    /// </summary>
     [Test]
     procedure Gemini_Metadata()
     var
@@ -84,6 +102,9 @@ codeunit 96012 "LangModel Providers Tests"
         VerifyNoKeyBlocksConnection(Provider);
     end;
 
+    /// <summary>
+    /// Verifies that every external provider is unconfigured without an API key.
+    /// </summary>
     [Test]
     procedure IsConfigured_WithoutApiKey_ReturnsFalse_ForEveryExternalProvider()
     var
@@ -103,6 +124,9 @@ codeunit 96012 "LangModel Providers Tests"
         Assert.IsFalse(TempArg."Result Boolean", 'Custom LLM without a key should not be configured.');
     end;
 
+    /// <summary>
+    /// Verifies that a blank Azure chat path uses the default deployment path.
+    /// </summary>
     [Test]
     procedure SetAzureChatPath_Blank_UsesDefaultDeploymentPath()
     var
@@ -120,6 +144,9 @@ codeunit 96012 "LangModel Providers Tests"
             'Blank Chat Path should resolve to default Azure deployment path.');
     end;
 
+    /// <summary>
+    /// Verifies model and API-version substitution in a custom Azure chat path.
+    /// </summary>
     [Test]
     procedure SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion()
     var
@@ -137,6 +164,9 @@ codeunit 96012 "LangModel Providers Tests"
             'Custom %1/%2 Chat Path template should substitute Model and api-version.');
     end;
 
+    /// <summary>
+    /// Verifies deployment substitution in a custom Azure chat path.
+    /// </summary>
     [Test]
     procedure SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment()
     var

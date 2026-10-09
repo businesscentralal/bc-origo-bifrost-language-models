@@ -3,6 +3,9 @@ using Microsoft.Purchases.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Purchase Orders.
+/// </summary>
 pageextension 10035364 "Bifrost Chat PurchOrders ori" extends "Purchase Orders"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
