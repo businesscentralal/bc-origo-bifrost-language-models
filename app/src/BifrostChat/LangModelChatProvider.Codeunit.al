@@ -25,7 +25,20 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostChatFocus: Page "Chat Focus ori";
     begin
         BifrostChatFocus.SetRecordContext(TableId, RecordSystemId, DataCaption);
+        OnAfterSetRecordContext(TableId, RecordSystemId, DataCaption);
         BifrostChatFocus.Run();
+    end;
+
+    /// <summary>
+    /// Observes the arguments after Foundation's context setter returns and before the real focus opens.
+    /// Does not expose Foundation's private state or rendered caption; parameters cannot alter the call.
+    /// </summary>
+    /// <param name="TableId">The table number passed to Foundation's setter.</param>
+    /// <param name="RecordSystemId">The record identity passed to Foundation's setter.</param>
+    /// <param name="DataCaption">The caption passed to Foundation's setter.</param>
+    [InternalEvent(false, false)]
+    local procedure OnAfterSetRecordContext(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)
+    begin
     end;
 
     /// <summary>
