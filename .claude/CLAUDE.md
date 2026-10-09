@@ -130,8 +130,9 @@ Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version 
 - Both codes are registered on insert and rename of a language model, and from
   `Copilot Install ori.OnInstallAppPerCompany` / `Copilot Upgrade ori.OnUpgradePerCompany` for every
   existing model. `Register` is idempotent. `OnDelete` clears both values.
-- Reads go through `LangModel Secrets ori.TryGetApiKey` (personal key first, then shared, both with
-  `MarkUsed`). Values are `SecretText` all the way into the HTTP header - `SecretText.Unwrap()` is
+- Reads go through `LangModel Secrets ori.TryGetApiKey` (personal key first, then shared, read-only;
+  `MarkApiKeyUsed` records usage after the provider call). Values are `SecretText` all the way into the HTTP
+  header - `SecretText.Unwrap()` is
   `OnPrem`-scoped and must never be used here. The chat control add-in's `apiKey` config property is a
   non-secret marker (`Bifrost Chat Argument ori.GetApiKeyIndicator()`); the JavaScript only tests it for
   truthiness and routes every request back through AL.
