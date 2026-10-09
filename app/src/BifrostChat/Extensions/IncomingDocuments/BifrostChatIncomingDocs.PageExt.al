@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.EServices.EDocument;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
@@ -23,10 +24,9 @@ pageextension 10035356 "Bifrost Chat IncomingDocs ori" extends "Incoming Documen
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::"Incoming Document", Rec.SystemId, StrSubstNo('%1 %2', Rec.TableCaption(), Rec."Entry No."));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::"Incoming Document", Rec.SystemId, StrSubstNo('%1 %2', Rec.TableCaption(), Rec."Entry No."));
                 end;
             }
         }

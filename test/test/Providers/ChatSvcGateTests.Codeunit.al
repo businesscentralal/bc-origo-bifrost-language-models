@@ -74,7 +74,7 @@ codeunit 96013 "Chat Svc Gate Tests"
     end;
 
     /// <summary>
-    /// Verifies that a diagnostic service-key gate record can be written, deleted and checked.
+    /// Verifies that the service-key gate can be queried and has no diagnostic record.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
@@ -84,6 +84,7 @@ codeunit 96013 "Chat Svc Gate Tests"
     begin
         // Verifies the table is accessible and can be queried
         ChatSvcGate.SetRange("Primary Key", 'DIAG');
+        ChatSvcGate.ReadIsolation := IsolationLevel::ReadCommitted;
         Assert.IsFalse(ChatSvcGate.FindFirst(), 'Diagnostic key should not exist');
     end;
 }

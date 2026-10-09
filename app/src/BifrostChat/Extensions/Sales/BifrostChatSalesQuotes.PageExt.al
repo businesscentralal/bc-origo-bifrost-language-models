@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Sales.Document;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
@@ -23,10 +24,9 @@ pageextension 10035376 "Bifrost Chat SalesQuotes ori" extends "Sales Quotes"
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::"Sales Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::"Sales Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
                 end;
             }
         }

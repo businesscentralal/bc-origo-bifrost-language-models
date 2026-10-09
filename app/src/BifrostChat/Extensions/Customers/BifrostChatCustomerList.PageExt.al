@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Sales.Customer;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
@@ -23,10 +24,9 @@ pageextension 10035347 "Bifrost Chat CustomerList ori" extends "Customer List"
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::Customer, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Name));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::Customer, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Name));
                 end;
             }
         }

@@ -1,9 +1,15 @@
 #pragma warning disable AL0432
 namespace Origo.Bifrost.LanguageModels.Test;
+using Microsoft.EServices.EDocument;
+using Microsoft.Inventory.Item;
+using Microsoft.Purchases.Document;
+using Microsoft.Purchases.Vendor;
+using Microsoft.Sales.Customer;
+using Microsoft.Sales.Document;
 using Microsoft.Utilities;
-using Origo.Bifrost;
-
 using Origo.Bifrost.LanguageModels;
+
+using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -582,6 +588,556 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual('/openai/models?api-version=2024', MockProvider.GetLastModelsPath(), 'Models Path not passed.');
         Assert.AreEqual(120000, MockProvider.GetLastTimeoutMs(), 'Timeout Ms not passed (should be seconds * 1000).');
         Assert.AreEqual(8192, MockProvider.GetLastMaxTokens(), 'Max Tokens not passed.');
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Customer List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_CustomerList_OpensFocus()
+    var
+        SourceRecord: Record Customer;
+        SourcePage: TestPage "Customer List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Incoming Documents chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_IncomingDocuments_OpensFocus()
+    var
+        SourceRecord: Record "Incoming Document";
+        SourcePage: TestPage "Incoming Documents";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Entry No." := 2147483000;
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Item List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_ItemList_OpensFocus()
+    var
+        SourceRecord: Record Item;
+        SourcePage: TestPage "Item List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Credit Memos chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseCreditMemos_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        SourcePage: TestPage "Purchase Credit Memos";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Credit Memo";
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Invoices chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseInvoices_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        SourcePage: TestPage "Purchase Invoices";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Invoice;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Orders chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseOrders_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        SourcePage: TestPage "Purchase Orders";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Order;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Quotes chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseQuotes_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        SourcePage: TestPage "Purchase Quotes";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Quote;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Return Orders chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseReturnOrders_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        SourcePage: TestPage "Purchase Return Orders";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Return Order";
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Credit Memos chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesCreditMemos_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        SourcePage: TestPage "Sales Credit Memos";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Credit Memo";
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Invoice List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesInvoiceList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        SourcePage: TestPage "Sales Invoice List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Invoice;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Order List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesOrderList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        SourcePage: TestPage "Sales Order List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Order;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Quotes chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesQuotes_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        SourcePage: TestPage "Sales Quotes";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Quote;
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Return Order List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesReturnOrderList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        SourcePage: TestPage "Sales Return Order List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Return Order";
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Vendor List chat action opens Foundation's focus for a selected source record.
+    /// Forwarded private context needs a supported observer; this test proves action routing only.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_VendorList_OpensFocus()
+    var
+        SourceRecord: Record Vendor;
+        SourcePage: TestPage "Vendor List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: add-in private context is not observable.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'PR57-CHAT';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that an unassigned user does not see the chat action even when a default model exists.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_UnassignedUser_HidesAction()
+    var
+        SourcePage: TestPage "Customer List";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: default model must not enable chat.
+        OriginalProvider := InitializeRouting();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SourcePage.OpenView();
+        Assert.IsFalse(SourcePage.ori_BifrostChat.Visible(), 'Default model must not enable interactive chat.');
+        SourcePage.Close();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that a missing assigned model keeps the action hidden.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_MissingAssignedModel_HidesAction()
+    var
+        SourcePage: TestPage "Customer List";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: stale assignment must not enable chat.
+        OriginalProvider := InitializeRouting();
+        SetupUserWithRole('PR57-MISSING');
+        SourcePage.OpenView();
+        Assert.IsFalse(SourcePage.ori_BifrostChat.Visible(), 'Missing assignment must hide interactive chat.');
+        SourcePage.Close();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that routing an empty current-record context preserves the original focus-opening behavior.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_EmptyCurrentRecord_OpensFocus()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        ChatFocus: TestPage "Chat Focus ori";
+        EmptySystemId: Guid;
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: private context remains unobservable.
+        OriginalProvider := InitializeRouting();
+        ChatFocus.Trap();
+        ChatProvider.OpenRecordChat(0, EmptySystemId, '');
+        ChatFocus.Close();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    local procedure InitializeRouting() OriginalProvider: Enum "Chat Provider Type ori"
+    var
+        BifrostSetup: Record "Setup ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+    begin
+        Initialize();
+        if not BifrostSetup.Get() then begin
+            BifrostSetup.Init();
+            BifrostSetup.Insert(true);
+        end;
+        OriginalProvider := BifrostSetup."Chat Provider Type";
+        BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
+        BifrostSetup.Modify(false);
+        CreateRole('PR57-CHAT', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetupUserWithRole('PR57-CHAT');
+        MockProvider.SetIsConfigured(true);
+        MockProvider.SetConfigJson('{}');
+    end;
+
+    local procedure RestoreRouting(OriginalProvider: Enum "Chat Provider Type ori")
+    var
+        BifrostSetup: Record "Setup ori";
+    begin
+        BifrostSetup.Get();
+        BifrostSetup."Chat Provider Type" := OriginalProvider;
+        BifrostSetup.Modify(false);
+    end;
+
+    /// <summary>
+    /// Verifies that completion resolution returns None and clears a stale output when no model exists.
+    /// </summary>
+    [Test]
+    procedure GetLangModelProviderWithModel_NoModels_ReturnsNone()
+    var
+        ResolvedModel: Record "Bifrost Language Model ori";
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        Provider: Interface "Bifrost LangModel Provider ori";
+    begin
+        // PR57 isolation | Time: independent of WorkDate | Risk: stale output and default lookup.
+        Initialize();
+        DeleteCurrentUserSetup();
+        ResolvedModel.Code := 'STALE';
+        Provider := ChatProvider.GetLangModelProviderWithModel(ResolvedModel);
+        Assert.AreEqual('', ResolvedModel.Code, 'No model must clear the output record.');
+        TempArgument."Procedure Type" := TempArgument."Procedure Type"::IsConfigured;
+        Provider.Execute(TempArgument);
+        Assert.IsFalse(TempArgument."Result Boolean", 'None provider must remain unconfigured.');
     end;
 
     local procedure Initialize()
