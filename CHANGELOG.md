@@ -9,6 +9,10 @@ All notable changes to Bifrost Language Models are documented here.
 - `LangModel Secrets Tests` (96009) now verifies that `LangModel Secrets ori` (10035422) reads API keys without usage writes and marks only the selected personal or shared key after the provider call. Added missing-key and blank-code usage tests; no API-key values are exposed.
 - Pipeline changes to the independent Bifrost guard workflow and its guard script now select a full Default/Test build instead of relying on incremental selection.
 
+### Fixed (2026-10-09) - Icelandic endpoint editing hint
+
+- Synchronized the Icelandic translation of the existing endpoint-editing hint in `LangModel Field Restrict ori` (10035408) with the compiler-generated XLF. Translation changes now select a full paired Default/Test build.
+
 ### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
 
 - `LangModel Secrets ori.TryGetApiKey` stamped the key as used on Bifrost App Secrets (a write, once a day per key) before the provider call. Foundation's `Bootstrap` then runs message types through `Codeunit.Run`, which the platform refuses in an open write transaction, so the first chat of the day failed with *An error occurred and the transaction is stopped*, and the rolled-back stamp made every later attempt fail the same way. `TryGetApiKey` now only reads; the new `MarkApiKeyUsed` stamps the key after the provider call (chat send and continue, `LLM.Prompt.Complete`). Found by the live chat test through `Test.LanguageModel.Chat` on bc28-is.

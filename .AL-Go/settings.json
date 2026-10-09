@@ -33,7 +33,8 @@
     "tools/SharedAlpacaContainer.ps1",
     "tools/Test-SharedAlpacaContainer.ps1",
     ".github/workflows/BifrostPipeline.yaml",
-    "tools/Test-BifrostPipeline.ps1"
+    "tools/Test-BifrostPipeline.ps1",
+    "app/Translations/*.xlf"
   ],
   "keyVaultCodesignCertificateName": "CodeSigning-2025",
   "conditionalSettings": [

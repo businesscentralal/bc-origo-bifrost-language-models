@@ -579,6 +579,12 @@
           <note from="Developer" annotates="general" priority="2">%1 = raw response snippet, is-IS=AI mállíkan skilaði svari án "message"-reits. Sýnishorn af svari: %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Chat Proxy ori - NamedType MissingMessageErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 307259259 - NamedType 3157307187" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.</source>
+          <target>Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Field Restrict ori - NamedType EndpointFieldsHintTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1304087324" size-unit="char" translate="yes" xml:space="preserve">
           <source>HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.</source>
           <target>HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.</target>
