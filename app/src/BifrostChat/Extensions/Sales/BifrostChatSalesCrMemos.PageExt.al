@@ -1,8 +1,12 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Sales.Document;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Sales Credit Memos.
+/// </summary>
 pageextension 10035371 "Bifrost Chat SalesCrMemos ori" extends "Sales Credit Memos"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
@@ -20,10 +24,9 @@ pageextension 10035371 "Bifrost Chat SalesCrMemos ori" extends "Sales Credit Mem
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::"Sales Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::"Sales Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
                 end;
             }
         }

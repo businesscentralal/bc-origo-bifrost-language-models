@@ -107,7 +107,7 @@ user enters their personal key once.
 
 ## Objects
 
-Every object carries the mandatory ` ori` affix. The free ids are listed in `.claude/CLAUDE.md`.
+Objects retain their existing published names and IDs. New objects require the ` ori` affix. The free IDs are listed in `.claude/CLAUDE.md`.
 
 ### Tables
 
@@ -129,14 +129,14 @@ Every object carries the mandatory ` ori` affix. The free ids are listed in `.cl
 | --- | --- | --- |
 | 10035342 | `Bifrost Chat Model List ori` | Lookup for picking one of the models the provider reports. |
 | 10035343 | `Bifrost LangModel Card ori` | Edits one language model, its skill markdown and its API-key actions. |
-| 10035344 | `Bifrost LangModel List ori` | List of language models. |
+| 10035344 | `Bifrost LangModel List ori` | Lists language models. Its explicit Copilot initialization action asks for confirmation through `Copilot Install ori` (10035390); declining leaves models unchanged. |
 | 10035421 | `LangModel Setup ori` | The module's own setup page, the only place it is configured. |
 
 ### Page extensions
 
 | ID | Name | Extends | Purpose |
 | --- | --- | --- | --- |
-| 10035346–10035381 | `Bifrost Chat <Page> ori` (36) | Customer Card/List, Vendor Card/List, Item Card/List; the sales and purchase quotes, orders, invoices, credit memos and return orders with their list pages; Bank Account, Customer, Detailed Customer, Vendor, Item, Value, VAT and G/L entries; Incoming Document and Incoming Documents | Each adds Foundation's `Bifrost Chat FactBox ori`, shows it only when `Bifrost Chat Mgt ori.ShowBifrostChat()` is true, and feeds the current record to it. All carry `ContextSensitiveHelpPage = 'bifrost-chat'`. |
+| 10035346–10035381 | `Bifrost Chat <Page> ori` (36) | Customer Card/List, Vendor Card/List, Item Card/List; the sales and purchase quotes, orders, invoices, credit memos and return orders with their list pages; Bank Account, Customer, Detailed Customer, Vendor, Item, Value, VAT and G/L entries; Incoming Document and Incoming Documents | Card and entry pages add Foundation's `Bifrost Chat FactBox ori` and feed the current record to it. The 14 list actions open Foundation's chat focus through `LangModel Chat Provider ori` (10035382), forwarding the original table, SystemId and caption in the current session. Both surfaces are shown only when `Bifrost Chat Mgt ori.ShowBifrostChat()` is true. All carry `ContextSensitiveHelpPage = 'bifrost-chat'`. |
 | 10035402 | `User Setup Editor LangMdl ori` | `User Setup Editor ori` (Foundation) | Adds the language model field and the chat FactBox to the Bifröst user setup editor. |
 | 10035403 | `Setup LangModel ori` | `Setup ori` (Foundation) | Adds exactly one *Apps* action opening `LangModel Setup ori`, plus its actionref in `Category_Apps`. |
 

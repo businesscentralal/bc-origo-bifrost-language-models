@@ -26,6 +26,9 @@ codeunit 96016 "LangModel Registration Tests"
         IsInitialized := true;
     end;
 
+    /// <summary>
+    /// Verifies that Bifrost Language Models registers itself in Bifrost Foundation's app registry.
+    /// </summary>
     [Test]
     procedure AppRegistry_ListsLanguageModelsWithItsSetupPage()
     var

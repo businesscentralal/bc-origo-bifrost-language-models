@@ -3,6 +3,9 @@ using Microsoft.EServices.EDocument;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Incoming Document.
+/// </summary>
 pageextension 10035357 "Bifrost Chat IncomingDoc ori" extends "Incoming Document"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

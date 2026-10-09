@@ -80,7 +80,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
   codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
   `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
-  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. Free: 96005-96008, 96029-96199.
+  Claimed by PR #50: **96004** `LangModel Field Restrict Tests`. PR #57 reserves codeunit **96029** `LangModel Context Spy ori` (manual, test-only observer; no product permissions). Free: 96005-96008, 96030-96199.
 
 ### Testing the chat of every provider
 - `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
@@ -130,8 +130,9 @@ Foundation dependency **28.0.0.0**; AL-Go core probing **latestBuild**, version 
 - Both codes are registered on insert and rename of a language model, and from
   `Copilot Install ori.OnInstallAppPerCompany` / `Copilot Upgrade ori.OnUpgradePerCompany` for every
   existing model. `Register` is idempotent. `OnDelete` clears both values.
-- Reads go through `LangModel Secrets ori.TryGetApiKey` (personal key first, then shared, both with
-  `MarkUsed`). Values are `SecretText` all the way into the HTTP header - `SecretText.Unwrap()` is
+- Reads go through `LangModel Secrets ori.TryGetApiKey` (personal key first, then shared, read-only;
+  `MarkApiKeyUsed` records usage after the provider call). Values are `SecretText` all the way into the HTTP
+  header - `SecretText.Unwrap()` is
   `OnPrem`-scoped and must never be used here. The chat control add-in's `apiKey` config property is a
   non-secret marker (`Bifrost Chat Argument ori.GetApiKeyIndicator()`); the JavaScript only tests it for
   truthiness and routes every request back through AL.

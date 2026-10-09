@@ -13,6 +13,9 @@ codeunit 96013 "Chat Svc Gate Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies that the service-key gate allows writes with test permissions disabled.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
     procedure ChatSvcGate_WritePermission_WithPermissionsDisabled()
@@ -23,6 +26,9 @@ codeunit 96013 "Chat Svc Gate Tests"
         Assert.IsTrue(ChatSvcGate.WritePermission(), 'WritePermission should be true when permissions are disabled');
     end;
 
+    /// <summary>
+    /// Verifies that the provider reports service-key permission with test permissions disabled.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
     procedure ProviderBase_HasServiceKeyPermission_WithPermissionsDisabled()
@@ -32,6 +38,9 @@ codeunit 96013 "Chat Svc Gate Tests"
         Assert.IsTrue(ProviderBase.HasServiceKeyPermission(), 'HasServiceKeyPermission should be true when permissions are disabled');
     end;
 
+    /// <summary>
+    /// Verifies that the granted service-key permission permits gate writes under restrictive test permissions.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure ChatSvcGate_WritePermission_WithRestrictivePermissions()
@@ -47,6 +56,9 @@ codeunit 96013 "Chat Svc Gate Tests"
         Assert.IsTrue(ChatSvcGate.WritePermission(), 'BIFROST ChatSvc ori must grant write permission on the Chat Service gate');
     end;
 
+    /// <summary>
+    /// Verifies that the service-key gate denies writes without its permission set.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure ChatSvcGate_WritePermission_WithoutPermissionSet()
@@ -61,6 +73,9 @@ codeunit 96013 "Chat Svc Gate Tests"
         Assert.IsFalse(ChatSvcGate.WritePermission(), 'a user without BIFROST ChatSvc ori must not pass the Chat Service gate');
     end;
 
+    /// <summary>
+    /// Verifies that the service-key gate can be queried and has no diagnostic record.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
     procedure ChatSvcGate_Table_IsAccessible()
@@ -69,6 +84,7 @@ codeunit 96013 "Chat Svc Gate Tests"
     begin
         // Verifies the table is accessible and can be queried
         ChatSvcGate.SetRange("Primary Key", 'DIAG');
+        ChatSvcGate.ReadIsolation := IsolationLevel::ReadCommitted;
         Assert.IsFalse(ChatSvcGate.FindFirst(), 'Diagnostic key should not exist');
     end;
 }

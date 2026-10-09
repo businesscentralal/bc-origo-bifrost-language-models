@@ -19,6 +19,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         TurnGuard: Codeunit "LangModel Turn Guard ori";
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=AI mállíkan skilaði svari án "message"-reits. Sýnishorn af svari: %1';
 
+    /// <summary>
+    /// Builds and sends an OpenAI-compatible chat request using the supplied model argument and optional extra request fields.
+    /// </summary>
     [NonDebuggable]
     procedure SendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text; AuthHeaderName: Text): Text
     var
@@ -27,6 +30,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(SendChatMessage(Argument, PayloadJson, AuthHeaderName, EmptyExtras));
     end;
 
+    /// <summary>
+    /// Builds and sends an OpenAI-compatible chat request using the supplied model argument and optional extra request fields.
+    /// </summary>
     [NonDebuggable]
     procedure SendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text
     var
@@ -67,6 +73,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             Messages, OpenAITools, Model, ExtraRequestFields));
     end;
 
+    /// <summary>
+    /// Appends supplied tool results to the saved conversation and sends the next provider request.
+    /// </summary>
     [NonDebuggable]
     procedure ContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text): Text
     var
@@ -75,6 +84,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(ContinueWithToolResults(Argument, ConversationState, ToolResultsJson, AuthHeaderName, EmptyExtras));
     end;
 
+    /// <summary>
+    /// Appends supplied tool results to the saved conversation and sends the next provider request.
+    /// </summary>
     [NonDebuggable]
     procedure ContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text
     var
@@ -435,6 +447,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit('/v1/chat/completions');
     end;
 
+    /// <summary>
+    /// Builds and sends an OpenAI Responses request using the model argument, tool definitions and extra request fields.
+    /// </summary>
     [NonDebuggable]
     procedure SendChatMessageResponses(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text
     var
@@ -479,6 +494,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             Input, ResponsesTools, Model, ExtraRequestFields));
     end;
 
+    /// <summary>
+    /// Appends supplied tool outputs to saved Responses input and sends the next request.
+    /// </summary>
     [NonDebuggable]
     procedure ContinueWithToolResultsResponses(var Argument: Record "Bifrost Chat Argument ori" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text
     var

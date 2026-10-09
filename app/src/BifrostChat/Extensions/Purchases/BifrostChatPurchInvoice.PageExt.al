@@ -3,6 +3,9 @@ using Microsoft.Purchases.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Purchase Invoice.
+/// </summary>
 pageextension 10035362 "Bifrost Chat PurchInvoice ori" extends "Purchase Invoice"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

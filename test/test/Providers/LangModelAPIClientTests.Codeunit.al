@@ -15,6 +15,9 @@ codeunit 96011 "LangModel API Client Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies that the API client extracts text from a standard choices response.
+    /// </summary>
     [Test]
     procedure ExtractText_StandardResponse()
     var
@@ -28,6 +31,9 @@ codeunit 96011 "LangModel API Client Tests"
         Assert.AreEqual('Hello world', ApiClient.ExtractText(Response), 'Should extract content from choices.');
     end;
 
+    /// <summary>
+    /// Verifies that an empty choices array yields empty text.
+    /// </summary>
     [Test]
     procedure ExtractText_EmptyChoices_ReturnsEmpty()
     var
@@ -38,6 +44,9 @@ codeunit 96011 "LangModel API Client Tests"
         Assert.AreEqual('', ApiClient.ExtractText(Response), 'Empty choices should return empty.');
     end;
 
+    /// <summary>
+    /// Verifies that a response without choices yields empty text.
+    /// </summary>
     [Test]
     procedure ExtractText_NoChoices_ReturnsEmpty()
     var
@@ -48,6 +57,9 @@ codeunit 96011 "LangModel API Client Tests"
         Assert.AreEqual('', ApiClient.ExtractText(Response), 'Missing choices should return empty.');
     end;
 
+    /// <summary>
+    /// Verifies that null message content yields empty text.
+    /// </summary>
     [Test]
     procedure ExtractText_ContentIsNull_ReturnsEmpty()
     var
@@ -61,6 +73,9 @@ codeunit 96011 "LangModel API Client Tests"
         Assert.AreEqual('', ApiClient.ExtractText(Response), 'Null content should return empty.');
     end;
 
+    /// <summary>
+    /// Verifies that array message content yields empty text.
+    /// </summary>
     [Test]
     procedure ExtractText_ContentArray_ReturnsEmpty()
     var

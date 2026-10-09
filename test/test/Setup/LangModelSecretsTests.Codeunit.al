@@ -1,14 +1,14 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 
-using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Tests for "LangModel Secrets ori", this app's facade over the Bifrost Foundation secret store:
 /// secret code layout, registration of both codes with the right scope, the set/is-set/clear
 /// round trip of the shared and the personal key, the personal-before-shared read order,
-/// and the clean-up when a language model is deleted or renamed.
+/// deferred usage marking, and the clean-up when a language model is deleted or renamed.
 /// </summary>
 codeunit 96009 "LangModel Secrets Tests"
 {
@@ -38,6 +38,9 @@ codeunit 96009 "LangModel Secrets Tests"
         IsInitialized := true;
     end;
 
+    /// <summary>
+    /// Verifies that the two secret codes of a language model follow the documented layout.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_BuildBothCodesFromLanguageModelCode()
     var
@@ -53,6 +56,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('LANGMODEL-COPILOT-USER-API-KEY', LangModelSecrets.GetUserKeyCode('COPILOT'), 'Unexpected personal key code.');
     end;
 
+    /// <summary>
+    /// Verifies that a language model code of the maximum length never has to be truncated.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_LongestLanguageModelCode_FitsInCode50()
     var
@@ -70,6 +76,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('LANGMODEL-' + LongCode + '-USER-API-KEY', LangModelSecrets.GetUserKeyCode(LongCode), 'Personal key code must not be truncated.');
     end;
 
+    /// <summary>
+    /// Verifies that a blank language model code produces no secret code.
+    /// </summary>
     [Test]
     procedure GetSecretCodes_BlankLanguageModelCode_ReturnsBlank()
     var
@@ -83,6 +92,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual('', LangModelSecrets.GetUserKeyCode(''), 'A blank model code must produce no personal key code.');
     end;
 
+    /// <summary>
+    /// Verifies that inserting a language model registers both API key secrets.
+    /// </summary>
     [Test]
     procedure Insert_LanguageModel_RegistersBothSecretsWithCorrectScope()
     var
@@ -109,6 +121,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreNotEqual('', UserSecret.Description, 'The personal key must have a description.');
     end;
 
+    /// <summary>
+    /// Verifies that Register can be called again from install or upgrade without creating duplicates.
+    /// </summary>
     [Test]
     procedure Register_CalledTwice_IsIdempotent()
     var
@@ -133,6 +148,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.AreEqual(CountBefore, AppSecret.Count(), 'Register must be idempotent.');
     end;
 
+    /// <summary>
+    /// Verifies that the shared API key can be stored, detected and removed.
+    /// </summary>
     [Test]
     procedure ServiceKey_SetIsSetClear_RoundTrips()
     var
@@ -163,6 +181,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'No key must be readable after Clear.');
     end;
 
+    /// <summary>
+    /// Verifies that the personal API key can be stored, detected and removed.
+    /// </summary>
     [Test]
     procedure UserKey_SetIsSetClear_RoundTrips()
     var
@@ -193,6 +214,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'No key must be readable after Clear.');
     end;
 
+    /// <summary>
+    /// Verifies that clearing the personal key leaves the shared key in place.
+    /// </summary>
     [Test]
     procedure ServiceAndUserKey_AreStoredIndependently()
     var
@@ -215,6 +239,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsTrue(LangModelSecrets.HasServiceKey(LangModel.Code), 'The shared key must survive clearing the personal key.');
     end;
 
+    /// <summary>
+    /// Verifies read-only retrieval and deferred usage marking of the preferred personal key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey()
     var
@@ -224,7 +251,7 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] When both keys exist, the personal key is the one a chat request uses.
+        // [SCENARIO] When both keys exist, the personal key is used. Time: nonzero usage stamp only; WorkDate ignored.
         Initialize();
 
         // [GIVEN] A language model with a shared and a personal key
@@ -235,13 +262,26 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'A key must be found.');
 
-        // [THEN] Only the personal key was read
+        // [THEN] Retrieval does not stamp either key before the provider call
         UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was read.');
-        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be read while a personal key exists.');
+        Assert.IsFalse(ApiKey.IsEmpty(), 'The resolved key must not be empty.');
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Resolving the personal key must not stamp usage.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Resolving the key must not stamp shared usage.');
+
+        // [WHEN] Usage is recorded after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] Only the preferred personal key is stamped
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be marked as used.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must stay unused when a personal key exists.');
     end;
 
+    /// <summary>
+    /// Verifies read-only retrieval and deferred usage marking of the shared fallback key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey()
     var
@@ -250,7 +290,7 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] Without a personal key, a chat request uses the shared key.
+        // [SCENARIO] Without a personal key, the shared key is used. Time: nonzero usage stamp only; WorkDate ignored.
         Initialize();
 
         // [GIVEN] A language model with only a shared key
@@ -260,11 +300,22 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'The shared key must be used as the fallback.');
 
-        // [THEN] The shared key was read
+        // [THEN] Retrieval returns a key without stamping usage
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was read.');
+        Assert.IsFalse(ApiKey.IsEmpty(), 'The fallback key must not be empty.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Resolving the shared key must not stamp usage.');
+
+        // [WHEN] Usage is recorded after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] The shared fallback key is stamped
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared fallback key must be marked as used.');
     end;
 
+    /// <summary>
+    /// Verifies that a language model without any key reports no key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_NoKeyStored_ReturnsFalse()
     var
@@ -283,6 +334,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsTrue(ApiKey.IsEmpty(), 'The returned value must stay empty.');
     end;
 
+    /// <summary>
+    /// Verifies that reading a key for a blank language model code fails safely.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_BlankLanguageModelCode_ReturnsFalse()
     var
@@ -296,6 +350,70 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.TryGetApiKey('', ApiKey), 'A blank model code must not resolve a key.');
     end;
 
+    /// <summary>
+    /// Verifies that registered keys without stored values are not marked as used.
+    /// </summary>
+    [Test]
+    procedure MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage()
+    var
+        LangModel: Record "Bifrost Language Model ori";
+        ServiceSecret: Record "App Secret ori";
+        UserSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+    begin
+        // [SCENARIO] Missing values must not record usage. Time: nonzero usage stamp only; WorkDate ignored.
+        Initialize();
+
+        // [GIVEN] Both keys are registered without stored values
+        CreateLanguageModel(LangModel);
+
+        // [WHEN] Usage is recorded without an API key
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] Both registrations remain unused
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'A missing personal key must not be marked as used.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'A missing shared key must not be marked as used.');
+    end;
+
+    /// <summary>
+    /// Verifies that blank model codes do not stamp another model's keys or create registrations.
+    /// </summary>
+    [Test]
+    procedure MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets()
+    var
+        LangModel: Record "Bifrost Language Model ori";
+        AppSecret: Record "App Secret ori";
+        ServiceSecret: Record "App Secret ori";
+        UserSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        RegistrationCount: Integer;
+    begin
+        // [SCENARIO] Blank input is a no-op. Time: nonzero usage stamp only; WorkDate ignored.
+        Initialize();
+
+        // [GIVEN] A different model has both keys stored
+        CreateLanguageModel(LangModel);
+        LangModelSecrets.SetServiceKey(LangModel.Code, AsSecret('sk-shared'));
+        LangModelSecrets.SetUserKey(LangModel.Code, AsSecret('sk-personal'));
+        AppSecret.SetRange("App Id", LangModelSecrets.GetAppId());
+        RegistrationCount := AppSecret.Count();
+
+        // [WHEN] Usage is recorded for a blank code
+        LangModelSecrets.MarkApiKeyUsed('');
+
+        // [THEN] Registrations and existing usage stamps remain unchanged
+        Assert.AreEqual(RegistrationCount, AppSecret.Count(), 'Blank input must not register secrets.');
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Blank input must not stamp another personal key.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Blank input must not stamp another shared key.');
+    end;
+
+    /// <summary>
+    /// Verifies that storing a key without a language model is rejected with a helpful message.
+    /// </summary>
     [Test]
     procedure SetServiceKey_BlankLanguageModelCode_Errors()
     var
@@ -311,6 +429,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.ExpectedError('A language model code must be specified');
     end;
 
+    /// <summary>
+    /// Verifies that deleting a language model removes both of its stored API keys.
+    /// </summary>
     [Test]
     procedure Delete_LanguageModel_ClearsBothSecrets()
     var
@@ -337,6 +458,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsFalse(LangModelSecrets.HasUserKey(ModelCode), 'The personal key must be cleared on delete.');
     end;
 
+    /// <summary>
+    /// Verifies that renaming a language model carries its keys over to the new code.
+    /// </summary>
     [Test]
     procedure Rename_LanguageModel_MovesSecretsToTheNewCode()
     var
@@ -360,6 +484,72 @@ codeunit 96009 "LangModel Secrets Tests"
         // [THEN] The key is stored under the new code and gone from the old one
         Assert.IsTrue(LangModelSecrets.HasServiceKey(NewCode), 'The shared key must be available under the new code.');
         Assert.IsFalse(LangModelSecrets.HasServiceKey(OldCode), 'The shared key must be gone from the old code.');
+    end;
+
+    /// <summary>
+    /// Verifies that an empty query has no missing keys.
+    /// </summary>
+    [Test]
+    procedure CountModelsWithoutKey_Empty_ReturnsZero()
+    var
+        LanguageModel: Record "Bifrost Language Model ori";
+        TempSavedModels: Record "Bifrost Language Model ori" temporary;
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+    begin
+        // PR57 read-loop | Time: no usage stamps | Risk: preserve existing model fixtures without secret writes.
+        Initialize();
+        LanguageModel.ReadIsolation := IsolationLevel::ReadCommitted;
+        if LanguageModel.FindSet() then
+            repeat
+                LanguageModel.CalcFields(Skill);
+                TempSavedModels := LanguageModel;
+                TempSavedModels.Insert();
+            until LanguageModel.Next() = 0;
+        LanguageModel.DeleteAll(false);
+        Assert.AreEqual(0, LangModelSecrets.CountModelsWithoutKey(), 'Empty query must return zero.');
+        if TempSavedModels.FindSet() then
+            repeat
+                LanguageModel := TempSavedModels;
+                LanguageModel.Insert(false, true);
+            until TempSavedModels.Next() = 0;
+    end;
+
+    /// <summary>
+    /// Verifies missing, shared, personal and key-free provider cases without marking key usage.
+    /// </summary>
+    [Test]
+    procedure CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites()
+    var
+        LanguageModel: Record "Bifrost Language Model ori";
+        UserSecret: Record "App Secret ori";
+        ServiceSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        MissingBefore: Integer;
+    begin
+        // PR57 read-loop | Time: Last Used On stays 0DT | Risk: preserve shared/personal secret scope.
+        // [GIVEN] A new owned model requiring an API key.
+        Initialize();
+        MissingBefore := LangModelSecrets.CountModelsWithoutKey();
+        CreateLanguageModel(LanguageModel);
+        LanguageModel."Chat Provider" := Enum::"Bifrost LangModel Prov. ori"::Mock;
+        LanguageModel.Modify(true);
+        Assert.AreEqual(MissingBefore + 1, LangModelSecrets.CountModelsWithoutKey(), 'Missing key must be counted.');
+        // [WHEN] Either scope supplies the key, counting remains read-only.
+        LangModelSecrets.SetServiceKey(LanguageModel.Code, AsSecret('PR57 synthetic shared key'));
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Shared key must satisfy the model.');
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LanguageModel.Code));
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Counting must not stamp the shared key.');
+        LangModelSecrets.ClearServiceKey(LanguageModel.Code);
+        LangModelSecrets.SetUserKey(LanguageModel.Code, AsSecret('PR57 synthetic personal key'));
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Personal key must satisfy the model.');
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LanguageModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Counting must not stamp the personal key.');
+        // [THEN] Key-free provider does not contribute to the missing count.
+        LangModelSecrets.ClearUserKey(LanguageModel.Code);
+        LanguageModel."Chat Provider" := Enum::"Bifrost LangModel Prov. ori"::None;
+        LanguageModel.Modify(true);
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Key-free provider must not be counted.');
+        LanguageModel.Delete(true);
     end;
 
     local procedure CreateLanguageModel(var LangModel: Record "Bifrost Language Model ori")

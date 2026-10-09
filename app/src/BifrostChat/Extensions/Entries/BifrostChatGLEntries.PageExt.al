@@ -3,6 +3,9 @@ using Microsoft.Finance.GeneralLedger.Ledger;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to General Ledger Entries.
+/// </summary>
 pageextension 10035351 "Bifrost Chat GLEntries ori" extends "General Ledger Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

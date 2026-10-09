@@ -1,8 +1,12 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Purchases.Document;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Purchase Return Orders.
+/// </summary>
 pageextension 10035369 "Bifrost Chat PurchRetOrds ori" extends "Purchase Return Orders"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
@@ -20,10 +24,9 @@ pageextension 10035369 "Bifrost Chat PurchRetOrds ori" extends "Purchase Return 
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::"Purchase Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::"Purchase Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
                 end;
             }
         }

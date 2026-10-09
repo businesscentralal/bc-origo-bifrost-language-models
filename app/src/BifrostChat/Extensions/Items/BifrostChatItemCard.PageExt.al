@@ -3,6 +3,9 @@ using Microsoft.Inventory.Item;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Item Card.
+/// </summary>
 pageextension 10035358 "Bifrost Chat ItemCard ori" extends "Item Card"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

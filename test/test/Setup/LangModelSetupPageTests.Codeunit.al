@@ -27,6 +27,9 @@ codeunit 96014 "LangModel Setup Page Tests"
         IsInitialized := true;
     end;
 
+    /// <summary>
+    /// Verifies that the Bifrost Language Models setup page opens and shows its status fields.
+    /// </summary>
     [Test]
     procedure LangModelSetupPage_Opens()
     var
@@ -46,6 +49,9 @@ codeunit 96014 "LangModel Setup Page Tests"
         LangModelSetupPage.Close();
     end;
 
+    /// <summary>
+    /// Verifies that the language model count on the setup page follows the table.
+    /// </summary>
     [Test]
     procedure LangModelSetupPage_CountsTheLanguageModels()
     var
@@ -74,6 +80,9 @@ codeunit 96014 "LangModel Setup Page Tests"
         LangModelSetupPage.Close();
     end;
 
+    /// <summary>
+    /// Verifies that Bifrost Language Models contributes exactly one action to the Apps group of Bifrost Setup.
+    /// </summary>
     [Test]
     procedure SetupOri_ExposesTheSingleLangModelAppsAction()
     var
