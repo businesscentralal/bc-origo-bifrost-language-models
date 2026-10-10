@@ -1,9 +1,15 @@
 #pragma warning disable AL0432
 namespace Origo.Bifrost.LanguageModels.Test;
+using Microsoft.EServices.EDocument;
+using Microsoft.Inventory.Item;
+using Microsoft.Purchases.Document;
+using Microsoft.Purchases.Vendor;
+using Microsoft.Sales.Customer;
+using Microsoft.Sales.Document;
 using Microsoft.Utilities;
-using Origo.Bifrost;
-
 using Origo.Bifrost.LanguageModels;
+
+using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -582,6 +588,800 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.AreEqual('/openai/models?api-version=2024', MockProvider.GetLastModelsPath(), 'Models Path not passed.');
         Assert.AreEqual(120000, MockProvider.GetLastTimeoutMs(), 'Timeout Ms not passed (should be seconds * 1000).');
         Assert.AreEqual(8192, MockProvider.GetLastMaxTokens(), 'Max Tokens not passed.');
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Customer List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_CustomerList_OpensFocus()
+    var
+        SourceRecord: Record Customer;
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Customer List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'X57-CUSTOMERLIST';
+        SourceRecord.Name := 'X57 Customer List context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."No.", SourceRecord.Name));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Incoming Documents chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_IncomingDocuments_OpensFocus()
+    var
+        SourceRecord: Record "Incoming Document";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Incoming Documents";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Entry No." := 2147483000;
+        SourceRecord.Description := 'X57 Incoming Documents context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Incoming Document", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord.TableCaption(), SourceRecord."Entry No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Item List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_ItemList_OpensFocus()
+    var
+        SourceRecord: Record Item;
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Item List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'X57-ITEMLIST';
+        SourceRecord.Description := 'X57 Item List context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::Item, SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."No.", SourceRecord.Description));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Credit Memos chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseCreditMemos_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Purchase Credit Memos";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Credit Memo";
+        SourceRecord."No." := 'X57-PURCHASECRED';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Purchase Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Invoices chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseInvoices_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Purchase Invoices";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Invoice;
+        SourceRecord."No." := 'X57-PURCHASEINVO';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Purchase Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Orders chat action opens Foundation's focus for a selected source record.
+    /// Preserves the legacy header-table/line-SystemId mapping; does not prove valid header context.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseOrders_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Line";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Purchase Orders";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Order;
+        SourceRecord."No." := 'X57-ITEM-ORDER';
+        SourceRecord."Document No." := 'X57-DOC-ORDER';
+        SourceRecord."Line No." := 10000;
+        SourceRecord.Description := 'X57 Purchase Orders context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Purchase Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Quotes chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseQuotes_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Purchase Quotes";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Quote;
+        SourceRecord."No." := 'X57-PURCHASEQUOT';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Purchase Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Purchase Return Orders chat action opens Foundation's focus for a selected source record.
+    /// Preserves the legacy header-table/line-SystemId mapping; does not prove valid header context.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_PurchaseReturnOrders_OpensFocus()
+    var
+        SourceRecord: Record "Purchase Line";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Purchase Return Orders";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Return Order";
+        SourceRecord."No." := 'X57-ITEM-RETURN';
+        SourceRecord."Document No." := 'X57-DOC-RETURN';
+        SourceRecord."Line No." := 10000;
+        SourceRecord.Description := 'X57 Purchase Return Orders context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Purchase Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Credit Memos chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesCreditMemos_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Sales Credit Memos";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Credit Memo";
+        SourceRecord."No." := 'X57-SALESCREDITM';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Sales Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Invoice List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesInvoiceList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Sales Invoice List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Invoice;
+        SourceRecord."No." := 'X57-SALESINVOICE';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Sales Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Order List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesOrderList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Sales Order List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Order;
+        SourceRecord."No." := 'X57-SALESORDERLI';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Sales Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Quotes chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesQuotes_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Sales Quotes";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::Quote;
+        SourceRecord."No." := 'X57-SALESQUOTES';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Sales Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Sales Return Order List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SalesReturnOrderList_OpensFocus()
+    var
+        SourceRecord: Record "Sales Header";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Sales Return Order List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."Document Type" := SourceRecord."Document Type"::"Return Order";
+        SourceRecord."No." := 'X57-SALESRETURNO';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::"Sales Header", SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."Document Type", SourceRecord."No."));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that the actual Vendor List chat action opens Foundation's focus for a selected source record.
+    /// Asserts original forwarded arguments after the setter returns and traps the real focus.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_VendorList_OpensFocus()
+    var
+        SourceRecord: Record Vendor;
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Vendor List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: forwarding assertions do not inspect private Foundation state.
+        // [GIVEN] A configured mock model and the actual page's record type.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'X57-VENDORLIST';
+        SourceRecord.Name := 'X57 Vendor List context';
+        SourceRecord.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        Assert.IsTrue(SourcePage.ori_BifrostChat.Visible(), 'Configured chat action must be visible.');
+        // [WHEN] The source page invokes its real extended action.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] A real Chat Focus page is trapped; Close would fail if no page opened.
+        AssertCapturedContext(ContextSpy, Database::Vendor, SourceRecord.SystemId, StrSubstNo('%1 %2', SourceRecord."No.", SourceRecord.Name));
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that an unassigned user does not see the chat action even when a default model exists.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_UnassignedUser_HidesAction()
+    var
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Customer List";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: default model must not enable chat.
+        OriginalProvider := InitializeRouting();
+        SetupUserWithRole('');
+        CreateRole('DEFAULT', true, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        Assert.IsFalse(SourcePage.ori_BifrostChat.Visible(), 'Default model must not enable interactive chat.');
+        AssertNoContextCaptured(ContextSpy);
+        SourcePage.Close();
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that a missing assigned model keeps the action hidden.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_MissingAssignedModel_HidesAction()
+    var
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Customer List";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: stale assignment must not enable chat.
+        OriginalProvider := InitializeRouting();
+        SetupUserWithRole('XPR58-MISSING');
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        Assert.IsFalse(SourcePage.ori_BifrostChat.Visible(), 'Missing assignment must hide interactive chat.');
+        AssertNoContextCaptured(ContextSpy);
+        SourcePage.Close();
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies that routing an empty current-record context preserves the original focus-opening behavior.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_EmptyCurrentRecord_OpensFocus()
+    var
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        ChatFocus: TestPage "Chat Focus ori";
+        EmptySystemId: Guid;
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // PR57 routing | Time: independent of WorkDate | Risk: blank values must not become stale context.
+        OriginalProvider := InitializeRouting();
+        BindSubscription(ContextSpy);
+        ChatFocus.Trap();
+        ChatProvider.OpenRecordChat(0, EmptySystemId, '');
+        AssertCapturedContext(ContextSpy, 0, EmptySystemId, '');
+        ChatFocus.Close();
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies two actual customer actions capture fresh identities and captions without stale values.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_SequentialCustomers_FreshContext()
+    var
+        FirstCustomer: Record Customer;
+        SecondCustomer: Record Customer;
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Customer List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // [GIVEN] Two distinct selected customers and one local bound fixture.
+        OriginalProvider := InitializeRouting();
+        FirstCustomer.Init();
+        FirstCustomer."No." := 'X57-FIRST';
+        FirstCustomer.Name := 'X57 first caption';
+        FirstCustomer.Insert(false);
+        SecondCustomer.Init();
+        SecondCustomer."No." := 'X57-SECOND';
+        SecondCustomer.Name := 'X57 second caption';
+        SecondCustomer.Insert(false);
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(FirstCustomer);
+        // [WHEN] The first actual action opens the real focus.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        AssertCapturedContext(ContextSpy, Database::Customer, FirstCustomer.SystemId, StrSubstNo('%1 %2', FirstCustomer."No.", FirstCustomer.Name));
+        ChatFocus.Close();
+        ContextSpy.Reset();
+        SourcePage.GoToRecord(SecondCustomer);
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] Only the second record's identity and caption are observed after reset.
+        AssertCapturedContext(ContextSpy, Database::Customer, SecondCustomer.SystemId, StrSubstNo('%1 %2', SecondCustomer."No.", SecondCustomer.Name));
+        ChatFocus.Close();
+        SourcePage.Close();
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        FirstCustomer.Delete(false);
+        SecondCustomer.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies normal focus opening with no bound observer, preserving unconditional page execution.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_NoBoundObserver_OpensFocus()
+    var
+        SourceRecord: Record Customer;
+        SourcePage: TestPage "Customer List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+    begin
+        // [GIVEN] No observer is bound in this test's local scope.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'X57-NO-SPY';
+        SourceRecord.Name := 'X57 normal focus';
+        SourceRecord.Insert(false);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        // [WHEN] The real action runs without a fixture.
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        // [THEN] Close succeeds only if the actual focus opened.
+        ChatFocus.Close();
+        SourcePage.Close();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    /// <summary>
+    /// Verifies incorrect expected table, identity and caption are rejected after actual action event dispatch.
+    /// </summary>
+    [Test]
+    procedure OpenRecordChat_WrongExpectedContext_IsRejected()
+    var
+        SourceRecord: Record Customer;
+        ContextSpy: Codeunit "LangModel Context Spy ori";
+        SourcePage: TestPage "Customer List";
+        ChatFocus: TestPage "Chat Focus ori";
+        OriginalProvider: Enum "Chat Provider Type ori";
+        WrongSystemId: Guid;
+        ExpectedCaption: Text;
+    begin
+        // [GIVEN] Actual event dispatch from a selected customer, never a direct subscriber invocation.
+        OriginalProvider := InitializeRouting();
+        SourceRecord.Init();
+        SourceRecord."No." := 'X57-CONTROL';
+        SourceRecord.Name := 'X57 control caption';
+        SourceRecord.Insert(false);
+        ExpectedCaption := StrSubstNo('%1 %2', SourceRecord."No.", SourceRecord.Name);
+        WrongSystemId := CreateGuid();
+        BindSubscription(ContextSpy);
+        SourcePage.OpenView();
+        SourcePage.GoToRecord(SourceRecord);
+        ChatFocus.Trap();
+        SourcePage.ori_BifrostChat.Invoke();
+        ChatFocus.Close();
+        AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, ExpectedCaption);
+        // [WHEN] Each expected value is independently wrong.
+        asserterror AssertCapturedContext(ContextSpy, Database::Vendor, SourceRecord.SystemId, ExpectedCaption);
+        Assert.ExpectedError('Forwarded table must match the original action.');
+        asserterror AssertCapturedContext(ContextSpy, Database::Customer, WrongSystemId, ExpectedCaption);
+        Assert.ExpectedError('Forwarded SystemId must match the selected record.');
+        asserterror AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, 'X57 wrong caption');
+        Assert.ExpectedError('Forwarded caption must match the original action.');
+        // [THEN] Negative assertions did not change the captured values.
+        AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, ExpectedCaption);
+        SourcePage.Close();
+        UnbindSubscription(ContextSpy);
+        ContextSpy.Reset();
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
+    end;
+
+    local procedure AssertCapturedContext(var ContextSpy: Codeunit "LangModel Context Spy ori"; ExpectedTableId: Integer; ExpectedSystemId: Guid; ExpectedCaption: Text)
+    var
+        Count: Integer;
+        TableId: Integer;
+        RecordSystemId: Guid;
+        DataCaption: Text;
+    begin
+        ContextSpy.ReadCapture(Count, TableId, RecordSystemId, DataCaption);
+        Assert.AreEqual(1, Count, 'Exactly one setter-return event must be observed.');
+        Assert.AreEqual(ExpectedTableId, TableId, 'Forwarded table must match the original action.');
+        Assert.AreEqual(ExpectedSystemId, RecordSystemId, 'Forwarded SystemId must match the selected record.');
+        Assert.AreEqual(ExpectedCaption, DataCaption, 'Forwarded caption must match the original action.');
+    end;
+
+    local procedure AssertNoContextCaptured(var ContextSpy: Codeunit "LangModel Context Spy ori")
+    var
+        Count: Integer;
+        TableId: Integer;
+        RecordSystemId: Guid;
+        EmptySystemId: Guid;
+        DataCaption: Text;
+    begin
+        ContextSpy.ReadCapture(Count, TableId, RecordSystemId, DataCaption);
+        Assert.AreEqual(0, Count, 'Page opening with no assigned model must not forward context.');
+        Assert.AreEqual(0, TableId, 'Uncaptured table must stay empty.');
+        Assert.AreEqual(EmptySystemId, RecordSystemId, 'Uncaptured SystemId must stay empty.');
+        Assert.AreEqual('', DataCaption, 'Uncaptured caption must stay empty.');
+    end;
+
+    local procedure InitializeRouting() OriginalProvider: Enum "Chat Provider Type ori"
+    var
+        BifrostSetup: Record "Setup ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+    begin
+        Initialize();
+        if not BifrostSetup.Get() then begin
+            BifrostSetup.Init();
+            BifrostSetup.Insert(true);
+        end;
+        OriginalProvider := BifrostSetup."Chat Provider Type";
+        BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
+        BifrostSetup.Modify(false);
+        CreateRole('XPR58-CHAT', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetupUserWithRole('XPR58-CHAT');
+        MockProvider.SetIsConfigured(true);
+        MockProvider.SetConfigJson('{}');
+    end;
+
+    local procedure RestoreRouting(OriginalProvider: Enum "Chat Provider Type ori")
+    var
+        BifrostSetup: Record "Setup ori";
+    begin
+        BifrostSetup.Get();
+        BifrostSetup."Chat Provider Type" := OriginalProvider;
+        BifrostSetup.Modify(false);
+    end;
+
+    /// <summary>
+    /// Verifies that completion resolution returns None and clears a stale output when no model exists.
+    /// </summary>
+    [Test]
+    procedure GetLangModelProviderWithModel_NoModels_ReturnsNone()
+    var
+        ResolvedModel: Record "Bifrost Language Model ori";
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        ChatProvider: Codeunit "LangModel Chat Provider ori";
+        Provider: Interface "Bifrost LangModel Provider ori";
+    begin
+        // PR57 isolation | Time: independent of WorkDate | Risk: stale output and default lookup.
+        Initialize();
+        DeleteCurrentUserSetup();
+        ResolvedModel.Code := 'STALE';
+        Provider := ChatProvider.GetLangModelProviderWithModel(ResolvedModel);
+        Assert.AreEqual('', ResolvedModel.Code, 'No model must clear the output record.');
+        TempArgument."Procedure Type" := TempArgument."Procedure Type"::IsConfigured;
+        Provider.Execute(TempArgument);
+        Assert.IsFalse(TempArgument."Result Boolean", 'None provider must remain unconfigured.');
     end;
 
     local procedure Initialize()

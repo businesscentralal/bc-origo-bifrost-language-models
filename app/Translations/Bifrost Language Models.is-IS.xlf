@@ -333,6 +333,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Óvænt villa kom upp við kall á Copilot líkanið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Chat Proxy ori - NamedType UnexpectedErrorLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1416886313 - Method 1827473356 - NamedType 750120336" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?</source>
+          <target>Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install ori - Method InitCopilotDefaults - NamedType ConfirmQst</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1416886313 - Method 1827473356 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot defaults initialized successfully.</source>
+          <target>Copilot sjálfgildi frumstillt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálfgildi frumstillt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install ori - Method InitCopilotDefaults - NamedType DoneMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1416886313 - Method 4084936880 - NamedType 2252135085" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bifrost Copilot</source>
           <target>Bifröst Copilot</target>
@@ -1154,18 +1166,6 @@
           <target>Frumstilla Copilot sjálfgildi</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Frumstilla Copilot sjálfgildi</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel List ori - Action InitCopilotDefaults - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1466659766 - Action 1827473356 - Method 1377591017 - NamedType 750120336" size-unit="char" translate="yes" xml:space="preserve">
-          <source>This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?</source>
-          <target>Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel List ori - Action InitCopilotDefaults - Method OnAction - NamedType ConfirmQst</note>
-        </trans-unit>
-        <trans-unit id="Page 1466659766 - Action 1827473356 - Method 1377591017 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Copilot defaults initialized successfully.</source>
-          <target>Copilot sjálfgildi frumstillt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálfgildi frumstillt.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel List ori - Action InitCopilotDefaults - Method OnAction - NamedType DoneMsg</note>
         </trans-unit>
         <trans-unit id="Page 1466659766 - Action 3383493608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Process</source>

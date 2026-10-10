@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-10) - Bounded canonical verification repairs
+
+- The 14 list chat actions (pageextensions 10035347, 10035356, 10035359, 10035361, 10035364, 10035366–10035367, 10035369, 10035371, 10035374, 10035376–10035377, 10035379 and 10035381) delegate to `LangModel Chat Provider ori` (codeunit 10035382), preserving the original table, SystemId, caption, visibility and promoted actions. Purchase Orders/Return Orders preserve their existing Purchase Header table number with Purchase Line identity; this change does not repair that legacy semantic mismatch.
+- `Copilot Install ori` (codeunit 10035390) owns confirmation and initialization orchestration called by `Bifrost LangModel List ori` (page 10035344). The same two Icelandic labels move to the codeunit without changing their text.
+- The default model lookup in codeunit 10035382, `CountModelsWithoutKey` in `LangModel Secrets ori` (codeunit 10035422), and the read-only `ChatSvcGate Tests` probe (codeunit 96013) use local read isolation.
+- `LangModel Chat Provider Tests` (96002), `Copilot Install Tests` (96018) and `LangModel Secrets Tests` (96009) cover real page actions, forwarding arguments, cancellation, errors and empty/key-scope cases. `LangModel Context Spy ori` (new test codeunit 96029) observes value arguments after the real setter; it does not inspect Foundation private state or rendered captions.
+
+
 ### Fixed (2026-10-10) - Verification coverage and documentation
 
 - `LangModel Field Restrict ori` (codeunit 10035408) now has the Icelandic endpoint-edit hint in the committed XLF; `Bifrost Chat Proc. Type ori` (enum 10035338) preserves its intentionally blank caption without a review placeholder.

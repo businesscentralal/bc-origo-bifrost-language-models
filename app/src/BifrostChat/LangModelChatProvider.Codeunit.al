@@ -15,6 +15,33 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     Access = Public;
 
     /// <summary>
+    /// Opens Foundation's chat focus with the caller's current record and caption in this session.
+    /// </summary>
+    /// <param name="TableId">The table number declared by the original page action; legacy mappings are preserved.</param>
+    /// <param name="RecordSystemId">The current record's SystemId.</param>
+    /// <param name="DataCaption">The caption formatted by the original page.</param>
+    internal procedure OpenRecordChat(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)
+    var
+        BifrostChatFocus: Page "Chat Focus ori";
+    begin
+        BifrostChatFocus.SetRecordContext(TableId, RecordSystemId, DataCaption);
+        OnAfterSetRecordContext(TableId, RecordSystemId, DataCaption);
+        BifrostChatFocus.Run();
+    end;
+
+    /// <summary>
+    /// Observes the arguments after Foundation's context setter returns and before the real focus opens.
+    /// Does not expose Foundation's private state or rendered caption; parameters cannot alter the call.
+    /// </summary>
+    /// <param name="TableId">The table number passed to Foundation's setter.</param>
+    /// <param name="RecordSystemId">The record identity passed to Foundation's setter.</param>
+    /// <param name="DataCaption">The caption passed to Foundation's setter.</param>
+    [InternalEvent(false, false)]
+    local procedure OnAfterSetRecordContext(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)
+    begin
+    end;
+
+    /// <summary>
     /// Reports whether the current user resolves to a language model whose provider is configured.
     /// </summary>
     procedure IsConfigured(): Boolean
@@ -86,6 +113,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
 
         // LLM.Prompt.Complete only. Bifrost Chat stops in ResolveChatLanguageModel.
         BifrostLanguageModel.SetRange(Default, true);
+        BifrostLanguageModel.ReadIsolation := IsolationLevel::ReadCommitted;
         if BifrostLanguageModel.FindFirst() then begin
             ResolvedRole := BifrostLanguageModel;
             Provider := BifrostLanguageModel."Chat Provider";

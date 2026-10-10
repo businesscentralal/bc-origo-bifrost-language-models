@@ -69,15 +69,9 @@ page 10035344 "Bifrost LangModel List ori"
                 trigger OnAction()
                 var
                     CopilotInstall: Codeunit "Copilot Install ori";
-                    ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?';
-                    DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
                 begin
-                    if not Confirm(ConfirmQst) then
-                        exit;
-                    CopilotInstall.RegisterCapability();
-                    CopilotInstall.InitDefaultLanguageModel();
-                    CurrPage.Update(false);
-                    Message(DoneMsg);
+                    if CopilotInstall.InitCopilotDefaults() then
+                        CurrPage.Update(false);
                 end;
             }
         }

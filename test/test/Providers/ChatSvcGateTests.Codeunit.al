@@ -84,6 +84,7 @@ codeunit 96013 "Chat Svc Gate Tests"
     begin
         // Verifies the table is accessible and can be queried
         ChatSvcGate.SetRange("Primary Key", 'DIAG');
+        ChatSvcGate.ReadIsolation := IsolationLevel::ReadCommitted;
         Assert.IsFalse(ChatSvcGate.FindFirst(), 'Diagnostic key should not exist');
     end;
 }

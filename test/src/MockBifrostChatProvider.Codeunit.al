@@ -1,8 +1,10 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 using Microsoft.Utilities;
-using Origo.Bifrost;
-
 using Origo.Bifrost.LanguageModels;
+using Origo.Bifrost;
+using System.AI;
+
+using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Configurable mock implementation of the "Bifrost LangModel Provider ori" interface for unit testing
@@ -36,6 +38,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         ContinueWithToolResultsCalled: Boolean;
         GetAvailableModelsCalled: Boolean;
         ModelCount: Integer;
+        RejectCopilotWrite: Boolean;
 
     /// <summary>
     /// Records the requested mock operation and returns configured fixture results through the temporary argument.
@@ -145,6 +148,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     /// <summary>Resets all mock state — call from each test's Initialize.</summary>
     procedure Reset()
     begin
+        RejectCopilotWrite := false;
         LastSendPayload := '';
         LastConversationState := '';
         LastToolResultsJson := '';
@@ -349,4 +353,37 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     begin
         exit(GetAvailableModelsCalled);
     end;
+    /// <summary>
+    /// Arms a test-only failure at the real COPILOT model write without bypassing capability registration.
+    /// </summary>
+    procedure SetRejectCopilotWrite(Value: Boolean)
+    begin
+        RejectCopilotWrite := Value;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Bifrost Language Model ori", 'OnBeforeInsertEvent', '', false, false)]
+    local procedure RejectCopilotInsert(var Rec: Record "Bifrost Language Model ori"; RunTrigger: Boolean)
+    begin
+        CheckCopilotWrite(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Bifrost Language Model ori", 'OnBeforeModifyEvent', '', false, false)]
+    local procedure RejectCopilotModify(var Rec: Record "Bifrost Language Model ori"; var xRec: Record "Bifrost Language Model ori"; RunTrigger: Boolean)
+    begin
+        CheckCopilotWrite(Rec);
+    end;
+
+    local procedure CheckCopilotWrite(var LanguageModel: Record "Bifrost Language Model ori")
+    var
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        CopilotCapability: Codeunit "Copilot Capability";
+        Assert: Codeunit "Library Assert";
+        RejectedWriteErr: Label 'PR57 test rejected COPILOT model write.', Locked = true;
+    begin
+        if LanguageModel.IsTemporary() or not RejectCopilotWrite or (LanguageModel.Code <> 'COPILOT') then
+            exit;
+        Assert.IsTrue(CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori", LangModelSecrets.GetAppId()), 'Capability registration must precede model initialization.');
+        Error(RejectedWriteErr);
+    end;
+
 }

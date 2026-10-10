@@ -1,6 +1,7 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Purchases.Vendor;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
@@ -23,10 +24,9 @@ pageextension 10035381 "Bifrost Chat VendorList ori" extends "Vendor List"
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::Vendor, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Name));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::Vendor, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Name));
                 end;
             }
         }

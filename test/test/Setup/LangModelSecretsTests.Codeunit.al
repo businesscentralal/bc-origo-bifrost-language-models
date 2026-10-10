@@ -1,7 +1,7 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 
-using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using Origo.Bifrost;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -484,6 +484,72 @@ codeunit 96009 "LangModel Secrets Tests"
         // [THEN] The key is stored under the new code and gone from the old one
         Assert.IsTrue(LangModelSecrets.HasServiceKey(NewCode), 'The shared key must be available under the new code.');
         Assert.IsFalse(LangModelSecrets.HasServiceKey(OldCode), 'The shared key must be gone from the old code.');
+    end;
+
+    /// <summary>
+    /// Verifies that an empty query has no missing keys.
+    /// </summary>
+    [Test]
+    procedure CountModelsWithoutKey_Empty_ReturnsZero()
+    var
+        LanguageModel: Record "Bifrost Language Model ori";
+        TempSavedModels: Record "Bifrost Language Model ori" temporary;
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+    begin
+        // PR57 read-loop | Time: no usage stamps | Risk: preserve existing model fixtures without secret writes.
+        Initialize();
+        LanguageModel.ReadIsolation := IsolationLevel::ReadCommitted;
+        if LanguageModel.FindSet() then
+            repeat
+                LanguageModel.CalcFields(Skill);
+                TempSavedModels := LanguageModel;
+                TempSavedModels.Insert();
+            until LanguageModel.Next() = 0;
+        LanguageModel.DeleteAll(false);
+        Assert.AreEqual(0, LangModelSecrets.CountModelsWithoutKey(), 'Empty query must return zero.');
+        if TempSavedModels.FindSet() then
+            repeat
+                LanguageModel := TempSavedModels;
+                LanguageModel.Insert(false, true);
+            until TempSavedModels.Next() = 0;
+    end;
+
+    /// <summary>
+    /// Verifies missing, shared, personal and key-free provider cases without marking key usage.
+    /// </summary>
+    [Test]
+    procedure CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites()
+    var
+        LanguageModel: Record "Bifrost Language Model ori";
+        UserSecret: Record "App Secret ori";
+        ServiceSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        MissingBefore: Integer;
+    begin
+        // PR57 read-loop | Time: Last Used On stays 0DT | Risk: preserve shared/personal secret scope.
+        // [GIVEN] A new owned model requiring an API key.
+        Initialize();
+        MissingBefore := LangModelSecrets.CountModelsWithoutKey();
+        CreateLanguageModel(LanguageModel);
+        LanguageModel."Chat Provider" := Enum::"Bifrost LangModel Prov. ori"::Mock;
+        LanguageModel.Modify(true);
+        Assert.AreEqual(MissingBefore + 1, LangModelSecrets.CountModelsWithoutKey(), 'Missing key must be counted.');
+        // [WHEN] Either scope supplies the key, counting remains read-only.
+        LangModelSecrets.SetServiceKey(LanguageModel.Code, AsSecret('PR57 synthetic shared key'));
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Shared key must satisfy the model.');
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LanguageModel.Code));
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Counting must not stamp the shared key.');
+        LangModelSecrets.ClearServiceKey(LanguageModel.Code);
+        LangModelSecrets.SetUserKey(LanguageModel.Code, AsSecret('PR57 synthetic personal key'));
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Personal key must satisfy the model.');
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LanguageModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Counting must not stamp the personal key.');
+        // [THEN] Key-free provider does not contribute to the missing count.
+        LangModelSecrets.ClearUserKey(LanguageModel.Code);
+        LanguageModel."Chat Provider" := Enum::"Bifrost LangModel Prov. ori"::None;
+        LanguageModel.Modify(true);
+        Assert.AreEqual(MissingBefore, LangModelSecrets.CountModelsWithoutKey(), 'Key-free provider must not be counted.');
+        LanguageModel.Delete(true);
     end;
 
     local procedure CreateLanguageModel(var LangModel: Record "Bifrost Language Model ori")
