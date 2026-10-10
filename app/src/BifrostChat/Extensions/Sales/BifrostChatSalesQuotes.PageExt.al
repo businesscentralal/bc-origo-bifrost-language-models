@@ -3,6 +3,9 @@ using Microsoft.Sales.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Sales Quotes.
+/// </summary>
 pageextension 10035376 "Bifrost Chat SalesQuotes ori" extends "Sales Quotes"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

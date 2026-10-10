@@ -4,6 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-10) - Verification coverage and documentation
+
+- `LangModel Field Restrict ori` (codeunit 10035408) now has the Icelandic endpoint-edit hint in the committed XLF; `Bifrost Chat Proc. Type ori` (enum 10035338) preserves its intentionally blank caption without a review placeholder.
+- Existing app/test object and procedure summaries are attached to their declarations without changing executable tokens, including the 36 chat page extensions (10035346–10035381). `Chat Svc Gate Tests` (codeunit 96013) describes its read-only absence assertion. README lists each app object and explains the existing request and credential flow.
+- `.AL-Go/settings.json` enables product CodeCop/UICop and test-app analyzers. Warnings now fail CI; existing AppSourceCop affixes, signing policy and Default/Test separation are preserved. No new object IDs are allocated.
+
+
 ### Fixed (2026-10-10) - Deferred API key usage test coverage
 
 - Codeunit 96009 `LangModel Secrets Tests` now verifies that API key retrieval leaves usage timestamps unchanged and that explicit `MarkApiKeyUsed` stamps the personal key or shared fallback. Added missing-key and blank-code controls. Reuses the bounded canonical PR #57 test repair; product behavior and deployment paths are unchanged.

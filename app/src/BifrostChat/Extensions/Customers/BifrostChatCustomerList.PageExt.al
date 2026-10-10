@@ -3,6 +3,9 @@ using Microsoft.Sales.Customer;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Customer List.
+/// </summary>
 pageextension 10035347 "Bifrost Chat CustomerList ori" extends "Customer List"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

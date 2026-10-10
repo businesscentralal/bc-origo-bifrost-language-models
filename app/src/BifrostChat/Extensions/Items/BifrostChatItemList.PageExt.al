@@ -3,6 +3,9 @@ using Microsoft.Inventory.Item;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Item List.
+/// </summary>
 pageextension 10035359 "Bifrost Chat ItemList ori" extends "Item List"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

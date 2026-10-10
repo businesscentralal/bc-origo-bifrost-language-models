@@ -26,26 +26,41 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori"
         UnexpectedAnswerErr: Label 'The language model returned an answer that is neither a reply nor tool calls: %1', Comment = '%1 = answer', Locked = true;
         RoundsExceededErr: Label 'The model still asked for tools after %1 rounds.', Comment = '%1 = rounds', Locked = true;
 
+    /// <summary>
+    /// Reports that this test-only message type is enabled.
+    /// </summary>
     procedure IsEnabled(): Boolean
     begin
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns the language model table number used by this test-only message type.
+    /// </summary>
     procedure GetFilterTableNo(): Integer
     begin
         exit(Database::"Bifrost Language Model ori");
     end;
 
+    /// <summary>
+    /// Describes the test-only language model chat operation.
+    /// </summary>
     procedure GetDescription(): Text[250]
     begin
         exit('TEST ONLY: runs one Bifrost Chat turn against a language model, tool calls included, through the same path as the chat add-in.');
     end;
 
+    /// <summary>
+    /// Returns Outbound for this test-only message type.
+    /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Outbound);
     end;
 
+    /// <summary>
+    /// Runs a language model chat turn with bounded tool rounds after refusing production execution.
+    /// </summary>
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var
         LanguageModel: Record "Bifrost Language Model ori";

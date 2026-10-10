@@ -3,6 +3,9 @@ using Microsoft.Purchases.Vendor;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Vendor List.
+/// </summary>
 pageextension 10035381 "Bifrost Chat VendorList ori" extends "Vendor List"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

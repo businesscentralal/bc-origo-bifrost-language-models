@@ -3,6 +3,9 @@ using Microsoft.Sales.Customer;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Customer Card.
+/// </summary>
 pageextension 10035346 "Bifrost Chat CustomerCard ori" extends "Customer Card"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

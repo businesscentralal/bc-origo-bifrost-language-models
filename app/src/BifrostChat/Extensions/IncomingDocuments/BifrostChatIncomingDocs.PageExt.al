@@ -3,6 +3,9 @@ using Microsoft.EServices.EDocument;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Incoming Documents.
+/// </summary>
 pageextension 10035356 "Bifrost Chat IncomingDocs ori" extends "Incoming Documents"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
