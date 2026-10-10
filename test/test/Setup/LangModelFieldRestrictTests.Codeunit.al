@@ -21,6 +21,9 @@ codeunit 96004 "LangModel Field Restrict Tests"
         Assert: Codeunit "Library Assert";
         EndpointHintTxt: Label 'Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.', Locked = true;
 
+    /// <summary>
+    /// Verifies that the three endpoint fields are write-restricted.
+    /// </summary>
     [Test]
     procedure FieldRestrict_ThreeEndpointFieldsWriteRestricted()
     var
@@ -36,6 +39,9 @@ codeunit 96004 "LangModel Field Restrict Tests"
         Assert.IsTrue(FlagOf(Flags, 25, 'writeRestricted'), 'Models Path (25) should be write-restricted.');
     end;
 
+    /// <summary>
+    /// Verifies that the same three fields stay readable.
+    /// </summary>
     [Test]
     procedure FieldRestrict_EndpointFieldsNotReadRestricted()
     var
@@ -49,6 +55,9 @@ codeunit 96004 "LangModel Field Restrict Tests"
         Assert.IsFalse(FlagOf(Flags, 25, 'readRestricted'), 'Models Path (25) must stay readable.');
     end;
 
+    /// <summary>
+    /// Verifies that the fields next to the endpoint are not affected.
+    /// </summary>
     [Test]
     procedure FieldRestrict_NeighbourFieldsNotRestricted()
     var
@@ -63,6 +72,9 @@ codeunit 96004 "LangModel Field Restrict Tests"
         Assert.IsFalse(FlagOf(Flags, 22, 'writeRestricted'), 'Timeout Seconds (22) must stay writable.');
     end;
 
+    /// <summary>
+    /// Verifies that the restrictions are field-level only.
+    /// </summary>
     [Test]
     procedure FieldRestrict_TableLevelChecksStayFalse()
     var
@@ -73,6 +85,9 @@ codeunit 96004 "LangModel Field Restrict Tests"
         Assert.IsFalse(TempArgument.IsTableWriteRestrictedForDataRecords(Database::"Bifrost Language Model ori", false), 'Table write must stay open.');
     end;
 
+    /// <summary>
+    /// Verifies that the endpoint fields carry the documented hint; a neighbour does not.
+    /// </summary>
     [Test]
     procedure FieldRestrict_HintForEndpointFieldsEmptyForNeighbour()
     var

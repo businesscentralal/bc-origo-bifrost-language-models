@@ -21,6 +21,9 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         ApiVersionTok: Label '2024-12-01-preview', Locked = true;
         ChatPathTok: Label '/openai/deployments/%1/chat/completions?api-version=%2', Locked = true;
 
+    /// <summary>
+    /// Dispatches the requested operation to the Azure OpenAI provider and writes results to the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";

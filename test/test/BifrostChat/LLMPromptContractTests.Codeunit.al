@@ -15,6 +15,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies that LLM.Prompt.Complete exposes its implementation contract as chapters.
+    /// </summary>
     [Test]
     procedure Contract_HasRequiredChaptersAndValidContent()
     var
@@ -36,6 +39,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
         Assert.IsFalse(Contract.Contains('workflow'), 'workflow is not declared');
     end;
 
+    /// <summary>
+    /// Verifies that the type can be found and distinguished from dedicated message types.
+    /// </summary>
     [Test]
     procedure Discovery_HasLanguageModelSpecificText()
     var
@@ -49,6 +55,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
         Assert.IsTrue(Discovery.GetSelectionDescription().Contains('without tools'), 'selection description');
     end;
 
+    /// <summary>
+    /// Verifies that the contract names Foundation's BIFROST Chat ori and this app's BIFROST LLM Chat ori for providers other than Copilot.
+    /// </summary>
     [Test]
     procedure Contract_NamesBothPermissionSets()
     var
@@ -64,6 +73,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
         Assert.IsTrue(ContractText.Contains('not Copilot'), 'The Copilot nuance is stated');
     end;
 
+    /// <summary>
+    /// Verifies that a missing prompt answers MissingParameter on prompt with expected and nextStep.
+    /// </summary>
     [Test]
     procedure Execute_MissingPrompt_IsCodedMissingParameter()
     var
@@ -74,6 +86,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
         AssertCodedError(ResponseJson, 'MissingParameter', 'prompt');
     end;
 
+    /// <summary>
+    /// Verifies that an unknown roleCode answers RecordNotFound on roleCode, with the received value.
+    /// </summary>
     [Test]
     procedure Execute_UnknownRoleCode_IsCodedRecordNotFound()
     var
@@ -85,6 +100,9 @@ codeunit 96019 "LLM Prompt Contract Tests"
         Assert.AreEqual('BIFT-NOPE', ResponseJson.GetText('received'), 'received');
     end;
 
+    /// <summary>
+    /// Verifies that a roleCode longer than a language model code is not cut to 20 characters and matched.
+    /// </summary>
     [Test]
     procedure Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut()
     var

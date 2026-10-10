@@ -16,6 +16,9 @@ codeunit 10035392 "Copilot AOAI Func Impl ori" implements "AOAI Function"
         ToolDescription: Text;
         ToolSchema: JsonObject;
 
+    /// <summary>
+    /// Stores the tool name, description and parameter schema used to build the Copilot function definition.
+    /// </summary>
     procedure SetToolData(NewName: Text; NewDescription: Text; NewSchema: JsonObject)
     begin
         ToolName := NewName;
@@ -23,11 +26,17 @@ codeunit 10035392 "Copilot AOAI Func Impl ori" implements "AOAI Function"
         ToolSchema := NewSchema;
     end;
 
+    /// <summary>
+    /// Returns the configured tool name.
+    /// </summary>
     procedure GetName(): Text
     begin
         exit(ToolName);
     end;
 
+    /// <summary>
+    /// Builds the function definition from the configured tool name, description and parameter schema.
+    /// </summary>
     procedure GetPrompt(): JsonObject
     var
         Prompt: JsonObject;
@@ -43,6 +52,9 @@ codeunit 10035392 "Copilot AOAI Func Impl ori" implements "AOAI Function"
         exit(Prompt);
     end;
 
+    /// <summary>
+    /// Returns an empty result because the Bifrost MCP Tool Server handles manual tool execution.
+    /// </summary>
     procedure Execute(Arguments: JsonObject): Variant
     begin
         // Manual tool invoke — execution handled by Bifrost MCP Tool Server

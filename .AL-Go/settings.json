@@ -53,5 +53,9 @@
         "skipUpgrade": true
       }
     }
-  ]
+  ],
+  "enableCodeCop": true,
+  "enableUICop": true,
+  "enableCodeAnalyzersOnTestApps": true,
+  "failOn": "warning"
 }

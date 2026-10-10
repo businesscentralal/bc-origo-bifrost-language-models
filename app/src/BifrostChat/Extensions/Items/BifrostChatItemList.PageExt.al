@@ -1,8 +1,12 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Inventory.Item;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Item List.
+/// </summary>
 pageextension 10035359 "Bifrost Chat ItemList ori" extends "Item List"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
@@ -20,10 +24,9 @@ pageextension 10035359 "Bifrost Chat ItemList ori" extends "Item List"
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::Item, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Description));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::Item, Rec.SystemId, StrSubstNo('%1 %2', Rec."No.", Rec.Description));
                 end;
             }
         }

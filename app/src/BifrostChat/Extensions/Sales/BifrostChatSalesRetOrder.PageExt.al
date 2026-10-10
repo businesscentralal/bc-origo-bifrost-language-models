@@ -3,6 +3,9 @@ using Microsoft.Sales.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Sales Return Order.
+/// </summary>
 pageextension 10035378 "Bifrost Chat SalesRetOrder ori" extends "Sales Return Order"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

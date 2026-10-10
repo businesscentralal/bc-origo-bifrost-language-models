@@ -23,6 +23,9 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         ApiKeyDocsLinkTextLbl: Label 'Get key from xAI Console', Comment = 'is-IS=Sækja lykil á xAI Console';
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
 
+    /// <summary>
+    /// Dispatches the requested operation to the xAI provider and writes results to the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";
