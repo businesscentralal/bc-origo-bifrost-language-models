@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-10) - Deferred API key usage test coverage
+
+- Codeunit 96009 `LangModel Secrets Tests` now verifies that API key retrieval leaves usage timestamps unchanged and that explicit `MarkApiKeyUsed` stamps the personal key or shared fallback. Added missing-key and blank-code controls. Reuses the bounded canonical PR #57 test repair; product behavior and deployment paths are unchanged.
+
 
 ### Fixed (2026-10-10) - UAT dependency installation
 

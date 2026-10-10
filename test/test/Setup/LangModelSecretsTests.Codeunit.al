@@ -8,7 +8,7 @@ using System.TestLibraries.Utilities;
 /// Tests for "LangModel Secrets ori", this app's facade over the Bifrost Foundation secret store:
 /// secret code layout, registration of both codes with the right scope, the set/is-set/clear
 /// round trip of the shared and the personal key, the personal-before-shared read order,
-/// and the clean-up when a language model is deleted or renamed.
+/// deferred usage marking, and the clean-up when a language model is deleted or renamed.
 /// </summary>
 codeunit 96009 "LangModel Secrets Tests"
 {
@@ -215,6 +215,9 @@ codeunit 96009 "LangModel Secrets Tests"
         Assert.IsTrue(LangModelSecrets.HasServiceKey(LangModel.Code), 'The shared key must survive clearing the personal key.');
     end;
 
+    /// <summary>
+    /// Verifies read-only retrieval and deferred usage marking of the preferred personal key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey()
     var
@@ -224,7 +227,7 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] When both keys exist, the personal key is the one a chat request uses.
+        // [SCENARIO] When both keys exist, the personal key is used. Time: nonzero usage stamp only; WorkDate ignored.
         Initialize();
 
         // [GIVEN] A language model with a shared and a personal key
@@ -235,13 +238,26 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'A key must be found.');
 
-        // [THEN] Only the personal key was read
+        // [THEN] Retrieval does not stamp either key before the provider call
         UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was read.');
-        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be read while a personal key exists.');
+        Assert.IsFalse(ApiKey.IsEmpty(), 'The resolved key must not be empty.');
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Resolving the personal key must not stamp usage.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Resolving the key must not stamp shared usage.');
+
+        // [WHEN] Usage is recorded after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] Only the preferred personal key is stamped
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be marked as used.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must stay unused when a personal key exists.');
     end;
 
+    /// <summary>
+    /// Verifies read-only retrieval and deferred usage marking of the shared fallback key.
+    /// </summary>
     [Test]
     procedure TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey()
     var
@@ -250,7 +266,7 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] Without a personal key, a chat request uses the shared key.
+        // [SCENARIO] Without a personal key, the shared key is used. Time: nonzero usage stamp only; WorkDate ignored.
         Initialize();
 
         // [GIVEN] A language model with only a shared key
@@ -260,9 +276,17 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'The shared key must be used as the fallback.');
 
-        // [THEN] The shared key was read
+        // [THEN] Retrieval returns a key without stamping usage
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was read.');
+        Assert.IsFalse(ApiKey.IsEmpty(), 'The fallback key must not be empty.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Resolving the shared key must not stamp usage.');
+
+        // [WHEN] Usage is recorded after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] The shared fallback key is stamped
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared fallback key must be marked as used.');
     end;
 
     [Test]
@@ -294,6 +318,67 @@ codeunit 96009 "LangModel Secrets Tests"
 
         // [WHEN/THEN]
         Assert.IsFalse(LangModelSecrets.TryGetApiKey('', ApiKey), 'A blank model code must not resolve a key.');
+    end;
+
+    /// <summary>
+    /// Verifies that registered keys without stored values are not marked as used.
+    /// </summary>
+    [Test]
+    procedure MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage()
+    var
+        LangModel: Record "Bifrost Language Model ori";
+        ServiceSecret: Record "App Secret ori";
+        UserSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+    begin
+        // [SCENARIO] Missing values must not record usage. Time: nonzero usage stamp only; WorkDate ignored.
+        Initialize();
+
+        // [GIVEN] Both keys are registered without stored values
+        CreateLanguageModel(LangModel);
+
+        // [WHEN] Usage is recorded without an API key
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] Both registrations remain unused
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'A missing personal key must not be marked as used.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'A missing shared key must not be marked as used.');
+    end;
+
+    /// <summary>
+    /// Verifies that blank model codes do not stamp another model's keys or create registrations.
+    /// </summary>
+    [Test]
+    procedure MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets()
+    var
+        LangModel: Record "Bifrost Language Model ori";
+        AppSecret: Record "App Secret ori";
+        ServiceSecret: Record "App Secret ori";
+        UserSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        RegistrationCount: Integer;
+    begin
+        // [SCENARIO] Blank input is a no-op. Time: nonzero usage stamp only; WorkDate ignored.
+        Initialize();
+
+        // [GIVEN] A different model has both keys stored
+        CreateLanguageModel(LangModel);
+        LangModelSecrets.SetServiceKey(LangModel.Code, AsSecret('sk-shared'));
+        LangModelSecrets.SetUserKey(LangModel.Code, AsSecret('sk-personal'));
+        AppSecret.SetRange("App Id", LangModelSecrets.GetAppId());
+        RegistrationCount := AppSecret.Count();
+
+        // [WHEN] Usage is recorded for a blank code
+        LangModelSecrets.MarkApiKeyUsed('');
+
+        // [THEN] Registrations and existing usage stamps remain unchanged
+        Assert.AreEqual(RegistrationCount, AppSecret.Count(), 'Blank input must not register secrets.');
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'Blank input must not stamp another personal key.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'Blank input must not stamp another shared key.');
     end;
 
     [Test]
