@@ -224,7 +224,7 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] When both keys exist, the personal key is the one a chat request uses.
+        // [SCENARIO] When both keys exist, the personal key is the one a chat request uses and stamps.
         Initialize();
 
         // [GIVEN] A language model with a shared and a personal key
@@ -232,14 +232,15 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets.SetServiceKey(LangModel.Code, AsSecret('sk-shared'));
         LangModelSecrets.SetUserKey(LangModel.Code, AsSecret('sk-personal'));
 
-        // [WHEN] The API key for a request is resolved
+        // [WHEN] The API key for a request is resolved and stamped after the provider call
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'A key must be found.');
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
 
-        // [THEN] Only the personal key was read
+        // [THEN] Only the personal key was stamped
         UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was read.');
-        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be read while a personal key exists.');
+        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was stamped.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be stamped while a personal key exists.');
     end;
 
     [Test]
@@ -250,19 +251,20 @@ codeunit 96009 "LangModel Secrets Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ApiKey: SecretText;
     begin
-        // [SCENARIO] Without a personal key, a chat request uses the shared key.
+        // [SCENARIO] Without a personal key, a chat request uses the shared key and stamps it.
         Initialize();
 
         // [GIVEN] A language model with only a shared key
         CreateLanguageModel(LangModel);
         LangModelSecrets.SetServiceKey(LangModel.Code, AsSecret('sk-shared'));
 
-        // [WHEN] The API key for a request is resolved
+        // [WHEN] The API key for a request is resolved and stamped after the provider call
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'The shared key must be used as the fallback.');
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
 
-        // [THEN] The shared key was read
+        // [THEN] The shared key was stamped
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was read.');
+        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was stamped.');
     end;
 
     [Test]
