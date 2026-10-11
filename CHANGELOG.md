@@ -7,6 +7,7 @@ All notable changes to Bifrost Language Models are documented here.
 ### Changed (2026-10-11) - CI compiles against BC 28.5
 
 - The Current build (pull requests and CI/CD) now uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` sets `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. AL-Go reads that value as storage/type/version/country/select; a leading double slash puts `w1` in select, and container creation rejects it.
+- `fullBuildPatterns` already lists `.AL-Go/settings.json`, so this pin is a full build. An incremental pull request build that left that file out of the pattern would skip the project and report success without compiling on 28.5.
 - `.github/AL-Go-Settings.json` does not set `artifact`. Test Next Minor and Test Next Major keep `////nextminor` and `////nextmajor`.
 - `app/app.json` and `test/app.json` already declare runtime `17.0` and application/platform `28.0.0.0`. The app version is unchanged.
 
