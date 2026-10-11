@@ -98,6 +98,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         Model := GetTextProperty(StateObject, 'model');
         if StateObject.Get('messages', MessagesToken) then
             Messages := MessagesToken.AsArray();
+        // A reasoning model that refused tools earlier in this turn keeps reasoning_effort none for the later rounds.
+        CopyRememberedReasoning(StateObject, ExtraRequestFields);
         BuildToolDefinitions(OpenAITools);
 
         AppendToolResultMessages(Messages, ToolResultsJson);
@@ -148,9 +150,11 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             ApiClient.LogLastRequest();
             // A reasoning model (e.g. Azure OpenAI gpt-6-sol) refuses function tools unless reasoning is off and says so.
             // Resend once with reasoning_effort "none"; a model that does not know the parameter never receives it.
+            // The setting stays on ExtraRequestFields, so later rounds of this turn send it on the first try.
             if not NeedsReasoningOff(RequestBody, GetLastErrorText()) then
                 exit(BuildErrorResponse(GetLastErrorText()));
             RequestBody.Add('reasoning_effort', 'none');
+            RememberReasoningOff(ExtraRequestFields);
             if not TrySendToModel(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
                 ApiClient.LogLastRequest();
                 exit(BuildErrorResponse(GetLastErrorText()));
@@ -183,7 +187,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         if FinishReason = 'tool_calls' then begin
             if not MessageObject.Get('tool_calls', ToolCallsToken) then
                 exit(BuildErrorResponse('Model signaled tool_calls but none present.'));
-            exit(BuildToolCallsResponse(ToolCallsToken.AsArray(), Messages, Model, UsageObject));
+            exit(BuildToolCallsResponse(ToolCallsToken.AsArray(), Messages, Model, UsageObject, ExtraRequestFields));
         end;
 
         Reply := GetTextProperty(MessageObject, 'content');
@@ -306,11 +310,51 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     /// True when a refused request carried tools but no reasoning_effort, and the provider's error asks for
     /// reasoning_effort 'none' to use function tools.
     /// </summary>
-    local procedure NeedsReasoningOff(RequestBody: JsonObject; ErrorText: Text): Boolean
+    /// <param name="RequestBody">The request that was refused.</param>
+    /// <param name="ErrorText">The provider error text.</param>
+    /// <returns>True when the request should be resent once with reasoning_effort none.</returns>
+    procedure NeedsReasoningOff(RequestBody: JsonObject; ErrorText: Text): Boolean
     begin
         if RequestBody.Contains('reasoning_effort') or not RequestBody.Contains('tools') then
             exit(false);
         exit(ErrorText.Contains('reasoning_effort') and ErrorText.Contains('''none'''));
+    end;
+
+    local procedure RememberReasoningOff(var ExtraRequestFields: JsonObject)
+    begin
+        if ExtraRequestFields.Contains('reasoning_effort') then
+            exit;
+        ExtraRequestFields.Add('reasoning_effort', 'none');
+    end;
+
+    local procedure CopyRememberedReasoning(StateObject: JsonObject; var ExtraRequestFields: JsonObject)
+    var
+        Token: JsonToken;
+    begin
+        if ExtraRequestFields.Contains('reasoning_effort') then
+            exit;
+        if not StateObject.Get('reasoning_effort', Token) then
+            exit;
+        if not Token.IsValue() then
+            exit;
+        if Token.AsValue().AsText() <> 'none' then
+            exit;
+        ExtraRequestFields.Add('reasoning_effort', 'none');
+    end;
+
+    local procedure StoreReasoningEffort(ExtraRequestFields: JsonObject; var StateObject: JsonObject)
+    var
+        Token: JsonToken;
+    begin
+        if StateObject.Contains('reasoning_effort') then
+            exit;
+        if not ExtraRequestFields.Get('reasoning_effort', Token) then
+            exit;
+        if not Token.IsValue() then
+            exit;
+        if Token.AsValue().AsText() <> 'none' then
+            exit;
+        StateObject.Add('reasoning_effort', 'none');
     end;
 
     [TryFunction]
@@ -352,7 +396,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         end;
     end;
 
-    local procedure BuildToolCallsResponse(ToolCallsArray: JsonArray; Messages: JsonArray; Model: Text; Usage: JsonObject) ResponseJson: Text
+    local procedure BuildToolCallsResponse(ToolCallsArray: JsonArray; Messages: JsonArray; Model: Text; Usage: JsonObject; ExtraRequestFields: JsonObject) ResponseJson: Text
     var
         ResponseObject: JsonObject;
         NormalizedCalls: JsonArray;
@@ -389,6 +433,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         StateObject.Add('messages', Messages);
         StateObject.Add('model', Model);
+        StoreReasoningEffort(ExtraRequestFields, StateObject);
         StateObject.WriteTo(StateText);
 
         ResponseObject.Add('type', 'tool_calls');

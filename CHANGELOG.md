@@ -10,8 +10,7 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Fixed (2026-10-05) - Reasoning models refused tool calls (Azure OpenAI, OpenAI)
 
-- A reasoning model such as Azure OpenAI `gpt-6-sol` answers 400 *Function tools with reasoning_effort are not supported ... set reasoning_effort to 'none'* when a chat request carries tools. The OpenAI-compatible chat proxy now resends such a request once with `reasoning_effort: "none"`; a model that does not know the parameter never receives it. Verified live on Azure OpenAI (`/openai/v1/chat/completions`, `gpt-6-sol`): two tool rounds and the right answer.
-- `LangModel Secrets Tests`: `TryGetApiKey` stamps nothing, `MarkApiKeyUsed` stamps the key that was used.
+- A reasoning model such as Azure OpenAI `gpt-6-sol` answers 400 *Function tools with reasoning_effort are not supported ... set reasoning_effort to 'none'* when a chat request carries tools. The OpenAI-compatible chat proxy resends that request once with `reasoning_effort: "none"`; a model that does not know the parameter never receives it. After that first refusal, later tool rounds and the figure-check follow-up of the same turn send `reasoning_effort: "none"` on the first try. Verified live on Azure OpenAI (`/openai/v1/chat/completions`, `gpt-6-sol`): two tool rounds and the right answer.
 
 ### Fixed (2026-10-05) - Google Gemini chat refused by Google
 
