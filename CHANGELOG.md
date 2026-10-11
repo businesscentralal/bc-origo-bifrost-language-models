@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-10-11) - CI compiles against BC 28.5
+
+- The Current build (pull requests and CI/CD) now uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` sets `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. AL-Go reads that value as storage/type/version/country/select; a leading double slash puts `w1` in select, and container creation rejects it.
+- `.github/AL-Go-Settings.json` does not set `artifact`. Test Next Minor and Test Next Major keep `////nextminor` and `////nextmajor`.
+- `app/app.json` and `test/app.json` already declare runtime `17.0` and application/platform `28.0.0.0`. The app version is unchanged.
+
 ### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
 
 - `LangModel Secrets ori.TryGetApiKey` stamped the key as used on Bifrost App Secrets (a write, once a day per key) before the provider call. Foundation's `Bootstrap` then runs message types through `Codeunit.Run`, which the platform refuses in an open write transaction, so the first chat of the day failed with *An error occurred and the transaction is stopped*, and the rolled-back stamp made every later attempt fail the same way. `TryGetApiKey` now only reads; the new `MarkApiKeyUsed` stamps the key after the provider call (chat send and continue, `LLM.Prompt.Complete`). Found by the live chat test through `Test.LanguageModel.Chat` on bc28-is.
