@@ -1301,7 +1301,9 @@ codeunit 96002 "LangModel Chat Provider Tests"
         SourcePage.Close();
         UnbindSubscription(ContextSpy);
         ContextSpy.Reset();
-        SourceRecord.Delete(false);
+        // asserterror rolls the insert back, so the row is already gone when the assertions hold.
+        if SourceRecord.Get(SourceRecord."No.") then
+            SourceRecord.Delete(false);
         RestoreRouting(OriginalProvider);
     end;
 
