@@ -6,7 +6,7 @@ using Origo.Bifrost.LanguageModels;
 /// Manually bound, test-only observation of the arguments forwarded to Foundation's context setter.
 /// Records values in the bound local instance without changing production state or page execution.
 /// </summary>
-codeunit 96029 "LangModel Context Spy ori"
+codeunit 96030 "LangModel Context Spy ori"
 {
     Access = Internal;
     EventSubscriberInstance = Manual;

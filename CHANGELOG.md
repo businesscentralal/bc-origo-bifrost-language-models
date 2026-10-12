@@ -4,9 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-12) - Full pipeline selection and negative-control fixture (PR #57)
+
+- Any `.github/workflows/**` change now selects a full Default/Test build; existing pipeline guard selection and all other settings remain in place.
+- `LangModel Chat Provider Tests` (96002) closes the real customer page, removes the fixture, and restores routing before expected assertion errors can roll back the customer. The wrong-table, wrong-SystemId and wrong-caption checks still reject incorrect context and recheck the original captured values.
+
 ### Fixed (2026-10-09) - Bounded gateway repairs (PR #57)
 
-- `LangModel Chat Provider ori` (10035382) adds an internal value-only observation after the context setter. `LangModel Context Spy ori` (test codeunit 96029) and `LangModel Chat Provider Tests` (96002) assert all 14 original action arguments, model gating and fresh sequential context while opening the real focus. The purchase order/return fixtures now select the actual `Purchase Line` records; their preexisting `Purchase Header`/line-SystemId mapping is preserved under the internal disposition; correcting its semantics requires separate approved scope.
+- `LangModel Chat Provider ori` (10035382) adds an internal value-only observation after the context setter. `LangModel Context Spy ori` (test codeunit 96030) and `LangModel Chat Provider Tests` (96002) assert all 14 original action arguments, model gating and fresh sequential context while opening the real focus. The purchase order/return fixtures now select the actual `Purchase Line` records; their preexisting `Purchase Header`/line-SystemId mapping is preserved under the internal disposition; correcting its semantics requires separate approved scope.
 
 - `LangModel Chat Provider ori` (10035382) now opens record chat through one internal helper. The 14 list actions delegate once, preserving their table, SystemId, caption, visibility and promotion: `Bifrost Chat CustomerList ori` (10035347), `Bifrost Chat IncomingDocs ori` (10035356), `Bifrost Chat ItemList ori` (10035359), `Bifrost Chat PurchCrMemos ori` (10035361), `Bifrost Chat PurchInvoices ori` (10035367), `Bifrost Chat PurchOrders ori` (10035364), `Bifrost Chat PurchQuotes ori` (10035366), `Bifrost Chat PurchRetOrds ori` (10035369), `Bifrost Chat SalesCrMemos ori` (10035371), `Bifrost Chat SalesInvoices ori` (10035377), `Bifrost Chat SalesOrders ori` (10035374), `Bifrost Chat SalesQuotes ori` (10035376), `Bifrost Chat SalesRetOrds ori` (10035379), `Bifrost Chat VendorList ori` (10035381).
 - `Bifrost LangModel List ori` (10035344) delegates its explicit initialization command to `Copilot Install ori` (10035390). Declining leaves models unchanged; registration still precedes model initialization, errors propagate, and success is reported only after completion. No install or upgrade initialization was added.
@@ -32,9 +37,18 @@ All notable changes to Bifrost Language Models are documented here.
 
 - Synchronized the Icelandic translation of the existing endpoint-editing hint in `LangModel Field Restrict ori` (10035408) with the compiler-generated XLF. Translation changes now select a full paired Default/Test build.
 
+### Changed (2026-10-11) - CI compiles against BC 28.5
+
+- Current (pull requests, CI/CD, and the Test Current workflow) uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` and `.github/Test Current.settings.json` set `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. `fullBuildPatterns` already lists `.AL-Go/settings.json`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`.
+- The two `TryGetApiKey` priority tests now follow the stamp-after-call design. `TryGetApiKey` has been read-only since 2a8421a (#53), and both tests have failed on main since then, on BC 29 as well as 28.5. The read leaves `Last Used On` at 0DT; `MarkApiKeyUsed` stamps the key that was used.
+
 ### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
 
 - `LangModel Secrets ori.TryGetApiKey` stamped the key as used on Bifrost App Secrets (a write, once a day per key) before the provider call. Foundation's `Bootstrap` then runs message types through `Codeunit.Run`, which the platform refuses in an open write transaction, so the first chat of the day failed with *An error occurred and the transaction is stopped*, and the rolled-back stamp made every later attempt fail the same way. `TryGetApiKey` now only reads; the new `MarkApiKeyUsed` stamps the key after the provider call (chat send and continue, `LLM.Prompt.Complete`). Found by the live chat test through `Test.LanguageModel.Chat` on bc28-is.
+
+### Fixed (2026-10-05) - Reasoning models refused tool calls (Azure OpenAI, OpenAI)
+
+- A reasoning model such as Azure OpenAI `gpt-6-sol` answers 400 *Function tools with reasoning_effort are not supported ... set reasoning_effort to 'none'* when a chat request carries tools. The OpenAI-compatible chat proxy resends that request once with `reasoning_effort: "none"`; a model that does not know the parameter never receives it. After that first refusal, later tool rounds and the figure-check follow-up of the same turn send `reasoning_effort: "none"` on the first try. Verified live on Azure OpenAI (`/openai/v1/chat/completions`, `gpt-6-sol`): two tool rounds and the right answer.
 
 ### Fixed (2026-10-05) - Google Gemini chat refused by Google
 
