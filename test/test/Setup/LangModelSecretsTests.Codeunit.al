@@ -235,11 +235,20 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'A key must be found.');
 
-        // [THEN] Only the personal key was read
+        // [THEN] Reading stamps nothing: a write here would stop Foundation's Bootstrap (Codeunit.Run in a write transaction)
         UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was read.');
-        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be read while a personal key exists.');
+        Assert.AreEqual(0DT, UserSecret."Last Used On", 'TryGetApiKey must not stamp the personal key.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'TryGetApiKey must not stamp the shared key.');
+
+        // [WHEN] The key is marked as used after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] Only the personal key, the one that was used, is stamped
+        UserSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetUserKeyCode(LangModel.Code));
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, UserSecret."Last Used On", 'The personal key must be the key that was stamped.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'The shared key must not be stamped while a personal key exists.');
     end;
 
     [Test]
@@ -260,9 +269,16 @@ codeunit 96009 "LangModel Secrets Tests"
         // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'The shared key must be used as the fallback.');
 
-        // [THEN] The shared key was read
+        // [THEN] Reading stamps nothing
         ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
-        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was read.');
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'TryGetApiKey must not stamp the shared key.');
+
+        // [WHEN] The key is marked as used after the provider call
+        LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
+
+        // [THEN] The shared key is the one stamped
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreNotEqual(0DT, ServiceSecret."Last Used On", 'The shared key must be the key that was stamped.');
     end;
 
     [Test]
