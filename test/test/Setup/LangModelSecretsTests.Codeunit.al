@@ -266,8 +266,14 @@ codeunit 96009 "LangModel Secrets Tests"
         CreateLanguageModel(LangModel);
         LangModelSecrets.SetServiceKey(LangModel.Code, AsSecret('sk-shared'));
 
-        // [WHEN] The API key for a request is resolved and then marked as used
+        // [WHEN] The API key for a request is resolved
         Assert.IsTrue(LangModelSecrets.TryGetApiKey(LangModel.Code, ApiKey), 'The shared key must be used as the fallback.');
+
+        // [THEN] Reading stamps nothing
+        ServiceSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(LangModel.Code));
+        Assert.AreEqual(0DT, ServiceSecret."Last Used On", 'TryGetApiKey must not stamp the shared key.');
+
+        // [WHEN] The key is marked as used after the provider call
         LangModelSecrets.MarkApiKeyUsed(LangModel.Code);
 
         // [THEN] The shared key is the one stamped
