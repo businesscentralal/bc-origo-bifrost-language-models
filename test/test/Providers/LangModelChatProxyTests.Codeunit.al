@@ -16,6 +16,9 @@ codeunit 96029 "LangModel Chat Proxy Tests"
         Assert: Codeunit "Library Assert";
         ReasoningOffErrTxt: Label 'Function tools with reasoning_effort are not supported. Set reasoning_effort to ''none''.', Locked = true;
 
+    /// <summary>
+    /// Verifies that tools and the matching provider error make the request eligible for a reasoning-off retry.
+    /// </summary>
     [Test]
     procedure NeedsReasoningOff_ToolsAndMatchingError_IsTrue()
     var
@@ -28,6 +31,9 @@ codeunit 96029 "LangModel Chat Proxy Tests"
         Assert.IsTrue(Proxy.NeedsReasoningOff(RequestBody, ReasoningOffErrTxt), 'Tools plus the reasoning_effort none error');
     end;
 
+    /// <summary>
+    /// Verifies that a request without tools is ineligible for a reasoning-off retry even when the provider error matches.
+    /// </summary>
     [Test]
     procedure NeedsReasoningOff_NoTools_IsFalse()
     var
@@ -40,6 +46,9 @@ codeunit 96029 "LangModel Chat Proxy Tests"
         Assert.IsFalse(Proxy.NeedsReasoningOff(RequestBody, ReasoningOffErrTxt), 'No tools');
     end;
 
+    /// <summary>
+    /// Verifies that a request already carrying reasoning_effort is ineligible for another reasoning-off retry.
+    /// </summary>
     [Test]
     procedure NeedsReasoningOff_AlreadySet_IsFalse()
     var
@@ -53,6 +62,9 @@ codeunit 96029 "LangModel Chat Proxy Tests"
         Assert.IsFalse(Proxy.NeedsReasoningOff(RequestBody, ReasoningOffErrTxt), 'reasoning_effort already set');
     end;
 
+    /// <summary>
+    /// Verifies that a tool request with an unrelated provider error is ineligible for a reasoning-off retry.
+    /// </summary>
     [Test]
     procedure NeedsReasoningOff_UnrelatedError_IsFalse()
     var

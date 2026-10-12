@@ -134,6 +134,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [28.0.0.0] - 2026-09-07
 
+### Changed (2026-10-12) - Retry eligibility test documentation
+
+- `LangModel Chat Proxy Tests` (codeunit 96029) now documents its four retry-eligibility assertions: matching error with tools, no tools, reasoning effort already set, and an unrelated error. Test behavior is unchanged.
+
 ### Changed (2026-09-20)
 
 - Docs: renamed MCP tool references `get_message_type_help` → `describe_message_type` in `.claude/CLAUDE.md` and `README.md`, matching the Foundation tool rename in core#64.
