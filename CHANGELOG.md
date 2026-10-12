@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-10-11) - CI compiles against BC 28.5
+
+- Current (pull requests, CI/CD, and the Test Current workflow) uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` and `.github/Test Current.settings.json` set `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. `fullBuildPatterns` already lists `.AL-Go/settings.json`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`.
+- The two `TryGetApiKey` priority tests now follow the stamp-after-call design. `TryGetApiKey` has been read-only since 2a8421a (#53), and both tests have failed on main since then, on BC 29 as well as 28.5. The read leaves `Last Used On` at 0DT; `MarkApiKeyUsed` stamps the key that was used.
+
 ### Fixed (2026-10-10) - Bounded canonical verification repairs
 
 - The 14 list chat actions (pageextensions 10035347, 10035356, 10035359, 10035361, 10035364, 10035366–10035367, 10035369, 10035371, 10035374, 10035376–10035377, 10035379 and 10035381) delegate to `LangModel Chat Provider ori` (codeunit 10035382), preserving the original table, SystemId, caption, visibility and promoted actions. Purchase Orders/Return Orders preserve their existing Purchase Header table number with Purchase Line identity; this change does not repair that legacy semantic mismatch.
@@ -24,10 +29,6 @@ All notable changes to Bifrost Language Models are documented here.
 ### Fixed (2026-10-10) - UAT dependency installation
 
 - UAT feature-app deployment uses the Foundation app already deployed by its own pipeline in Dev scope, avoiding an unauthorized AppSource Foundation installation. `.github/AL-Go-Settings.json`: `DeployToBifrost.DependencyInstallMode = "ignore"`. AppSource delivery is unchanged; no AL objects or IDs change.
-### Changed (2026-10-11) - CI compiles against BC 28.5
-
-- Current (pull requests, CI/CD, and the Test Current workflow) uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` and `.github/Test Current.settings.json` set `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. `fullBuildPatterns` already lists `.AL-Go/settings.json`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`.
-- The two `TryGetApiKey` priority tests now follow the stamp-after-call design. `TryGetApiKey` has been read-only since 2a8421a (#53), and both tests have failed on main since then, on BC 29 as well as 28.5. The read leaves `Last Used On` at 0DT; `MarkApiKeyUsed` stamps the key that was used.
 
 ### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
 
