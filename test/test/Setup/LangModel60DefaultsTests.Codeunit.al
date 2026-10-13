@@ -413,6 +413,8 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; temporary owned input.
         AssertConfiguredRequestUrls('https://proxy.example.test/v1/', 'v1/chat/completions', 'v1/models',
             'https://proxy.example.test/v1/chat/completions', 'https://proxy.example.test/v1/models');
+        AssertConfiguredRequestUrls('https://proxy.example.test/v1/', 'v1///chat/completions', 'v1//models',
+            'https://proxy.example.test/v1/chat/completions', 'https://proxy.example.test/v1/models');
         AssertConfiguredRequestUrls('https://proxy.example.test/v1', '/v10/chat', '/custom/models',
             'https://proxy.example.test/v1/v10/chat', 'https://proxy.example.test/v1/custom/models');
         AssertConfiguredRequestUrls('https://proxy.example.test/v10/', '/v1/chat/completions', '/v1/models',

@@ -52,6 +52,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
                 ResolvedPath := CopyStr(ResolvedPath, 4);
         if ResolvedPath = '' then
             exit(ResolvedBaseUrl);
+        ResolvedPath := '/' + DelChr(ResolvedPath, '<', '/');
         exit(ResolvedBaseUrl + ResolvedPath);
     end;
 
