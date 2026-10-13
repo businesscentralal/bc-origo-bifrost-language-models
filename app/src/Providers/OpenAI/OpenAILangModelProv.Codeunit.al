@@ -226,7 +226,7 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
     /// </summary>
     procedure GetCompletionUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     begin
-        exit(ProviderBase.GetBaseUrl(Argument, '') + '/v1/chat/completions');
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), '/v1/chat/completions'));
     end;
 
     /// <summary>
@@ -234,7 +234,7 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
     /// </summary>
     procedure GetModelsUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     begin
-        exit(ProviderBase.GetBaseUrl(Argument, '') + '/v1/models');
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), '/v1/models'));
     end;
 
     local procedure DoGetAvailableModels(var Argument: Record "Bifrost Chat Argument ori" temporary): Boolean

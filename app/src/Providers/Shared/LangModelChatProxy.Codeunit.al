@@ -511,7 +511,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
     begin
-        exit(ProviderBase.GetBaseUrl(Argument, '') + GetChatPath(Argument));
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), GetChatPath(Argument)));
     end;
 
     /// <summary>
@@ -521,7 +521,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
     begin
-        exit(ProviderBase.GetBaseUrl(Argument, '') + '/v1/responses');
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), '/v1/responses'));
     end;
 
     local procedure GetChatPath(var Argument: Record "Bifrost Chat Argument ori" temporary): Text

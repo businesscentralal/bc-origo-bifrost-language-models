@@ -371,6 +371,90 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         Assert.AreEqual('   ', TempArg."Base URL", 'Runtime normalization must not rewrite stored input.');
     end;
 
+    /// <summary>
+    /// Verifies all OpenAI request builders preserve a single v1 segment for a versioned base.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC01_VersionedBase_BuildsSingleV1Urls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; temporary owned input.
+        AssertVersionedOpenAIRequestUrls('https://api.openai.com/v1');
+    end;
+
+    /// <summary>
+    /// Verifies a trailing slash on a versioned base does not repeat v1 in any OpenAI endpoint.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC01_VersionedTrailingSlash_BuildsSingleV1Urls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; temporary owned input.
+        AssertVersionedOpenAIRequestUrls('https://api.openai.com/v1/');
+    end;
+
+    /// <summary>
+    /// Verifies configured chat and models paths without a leading slash remain valid and unchanged.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC02_PathsWithoutLeadingSlash_BuildsEndpointUrls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; temporary owned input.
+        AssertConfiguredRequestUrls('https://proxy.example.test/', 'custom/chat', 'custom/models',
+            'https://proxy.example.test/custom/chat', 'https://proxy.example.test/custom/models');
+        AssertConfiguredRequestUrls('https://proxy.example.test', 'custom/chat', 'custom/models',
+            'https://proxy.example.test/custom/chat', 'https://proxy.example.test/custom/models');
+    end;
+
+    /// <summary>
+    /// Verifies versioned configured paths join once, while distinct v10 and custom segments remain intact.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC02_VersionedPaths_PreservesSegmentBoundaries()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; temporary owned input.
+        AssertConfiguredRequestUrls('https://proxy.example.test/v1/', 'v1/chat/completions', 'v1/models',
+            'https://proxy.example.test/v1/chat/completions', 'https://proxy.example.test/v1/models');
+        AssertConfiguredRequestUrls('https://proxy.example.test/v1', '/v10/chat', '/custom/models',
+            'https://proxy.example.test/v1/v10/chat', 'https://proxy.example.test/v1/custom/models');
+        AssertConfiguredRequestUrls('https://proxy.example.test/v10/', '/v1/chat/completions', '/v1/models',
+            'https://proxy.example.test/v10/v1/chat/completions', 'https://proxy.example.test/v10/v1/models');
+        AssertConfiguredRequestUrls('https://proxy.example.test///', '///custom/chat', '//custom/models',
+            'https://proxy.example.test/custom/chat', 'https://proxy.example.test/custom/models');
+    end;
+
+    local procedure AssertVersionedOpenAIRequestUrls(BaseUrl: Text)
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        Provider: Codeunit "OpenAI LangModel Prov. ori";
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
+    begin
+        // [GIVEN] Owned temporary configuration with v1 already in the base URL.
+        TempArg."Base URL" := CopyStr(BaseUrl, 1, MaxStrLen(TempArg."Base URL"));
+        // [WHEN/THEN] The real request builders keep exactly one v1 segment.
+        Assert.AreEqual('https://api.openai.com/v1/chat/completions', Provider.GetCompletionUrl(TempArg), 'One-shot completion must not repeat v1.');
+        Assert.AreEqual('https://api.openai.com/v1/chat/completions', ChatProxy.GetChatUrl(TempArg), 'Chat must not repeat v1.');
+        Assert.AreEqual('https://api.openai.com/v1/models', Provider.GetModelsUrl(TempArg), 'Model discovery must not repeat v1.');
+        Assert.AreEqual('https://api.openai.com/v1/responses', ChatProxy.GetResponsesUrl(TempArg), 'Responses must not repeat v1.');
+        Assert.AreEqual(BaseUrl, TempArg."Base URL", 'Request builders must preserve the configured base.');
+    end;
+
+    local procedure AssertConfiguredRequestUrls(BaseUrl: Text; ChatPath: Text; ModelsPath: Text; ExpectedChatUrl: Text; ExpectedModelsUrl: Text)
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
+        AzureProvider: Codeunit "Azure OAI LangModel Prov. ori";
+    begin
+        // [GIVEN] Owned temporary configuration with explicit paths.
+        TempArg."Base URL" := CopyStr(BaseUrl, 1, MaxStrLen(TempArg."Base URL"));
+        TempArg."Chat Path" := CopyStr(ChatPath, 1, MaxStrLen(TempArg."Chat Path"));
+        TempArg."Models Path" := CopyStr(ModelsPath, 1, MaxStrLen(TempArg."Models Path"));
+        // [WHEN/THEN] Actual chat and configured model-discovery builders normalize only the join.
+        Assert.AreEqual(ExpectedChatUrl, ChatProxy.GetChatUrl(TempArg), 'Configured chat endpoint must have one join slash.');
+        Assert.AreEqual(ExpectedModelsUrl, AzureProvider.GetModelsUrl(TempArg), 'Configured models endpoint must have one join slash.');
+        Assert.AreEqual(BaseUrl, TempArg."Base URL", 'Configured base must stay unchanged.');
+        Assert.AreEqual(ChatPath, TempArg."Chat Path", 'Configured chat path must stay unchanged.');
+        Assert.AreEqual(ModelsPath, TempArg."Models Path", 'Configured models path must stay unchanged.');
+    end;
+
     local procedure AssertOpenAIRequestUrls(BaseUrl: Text; ResolvedBaseUrl: Text)
     var
         TempArg: Record "Bifrost Chat Argument ori" temporary;

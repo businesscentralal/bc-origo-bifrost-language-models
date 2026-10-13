@@ -10,6 +10,8 @@ All notable changes to Bifrost Language Models are documented here.
 
 - OpenAI requests normalize surrounding whitespace and trailing slashes from the resolved base URL before adding chat, responses and models paths; stored default/custom values stay unchanged. Whitespace-only Base URL now defaults on OpenAI selection. Codeunit 10035410 `LangModel Prov. Base ori`; table 10035335; codeunits 10035413 `OpenAI LangModel Prov. ori` and 10035412 `LangModel Chat Proxy ori` expose their internal runtime endpoint builders to codeunit 96031, which checks default/custom hosts, custom chat paths and whitespace. Both apps remain Cloud.
 
+- Shared endpoint joining now inserts exactly one slash between base and path and avoids repeating `/v1` when the base ends in `/v1` or `/v1/`. OpenAI chat, completions, responses and model discovery plus configured Azure chat/models paths use codeunit 10035410; stored values remain unchanged. Codeunits 10035413, 10035412 and 10035414 delegate to that helper. Codeunit 96031 covers versioned bases, paths without leading slashes, multiple join slashes and segment-boundary preservation. No new labels or translation changes.
+
 ### Changed (2026-10-11) - CI compiles against BC 28.5
 
 - Current (pull requests, CI/CD, and the Test Current workflow) uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` and `.github/Test Current.settings.json` set `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. `fullBuildPatterns` already lists `.AL-Go/settings.json`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`.
