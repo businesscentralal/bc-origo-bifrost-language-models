@@ -5,7 +5,7 @@
 **App ID:** `f1722684-0c24-4022-a2e0-0f63154aca76` — **Test app ID:** `9c452c6e-df9b-4eb0-9a54-7ea8f32483ec`  
 **Object ID range:** 10035335–10035484 (tests 96000–96199) — **Namespace:** `Origo.Bifrost.LanguageModels`  
 **Depends on:** Bifrost Foundation 28.0.1.0 or later  
-**Environments:** Business Central online (SaaS) and the COSMO Alpaca development container `bc28-w1` (CRONUS International Ltd.)
+**Environments:** Business Central online (SaaS) and owned, disposable COSMO Alpaca W1 verification environments
 
 ---
 
@@ -67,6 +67,19 @@ addressed by a secret code per language model, and is passed as `SecretText` all
 
 ---
 
+## Benefits
+
+- Each user selects a language model while Foundation applies the user's Business Central permissions to chat tools.
+- Personal API keys take precedence over shared keys; administrators can delegate shared-key management separately from chat access.
+- One-shot `LLM.Prompt.Complete` returns coded errors for missing parameters, unavailable models and failed providers.
+
+## Logic Flow
+
+1. Foundation dispatches chat to `LangModel Chat Provider ori` (10035382), or a one-shot request to `LLM Prompt Compl Impl ori` (10035396).
+2. The app resolves the model and calls its `Bifrost LangModel Provider ori` implementation using the temporary `Bifrost Chat Argument ori` (10035337).
+3. The provider resolves credentials, sends the request and returns the response. Tool-enabled chat delegates Business Central tool calls to Foundation; one-shot completion does not call tools.
+4. `LangModel Secrets ori` (10035422) marks API-key usage after the provider call, keeping key retrieval read-only.
+
 ## Setup & Configuration
 
 | Step | Where | What |
@@ -105,9 +118,15 @@ user enters their personal key once.
 
 ---
 
+## Example Scenario
+
+1. An administrator creates an OpenAI language model on **Bifrost Language Models**, enters its endpoint and model identifier, and stores a shared key through the card action.
+2. A user with the required chat permissions selects that model in **Language Model Code** on Bifröst User Setup.
+3. On a supported Business Central page, the user opens Bifrost Chat and asks a question about the current record. Foundation supplies the record context and checks permissions for each requested tool.
+
 ## Objects
 
-Every object carries the mandatory ` ori` affix. The free ids are listed in `.claude/CLAUDE.md`.
+Objects use the `ori` affix convention; the existing enumextension `LangModel Chat Provider Type` (10035384) retains its fixed name within the app namespace. The free ids are listed in `.claude/CLAUDE.md`.
 
 ### Tables
 
@@ -136,7 +155,42 @@ Every object carries the mandatory ` ori` affix. The free ids are listed in `.cl
 
 | ID | Name | Extends | Purpose |
 | --- | --- | --- | --- |
-| 10035346–10035381 | `Bifrost Chat <Page> ori` (36) | Customer Card/List, Vendor Card/List, Item Card/List; the sales and purchase quotes, orders, invoices, credit memos and return orders with their list pages; Bank Account, Customer, Detailed Customer, Vendor, Item, Value, VAT and G/L entries; Incoming Document and Incoming Documents | Each adds Foundation's `Bifrost Chat FactBox ori`, shows it only when `Bifrost Chat Mgt ori.ShowBifrostChat()` is true, and feeds the current record to it. All carry `ContextSensitiveHelpPage = 'bifrost-chat'`. |
+| 10035346 | `Bifrost Chat CustomerCard ori` | `Customer Card` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035347 | `Bifrost Chat CustomerList ori` | `Customer List` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035348 | `Bifrost Chat BankAccLedgE ori` | `Bank Account Ledger Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035350 | `Bifrost Chat CustLedgEntr ori` | `Customer Ledger Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035349 | `Bifrost Chat DtldCustLEntr ori` | `Detailed Cust. Ledg. Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035351 | `Bifrost Chat GLEntries ori` | `General Ledger Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035352 | `Bifrost Chat ItemLedgEntr ori` | `Item Ledger Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035354 | `Bifrost Chat VATEntries ori` | `VAT Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035353 | `Bifrost Chat ValueEntries ori` | `Value Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035355 | `Bifrost Chat VendLedgEntr ori` | `Vendor Ledger Entries` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035357 | `Bifrost Chat IncomingDoc ori` | `Incoming Document` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035356 | `Bifrost Chat IncomingDocs ori` | `Incoming Documents` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035358 | `Bifrost Chat ItemCard ori` | `Item Card` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035359 | `Bifrost Chat ItemList ori` | `Item List` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035360 | `Bifrost Chat PurchCrMemo ori` | `Purchase Credit Memo` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035361 | `Bifrost Chat PurchCrMemos ori` | `Purchase Credit Memos` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035362 | `Bifrost Chat PurchInvoice ori` | `Purchase Invoice` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035367 | `Bifrost Chat PurchInvoices ori` | `Purchase Invoices` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035363 | `Bifrost Chat PurchOrder ori` | `Purchase Order` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035364 | `Bifrost Chat PurchOrders ori` | `Purchase Orders` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035365 | `Bifrost Chat PurchQuote ori` | `Purchase Quote` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035366 | `Bifrost Chat PurchQuotes ori` | `Purchase Quotes` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035368 | `Bifrost Chat PurchRetOrder ori` | `Purchase Return Order` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035369 | `Bifrost Chat PurchRetOrds ori` | `Purchase Return Orders` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035370 | `Bifrost Chat SalesCrMemo ori` | `Sales Credit Memo` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035371 | `Bifrost Chat SalesCrMemos ori` | `Sales Credit Memos` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035372 | `Bifrost Chat SalesInvoice ori` | `Sales Invoice` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035377 | `Bifrost Chat SalesInvoices ori` | `Sales Invoice List` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035373 | `Bifrost Chat SalesOrder ori` | `Sales Order` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035374 | `Bifrost Chat SalesOrders ori` | `Sales Order List` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035375 | `Bifrost Chat SalesQuote ori` | `Sales Quote` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035376 | `Bifrost Chat SalesQuotes ori` | `Sales Quotes` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035378 | `Bifrost Chat SalesRetOrder ori` | `Sales Return Order` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035379 | `Bifrost Chat SalesRetOrds ori` | `Sales Return Order List` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035380 | `Bifrost Chat VendorCard ori` | `Vendor Card` | Adds the Foundation chat FactBox and supplies the current record context. |
+| 10035381 | `Bifrost Chat VendorList ori` | `Vendor List` | Adds the Foundation chat FactBox and supplies the current record context. |
 | 10035402 | `User Setup Editor LangMdl ori` | `User Setup Editor ori` (Foundation) | Adds the language model field and the chat FactBox to the Bifröst user setup editor. |
 | 10035403 | `Setup LangModel ori` | `Setup ori` (Foundation) | Adds exactly one *Apps* action opening `LangModel Setup ori`, plus its actionref in `Category_Apps`. |
 
@@ -172,6 +226,7 @@ Every object carries the mandatory ` ori` affix. The free ids are listed in `.cl
 | 10035394 | `Copilot Req Log Masker ori` | Masker for Copilot request log entries; logging happens only in debug mode. |
 | 10035395 | `Copilot Default Skill ori` | The default skill text of the Copilot language model. |
 | 10035396 | `LLM Prompt Compl Impl ori` | `LLM.Prompt.Complete`: one-shot completion, coded errors, contract chapters. |
+| 10035408 | `LangModel Field Restrict ori` | Restricts generic data writes to endpoint fields and supplies the dedicated-page hint. |
 | 10035409 | `LLM Req Log Masker ori` | Strips API keys from logged LLM requests and redacts bodies outside debug mode. |
 | 10035410 | `LangModel Prov. Base ori` | Shared helpers: config resolution, service-key permission check, token-usage parsing, multi-modal messages. |
 | 10035411 | `LangModel API Client ori` | HTTP client for the OpenAI-compatible providers with a caller-supplied auth header. |
@@ -264,9 +319,7 @@ translation under `i18n/is-IS/docusaurus-plugin-content-docs-help-language-model
 ## Development
 
 - Open `al.code-workspace` in VS Code.
-- Development container: COSMO Alpaca `bc28-w1` (CRONUS International Ltd.), defined in
-  `app/.vscode/launch.json`, which is git-ignored and the authority for the instance id. Publish and run the unit
-  tests there with `-LaunchConfiguration 'launch: bc28-w1'`.
+- Create an owned, disposable GitHub-origin COSMO Alpaca W1 environment for the branch. Publish and run tests there; record the tested SHA and app versions, then delete the environment and verify deletion.
 - Compile locally with `alc.exe` plus CodeCop, UICop and AppSourceCop. Zero errors and zero warnings beyond the
   suppressions in `app.json` is the bar. Symbols live in `app/.alpackages` (Microsoft symbols plus the current
   Bifrost Foundation `.app`); test symbols in `test/.alpackages`.
@@ -283,8 +336,7 @@ translation under `i18n/is-IS/docusaurus-plugin-content-docs-help-language-model
 - Publish and run the tests without VS Code (pwsh 7, credential from the user-level env vars `BC28IS_USER` /
   `BC28IS_PASSWORD`, never from files): `bc-origo-bifrost-core/tools/Publish-BifrostApp.ps1 -AppFile <.app>`
   and `bc-origo-bifrost-core/tools/Run-BifrostTests.ps1 -TestAppJson test/app.json`.
-- Command-line `alc` does not raise AS0011 (mandatory affix); AL-Go CI is the gate, so check the ` ori` suffix
-  yourself before pushing.
+- Command-line `alc` runs AppSourceCop when its analyzer is loaded. `app/AppSourceCop.json` supplies the mandatory `ori` affix. An eligible unnamespaced missing-affix control must report AS0011; a multi-level namespace alone is not an eligible negative control.
 - Standards: [Origo BC Development Standards](https://github.com/OrigoSoftwareSolutions/bc-dev-standards).
   Project rules are in `.claude/CLAUDE.md`.
 

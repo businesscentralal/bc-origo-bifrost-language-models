@@ -24,26 +24,41 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori"
         UnknownProviderErr: Label 'The chat provider "%1" is unknown.', Comment = '%1 = provider name', Locked = true;
         ProviderExpectedTxt: Label 'Copilot, OpenAI, Azure OpenAI, Custom LLM, Anthropic, xAI or Google', Locked = true;
 
+    /// <summary>
+    /// Reports that this test-only message type is enabled.
+    /// </summary>
     procedure IsEnabled(): Boolean
     begin
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns the language model table number used by this test-only message type.
+    /// </summary>
     procedure GetFilterTableNo(): Integer
     begin
         exit(Database::"Bifrost Language Model ori");
     end;
 
+    /// <summary>
+    /// Describes the test-only language model set operation.
+    /// </summary>
     procedure GetDescription(): Text[250]
     begin
         exit('TEST ONLY: creates or updates language models and stores their shared or personal API keys, so the chat of every provider can be tested without the setup pages.');
     end;
 
+    /// <summary>
+    /// Returns Inbound for this test-only message type.
+    /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
+    /// <summary>
+    /// Creates or updates language models and stores supplied keys without returning them, after refusing production execution.
+    /// </summary>
     [NonDebuggable]
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var

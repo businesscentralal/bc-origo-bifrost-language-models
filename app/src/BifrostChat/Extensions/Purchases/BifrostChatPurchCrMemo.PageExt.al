@@ -3,6 +3,9 @@ using Microsoft.Purchases.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Purchase Credit Memo.
+/// </summary>
 pageextension 10035360 "Bifrost Chat PurchCrMemo ori" extends "Purchase Credit Memo"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

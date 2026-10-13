@@ -1,8 +1,10 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 using Microsoft.Utilities;
-using Origo.Bifrost;
-
 using Origo.Bifrost.LanguageModels;
+using Origo.Bifrost;
+using System.AI;
+
+using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Configurable mock implementation of the "Bifrost LangModel Provider ori" interface for unit testing
@@ -36,7 +38,11 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         ContinueWithToolResultsCalled: Boolean;
         GetAvailableModelsCalled: Boolean;
         ModelCount: Integer;
+        RejectCopilotWrite: Boolean;
 
+    /// <summary>
+    /// Records the requested mock operation and returns configured fixture results through the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";
@@ -142,6 +148,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     /// <summary>Resets all mock state — call from each test's Initialize.</summary>
     procedure Reset()
     begin
+        RejectCopilotWrite := false;
         LastSendPayload := '';
         LastConversationState := '';
         LastToolResultsJson := '';
@@ -165,31 +172,49 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         ModelCount := 0;
     end;
 
+    /// <summary>
+    /// Sets the mock is configured fixture.
+    /// </summary>
     procedure SetIsConfigured(Value: Boolean)
     begin
         IsConfiguredValue := Value;
     end;
 
+    /// <summary>
+    /// Sets the mock config JSON fixture.
+    /// </summary>
     procedure SetConfigJson(Json: Text)
     begin
         ConfigJsonValue := Json;
     end;
 
+    /// <summary>
+    /// Sets the mock send response fixture.
+    /// </summary>
     procedure SetSendResponse(ResponseJson: Text)
     begin
         SendResponseValue := ResponseJson;
     end;
 
+    /// <summary>
+    /// Sets the mock continue response fixture.
+    /// </summary>
     procedure SetContinueResponse(ResponseJson: Text)
     begin
         ContinueResponseValue := ResponseJson;
     end;
 
+    /// <summary>
+    /// Sets the mock model count fixture.
+    /// </summary>
     procedure SetModelCount(Count: Integer)
     begin
         ModelCount := Count;
     end;
 
+    /// <summary>
+    /// Returns the send payload captured by the last mock operation.
+    /// </summary>
     procedure GetLastSendPayload(): Text
     begin
         exit(LastSendPayload);
@@ -208,79 +233,157 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         LastDebugMode := Argument."Debug Mode";
     end;
 
+    /// <summary>
+    /// Returns the base URL captured by the last mock operation.
+    /// </summary>
     procedure GetLastBaseUrl(): Text
     begin
         exit(LastBaseUrl);
     end;
 
+    /// <summary>
+    /// Returns the model captured by the last mock operation.
+    /// </summary>
     procedure GetLastModel(): Text
     begin
         exit(LastModel);
     end;
 
+    /// <summary>
+    /// Returns the chat path captured by the last mock operation.
+    /// </summary>
     procedure GetLastChatPath(): Text
     begin
         exit(LastChatPath);
     end;
 
+    /// <summary>
+    /// Returns the models path captured by the last mock operation.
+    /// </summary>
     procedure GetLastModelsPath(): Text
     begin
         exit(LastModelsPath);
     end;
 
+    /// <summary>
+    /// Returns the API key captured by the last mock operation.
+    /// </summary>
     [NonDebuggable]
     procedure GetLastApiKey(): Text
     begin
         exit(LastApiKey);
     end;
 
+    /// <summary>
+    /// Returns the timeout in milliseconds captured by the last mock operation.
+    /// </summary>
     procedure GetLastTimeoutMs(): Integer
     begin
         exit(LastTimeoutMs);
     end;
 
+    /// <summary>
+    /// Returns the max tokens captured by the last mock operation.
+    /// </summary>
     procedure GetLastMaxTokens(): Integer
     begin
         exit(LastMaxTokens);
     end;
 
+    /// <summary>
+    /// Returns the debug mode captured by the last mock operation.
+    /// </summary>
     procedure GetLastDebugMode(): Boolean
     begin
         exit(LastDebugMode);
     end;
 
+    /// <summary>
+    /// Reports whether the mock is configured operation was called.
+    /// </summary>
     procedure WasIsConfiguredCalled(): Boolean
     begin
         exit(IsConfiguredCalled);
     end;
 
+    /// <summary>
+    /// Reports whether the mock build config operation was called.
+    /// </summary>
     procedure WasBuildConfigCalled(): Boolean
     begin
         exit(BuildConfigCalled);
     end;
 
+    /// <summary>
+    /// Reports whether the mock send chat message operation was called.
+    /// </summary>
     procedure WasSendChatMessageCalled(): Boolean
     begin
         exit(SendChatMessageCalled);
     end;
 
+    /// <summary>
+    /// Reports whether the mock continue with tool results operation was called.
+    /// </summary>
     procedure WasContinueWithToolResultsCalled(): Boolean
     begin
         exit(ContinueWithToolResultsCalled);
     end;
 
+    /// <summary>
+    /// Returns the conversation state captured by the last mock operation.
+    /// </summary>
     procedure GetLastConversationState(): Text
     begin
         exit(LastConversationState);
     end;
 
+    /// <summary>
+    /// Returns the tool results JSON captured by the last mock operation.
+    /// </summary>
     procedure GetLastToolResultsJson(): Text
     begin
         exit(LastToolResultsJson);
     end;
 
+    /// <summary>
+    /// Reports whether the mock get available models operation was called.
+    /// </summary>
     procedure WasGetAvailableModelsCalled(): Boolean
     begin
         exit(GetAvailableModelsCalled);
     end;
+    /// <summary>
+    /// Arms a test-only failure at the real COPILOT model write without bypassing capability registration.
+    /// </summary>
+    procedure SetRejectCopilotWrite(Value: Boolean)
+    begin
+        RejectCopilotWrite := Value;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Bifrost Language Model ori", 'OnBeforeInsertEvent', '', false, false)]
+    local procedure RejectCopilotInsert(var Rec: Record "Bifrost Language Model ori"; RunTrigger: Boolean)
+    begin
+        CheckCopilotWrite(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Bifrost Language Model ori", 'OnBeforeModifyEvent', '', false, false)]
+    local procedure RejectCopilotModify(var Rec: Record "Bifrost Language Model ori"; var xRec: Record "Bifrost Language Model ori"; RunTrigger: Boolean)
+    begin
+        CheckCopilotWrite(Rec);
+    end;
+
+    local procedure CheckCopilotWrite(var LanguageModel: Record "Bifrost Language Model ori")
+    var
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        CopilotCapability: Codeunit "Copilot Capability";
+        Assert: Codeunit "Library Assert";
+        RejectedWriteErr: Label 'PR57 test rejected COPILOT model write.', Locked = true;
+    begin
+        if LanguageModel.IsTemporary() or not RejectCopilotWrite or (LanguageModel.Code <> 'COPILOT') then
+            exit;
+        Assert.IsTrue(CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori", LangModelSecrets.GetAppId()), 'Capability registration must precede model initialization.');
+        Error(RejectedWriteErr);
+    end;
+
 }

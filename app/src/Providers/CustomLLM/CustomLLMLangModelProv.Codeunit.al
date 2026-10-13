@@ -18,6 +18,9 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
         ApiKeyInstructionLbl: Label 'Enter the API key for your LLM endpoint.', Comment = 'is-IS=Sláðu inn API-lykilinn fyrir LLM endapunktinn þinn.';
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
 
+    /// <summary>
+    /// Dispatches the requested operation to the Custom LLM provider and writes results to the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";

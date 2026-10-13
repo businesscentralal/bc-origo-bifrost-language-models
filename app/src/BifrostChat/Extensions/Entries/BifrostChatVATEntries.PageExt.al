@@ -3,6 +3,9 @@ using Microsoft.Finance.VAT.Ledger;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to VAT Entries.
+/// </summary>
 pageextension 10035354 "Bifrost Chat VATEntries ori" extends "VAT Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

@@ -1,15 +1,15 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Utilities;
 
+
+using Origo.Bifrost;
+using System.Utilities;
+
 /// <summary>
 /// Defines Bifrost Language Models with associated skill content (markdown).
 /// Each role stores a skill blob that is injected into the chat control
 /// as the system-level instruction when selected in user setup.
 /// </summary>
-
-using Origo.Bifrost;
-using System.Utilities;
-
 table 10035335 "Bifrost Language Model ori"
 {
     Access = Public;

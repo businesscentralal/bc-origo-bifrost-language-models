@@ -3,6 +3,9 @@ using Microsoft.Inventory.Ledger;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Value Entries.
+/// </summary>
 pageextension 10035353 "Bifrost Chat ValueEntries ori" extends "Value Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

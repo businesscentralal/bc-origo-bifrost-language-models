@@ -31,16 +31,25 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ProviderExpectedTxt: Label 'an answer from the language model', Comment = 'is-IS=svar frá mállíkaninu';
         ProviderFailedNextStepTxt: Label 'Check the language model''s Base URL, model and API key with Test Connection on the Bifrost Language Model card, then try again.', Comment = 'is-IS=Athugaðu grunnslóð, líkan og API-lykil mállíkansins með Prófa tengingu á spjaldi Bifröst mállíkansins og reyndu svo aftur.';
 
+    /// <summary>
+    /// Reports that the message type implementation is enabled.
+    /// </summary>
     procedure IsEnabled(): Boolean
     begin
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns zero because this completion does not filter a target table.
+    /// </summary>
     procedure GetFilterTableNo(): Integer
     begin
         exit(0);
     end;
 
+    /// <summary>
+    /// Returns the localized description of the one-shot completion message type.
+    /// </summary>
     procedure GetDescription() Description: Text[250]
     var
         DescriptionLbl: Label 'One-shot LLM completion — send a prompt, get text back. No tools, no chat.', Comment = 'is-IS=Einskots LLM framkvæmd — senda kvaðningu, fá texta til baka. Engin tól, ekkert spjall.';
@@ -48,6 +57,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(DescriptionLbl);
     end;
 
+    /// <summary>
+    /// Returns localized search terms for discovering one-shot language model completions.
+    /// </summary>
     procedure GetKeywords(): Text
     var
         KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í áætluðu verki';
@@ -55,6 +67,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(KeywordsLbl);
     end;
 
+    /// <summary>
+    /// Explains when to select a one-shot completion instead of a dedicated message type.
+    /// </summary>
     procedure GetSelectionDescription(): Text
     var
         SelectionDescriptionLbl: Label 'Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.', Comment = 'is-IS=Býr til textasvar úr kvaðningu án tóla, færslusamhengis eða samtalsstöðu; notaðu sérstaka boðgerð þegar hún er til.';
@@ -62,6 +77,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(SelectionDescriptionLbl);
     end;
 
+    /// <summary>
+    /// Describes the required JSON data envelope without a subject record.
+    /// </summary>
     procedure GetEnvelope(var Envelope: JsonObject): Boolean
     var
         Subject: JsonObject;
@@ -77,11 +95,17 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns false because the completion has no target record contract.
+    /// </summary>
     procedure GetTarget(var Target: JsonArray): Boolean
     begin
         exit(false);
     end;
 
+    /// <summary>
+    /// Describes the prompt, optional system text, language model code and file inputs.
+    /// </summary>
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -94,6 +118,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Describes the successful reply and text fields returned by the provider.
+    /// </summary>
     procedure GetResponse(var Response: JsonObject): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -107,6 +134,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Describes coded failures and next steps using the same labels as execution.
+    /// </summary>
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -120,6 +150,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Describes the completion effect and its external provider call.
+    /// </summary>
     procedure GetEffect(var Effect: JsonObject): Boolean
     begin
         Effect.Add('effect', 'read');
@@ -130,11 +163,17 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns false because this implementation supplies no metering chapter.
+    /// </summary>
     procedure GetMetering(var Metering: JsonObject): Boolean
     begin
         exit(false);
     end;
 
+    /// <summary>
+    /// Lists related message types for discovery and follow-up work.
+    /// </summary>
     procedure GetRelated(var Related: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -144,11 +183,17 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns false because this implementation supplies no workflow chapter.
+    /// </summary>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
     begin
         exit(false);
     end;
 
+    /// <summary>
+    /// Adds example completion requests and responses to the contract.
+    /// </summary>
     procedure GetExamples(var Examples: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -157,23 +202,35 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         exit(true);
     end;
 
+    /// <summary>
+    /// Describes the one-shot completion operation and its scope.
+    /// </summary>
     procedure GetOverview(var Overview: Text): Boolean
     begin
         Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt to a configured provider without tools, record context or conversation state.';
         exit(true);
     end;
 
+    /// <summary>
+    /// Describes completion constraints and provider-specific behavior.
+    /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
         Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. Providers may reject files, and provider response properties other than status, reply and text are passed through.';
         exit(true);
     end;
 
+    /// <summary>
+    /// Returns Outbound for the completion message type.
+    /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
         exit(Enum::"Msg Direction ori"::Outbound);
     end;
 
+    /// <summary>
+    /// Validates permissions and completion inputs, resolves the language model and returns the provider completion or a coded error.
+    /// </summary>
     [NonDebuggable]
     procedure ExecuteBifrostTask(var Argument: Record "Message Argument ori")
     var

@@ -14,12 +14,18 @@ codeunit 96000 "LangModel Test Setup Events"
         RequestDebugModeOverrideEnabled: Boolean;
         RequestDebugModeOverrideValue: Boolean;
 
+    /// <summary>
+    /// Clears the test override for request debug mode.
+    /// </summary>
     procedure Reset()
     begin
         RequestDebugModeOverrideEnabled := false;
         RequestDebugModeOverrideValue := false;
     end;
 
+    /// <summary>
+    /// Sets the request debug mode returned by the test event subscriber.
+    /// </summary>
     procedure SetRequestDebugModeOverride(Value: Boolean)
     begin
         RequestDebugModeOverrideEnabled := true;

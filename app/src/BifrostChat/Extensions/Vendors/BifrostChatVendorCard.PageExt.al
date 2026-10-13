@@ -3,6 +3,9 @@ using Microsoft.Purchases.Vendor;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Vendor Card.
+/// </summary>
 pageextension 10035380 "Bifrost Chat VendorCard ori" extends "Vendor Card"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

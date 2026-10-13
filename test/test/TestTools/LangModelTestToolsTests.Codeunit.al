@@ -18,6 +18,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         ModelCodeTok: Label 'BIFT-MOCK', Locked = true;
 
+    /// <summary>
+    /// Verifies that Test.LanguageModel.Set creates a language model with its settings and both keys.
+    /// </summary>
     [Test]
     procedure Set_CreatesModelAndStoresKeysWithoutAnsweringThem()
     var
@@ -45,6 +48,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         Cleanup();
     end;
 
+    /// <summary>
+    /// Verifies that bad entries are reported together and nothing is created.
+    /// </summary>
     [Test]
     procedure Set_UnknownProviderAndMissingCode_AreReportedTogether()
     var
@@ -61,6 +67,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         Assert.IsFalse(ModelExists(), 'Nothing is created.');
     end;
 
+    /// <summary>
+    /// Verifies that Test.LanguageModel.Delete deletes a model and lists the codes it did not find.
+    /// </summary>
     [Test]
     procedure Delete_RemovesTheModelAndReportsUnknownCodes()
     var
@@ -80,6 +89,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         Assert.IsFalse(ModelExists(), 'The model is deleted.');
     end;
 
+    /// <summary>
+    /// Verifies that Test.LanguageModel.Chat runs the provider's tool calls through the MCP Tool Server and continues.
+    /// </summary>
     [Test]
     procedure Chat_RunsToolCallsAndReturnsTheReply()
     var
@@ -109,6 +121,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         Cleanup();
     end;
 
+    /// <summary>
+    /// Verifies that a provider error is answered as an error naming the provider's text.
+    /// </summary>
     [Test]
     procedure Chat_ProviderError_IsPreconditionFailed()
     var
@@ -130,6 +145,9 @@ codeunit 96028 "LangModel Test Tools Tests"
         Cleanup();
     end;
 
+    /// <summary>
+    /// Verifies that an unknown code is RecordNotFound on code.
+    /// </summary>
     [Test]
     procedure Chat_UnknownModel_IsRecordNotFound()
     var

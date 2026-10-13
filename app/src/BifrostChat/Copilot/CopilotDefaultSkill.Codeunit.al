@@ -9,6 +9,9 @@ codeunit 10035395 "Copilot Default Skill ori"
 {
     Access = Internal;
 
+    /// <summary>
+    /// Returns the embedded Copilot instructions for using the Bifrost internal tool server.
+    /// </summary>
     procedure GetSkillText() SkillText: Text
     var
         Skill: TextBuilder;

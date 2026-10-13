@@ -1,8 +1,12 @@
 namespace Origo.Bifrost.LanguageModels;
 using Microsoft.Purchases.Document;
 
+using Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat action to Purchase Credit Memos.
+/// </summary>
 pageextension 10035361 "Bifrost Chat PurchCrMemos ori" extends "Purchase Credit Memos"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';
@@ -20,10 +24,9 @@ pageextension 10035361 "Bifrost Chat PurchCrMemos ori" extends "Purchase Credit 
 
                 trigger OnAction()
                 var
-                    BifrostChatFocus: Page "Chat Focus ori";
+                    ChatProvider: Codeunit "LangModel Chat Provider ori";
                 begin
-                    BifrostChatFocus.SetRecordContext(Database::"Purchase Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
-                    BifrostChatFocus.Run();
+                    ChatProvider.OpenRecordChat(Database::"Purchase Header", Rec.SystemId, StrSubstNo('%1 %2', Rec."Document Type", Rec."No."));
                 end;
             }
         }

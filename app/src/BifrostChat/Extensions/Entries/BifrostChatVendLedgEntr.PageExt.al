@@ -3,6 +3,9 @@ using Microsoft.Purchases.Payables;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Vendor Ledger Entries.
+/// </summary>
 pageextension 10035355 "Bifrost Chat VendLedgEntr ori" extends "Vendor Ledger Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

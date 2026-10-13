@@ -9,6 +9,9 @@ codeunit 10035389 "Bifrost LangModel None ori" implements "Bifrost LangModel Pro
 {
     Access = Internal;
 
+    /// <summary>
+    /// Returns disabled configuration and unsupported-operation results for the None provider.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";

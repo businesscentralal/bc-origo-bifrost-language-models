@@ -3,6 +3,9 @@ using Microsoft.Inventory.Ledger;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Item Ledger Entries.
+/// </summary>
 pageextension 10035352 "Bifrost Chat ItemLedgEntr ori" extends "Item Ledger Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

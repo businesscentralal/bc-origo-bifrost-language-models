@@ -16,6 +16,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert: Codeunit "Library Assert";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
 
+    /// <summary>
+    /// Verifies that a 32k model gets a budget from its own context size, a 200k model a larger one.
+    /// </summary>
     [Test]
     procedure HistoryBudget_FollowsTheContextSize()
     var
@@ -29,6 +32,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreNotEqual(80000, TurnGuard.HistoryBudgetChars(32000, 4096, NoTools), 'The fixed 80000 is gone');
     end;
 
+    /// <summary>
+    /// Verifies that a model without a context size uses 32,000 tokens.
+    /// </summary>
     [Test]
     procedure HistoryBudget_ZeroContextUsesTheFallback()
     var
@@ -38,6 +44,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual(TurnGuard.HistoryBudgetChars(32000, 1000, NoTools), TurnGuard.HistoryBudgetChars(0, 1000, NoTools), 'Fallback is 32,000 tokens');
     end;
 
+    /// <summary>
+    /// Verifies that the tool definitions take their share of the context, and the budget never drops below 2,000 tokens.
+    /// </summary>
     [Test]
     procedure HistoryBudget_ToolDefinitionsAndTinyContextKeepAFloor()
     var
@@ -52,6 +61,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual(Round(2000 * 3.5 * 0.9, 1, '<'), TurnGuard.HistoryBudgetChars(4000, 8000, NoTools), 'Floor of 2,000 tokens');
     end;
 
+    /// <summary>
+    /// Verifies that after a trim, no request starts (after system) with a tool message whose call is gone.
+    /// </summary>
     [Test]
     procedure RemoveOrphanedToolMessages_LeadingToolMessageIsRemoved()
     var
@@ -70,6 +82,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual('user', First.AsObject().GetText('role'), 'The user question follows the system message');
     end;
 
+    /// <summary>
+    /// Verifies that a complete tool call and its result stay.
+    /// </summary>
     [Test]
     procedure RemoveOrphanedToolMessages_PairedCallsAreKept()
     var
@@ -85,6 +100,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual(3, Messages.Count(), 'Nothing is removed');
     end;
 
+    /// <summary>
+    /// Verifies that an assistant tool call whose result was trimmed away is removed (it has no text).
+    /// </summary>
     [Test]
     procedure RemoveOrphanedToolMessages_CallWithoutResultIsDropped()
     var
@@ -100,6 +118,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual(2, Messages.Count(), 'The unanswered tool call is removed');
     end;
 
+    /// <summary>
+    /// Verifies that the Responses input keeps only function_call / function_call_output pairs.
+    /// </summary>
     [Test]
     procedure RemoveOrphanedResponsesItems_DropsUnpairedItems()
     var
@@ -117,6 +138,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.AreEqual(3, Input.Count(), 'Only the pair and the message stay');
     end;
 
+    /// <summary>
+    /// Verifies that a balance stated without any tool call in the turn is caught.
+    /// </summary>
     [Test]
     procedure NeedsFigureCheck_FiguresWithoutToolCall_IsTrue()
     var
@@ -129,6 +153,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.IsTrue(TurnGuard.NeedsFigureCheck(Messages, 'The total outstanding is 6,283,771.42 ISK.'), 'Figures without a tool call need the check');
     end;
 
+    /// <summary>
+    /// Verifies that figures that follow a tool call in the turn are not questioned.
+    /// </summary>
     [Test]
     procedure NeedsFigureCheck_FiguresAfterToolCall_IsFalse()
     var
@@ -143,6 +170,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.IsFalse(TurnGuard.NeedsFigureCheck(Messages, 'The total outstanding is 234,687.50 ISK.'), 'A tool was called');
     end;
 
+    /// <summary>
+    /// Verifies that a tool call of an earlier turn does not cover figures in the current turn.
+    /// </summary>
     [Test]
     procedure NeedsFigureCheck_ToolCallInAnEarlierTurn_DoesNotCount()
     var
@@ -159,6 +189,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.IsTrue(TurnGuard.NeedsFigureCheck(Messages, 'It is 1.250.000 kr.'), 'The current turn called no tool');
     end;
 
+    /// <summary>
+    /// Verifies that the follow-up is sent at most once per turn (no loop).
+    /// </summary>
     [Test]
     procedure NeedsFigureCheck_AfterTheFollowUp_IsFalse()
     var
@@ -173,6 +206,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.IsFalse(TurnGuard.NeedsFigureCheck(Messages, 'I estimate 6,000,000 ISK.'), 'The follow-up was already sent in this turn');
     end;
 
+    /// <summary>
+    /// Verifies that the Anthropic format's tool_use block counts as a tool call.
+    /// </summary>
     [Test]
     procedure NeedsFigureCheck_AnthropicToolUseBlocksCount()
     var
@@ -193,6 +229,9 @@ codeunit 96022 "LangModel Turn Guard Tests"
         Assert.IsFalse(TurnGuard.NeedsFigureCheck(Messages, 'It is 234,687.50 ISK.'), 'tool_use counts');
     end;
 
+    /// <summary>
+    /// Verifies that four digits or a separator is an amount; small counts are not.
+    /// </summary>
     [Test]
     procedure ContainsFigures_RecognisesAmountsOnly()
     begin

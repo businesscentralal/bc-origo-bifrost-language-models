@@ -27,6 +27,9 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ApiStatusErr: Label 'Google AI API returned status %1. %2', Comment = '%1 = status code, %2 = detail, is-IS=Google AI API skilaði stöðu %1. %2';
         InvalidResponseJsonTxt: Label 'The answer is not valid JSON.', Comment = 'is-IS=Svarið er ekki gilt JSON.';
 
+    /// <summary>
+    /// Dispatches the requested operation to the Gemini provider and writes results to the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";

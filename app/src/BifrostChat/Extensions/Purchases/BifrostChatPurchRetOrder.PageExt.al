@@ -3,6 +3,9 @@ using Microsoft.Purchases.Document;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Purchase Return Order.
+/// </summary>
 pageextension 10035368 "Bifrost Chat PurchRetOrder ori" extends "Purchase Return Order"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

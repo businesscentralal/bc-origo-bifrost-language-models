@@ -20,6 +20,9 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
         ApiKeyDocsLinkTextLbl: Label 'Get key from OpenAI Platform', Comment = 'is-IS=Sækja lykil á OpenAI Platform';
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
 
+    /// <summary>
+    /// Dispatches the requested operation to the OpenAI provider and writes results to the temporary argument.
+    /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         ProcType: Enum "Bifrost Chat Proc. Type ori";

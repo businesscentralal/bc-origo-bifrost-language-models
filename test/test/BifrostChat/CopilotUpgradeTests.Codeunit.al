@@ -19,6 +19,9 @@ codeunit 96017 "Copilot Upgrade Tests"
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
         OriginalChatProviderType: Enum "Chat Provider Type ori";
 
+    /// <summary>
+    /// Verifies that upgrade claims Language Models without direct setup permission.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure UpgradePerCompany_WithoutSetupPermission_Claims()
@@ -37,6 +40,9 @@ codeunit 96017 "Copilot Upgrade Tests"
         RestoreSetup();
     end;
 
+    /// <summary>
+    /// Verifies that upgrade preserves another provider claim.
+    /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
     procedure UpgradePerCompany_WhenAnotherProviderHolds_LeavesItUnchanged()

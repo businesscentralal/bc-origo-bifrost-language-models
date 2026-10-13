@@ -26,6 +26,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         ApiStatusErr: Label 'Anthropic API returned status %1. %2', Comment = '%1 = status code, %2 = detail, is-IS=Anthropic API skilaði stöðu %1. %2';
         InvalidResponseErr: Label 'Received an invalid response from the Anthropic API.', Comment = 'is-IS=Ógilt svar barst frá Anthropic API.';
 
+    /// <summary>
+    /// Runs an Anthropic Messages chat request with Bifrost tool definitions and returns reply or error JSON.
+    /// </summary>
     [NonDebuggable]
     procedure SendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text): Text
     var
@@ -59,6 +62,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             Argument."Context Tokens"));
     end;
 
+    /// <summary>
+    /// Sends a one-shot Anthropic completion without chat tools and returns reply or error JSON.
+    /// </summary>
     [NonDebuggable]
     procedure CompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text): Text
     var
@@ -182,6 +188,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         Messages.Add(NewMessage);
     end;
 
+    /// <summary>
+    /// Appends supplied tool results to the saved conversation and sends the next provider request.
+    /// </summary>
     [NonDebuggable]
     procedure ContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary; ConversationState: Text; ToolResultsJson: Text): Text
     var

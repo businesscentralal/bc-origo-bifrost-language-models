@@ -3,6 +3,9 @@ using Microsoft.Bank.Ledger;
 
 using Origo.Bifrost;
 
+/// <summary>
+/// Adds the Bifrost Chat FactBox to Bank Account Ledger Entries.
+/// </summary>
 pageextension 10035348 "Bifrost Chat BankAccLedgE ori" extends "Bank Account Ledger Entries"
 {
     ContextSensitiveHelpPage = 'bifrost-chat';

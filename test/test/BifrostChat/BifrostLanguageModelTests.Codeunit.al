@@ -25,6 +25,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         IsInitialized := true;
     end;
 
+    /// <summary>
+    /// Verifies that SetSkill stores markdown text that GetSkill retrieves correctly.
+    /// </summary>
     [Test]
     procedure SetSkill_GetSkill_ReturnsStoredText()
     var
@@ -51,6 +54,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual(SkillText, BifrostLanguageModel.GetSkill(), 'GetSkill should return the stored skill text.');
     end;
 
+    /// <summary>
+    /// Verifies that GetSkill returns empty string when no blob content exists.
+    /// </summary>
     [Test]
     procedure GetSkill_NoContent_ReturnsEmptyString()
     var
@@ -70,6 +76,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual('', BifrostLanguageModel.GetSkill(), 'GetSkill should return empty string when no skill is set.');
     end;
 
+    /// <summary>
+    /// Verifies that SetSkill handles large markdown content correctly.
+    /// </summary>
     [Test]
     procedure SetSkill_LargeContent_RoundTripsCorrectly()
     var
@@ -103,6 +112,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual(SkillText, BifrostLanguageModel.GetSkill(), 'GetSkill should return the full large skill text.');
     end;
 
+    /// <summary>
+    /// Verifies that SetSkill overwrites existing skill content.
+    /// </summary>
     [Test]
     procedure SetSkill_OverwriteExisting_ReturnsNewContent()
     var
@@ -132,6 +144,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual(SecondSkill, BifrostLanguageModel.GetSkill(), 'GetSkill should return the overwritten skill text.');
     end;
 
+    /// <summary>
+    /// Verifies that a model with Context Tokens 0 uses its provider's default context size.
+    /// </summary>
     [Test]
     procedure GetContextTokens_ZeroUsesTheProviderDefault()
     var
@@ -146,6 +161,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual(32000, TempLanguageModel.GetContextTokens(), 'The provider default applies when Context Tokens is 0.');
     end;
 
+    /// <summary>
+    /// Verifies that a model's own context size is used instead of the provider default.
+    /// </summary>
     [Test]
     procedure GetContextTokens_SetValueWins()
     var
@@ -159,6 +177,9 @@ codeunit 96003 "Bifrost Language Model Tests"
         Assert.AreEqual(262144, TempLanguageModel.GetContextTokens(), 'Context Tokens is used when set.');
     end;
 
+    /// <summary>
+    /// Verifies that the fallback per provider is 32k Custom LLM, 128k OpenAI/Azure OpenAI/xAI/Gemini, 200k Anthropic.
+    /// </summary>
     [Test]
     procedure GetContextTokens_ProviderDefaults()
     var

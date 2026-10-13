@@ -17,6 +17,9 @@ codeunit 96010 "LangModel Prov Base Tests"
     var
         Assert: Codeunit "Library Assert";
 
+    /// <summary>
+    /// Verifies that an API key and endpoint satisfy provider configuration.
+    /// </summary>
     [Test]
     procedure IsConfigured_WithKeyAndUrl_ReturnsTrue()
     var
@@ -32,6 +35,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.IsTrue(ProviderBase.IsConfigured(TempArg, ''), 'Should be configured with key and URL');
     end;
 
+    /// <summary>
+    /// Verifies that a missing API key leaves the provider unconfigured.
+    /// </summary>
     [Test]
     procedure IsConfigured_WithoutKey_ReturnsFalse()
     var
@@ -46,6 +52,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.IsFalse(ProviderBase.IsConfigured(TempArg, ''), 'Should not be configured without key');
     end;
 
+    /// <summary>
+    /// Verifies that a default endpoint is used when only the API key is configured.
+    /// </summary>
     [Test]
     procedure IsConfigured_WithKeyNoUrl_UsesDefault()
     var
@@ -61,6 +70,9 @@ codeunit 96010 "LangModel Prov Base Tests"
             'Should be configured with key and default URL');
     end;
 
+    /// <summary>
+    /// Verifies that the argument endpoint overrides the provider default.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_ArgumentOverridesDefault()
     var
@@ -76,6 +88,9 @@ codeunit 96010 "LangModel Prov Base Tests"
             'Argument URL should override default');
     end;
 
+    /// <summary>
+    /// Verifies that an empty argument endpoint uses the provider default.
+    /// </summary>
     [Test]
     procedure GetBaseUrl_EmptyArgument_FallsBackToDefault()
     var
@@ -87,6 +102,9 @@ codeunit 96010 "LangModel Prov Base Tests"
             'Should fall back to default');
     end;
 
+    /// <summary>
+    /// Verifies that the argument model overrides the provider default.
+    /// </summary>
     [Test]
     procedure GetModel_ArgumentOverridesDefault()
     var
@@ -99,6 +117,9 @@ codeunit 96010 "LangModel Prov Base Tests"
             'Argument model should override default');
     end;
 
+    /// <summary>
+    /// Verifies that the configured timeout is used.
+    /// </summary>
     [Test]
     procedure GetTimeoutMs_ArgumentValue_Used()
     var
@@ -110,6 +131,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(60000, ProviderBase.GetTimeoutMs(TempArg, 120000), 'Should use argument timeout');
     end;
 
+    /// <summary>
+    /// Verifies that a zero timeout uses the provider default.
+    /// </summary>
     [Test]
     procedure GetTimeoutMs_Zero_UsesDefault()
     var
@@ -120,6 +144,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(120000, ProviderBase.GetTimeoutMs(TempArg, 120000), 'Should use default');
     end;
 
+    /// <summary>
+    /// Verifies that the configured output token limit is used.
+    /// </summary>
     [Test]
     procedure GetMaxTokens_ArgumentValue_Used()
     var
@@ -131,6 +158,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(2048, ProviderBase.GetMaxTokens(TempArg, 4096), 'Should use argument value');
     end;
 
+    /// <summary>
+    /// Verifies that a zero output token limit uses the provider default.
+    /// </summary>
     [Test]
     procedure GetMaxTokens_Zero_UsesDefault()
     var
@@ -141,6 +171,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(4096, ProviderBase.GetMaxTokens(TempArg, 4096), 'Should use default');
     end;
 
+    /// <summary>
+    /// Verifies that standard usage JSON yields the expected input and output token counts.
+    /// </summary>
     [Test]
     procedure ParseTokenUsage_StandardFormat()
     var
@@ -158,6 +191,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(42, OutTokens, 'Output tokens should be 42.');
     end;
 
+    /// <summary>
+    /// Verifies that missing usage JSON yields zero token counts.
+    /// </summary>
     [Test]
     procedure ParseTokenUsage_MissingUsage_ReturnsZero()
     var
@@ -170,6 +206,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(0, OutTokens, 'Missing usage should return 0.');
     end;
 
+    /// <summary>
+    /// Verifies that invalid usage JSON yields zero token counts.
+    /// </summary>
     [Test]
     procedure ParseTokenUsage_InvalidJson_ReturnsZero()
     var
@@ -182,6 +221,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual(0, OutTokens, 'Invalid JSON should return 0.');
     end;
 
+    /// <summary>
+    /// Verifies that an image attachment adds an image_url content block.
+    /// </summary>
     [Test]
     procedure AttachFiles_AddsImageUrlBlock()
     var
@@ -223,6 +265,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual('Describe this image', GetJsonText(FirstBlock.AsObject(), 'text'), 'Text should match prompt.');
     end;
 
+    /// <summary>
+    /// Verifies that a PDF attachment uses a file content block.
+    /// </summary>
     [Test]
     procedure AttachFiles_PdfUsesFileBlock()
     var
@@ -259,6 +304,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual('file', GetJsonText(SecondBlock.AsObject(), 'type'), 'PDF should use file block type.');
     end;
 
+    /// <summary>
+    /// Verifies that attaching no files leaves message content unchanged.
+    /// </summary>
     [Test]
     procedure AttachFiles_NoFiles_LeavesMessageUnchanged()
     var
@@ -284,6 +332,9 @@ codeunit 96010 "LangModel Prov Base Tests"
         Assert.AreEqual('Hello', ContentToken.AsValue().AsText(), 'Text should be unchanged.');
     end;
 
+    /// <summary>
+    /// Verifies that file attachment preserves the leading system message.
+    /// </summary>
     [Test]
     procedure AttachFiles_PreservesSystemMessage()
     var

@@ -9,6 +9,27 @@ All notable changes to Bifrost Language Models are documented here.
 - Current (pull requests, CI/CD, and the Test Current workflow) uses sandbox artifact `28.5.54151.55751` (w1). `.AL-Go/settings.json` and `.github/Test Current.settings.json` set `artifact` to `/sandbox/28.5.54151.55751/w1/latest`. `fullBuildPatterns` already lists `.AL-Go/settings.json`. Next Minor and Next Major stay on `////nextminor` and `////nextmajor`.
 - The two `TryGetApiKey` priority tests now follow the stamp-after-call design. `TryGetApiKey` has been read-only since 2a8421a (#53), and both tests have failed on main since then, on BC 29 as well as 28.5. The read leaves `Last Used On` at 0DT; `MarkApiKeyUsed` stamps the key that was used.
 
+### Fixed (2026-10-10) - Bounded canonical verification repairs
+
+- The 14 list chat actions (pageextensions 10035347, 10035356, 10035359, 10035361, 10035364, 10035366–10035367, 10035369, 10035371, 10035374, 10035376–10035377, 10035379 and 10035381) delegate to `LangModel Chat Provider ori` (codeunit 10035382), preserving the original table, SystemId, caption, visibility and promoted actions. Purchase Orders/Return Orders preserve their existing Purchase Header table number with Purchase Line identity; this change does not repair that legacy semantic mismatch.
+- `Copilot Install ori` (codeunit 10035390) owns confirmation and initialization orchestration called by `Bifrost LangModel List ori` (page 10035344). The same two Icelandic labels move to the codeunit without changing their text.
+- The default model lookup in codeunit 10035382, `CountModelsWithoutKey` in `LangModel Secrets ori` (codeunit 10035422), and the read-only `ChatSvcGate Tests` probe (codeunit 96013) use local read isolation.
+- `LangModel Chat Provider Tests` (96002), `Copilot Install Tests` (96018) and `LangModel Secrets Tests` (96009) cover real page actions, forwarding arguments, cancellation, errors and empty/key-scope cases. `LangModel Context Spy ori` (new test codeunit 96030) observes value arguments after the real setter; it does not inspect Foundation private state or rendered captions.
+
+### Fixed (2026-10-10) - Verification coverage and documentation
+
+- `LangModel Field Restrict ori` (codeunit 10035408) now has the Icelandic endpoint-edit hint in the committed XLF; `Bifrost Chat Proc. Type ori` (enum 10035338) preserves its intentionally blank caption without a review placeholder.
+- Existing app/test object and procedure summaries are attached to their declarations without changing executable tokens, including the 36 chat page extensions (10035346–10035381). `Chat Svc Gate Tests` (codeunit 96013) describes its read-only absence assertion. README lists each app object and explains the existing request and credential flow.
+- `.AL-Go/settings.json` enables product CodeCop/UICop and test-app analyzers. Warnings now fail CI; existing AppSourceCop affixes, signing policy and Default/Test separation are preserved. The only new object is test codeunit 96030.
+
+### Fixed (2026-10-10) - Deferred API key usage test coverage
+
+- Codeunit 96009 `LangModel Secrets Tests` now verifies that API key retrieval leaves usage timestamps unchanged and that explicit `MarkApiKeyUsed` stamps the personal key or shared fallback. Added missing-key and blank-code controls. Product behavior and deployment paths are unchanged.
+
+### Fixed (2026-10-10) - UAT dependency installation
+
+- UAT feature-app deployment uses the Foundation app already deployed by its own pipeline in Dev scope, avoiding an unauthorized AppSource Foundation installation. `.github/AL-Go-Settings.json`: `DeployToBifrost.DependencyInstallMode = "ignore"`. AppSource delivery is unchanged; no AL objects or IDs change.
+
 ### Fixed (2026-10-05) - The chat failed whenever an API key had not been used yet that day
 
 - `LangModel Secrets ori.TryGetApiKey` stamped the key as used on Bifrost App Secrets (a write, once a day per key) before the provider call. Foundation's `Bootstrap` then runs message types through `Codeunit.Run`, which the platform refuses in an open write transaction, so the first chat of the day failed with *An error occurred and the transaction is stopped*, and the rolled-back stamp made every later attempt fail the same way. `TryGetApiKey` now only reads; the new `MarkApiKeyUsed` stamps the key after the provider call (chat send and continue, `LLM.Prompt.Complete`). Found by the live chat test through `Test.LanguageModel.Chat` on bc28-is.
@@ -112,6 +133,10 @@ All notable changes to Bifrost Language Models are documented here.
 - Fix: probing version raised to `1.0.0.132`, the core build live on the Bifrost sandbox as Foundation 28.0.0.132 (includes core#107 and core#114). App/test app.json unchanged.
 
 ## [28.0.0.0] - 2026-09-07
+
+### Changed (2026-10-12) - Retry eligibility test documentation
+
+- `LangModel Chat Proxy Tests` (codeunit 96029) now documents its four retry-eligibility assertions: matching error with tools, no tools, reasoning effort already set, and an unrelated error. Test behavior is unchanged.
 
 ### Changed (2026-09-20)
 

@@ -57,6 +57,27 @@ codeunit 10035390 "Copilot Install ori"
         LangModelSecrets.RegisterAll();
     end;
 
+    /// <summary>
+    /// Confirms the user's setup command, registers the capability before initializing the model,
+    /// and reports success only after both operations complete. Cancellation leaves setup unchanged.
+    /// </summary>
+    /// <returns>True after successful initialization; false when the user declines.</returns>
+    internal procedure InitCopilotDefaults(): Boolean
+    var
+        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?';
+        DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
+    begin
+        if not Confirm(ConfirmQst, false) then
+            exit(false);
+        RegisterCapability();
+        InitDefaultLanguageModel();
+        Message(DoneMsg);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Registers or updates the Bifrost Chat Copilot capability with Microsoft billing.
+    /// </summary>
     procedure RegisterCapability()
     var
         CopilotCapability: Codeunit "Copilot Capability";
@@ -76,6 +97,9 @@ codeunit 10035390 "Copilot Install ori"
                 LearnMoreUrlTok);
     end;
 
+    /// <summary>
+    /// Creates the COPILOT language model when missing and refreshes its skill; preserves an existing default model.
+    /// </summary>
     procedure InitDefaultLanguageModel()
     var
         LangModel: Record "Bifrost Language Model ori";

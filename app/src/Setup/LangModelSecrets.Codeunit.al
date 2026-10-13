@@ -345,6 +345,7 @@ codeunit 10035422 "LangModel Secrets ori"
         MissingCount: Integer;
     begin
         LangModel.SetLoadFields(Code, "Chat Provider");
+        LangModel.ReadIsolation := IsolationLevel::ReadCommitted;
         if not LangModel.FindSet() then
             exit(0);
         repeat
