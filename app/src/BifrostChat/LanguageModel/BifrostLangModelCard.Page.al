@@ -50,7 +50,7 @@ page 10035343 "Bifrost LangModel Card ori"
 
                     trigger OnValidate()
                     begin
-                        CurrPage.Update(false);
+                        CurrPage.Update(true);
                     end;
                 }
             }
