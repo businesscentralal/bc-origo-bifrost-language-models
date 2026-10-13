@@ -1,5 +1,6 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 
+using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
 
@@ -10,9 +11,12 @@ codeunit 96031 "LangModel 60 Defaults Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
+    TestHttpRequestPolicy = BlockOutboundRequests;
 
     var
         Assert: Codeunit "Library Assert";
+        ExpectedRequestUrl: Text;
+        RequestCount: Integer;
 
     /// <summary>
     /// Verifies emptyendpoints fillsdefaults through the model card.
@@ -296,6 +300,131 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.Close();
         LangModel.Get(LangModel.Code);
         AssertEndpoints(LangModel, '', '', '');
+    end;
+
+    /// <summary>
+    /// Verifies actual OpenAI HTTP endpoint joins for DefaultBase without rewriting stored values.
+    /// </summary>
+    [Test]
+    [HandlerFunctions('EndpointHttpHandler')]
+    procedure Scenario_AC01_DefaultBase_BuildsEndpointUrls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        AssertOpenAIRequestUrls('https://api.openai.com/', 'https://api.openai.com');
+    end;
+
+    /// <summary>
+    /// Verifies actual OpenAI HTTP endpoint joins for CustomTrailingSlash without rewriting stored values.
+    /// </summary>
+    [Test]
+    [HandlerFunctions('EndpointHttpHandler')]
+    procedure Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        AssertOpenAIRequestUrls('https://proxy.example.test/gateway/', 'https://proxy.example.test/gateway');
+    end;
+
+    /// <summary>
+    /// Verifies actual OpenAI HTTP endpoint joins for WhitespaceAroundBase without rewriting stored values.
+    /// </summary>
+    [Test]
+    [HandlerFunctions('EndpointHttpHandler')]
+    procedure Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls()
+    begin
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        AssertOpenAIRequestUrls('  https://proxy.example.test/gateway///  ', 'https://proxy.example.test/gateway');
+    end;
+
+    /// <summary>
+    /// Verifies whitespace-only values default through the real model card.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC01_WhitespaceBase_DefaultsOnCard()
+    var
+        LangModel: Record "Bifrost Language Model ori";
+        ModelCard: TestPage "Bifrost LangModel Card ori";
+    begin
+        // [GIVEN] An owned model with a whitespace-only base URL.
+        InitializeModel(LangModel);
+        LangModel."Base URL" := '   ';
+        LangModel.Modify();
+        // [WHEN] OpenAI is selected on the card.
+        ModelCard.OpenEdit();
+        ModelCard.GoToRecord(LangModel);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        Assert.AreEqual(0, ModelCard."Chat Provider".ValidationErrorCount(), 'Provider validation must succeed.');
+        ModelCard.Close();
+        // [THEN] The persisted default keeps Gunnar's confirmed trailing slash.
+        LangModel.Get(LangModel.Code);
+        AssertEndpoints(LangModel, 'https://api.openai.com/', '', '');
+    end;
+
+    /// <summary>
+    /// Verifies whitespace-only runtime configuration is empty and provider defaults normalize.
+    /// </summary>
+    [Test]
+    procedure Scenario_AC01_WhitespaceBase_UsesRuntimeDefault()
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        // [GIVEN] A temporary runtime argument with spaces and a non-secret test key.
+        TempArg."Base URL" := '   ';
+        TempArg.SetApiKey(AsSecret('test-key'));
+        // [WHEN/THEN] Whitespace alone is unconfigured; a supplied fallback resolves without slash.
+        Assert.IsFalse(ProviderBase.IsConfigured(TempArg, ''), 'Whitespace must not be a configured URL.');
+        Assert.AreEqual('https://fallback.example.test', ProviderBase.GetBaseUrl(TempArg, ' https://fallback.example.test/ '), 'Fallback must normalize.');
+        Assert.AreEqual('   ', TempArg."Base URL", 'Runtime normalization must not rewrite stored input.');
+    end;
+
+    /// <summary>
+    /// Captures the provider-built URL and returns deterministic chat/model responses without network traffic.
+    /// </summary>
+    [HttpClientHandler]
+    procedure EndpointHttpHandler(Request: TestHttpRequestMessage; var Response: TestHttpResponseMessage): Boolean
+    begin
+        Assert.AreEqual(ExpectedRequestUrl, Request.Path, 'Actual provider HTTP URL must contain one joining slash.');
+        RequestCount += 1;
+        Response.HttpStatusCode := 200;
+        Response.Content.WriteFrom('{"data":[{"id":"test-model"}],"choices":[{"message":{"role":"assistant","content":"verified"},"finish_reason":"stop"}],"output":[]}');
+        exit(false);
+    end;
+
+    local procedure AssertOpenAIRequestUrls(BaseUrl: Text; ResolvedBaseUrl: Text)
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        Provider: Codeunit "OpenAI LangModel Prov. ori";
+    begin
+        // [GIVEN] Only owned temporary input; no real keys or external requests.
+        TempArg."Base URL" := CopyStr(BaseUrl, 1, MaxStrLen(TempArg."Base URL"));
+        TempArg.Model := 'test-model';
+        TempArg.SetApiKey(AsSecret('test-key'));
+        TempArg.SetPayload('{"messages":[{"role":"user","content":"test"}]}');
+        RequestCount := 0;
+        // [WHEN/THEN] Each real provider entry point must build the expected HTTP URL.
+        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/chat/completions';
+        TempArg."Procedure Type" := TempArg."Procedure Type"::CompletePrompt;
+        Provider.Execute(TempArg);
+        TempArg."Procedure Type" := TempArg."Procedure Type"::SendChatMessage;
+        Provider.Execute(TempArg);
+        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/models';
+        TempArg."Procedure Type" := TempArg."Procedure Type"::GetAvailableModels;
+        Provider.Execute(TempArg);
+        Assert.IsTrue(TempArg."Result Boolean", 'Model listing must use the mocked endpoint.');
+        TempArg."Procedure Type" := TempArg."Procedure Type"::TestConnection;
+        Provider.Execute(TempArg);
+        Assert.IsTrue(TempArg."Result Boolean", 'Connection check must use the mocked endpoint.');
+        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/responses';
+        TempArg.Model := 'gpt-6-test';
+        TempArg."Procedure Type" := TempArg."Procedure Type"::SendChatMessage;
+        Provider.Execute(TempArg);
+        Assert.AreEqual(5, RequestCount, 'Every endpoint scenario must actually issue an intercepted HTTP request.');
+        Assert.AreEqual(BaseUrl, TempArg."Base URL", 'Runtime URL joins must preserve stored custom values.');
+    end;
+
+    local procedure AsSecret(Value: Text) Secret: SecretText
+    begin
+        Secret := Value;
     end;
 
     local procedure InitializeModel(var LangModel: Record "Bifrost Language Model ori")

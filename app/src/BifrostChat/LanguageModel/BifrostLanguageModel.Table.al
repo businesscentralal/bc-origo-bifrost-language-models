@@ -92,7 +92,7 @@ table 10035335 "Bifrost Language Model ori"
                         Provider.Execute(TempArg);
                         "Max Tokens" := TempArg."Result Integer";
                     end;
-                    if ("Chat Provider" = "Chat Provider"::OpenAI) and ("Base URL" = '') then
+                    if ("Chat Provider" = "Chat Provider"::OpenAI) and ("Base URL".Trim() = '') then
                         "Base URL" := 'https://api.openai.com/';
                 end else begin
                     "Base URL" := '';

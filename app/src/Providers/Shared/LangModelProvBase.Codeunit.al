@@ -23,13 +23,17 @@ codeunit 10035410 "LangModel Prov. Base ori"
     end;
 
     /// <summary>
-    /// Returns the argument's Base URL, or the provider default when blank.
+    /// Resolves the base URL for endpoint joins, trimming surrounding whitespace and trailing slashes.
+    /// A blank or whitespace-only argument falls back to the provider default; stored values are unchanged.
     /// </summary>
     procedure GetBaseUrl(var Argument: Record "Bifrost Chat Argument ori" temporary; DefaultUrl: Text): Text
+    var
+        BaseUrl: Text;
     begin
-        if Argument."Base URL" <> '' then
-            exit(Argument."Base URL");
-        exit(DefaultUrl);
+        BaseUrl := Argument."Base URL".Trim();
+        if BaseUrl = '' then
+            BaseUrl := DefaultUrl.Trim();
+        exit(DelChr(BaseUrl, '>', '/'));
     end;
 
     /// <summary>
