@@ -1150,7 +1150,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
     begin
         // PR57 routing | Time: independent of WorkDate | Risk: stale assignment must not enable chat.
         OriginalProvider := InitializeRouting();
-        SetupUserWithRole('PR57-MISSING');
+        SetupUserWithRole('XPR58-MISSING');
         BindSubscription(ContextSpy);
         SourcePage.OpenView();
         Assert.IsFalse(SourcePage.ori_BifrostChat.Visible(), 'Missing assignment must hide interactive chat.');
@@ -1349,8 +1349,8 @@ codeunit 96002 "LangModel Chat Provider Tests"
         OriginalProvider := BifrostSetup."Chat Provider Type";
         BifrostSetup."Chat Provider Type" := Enum::"Chat Provider Type ori"::LanguageModels;
         BifrostSetup.Modify(false);
-        CreateRole('PR57-CHAT', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
-        SetupUserWithRole('PR57-CHAT');
+        CreateRole('XPR58-CHAT', false, Enum::"Bifrost LangModel Prov. ori"::Mock);
+        SetupUserWithRole('XPR58-CHAT');
         MockProvider.SetIsConfigured(true);
         MockProvider.SetConfigJson('{}');
     end;

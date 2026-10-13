@@ -80,9 +80,8 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Test tooling: enumextension **96023** `LangModel Test MsgType` (values 96023-96025 `Test.LanguageModel.Set/Delete/Chat`),
   codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
   `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
-  From #50 (#49): **96004** `LangModel Field Restrict Tests`. Test codeunit **96029** `LangModel Chat Proxy Tests`.
-  PR #57 reserves codeunit **96030** `LangModel Context Spy ori` (manual, test-only observer; same-name reservation in PR #58).
-  Free: 96005-96008, 96031-96199.
+  From #50 (#49): **96004** `LangModel Field Restrict Tests`. Test codeunit **96029** `LangModel Chat Proxy Tests` (#54).
+  Test codeunit **96030** `LangModel Context Spy ori` (manual value-only test observer). Free: 96005-96008, 96031-96199.
 
 ### Testing the chat of every provider
 - `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`

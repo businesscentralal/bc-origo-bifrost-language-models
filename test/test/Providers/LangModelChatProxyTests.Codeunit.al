@@ -17,7 +17,7 @@ codeunit 96029 "LangModel Chat Proxy Tests"
         ReasoningOffErrTxt: Label 'Function tools with reasoning_effort are not supported. Set reasoning_effort to ''none''.', Locked = true;
 
     /// <summary>
-    /// A tool request retries when the provider asks for reasoning_effort none.
+    /// Verifies that tools and the matching provider error make the request eligible for a reasoning-off retry.
     /// </summary>
     [Test]
     procedure NeedsReasoningOff_ToolsAndMatchingError_IsTrue()
@@ -32,7 +32,7 @@ codeunit 96029 "LangModel Chat Proxy Tests"
     end;
 
     /// <summary>
-    /// A request without tools does not retry with reasoning_effort none.
+    /// Verifies that a request without tools is ineligible for a reasoning-off retry even when the provider error matches.
     /// </summary>
     [Test]
     procedure NeedsReasoningOff_NoTools_IsFalse()
@@ -47,7 +47,7 @@ codeunit 96029 "LangModel Chat Proxy Tests"
     end;
 
     /// <summary>
-    /// A request with reasoning_effort already set does not retry.
+    /// Verifies that a request already carrying reasoning_effort is ineligible for another reasoning-off retry.
     /// </summary>
     [Test]
     procedure NeedsReasoningOff_AlreadySet_IsFalse()
@@ -63,7 +63,7 @@ codeunit 96029 "LangModel Chat Proxy Tests"
     end;
 
     /// <summary>
-    /// An unrelated provider error does not trigger a reasoning retry.
+    /// Verifies that a tool request with an unrelated provider error is ineligible for a reasoning-off retry.
     /// </summary>
     [Test]
     procedure NeedsReasoningOff_UnrelatedError_IsFalse()

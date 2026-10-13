@@ -17,7 +17,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
     /// <summary>
     /// Opens Foundation's chat focus with the caller's current record and caption in this session.
     /// </summary>
-    /// <param name="TableId">The original page's source table number.</param>
+    /// <param name="TableId">The table number declared by the original page action; legacy mappings are preserved.</param>
     /// <param name="RecordSystemId">The current record's SystemId.</param>
     /// <param name="DataCaption">The caption formatted by the original page.</param>
     internal procedure OpenRecordChat(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)

@@ -74,7 +74,7 @@ codeunit 96013 "Chat Svc Gate Tests"
     end;
 
     /// <summary>
-    /// Verifies that the service-key gate can be queried and has no diagnostic record.
+    /// Verifies that a read of the empty gate table finds no stored rows.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]

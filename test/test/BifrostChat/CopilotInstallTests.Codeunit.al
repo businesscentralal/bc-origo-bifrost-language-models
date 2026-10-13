@@ -213,7 +213,7 @@ codeunit 96018 "Copilot Install Tests"
         // [GIVEN] An owned fixture; original model records are restored explicitly.
         PrepareInitFixture(true);
         LanguageModel.Init();
-        LanguageModel.Code := 'PR57-OTHER';
+        LanguageModel.Code := 'XPR58-OTHER';
         LanguageModel.Default := true;
         LanguageModel.Insert(true);
         // [WHEN] The actual page action runs with a handled confirmation.
@@ -223,14 +223,14 @@ codeunit 96018 "Copilot Install Tests"
         // [THEN] Real records and success messages match the user's choice.
         LanguageModel.Get('COPILOT');
         Assert.IsFalse(LanguageModel.Default, 'Existing default must not be displaced.');
-        LanguageModel.Get('PR57-OTHER');
+        LanguageModel.Get('XPR58-OTHER');
         Assert.IsTrue(LanguageModel.Default, 'Other default must stay selected.');
         Assert.AreEqual(1, SuccessMessages, 'Success must be reported only after completion.');
         RestoreInitFixture();
     end;
 
     /// <summary>
-    /// Verifies the initialization action: AcceptedExisting RefreshesOnlySkill.
+    /// Verifies that declining initialization preserves the existing model and skill.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Disabled)]
@@ -378,7 +378,7 @@ codeunit 96018 "Copilot Install Tests"
                 TempSavedModels.Insert();
             until LanguageModel.Next() = 0;
         // Do not clear existing secret values when temporarily removing fixture models.
-        LanguageModel.SetFilter(Code, 'COPILOT|PR57-OTHER');
+        LanguageModel.SetFilter(Code, 'COPILOT|XPR58-OTHER');
         LanguageModel.DeleteAll(false);
         LanguageModel.Reset();
         LanguageModel.SetRange(Default, true);
@@ -389,7 +389,7 @@ codeunit 96018 "Copilot Install Tests"
     var
         LanguageModel: Record "Bifrost Language Model ori";
     begin
-        LanguageModel.SetFilter(Code, 'COPILOT|PR57-OTHER');
+        LanguageModel.SetFilter(Code, 'COPILOT|XPR58-OTHER');
         LanguageModel.DeleteAll(false);
         TempSavedModels.Reset();
         if TempSavedModels.FindSet() then
