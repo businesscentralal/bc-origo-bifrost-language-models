@@ -209,10 +209,12 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
         ModelCard."Base URL".SetValue('https://proxy.example.test/v1');
+        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::"Azure OpenAI");
         ModelCard."Chat Path".SetValue('/edited/chat');
         ModelCard."Models Path".SetValue('/edited/models');
+        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [WHEN] OpenAI is selected again.
+        // [WHEN] OpenAI is selected again after editing paths while Azure OpenAI enables them.
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
         // [THEN] The user edits remain persisted.
