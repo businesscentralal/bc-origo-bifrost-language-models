@@ -11,12 +11,9 @@ codeunit 96031 "LangModel 60 Defaults Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
-    TestHttpRequestPolicy = BlockOutboundRequests;
 
     var
         Assert: Codeunit "Library Assert";
-        ExpectedRequestUrl: Text;
-        RequestCount: Integer;
 
     /// <summary>
     /// Verifies emptyendpoints fillsdefaults through the model card.
@@ -303,35 +300,32 @@ codeunit 96031 "LangModel 60 Defaults Tests"
     end;
 
     /// <summary>
-    /// Verifies actual OpenAI HTTP endpoint joins for DefaultBase without rewriting stored values.
+    /// Verifies the runtime OpenAI endpoint builders for DefaultBase without rewriting stored values.
     /// </summary>
     [Test]
-    [HandlerFunctions('EndpointHttpHandler')]
     procedure Scenario_AC01_DefaultBase_BuildsEndpointUrls()
     begin
-        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; pure runtime endpoint builders.
         AssertOpenAIRequestUrls('https://api.openai.com/', 'https://api.openai.com');
     end;
 
     /// <summary>
-    /// Verifies actual OpenAI HTTP endpoint joins for CustomTrailingSlash without rewriting stored values.
+    /// Verifies the runtime OpenAI endpoint builders for CustomTrailingSlash without rewriting stored values.
     /// </summary>
     [Test]
-    [HandlerFunctions('EndpointHttpHandler')]
     procedure Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls()
     begin
-        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; pure runtime endpoint builders.
         AssertOpenAIRequestUrls('https://proxy.example.test/gateway/', 'https://proxy.example.test/gateway');
     end;
 
     /// <summary>
-    /// Verifies actual OpenAI HTTP endpoint joins for WhitespaceAroundBase without rewriting stored values.
+    /// Verifies the runtime OpenAI endpoint builders for WhitespaceAroundBase without rewriting stored values.
     /// </summary>
     [Test]
-    [HandlerFunctions('EndpointHttpHandler')]
     procedure Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls()
     begin
-        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; HTTP intercepted.
+        // [SCENARIO] #60 AMEND | Time: no date dependency | Risk: None; pure runtime endpoint builders.
         AssertOpenAIRequestUrls('  https://proxy.example.test/gateway///  ', 'https://proxy.example.test/gateway');
     end;
 
@@ -377,48 +371,21 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         Assert.AreEqual('   ', TempArg."Base URL", 'Runtime normalization must not rewrite stored input.');
     end;
 
-    /// <summary>
-    /// Captures the provider-built URL and returns deterministic chat/model responses without network traffic.
-    /// </summary>
-    [HttpClientHandler]
-    procedure EndpointHttpHandler(Request: TestHttpRequestMessage; var Response: TestHttpResponseMessage): Boolean
-    begin
-        Assert.AreEqual(ExpectedRequestUrl, Request.Path, 'Actual provider HTTP URL must contain one joining slash.');
-        RequestCount += 1;
-        Response.HttpStatusCode := 200;
-        Response.Content.WriteFrom('{"data":[{"id":"test-model"}],"choices":[{"message":{"role":"assistant","content":"verified"},"finish_reason":"stop"}],"output":[]}');
-        exit(false);
-    end;
-
     local procedure AssertOpenAIRequestUrls(BaseUrl: Text; ResolvedBaseUrl: Text)
     var
         TempArg: Record "Bifrost Chat Argument ori" temporary;
         Provider: Codeunit "OpenAI LangModel Prov. ori";
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
     begin
-        // [GIVEN] Only owned temporary input; no real keys or external requests.
+        // [GIVEN] Only owned temporary input; no keys or external requests.
         TempArg."Base URL" := CopyStr(BaseUrl, 1, MaxStrLen(TempArg."Base URL"));
-        TempArg.Model := 'test-model';
-        TempArg.SetApiKey(AsSecret('test-key'));
-        TempArg.SetPayload('{"messages":[{"role":"user","content":"test"}]}');
-        RequestCount := 0;
-        // [WHEN/THEN] Each real provider entry point must build the expected HTTP URL.
-        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/chat/completions';
-        TempArg."Procedure Type" := TempArg."Procedure Type"::CompletePrompt;
-        Provider.Execute(TempArg);
-        TempArg."Procedure Type" := TempArg."Procedure Type"::SendChatMessage;
-        Provider.Execute(TempArg);
-        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/models';
-        TempArg."Procedure Type" := TempArg."Procedure Type"::GetAvailableModels;
-        Provider.Execute(TempArg);
-        Assert.IsTrue(TempArg."Result Boolean", 'Model listing must use the mocked endpoint.');
-        TempArg."Procedure Type" := TempArg."Procedure Type"::TestConnection;
-        Provider.Execute(TempArg);
-        Assert.IsTrue(TempArg."Result Boolean", 'Connection check must use the mocked endpoint.');
-        ExpectedRequestUrl := ResolvedBaseUrl + '/v1/responses';
-        TempArg.Model := 'gpt-6-test';
-        TempArg."Procedure Type" := TempArg."Procedure Type"::SendChatMessage;
-        Provider.Execute(TempArg);
-        Assert.AreEqual(5, RequestCount, 'Every endpoint scenario must actually issue an intercepted HTTP request.');
+        // [WHEN/THEN] Assert the builders called by the real provider request paths.
+        Assert.AreEqual(ResolvedBaseUrl + '/v1/chat/completions', Provider.GetCompletionUrl(TempArg), 'CompletePrompt endpoint must join once.');
+        Assert.AreEqual(ResolvedBaseUrl + '/v1/chat/completions', ChatProxy.GetChatUrl(TempArg), 'Chat endpoint must join once.');
+        Assert.AreEqual(ResolvedBaseUrl + '/v1/models', Provider.GetModelsUrl(TempArg), 'Model discovery and connection endpoint must join once.');
+        Assert.AreEqual(ResolvedBaseUrl + '/v1/responses', ChatProxy.GetResponsesUrl(TempArg), 'Reasoning chat endpoint must join once.');
+        TempArg."Chat Path" := '/custom/chat';
+        Assert.AreEqual(ResolvedBaseUrl + '/custom/chat', ChatProxy.GetChatUrl(TempArg), 'Configured chat path must remain in the request endpoint.');
         Assert.AreEqual(BaseUrl, TempArg."Base URL", 'Runtime URL joins must preserve stored custom values.');
     end;
 

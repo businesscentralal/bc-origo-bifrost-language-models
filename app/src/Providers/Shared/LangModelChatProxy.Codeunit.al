@@ -64,7 +64,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             AddSystemMessage(Messages, SystemPrompt);
 
         BuildToolDefinitions(OpenAITools);
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + GetChatPath(Argument);
+        ChatUrl := GetChatUrl(Argument);
 
         exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
@@ -115,7 +115,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         BuildToolDefinitions(OpenAITools);
 
         AppendToolResultMessages(Messages, ToolResultsJson);
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + GetChatPath(Argument);
+        ChatUrl := GetChatUrl(Argument);
 
         exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
@@ -504,6 +504,26 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         Arguments.Add('format', 'table');
     end;
 
+    /// <summary>
+    /// Builds the runtime chat endpoint from the resolved base and configured or default chat path.
+    /// </summary>
+    procedure GetChatUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        exit(ProviderBase.GetBaseUrl(Argument, '') + GetChatPath(Argument));
+    end;
+
+    /// <summary>
+    /// Builds the runtime OpenAI Responses endpoint for reasoning-model chat and continuation.
+    /// </summary>
+    procedure GetResponsesUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        exit(ProviderBase.GetBaseUrl(Argument, '') + '/v1/responses');
+    end;
+
     local procedure GetChatPath(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     begin
         if Argument."Chat Path" <> '' then
@@ -549,7 +569,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             AppendChatMessageToResponsesInput(Input, MessageToken);
 
         BuildResponsesToolDefinitions(ResponsesTools);
-        Url := ProviderBase.GetBaseUrl(Argument, '') + '/v1/responses';
+        Url := GetResponsesUrl(Argument);
 
         exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
@@ -587,7 +607,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         BuildResponsesToolDefinitions(ResponsesTools);
 
         AppendToolResultsToResponsesInput(Input, ToolResultsJson);
-        Url := ProviderBase.GetBaseUrl(Argument, '') + '/v1/responses';
+        Url := GetResponsesUrl(Argument);
 
         exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey,
             ProviderBase.GetTimeoutMs(Argument, 120000),
