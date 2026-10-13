@@ -13,7 +13,6 @@ codeunit 96031 "LangModel 60 Defaults Tests"
 
     var
         Assert: Codeunit "Library Assert";
-        Any: Codeunit Any;
 
     /// <summary>
     /// Verifies emptyendpoints fillsdefaults through the model card.
@@ -32,7 +31,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://api.openai.com/');
@@ -63,7 +65,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://proxy.example.test/api');
@@ -95,7 +100,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://example.openai.azure.com/openai/v1');
@@ -124,7 +132,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://proxy.example.test/v1');
@@ -153,7 +164,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://api.openai.com/');
@@ -182,7 +196,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] The user selects OpenAI on the card.
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://api.openai.com/');
@@ -207,15 +224,27 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         InitializeModel(LangModel);
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
         ModelCard."Base URL".SetValue('https://proxy.example.test/v1');
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::"Azure OpenAI");
+        ModelCard."Chat Provider".SetValue('Azure OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('Azure OpenAI');
         ModelCard."Chat Path".SetValue('/edited/chat');
         ModelCard."Models Path".SetValue('/edited/models');
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [WHEN] OpenAI is selected again after editing paths while Azure OpenAI enables them.
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
+        ModelCard."Chat Provider".SetValue('OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('OpenAI');
 
         // [THEN] The user edits remain persisted.
         ModelCard.Close();
@@ -258,7 +287,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
 
         // [WHEN] Azure OpenAI is selected instead of OpenAI.
-        ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::"Azure OpenAI");
+        ModelCard."Chat Provider".SetValue('Azure OpenAI');
+        if ModelCard."Chat Provider".ValidationErrorCount() > 0 then
+            Assert.Fail(ModelCard."Chat Provider".GetValidationError());
+        ModelCard."Chat Provider".AssertEquals('Azure OpenAI');
 
         // [THEN] Azure endpoints remain for the user to configure.
         ModelCard.Close();
@@ -269,7 +301,7 @@ codeunit 96031 "LangModel 60 Defaults Tests"
     local procedure InitializeModel(var LangModel: Record "Bifrost Language Model ori")
     begin
         LangModel.Init();
-        LangModel.Code := CopyStr('BIFT-' + Format(Any.IntegerInRange(100000, 999999)), 1, MaxStrLen(LangModel.Code));
+        LangModel.Code := CopyStr('BIFT-' + DelChr(Format(CreateGuid(), 0, 4), '=', '{}-'), 1, MaxStrLen(LangModel.Code));
         LangModel.Insert(true);
     end;
 
