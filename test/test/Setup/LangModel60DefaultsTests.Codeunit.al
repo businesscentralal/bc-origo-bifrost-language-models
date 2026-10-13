@@ -4,7 +4,7 @@ using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Issue #60: OpenAI selection defaults empty endpoints without overwriting configured values.
+/// Issue #60: OpenAI selection defaults an empty base URL without overwriting configured values.
 /// </summary>
 codeunit 96031 "LangModel 60 Defaults Tests"
 {
@@ -34,13 +34,13 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
-        ModelCard."Base URL".AssertEquals('https://api.openai.com/v1');
-        ModelCard."Chat Path".AssertEquals('/chat/completions');
-        ModelCard."Models Path".AssertEquals('/models');
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
+        ModelCard."Base URL".AssertEquals('https://api.openai.com/');
+        ModelCard."Chat Path".AssertEquals('');
+        ModelCard."Models Path".AssertEquals('');
         ModelCard.Close();
         LangModel.Get(LangModel.Code);
-        AssertEndpoints(LangModel, 'https://api.openai.com/v1', '/chat/completions', '/models');
+        AssertEndpoints(LangModel, 'https://api.openai.com/', '', '');
     end;
 
     /// <summary>
@@ -65,7 +65,7 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://proxy.example.test/api');
         ModelCard."Chat Path".AssertEquals('/proxy/chat');
         ModelCard."Models Path".AssertEquals('/proxy/models');
@@ -97,7 +97,7 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://example.openai.azure.com/openai/v1');
         ModelCard."Chat Path".AssertEquals('/chat/completions?api-version=2026-01-01');
         ModelCard."Models Path".AssertEquals('/models?api-version=2026-01-01');
@@ -107,10 +107,10 @@ codeunit 96031 "LangModel 60 Defaults Tests"
     end;
 
     /// <summary>
-    /// Verifies onlybaseurl fillsemptypaths through the model card.
+    /// Verifies an existing base URL is preserved and empty paths remain empty.
     /// </summary>
     [Test]
-    procedure Scenario_AC02_OnlyBaseUrl_FillsEmptyPaths()
+    procedure Scenario_AC02_OnlyBaseUrl_LeavesPathsEmpty()
     var
         LangModel: Record "Bifrost Language Model ori";
         ModelCard: TestPage "Bifrost LangModel Card ori";
@@ -126,20 +126,20 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
         ModelCard."Base URL".AssertEquals('https://proxy.example.test/v1');
-        ModelCard."Chat Path".AssertEquals('/chat/completions');
-        ModelCard."Models Path".AssertEquals('/models');
+        ModelCard."Chat Path".AssertEquals('');
+        ModelCard."Models Path".AssertEquals('');
         ModelCard.Close();
         LangModel.Get(LangModel.Code);
-        AssertEndpoints(LangModel, 'https://proxy.example.test/v1', '/chat/completions', '/models');
+        AssertEndpoints(LangModel, 'https://proxy.example.test/v1', '', '');
     end;
 
     /// <summary>
-    /// Verifies onlychatpath fillsotherendpoints through the model card.
+    /// Verifies an existing chat path is preserved while only the base URL defaults.
     /// </summary>
     [Test]
-    procedure Scenario_AC02_OnlyChatPath_FillsOtherEndpoints()
+    procedure Scenario_AC02_OnlyChatPath_FillsBaseUrlOnly()
     var
         LangModel: Record "Bifrost Language Model ori";
         ModelCard: TestPage "Bifrost LangModel Card ori";
@@ -155,20 +155,20 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
-        ModelCard."Base URL".AssertEquals('https://api.openai.com/v1');
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
+        ModelCard."Base URL".AssertEquals('https://api.openai.com/');
         ModelCard."Chat Path".AssertEquals('/custom/chat');
-        ModelCard."Models Path".AssertEquals('/models');
+        ModelCard."Models Path".AssertEquals('');
         ModelCard.Close();
         LangModel.Get(LangModel.Code);
-        AssertEndpoints(LangModel, 'https://api.openai.com/v1', '/custom/chat', '/models');
+        AssertEndpoints(LangModel, 'https://api.openai.com/', '/custom/chat', '');
     end;
 
     /// <summary>
-    /// Verifies onlymodelspath fillsotherendpoints through the model card.
+    /// Verifies an existing models path is preserved while only the base URL defaults.
     /// </summary>
     [Test]
-    procedure Scenario_AC02_OnlyModelsPath_FillsOtherEndpoints()
+    procedure Scenario_AC02_OnlyModelsPath_FillsBaseUrlOnly()
     var
         LangModel: Record "Bifrost Language Model ori";
         ModelCard: TestPage "Bifrost LangModel Card ori";
@@ -184,13 +184,13 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard.GoToRecord(LangModel);
         ModelCard."Chat Provider".SetValue(LangModel."Chat Provider"::OpenAI);
 
-        // [THEN] Each empty endpoint defaults and each existing endpoint is preserved.
-        ModelCard."Base URL".AssertEquals('https://api.openai.com/v1');
-        ModelCard."Chat Path".AssertEquals('/chat/completions');
+        // [THEN] Only the empty base URL defaults; every existing value and empty path is preserved.
+        ModelCard."Base URL".AssertEquals('https://api.openai.com/');
+        ModelCard."Chat Path".AssertEquals('');
         ModelCard."Models Path".AssertEquals('/custom/models');
         ModelCard.Close();
         LangModel.Get(LangModel.Code);
-        AssertEndpoints(LangModel, 'https://api.openai.com/v1', '/chat/completions', '/custom/models');
+        AssertEndpoints(LangModel, 'https://api.openai.com/', '', '/custom/models');
     end;
 
     /// <summary>
@@ -203,7 +203,7 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         ModelCard: TestPage "Bifrost LangModel Card ori";
     begin
         // [SCENARIO] #60 AC02 | Time: no date dependency | Risk: None.
-        // [GIVEN] The user has selected OpenAI and then edited all three defaults.
+        // [GIVEN] The user has selected OpenAI and then configured a custom base URL and paths.
         InitializeModel(LangModel);
         ModelCard.OpenEdit();
         ModelCard.GoToRecord(LangModel);
@@ -236,8 +236,8 @@ codeunit 96031 "LangModel 60 Defaults Tests"
         // [WHEN] A caller validates the provider on the table.
         TempLangModel.Validate("Chat Provider", TempLangModel."Chat Provider"::OpenAI);
 
-        // [THEN] The same three endpoint defaults are applied.
-        AssertEndpoints(TempLangModel, 'https://api.openai.com/v1', '/chat/completions', '/models');
+        // [THEN] The base URL defaults and both paths remain empty.
+        AssertEndpoints(TempLangModel, 'https://api.openai.com/', '', '');
     end;
 
     /// <summary>

@@ -39,13 +39,14 @@ addressed by a secret code per language model, and is passed as `SecretText` all
    `Bifrost Language Model ori` row: a code, a description, the chat provider, the endpoint (`Base URL`,
    `Model`, `Chat Path`, `Models Path`), the limits (`Timeout Seconds`, `Max Tokens`, `Context Tokens`) and
    the skill text that becomes part of the system instruction.
-   Selecting **OpenAI** fills empty **Base URL**, **Chat Path** and **Models Path** with
-   `https://api.openai.com/v1`, `/chat/completions` and `/models`. Each existing value is preserved,
-   so custom Azure OpenAI and proxy endpoints remain configured.
+   Selecting **OpenAI** fills an empty **Base URL** with `https://api.openai.com/`.
+   **Chat Path** and **Models Path** remain unchanged; the provider adds its endpoint paths.
+   Existing base URLs, including custom Azure OpenAI and proxy endpoints, are preserved.
 
-   **Íslenska:** Þegar **OpenAI** er valið fá auðir reitir **Grunnslóð**, **Spjallslóð** og
-   **Líkanaslóð** gildin `https://api.openai.com/v1`, `/chat/completions` og `/models`.
-   Fyrirliggjandi gildi haldast, þar á meðal sérsniðnar slóðir fyrir Azure OpenAI og milliliða.
+   **Íslenska:** Þegar **OpenAI** er valið fær auður reitur **Grunnslóð** gildið
+   `https://api.openai.com/`. **Spjallslóð** og **Líkanaslóð** haldast óbreyttar;
+   veitandinn bætir við endapunktsslóðum. Fyrirliggjandi grunnslóðir haldast,
+   þar á meðal sérsniðnar slóðir fyrir Azure OpenAI og milliliða.
 2. **Store the API key.** On `Bifrost LangModel Card ori` the actions **Set Shared API Key** and
    **Set Personal API Key** write the key through `LangModel Secrets ori` into Foundation's secret store. The
    card only shows the read-only *Shared Key Stored* / *Personal Key Stored* flags. The shared-key actions
