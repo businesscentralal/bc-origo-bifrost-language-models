@@ -621,7 +621,9 @@ codeunit 96032 "LLM 65 Prompt Tests"
         LowerPermissions: Codeunit "Library - Lower Permissions";
         Response: JsonObject;
     begin
+        // BIFROST API is the transport baseline; it grants neither chat gate nor model-table read.
         LowerPermissions.SetO365Basic();
+        LowerPermissions.AddPermissionSet('BIFROST API ori');
         Response := Execute('{"prompt":"Hello"}');
         AssertCodedError(Response, 'PermissionDenied');
     end;
@@ -634,7 +636,9 @@ codeunit 96032 "LLM 65 Prompt Tests"
         LowerPermissions: Codeunit "Library - Lower Permissions";
         Response: JsonObject;
     begin
+        // BIFROST API is the transport baseline; it grants neither chat gate nor model-table read.
         LowerPermissions.SetO365Basic();
+        LowerPermissions.AddPermissionSet('BIFROST API ori');
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         Response := Execute('{"prompt":"Hello"}');
         AssertCodedError(Response, 'PermissionDenied');
@@ -656,7 +660,9 @@ codeunit 96032 "LLM 65 Prompt Tests"
         RequestText := Request(Model.Code, false, false);
         HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::OpenAI, false), false, false);
         BindSubscription(HttpMock);
+        // BIFROST API is the transport baseline; it grants neither chat gate nor model-table read.
         LowerPermissions.SetO365Basic();
+        LowerPermissions.AddPermissionSet('BIFROST API ori');
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
         Response := Execute(RequestText);
