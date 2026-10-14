@@ -47,7 +47,7 @@
         </trans-unit>
         <trans-unit id="Table 3454536554 - Field 3898104680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Max Tokens</source>
-          <target>Hámarksfjöldi tókena</target>
+          <target>Hámarksfjöldi tákna</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Chat Argument ori - Field Max Tokens - Property Caption</note>
         </trans-unit>
@@ -77,13 +77,13 @@
         </trans-unit>
         <trans-unit id="Table 3454536554 - Field 2514534103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Result Boolean</source>
-          <target>Niðurstaða (Boolean)</target>
+          <target>Niðurstaða (rökgildi)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Chat Argument ori - Field Result Boolean - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3454536554 - Field 4271108617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Result Integer</source>
-          <target>Niðurstaða heiltölu</target>
+          <target>Niðurstaða (heiltala)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Chat Argument ori - Field Result Integer - Property Caption</note>
         </trans-unit>
@@ -1535,13 +1535,13 @@
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 1688929688 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>BuildConfigJson</source>
-          <target>Byggja stillingar JSON</target>
+          <target>Búa til JSON-stillingar</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue BuildConfigJson - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 888568311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CompletePrompt</source>
-          <target>Ljúka kvaðningu</target>
+          <target>Vinna kvaðningu</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue CompletePrompt - Property Caption</note>
         </trans-unit>
@@ -1643,7 +1643,7 @@
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 2758994150 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GetServiceKeyDescription</source>
-          <target>Sækja lýsingu þjónustulykils</target>
+          <target>Sækja lýsingu sameiginlegs lykils</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue GetServiceKeyDescription - Property Caption</note>
         </trans-unit>
@@ -1661,7 +1661,7 @@
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 2249538077 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>HasServiceKeyPermission</source>
-          <target>Er með heimild fyrir þjónustulykli</target>
+          <target>Er með heimild fyrir sameiginlegum lykli</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue HasServiceKeyPermission - Property Caption</note>
         </trans-unit>
@@ -1703,13 +1703,13 @@
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 3275512608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SupportsSplitToolExecution</source>
-          <target>Styður skipta framkvæmd verkfæra</target>
+          <target>Styður aðskilda keyrslu verkfæra</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue SupportsSplitToolExecution - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 309372455 - EnumValue 4102627498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SupportsToolCalling</source>
-          <target>Styður köllun verkfæra</target>
+          <target>Styður verkfæraköll</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum Bifrost Chat Proc. Type ori - EnumValue SupportsToolCalling - Property Caption</note>
         </trans-unit>
