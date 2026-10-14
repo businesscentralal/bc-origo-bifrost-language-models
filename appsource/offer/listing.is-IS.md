@@ -1,0 +1,84 @@
+# Skráning - Bifröst mállíkön (is-IS)
+
+## Auðkenni tilboðs
+
+| Reitur | Gildi |
+| --- | --- |
+| Heiti tilboðs | Bifröst mállíkön |
+| Heiti forrits (app.json) | Bifrost Language Models |
+| Auðkenni forrits | `f1722684-0c24-4022-a2e0-0f63154aca76` |
+| Útgefandi | Origo (sami útgefandi og Bifrost Foundation) |
+| Útgáfa | 28.0.0.0 |
+| Nauðsynlegt forrit | Bifrost Foundation 28.0.1.0 eða nýrra (`7505e808-6e52-4b96-a328-82573391297a`) |
+| Vörunúmer (product id) | _Tryggvi fyllir út þegar tilboðið er til_ |
+
+## Stutt samantekt (hámark 100 stafir)
+
+```
+Spjallaðu við Business Central með OpenAI, Anthropic, Gemini, xAI, Azure OpenAI eða Copilot.
+```
+
+## Lýsing
+
+Bifröst mállíkön tengja Bifröst við það mállíkan sem þú velur. Notendur spjalla við Business Central af þeirri síðu sem þeir eru að vinna á, og aðstoðarmaðurinn svarar út frá gögnum þeirra sjálfra með þeim réttindum sem þeir hafa.
+
+Forritið byggir á Bifrost Foundation, sem sér um sjálft spjallið og MCP-verkfæraþjóninn sem gerir aðstoðarmanninum kleift að lesa og vinna með gögn í Business Central. Bifröst mállíkön sjá um mállíkönin sjálf.
+
+**Hvað færðu**
+
+- **Mállíkön.** Eitt mállíkan í hverri línu: spjallveita, endapunktur, líkan, mörk (tímamörk, hámarksfjöldi tókna og stærð samhengis) og færnitexti sem verður hluti af kerfisfyrirmælum.
+- **Sjö spjallveitur.** Copilot, OpenAI, Azure OpenAI, sérsniðið LLM, Anthropic, xAI og Google (Gemini), allar á bak við sama veituviðmót.
+- **Spjall á 36 stöðluðum síðum.** Bifrost Chat-upplýsingaglugganum er bætt við á síður viðskiptamanna, lánardrottna, vara, sölu, innkaupa, færslna og innkominna skjala.
+- **Mállíkan fyrir hvern notanda.** Kerfisstjóri úthlutar hverjum notanda mállíkani í notandauppsetningu Bifrostar. Spjallið birtist aðeins notendum sem hafa fengið mállíkan.
+- **Einskiptisbeiðnir.** Skilaboðagerðin `LLM.Prompt.Complete` sendir fyrirmæli til stillta líkansins og skilar textanum, til notkunar í handritum og tímasettum verkum.
+
+**Lyklar og réttindi**
+
+- Forritið geymir aldrei API-lykil sjálft. Lyklar eru geymdir í leyndarmálageymslu Foundation og fluttir sem leynitexti alla leið í HTTP-haus beiðninnar.
+- Hver notandi getur sett persónulegan API-lykil, sem gengur fyrir sameiginlega lyklinum. Umsjón með sameiginlegum fyrirtækjalykli er sérstakt réttindasett (`BIFROST ChatSvc ori`) og því má fela hana öðrum án þess að veita aðgang að spjallinu.
+- Verkfærakall keyra með réttindum innskráða notandans í Business Central.
+
+**Kröfur**
+
+- Business Central í skýinu (SaaS), útgáfa 28.
+- Bifrost Foundation 28.0.1.0 eða nýrra.
+- Aðgangur og API-lykill hjá völdu veitunni (ekki þörf fyrir Copilot). Kveikja þarf á **Allow HttpClient Requests** fyrir forritið í Extension Management, því allar ytri veitur þurfa á því að halda.
+
+## Leitarorð (Partner Center leyfir allt að 3; fleiri til vara)
+
+1. Bifröst
+2. spjall
+3. mállíkan
+
+Til vara: gervigreind, LLM, OpenAI, Anthropic, Gemini, Copilot, aðstoðarmaður.
+
+## Flokkar
+
+- Aðalflokkur: Productivity (staðfestið nákvæmt heiti í flokkalista Partner Center)
+- Aukaflokkur: sá flokkur fyrir gervigreind eða spjall sem tilboðsformið stingur upp á, ef hann er í boði.
+
+## Tungumál og markaðir
+
+- Tungumál: enska (en-US) og íslenska (is-IS), í samræmi við `supportedLocales` í `app.json`.
+- Markaðir: sömu markaðir og Bifrost Foundation er skráð á. Forritið er smíðað fyrir W1-staðfærslu og prófað á W1 og íslenskri staðfærslu.
+
+## Tenglar
+
+| Reitur | Slóð |
+| --- | --- |
+| Vefsíða | https://docs.bifrost.origo.is |
+| Hjálp | https://businesscentralal.github.io/bifrost/en-us/language-models/ |
+| Persónuverndarstefna | https://docs.bifrost.origo.is/en-us/licensing/privacy/ |
+| Notkunarskilmálar (EULA) | https://docs.bifrost.origo.is/en-us/licensing/eula/ |
+| Þjónusta | https://www.origo.is/ |
+
+Athugið: Í `app.json` Foundation vísa persónuverndarstefna og EULA á `docs.bifrost.origo.is`. Í `app.json` þessa forrits vísa þær enn á `businesscentralal.github.io/bifrost/en-us/foundation/`. Skráningin notar slóðir Foundation; samræma má `app.json` síðar ef Tryggvi samþykkir.
+
+## Skjámyndir (aðeins lýsingar; myndir á eftir að taka)
+
+1. **Listi yfir mállíkön** - listinn yfir Bifröst mállíkön með nokkrum veitum.
+2. **Spjald mállíkans** - veita, endapunktur, líkan, mörk og færnitexti, ásamt aðgerðum fyrir sameiginlegan og persónulegan API-lykil.
+3. **Uppsetningarsíða** - uppsetningarsíða Bifröst mállíkana sem sýnir fjölda líkana, sjálfgefið líkan og hve mörg vantar enn API-lykil.
+4. **Spjall á viðskiptamannaspjaldi** - Bifrost Chat-glugginn svarar spurningu um viðskiptamanninn sem er opinn.
+5. **Spjall á lista yfir sölupantanir** - glugginn á listasíðu.
+6. **Notandauppsetning** - reiturinn Language Model Code í notandauppsetningu Bifrostar.
