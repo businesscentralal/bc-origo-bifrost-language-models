@@ -149,7 +149,7 @@ page 10035421 "LangModel Setup ori"
         KeyHintVisible: Boolean;
         UnfavorableStyleTok: Label 'Unfavorable', Locked = true;
         FavorableStyleTok: Label 'Favorable', Locked = true;
-        KeyMissingHintTxt: Label 'API keys cannot be moved from another extension. Open a language model and use Set Personal API Key or Set Shared API Key to enter each key once.', Comment = 'is-IS=Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.';
+        KeyMissingHintTxt: Label 'API keys cannot be moved from another extension. Open a language model and use Set Personal API Key or Set Shared API Key to enter each key once.', Comment = 'is-IS=Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.';
         NoDefaultLanguageModelTxt: Label '(none)', Comment = 'is-IS=(ekkert)';
 
     trigger OnOpenPage()

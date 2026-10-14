@@ -839,8 +839,8 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - NamedType 461271212" size-unit="char" translate="yes" xml:space="preserve">
           <source>No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.</source>
-          <target>Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hann inn einu sinni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hann inn einu sinni.</note>
+          <target>Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hann inn einu sinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hann inn einu sinni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - NamedType KeyMissingHintTxt</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - NamedType 2632751158" size-unit="char" translate="yes" xml:space="preserve">
@@ -851,8 +851,8 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 486669812 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.</source>
-          <target>API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að skrá eða fjarlægja lykil.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að skrá eða fjarlægja lykil.</note>
+          <target>API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Authentication - Property InstructionalText</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 486669812 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1049,8 +1049,8 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - Action 508695791 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Set Personal API Key</source>
-          <target>Skrá persónulegan API-lykil</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skrá persónulegan API-lykil</note>
+          <target>Setja inn persónulegan API-lykil</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja inn persónulegan API-lykil</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Action SetPersonalApiKey - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Action 2897634132 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1061,8 +1061,8 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - Action 2897634132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Set Shared API Key</source>
-          <target>Skrá sameiginlegan API-lykil</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Skrá sameiginlegan API-lykil</note>
+          <target>Setja inn sameiginlegan API-lykil</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja inn sameiginlegan API-lykil</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Action SetServiceApiKey - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Action 4263468516 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1181,8 +1181,8 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - NamedType 461271212" size-unit="char" translate="yes" xml:space="preserve">
           <source>API keys cannot be moved from another extension. Open a language model and use Set Personal API Key or Set Shared API Key to enter each key once.</source>
-          <target>Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.</note>
+          <target>Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - NamedType KeyMissingHintTxt</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - NamedType 2036663209" size-unit="char" translate="yes" xml:space="preserve">

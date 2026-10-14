@@ -142,7 +142,7 @@ page 10035343 "Bifrost LangModel Card ori"
             {
                 Caption = 'Authentication', Comment = 'is-IS=Sannvottun';
                 Visible = RequiresApiKeyVisible;
-                InstructionalText = 'API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.', Comment = 'is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að skrá eða fjarlægja lykil.';
+                InstructionalText = 'API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.', Comment = 'is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.';
 
                 field(HasPersonalKeyField; HasPersonalKey)
                 {
@@ -274,7 +274,7 @@ page 10035343 "Bifrost LangModel Card ori"
             action(SetPersonalApiKey)
             {
                 ApplicationArea = All;
-                Caption = 'Set Personal API Key', Comment = 'is-IS=Skrá persónulegan API-lykil';
+                Caption = 'Set Personal API Key', Comment = 'is-IS=Setja inn persónulegan API-lykil';
                 ToolTip = 'Enter your personal API key for this language model. It is stored in the Bifrost secret store for you only and takes priority over the shared key.', Comment = 'is-IS=Sláðu inn persónulegan API-lykil fyrir þetta mállíkan. Hann er geymdur í leyndarmálageymslu Bifröst fyrir þig eingöngu og hefur forgang yfir sameiginlega lykilinn.';
                 Image = EncryptionKeys;
                 Visible = RequiresApiKeyVisible;
@@ -310,7 +310,7 @@ page 10035343 "Bifrost LangModel Card ori"
             action(SetServiceApiKey)
             {
                 ApplicationArea = All;
-                Caption = 'Set Shared API Key', Comment = 'is-IS=Skrá sameiginlegan API-lykil';
+                Caption = 'Set Shared API Key', Comment = 'is-IS=Setja inn sameiginlegan API-lykil';
                 ToolTip = 'Enter the shared API key used by every user without a personal key. Requires the BIFROST ChatSvc ori permission set.', Comment = 'is-IS=Sláðu inn sameiginlega API-lykilinn sem allir notendur án persónulegs lykils nota. Krefst heimildasamstæðunnar BIFROST ChatSvc ori.';
                 Image = EncryptionKeys;
                 Visible = RequiresApiKeyVisible;
@@ -390,7 +390,7 @@ page 10035343 "Bifrost LangModel Card ori"
         SkillTextValue: Text;
         KeyMissingHint: Text;
         SkillPlaceholderTxt: Label 'Enter skill instructions in markdown...', Comment = 'is-IS=Sláðu inn hæfnileiðbeiningar á markdown-sniði...';
-        KeyMissingHintTxt: Label 'No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.', Comment = 'is-IS=Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Skrá persónulegan API-lykil eða Skrá sameiginlegan API-lykil til að slá hann inn einu sinni.';
+        KeyMissingHintTxt: Label 'No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.', Comment = 'is-IS=Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hann inn einu sinni.';
         ClearPersonalKeyQst: Label 'Remove your personal API key for language model %1?', Comment = '%1 = language model code, is-IS=Fjarlægja persónulega API-lykilinn þinn fyrir mállíkanið %1?';
         ClearServiceKeyQst: Label 'Remove the shared API key for language model %1? Every user without a personal key loses access.', Comment = '%1 = language model code, is-IS=Fjarlægja sameiginlega API-lykilinn fyrir mállíkanið %1? Allir notendur án persónulegs lykils missa aðgang.';
         HasExternalEndpoint: Boolean;
