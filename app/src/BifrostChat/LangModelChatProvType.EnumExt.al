@@ -6,7 +6,7 @@ using Origo.Bifrost;
 /// "Chat Provider Type ori" enum. See "Copilot Install ori" for how
 /// "Setup ori"."Chat Provider Type" is claimed on install.
 /// </summary>
-enumextension 10035384 "LangModel Chat Provider Type" extends "Chat Provider Type ori"
+enumextension 10035384 "LangModel Chat Prov Type ori" extends "Chat Provider Type ori"
 {
     value(10035384; LanguageModels)
     {

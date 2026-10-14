@@ -1773,11 +1773,11 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Copilot</note>
           <note from="Xliff Generator" annotates="general" priority="3">EnumExtension Copilot Capability ori - EnumValue Bifrost Chat ori - Property Caption</note>
         </trans-unit>
-        <trans-unit id="EnumExtension 834387008 - EnumValue 1873111202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1670964381">
+        <trans-unit id="EnumExtension 526614798 - EnumValue 1873111202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1670964381">
           <source>Bifrost Language Models</source>
           <target>Bifröst mállíkön</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Bifröst mállíkön</note>
-          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension LangModel Chat Provider Type - EnumValue LanguageModels - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension LangModel Chat Prov Type ori - EnumValue LanguageModels - Property Caption</note>
         </trans-unit>
         <trans-unit id="EnumExtension 2945382879 - EnumValue 1408386902 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 242122731">
           <source>Copilot</source>
