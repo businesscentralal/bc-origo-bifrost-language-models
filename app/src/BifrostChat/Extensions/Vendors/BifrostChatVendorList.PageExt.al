@@ -17,7 +17,7 @@ pageextension 10035381 "Bifrost Chat VendorList ori" extends "Vendor List"
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this vendor in Business Central.', Comment = 'is-IS=Spjalla um þennan lánardrottin í Business Central';
+                ToolTip = 'Chat about this vendor in Business Central.', Comment = 'is-IS=Spjalla um þennan lánardrottin í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;
