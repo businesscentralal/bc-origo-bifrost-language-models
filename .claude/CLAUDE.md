@@ -22,7 +22,7 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation **28.0.1.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): the first Foundation version with `Setup ori.TryClaimChatProvider` public again (core#881). AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
+- Bifrost Foundation **28.0.4.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): includes the `Retryable` error code needed by prompt failures and the public `Setup ori.TryClaimChatProvider`. AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
 
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
@@ -177,7 +177,7 @@ Key rules always in effect:
 - Compile locally with alc.exe + CodeCop/UICop/AppSourceCop, zero errors and zero warnings. After a caption change
   run `tools/Update-IcelandicXlf.ps1` and compile again; before a PR run every guard in `tools/` (the *Source Guards*
   workflow runs all but `Test-IcelandicXlfInSync`, which needs a build).
-  Symbols: `app/.alpackages` (Microsoft symbols + a Foundation 28.0.1.x `.app`),
+  Symbols: `app/.alpackages` (Microsoft symbols + a Foundation 28.0.4.x `.app`),
   `test/.alpackages` (Microsoft test libraries + Foundation + the freshly built Bifrost Language Models app).
 - Publish and test without VS Code (pwsh 7, credential from the user-level env vars `BC28IS_USER` /
   `BC28IS_PASSWORD`, never from files) with the Foundation tooling:

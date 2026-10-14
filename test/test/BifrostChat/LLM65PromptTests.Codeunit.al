@@ -715,6 +715,9 @@ codeunit 96032 "LLM 65 Prompt Tests"
         ErrorText: Text;
         OriginalLanguage: Integer;
     begin
+        TempArgument.Init();
+        TempArgument.ID := CreateGuid();
+        TempArgument.Insert(true);
         OriginalLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
         ProviderBase.RespondPromptError(TempArgument, ProviderBase.BuildPromptError(401, false));

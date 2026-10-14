@@ -4,7 +4,7 @@
 **Publisher:** Origo — **Version:** 28.0.0.0 (AL-Go stamps build and revision) — **Target:** Cloud (BC 28, runtime 17.0)  
 **App ID:** `f1722684-0c24-4022-a2e0-0f63154aca76` — **Test app ID:** `9c452c6e-df9b-4eb0-9a54-7ea8f32483ec`  
 **Object ID range:** 10035335–10035484 (tests 96000–96199) — **Namespace:** `Origo.Bifrost.LanguageModels`  
-**Depends on:** Bifrost Foundation 28.0.1.0 or later  
+**Depends on:** Bifrost Foundation 28.0.4.0 or later  
 **Environments:** Business Central online (SaaS) and owned, disposable COSMO Alpaca W1 verification environments
 
 ---
