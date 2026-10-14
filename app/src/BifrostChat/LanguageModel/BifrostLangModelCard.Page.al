@@ -50,7 +50,7 @@ page 10035343 "Bifrost LangModel Card ori"
 
                     trigger OnValidate()
                     begin
-                        CurrPage.Update(false);
+                        CurrPage.Update(true);
                     end;
                 }
             }
@@ -182,6 +182,7 @@ page 10035343 "Bifrost LangModel Card ori"
 
                 trigger ControlReady()
                 begin
+                    SkillEditorReady := true;
                     CurrPage.SkillEditor.SetPlaceholder(SkillPlaceholderTxt);
                     CurrPage.SkillEditor.SetReadOnly(not CurrPage.Editable());
                     CurrPage.SkillEditor.SetContent(Rec.GetSkill());
@@ -404,12 +405,15 @@ page 10035343 "Bifrost LangModel Card ori"
         HasServiceKey: Boolean;
         HasServiceKeyPerm: Boolean;
         KeyMissingVisible: Boolean;
+        SkillEditorReady: Boolean;
 
     trigger OnAfterGetCurrRecord()
     begin
         SkillTextValue := Rec.GetSkill();
-        CurrPage.SkillEditor.SetReadOnly(not CurrPage.Editable());
-        CurrPage.SkillEditor.SetContent(SkillTextValue);
+        if SkillEditorReady then begin
+            CurrPage.SkillEditor.SetReadOnly(not CurrPage.Editable());
+            CurrPage.SkillEditor.SetContent(SkillTextValue);
+        end;
         UpdateProviderFlags();
         UpdateAuthFlags();
     end;

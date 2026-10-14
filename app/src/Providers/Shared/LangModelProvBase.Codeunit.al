@@ -23,13 +23,37 @@ codeunit 10035410 "LangModel Prov. Base ori"
     end;
 
     /// <summary>
-    /// Returns the argument's Base URL, or the provider default when blank.
+    /// Resolves the base URL for endpoint joins, trimming surrounding whitespace and trailing slashes.
+    /// A blank or whitespace-only argument falls back to the provider default; stored values are unchanged.
     /// </summary>
     procedure GetBaseUrl(var Argument: Record "Bifrost Chat Argument ori" temporary; DefaultUrl: Text): Text
+    var
+        BaseUrl: Text;
     begin
-        if Argument."Base URL" <> '' then
-            exit(Argument."Base URL");
-        exit(DefaultUrl);
+        BaseUrl := Argument."Base URL".Trim();
+        if BaseUrl = '' then
+            BaseUrl := DefaultUrl.Trim();
+        exit(DelChr(BaseUrl, '>', '/'));
+    end;
+
+    /// <summary>
+    /// Joins a resolved base URL and endpoint path with one slash, without repeating a terminal v1 segment.
+    /// Normalizes only the request URL; configured base and path values are unchanged.
+    /// </summary>
+    procedure JoinEndpointUrl(BaseUrl: Text; EndpointPath: Text): Text
+    var
+        ResolvedBaseUrl: Text;
+        ResolvedPath: Text;
+    begin
+        ResolvedBaseUrl := DelChr(BaseUrl.Trim(), '>', '/');
+        ResolvedPath := '/' + DelChr(EndpointPath, '<', '/');
+        if ResolvedBaseUrl.EndsWith('/v1') then
+            if (ResolvedPath = '/v1') or ResolvedPath.StartsWith('/v1/') then
+                ResolvedPath := CopyStr(ResolvedPath, 4);
+        if ResolvedPath = '' then
+            exit(ResolvedBaseUrl);
+        ResolvedPath := '/' + DelChr(ResolvedPath, '<', '/');
+        exit(ResolvedBaseUrl + ResolvedPath);
     end;
 
     /// <summary>
