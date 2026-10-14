@@ -613,26 +613,32 @@ codeunit 96032 "LLM 65 Prompt Tests"
         Model.Delete(true);
     end;
 
-    /// <summary>Both permission gates are checked before a provider request can be sent.</summary>
+    /// <summary>The Foundation API transport baseline grants neither chat capability nor model read and receives PermissionDenied.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
-    procedure AC7_NoChatPermission()
+    procedure AC7_TransportBaselineDenied()
     var
+        Model: Record "Bifrost Language Model ori";
+        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         Response: JsonObject;
     begin
         // BIFROST API is the transport baseline; it grants neither chat gate nor model-table read.
         LowerPermissions.SetO365Basic();
         LowerPermissions.AddPermissionSet('BIFROST API ori');
+        Assert.IsFalse(BifrostChatMgt.HasChatPermission(), 'The transport baseline must not grant the Foundation Chat Gate.');
+        Assert.IsFalse(Model.ReadPermission(), 'The transport baseline must not grant language model read.');
         Response := Execute('{"prompt":"Hello"}');
         AssertCodedError(Response, 'PermissionDenied');
     end;
 
-    /// <summary>A caller with Foundation chat but no model read permission receives a coded refusal.</summary>
+    /// <summary>The transport baseline plus Foundation chat still receives PermissionDenied without model read.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
-    procedure AC7_NoLanguageModelPermission()
+    procedure AC7_TransportAndChatDenied()
     var
+        Model: Record "Bifrost Language Model ori";
+        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         Response: JsonObject;
     begin
@@ -640,14 +646,16 @@ codeunit 96032 "LLM 65 Prompt Tests"
         LowerPermissions.SetO365Basic();
         LowerPermissions.AddPermissionSet('BIFROST API ori');
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
+        Assert.IsTrue(BifrostChatMgt.HasChatPermission(), 'Foundation chat must grant the Chat Gate over the transport baseline.');
+        Assert.IsFalse(Model.ReadPermission(), 'The transport baseline plus Foundation chat must not grant language model read.');
         Response := Execute('{"prompt":"Hello"}');
         AssertCodedError(Response, 'PermissionDenied');
     end;
 
-    /// <summary>Foundation and Language Models chat permissions suffice for a configured prompt.</summary>
+    /// <summary>The transport baseline plus both chat permission sets suffices for a configured prompt.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
-    procedure AC7_BothChatPermissions()
+    procedure AC7_TransportAndChatPairAllow()
     var
         Model: Record "Bifrost Language Model ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
@@ -666,7 +674,7 @@ codeunit 96032 "LLM 65 Prompt Tests"
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
         Response := Execute(RequestText);
-        Assert.AreEqual('Success', Response.GetText('status'), 'Both chat sets must permit completion.');
+        Assert.AreEqual('Success', Response.GetText('status'), 'The transport baseline plus both chat sets must permit completion.');
         Assert.AreEqual('A safe answer', Response.GetText('text'), 'Expected completion.');
         UnbindSubscription(HttpMock);
         LowerPermissions.SetOutsideO365Scope();

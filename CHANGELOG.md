@@ -9,6 +9,7 @@ All notable changes to Bifrost Language Models are documented here.
 - `LLM.Prompt.Complete` (codeunit 10035396) rejects non-string prompts with `InvalidParameterFormat`. All six external providers return coded authentication, blocked HTTP and retryable transport errors with next steps; provider error bodies and API-key fragments are never returned or logged by this path. Success `reply`/`text` behavior is preserved, including inline and stored files.
 - The shared safe transport and error contract are in codeunits 10035411/10035410. Completion paths in codeunits 10035413–10035415 and 10035417–10035419 use them; chat and model-list operations retain their existing behavior. English/Icelandic error help and XLF are updated. Both manifests require Foundation 28.0.4.0 for `Retryable`; product/test top-level versions are unchanged.
 - Test codeunits 96032/96033 cover prompt dispatch for six providers, authentication/rate/server/timeout/blocked errors, secret-fragment rejection, debug logging, prompt types, success/files and restricted chat permissions.
+- AC7 tests in codeunit 96032 explicitly name the Foundation API transport baseline and assert that it grants neither the Chat Gate nor language-model read. The positive test adds both chat permission sets; Foundation transport permissions remain unchanged.
 
 ### Fixed (2026-10-13) - OpenAI endpoint defaults (#60)
 
