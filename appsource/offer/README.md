@@ -11,4 +11,4 @@ repository, so this folder follows the Partner Center listing fields directly.
 Facts come from `app/app.json` and `README.md`. Change the texts here first, then in Partner Center.
 
 Descriptions in the listings are basic HTML (Partner Center does not render Markdown); this README stays Markdown.
-Help links point at `docs.bifrost.origo.is` (en-us and is-is language-models pages both exist). The is-IS listing keeps the en-us Privacy and EULA links, as in the app manifest, although is-is pages also exist.
+Help links point at `docs.bifrost.origo.is` (en-us and is-is language-models pages both exist). The is-IS listing keeps the en-us Privacy and Terms of Use links, as in the app manifest, although is-is pages also exist.
