@@ -15,6 +15,10 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     Access = Internal;
 
     var
+        PromptDeniedWhenTxt: Label 'The caller does not hold Foundation''s BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app''s BIFROST LLM Chat ori.', Comment = 'is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.';
+        MissingPromptWhenTxt: Label 'prompt is missing or empty.', Comment = 'is-IS=prompt vantar eða er tómt.';
+        RoleNotFoundWhenTxt: Label 'roleCode is sent but no language model has that code.', Comment = 'is-IS=roleCode er sent en ekkert mállíkan hefur þann kóða.';
+        NoProviderWhenTxt: Label 'The selected, the caller''s or the default language model has no usable chat provider or API key.', Comment = 'is-IS=Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.';
         PromptDeniedErr: Label 'You do not have permission to complete prompts with a language model.', Comment = 'is-IS=Þú hefur ekki heimild til að vinna kvaðningar með mállíkani.';
         PromptDeniedExpectedTxt: Label 'the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot', Comment = 'is-IS=heimildasamstæðan BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda';
         PromptDeniedNextStepTxt: Label 'Ask your administrator to assign the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot.', Comment = 'is-IS=Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.';
@@ -142,10 +146,10 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ProviderBase: Codeunit "LangModel Prov. Base ori";
     begin
         // The rows share their labels with the live answers; Msg Contract Mgt ori builds the chapters in English.
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, PromptDeniedErr, 'The caller does not hold Foundation''s BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app''s BIFROST LLM Chat ori.', PromptDeniedNextStepTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, MissingPromptErr, 'prompt is missing or empty.', MissingPromptNextStepTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, RoleNotFoundErr, 'roleCode is sent but no language model has that code.', RoleNotFoundNextStepTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, 'The selected, the caller''s or the default language model has no usable chat provider or API key.', NoProviderNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, PromptDeniedErr, PromptDeniedWhenTxt, PromptDeniedNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, MissingPromptErr, MissingPromptWhenTxt, MissingPromptNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, RoleNotFoundErr, RoleNotFoundWhenTxt, RoleNotFoundNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, NoProviderWhenTxt, NoProviderNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, InvalidPromptErr, InvalidPromptWhenTxt, MissingPromptNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
         exit(true);

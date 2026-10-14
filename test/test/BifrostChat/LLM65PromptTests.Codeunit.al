@@ -699,21 +699,77 @@ codeunit 96032 "LLM 65 Prompt Tests"
         Assert.IsTrue(ErrorText.Contains('Allow HttpClient Requests'), 'HTTP refusal');
     end;
 
-    /// <summary>Published English error labels are shared by authentication answers and the error chapter.</summary>
+    /// <summary>English auth errors and next steps use the published resources.</summary>
     [Test]
     procedure AC8_EnglishErrorLabels()
     begin
-        VerifyLocalizedErrorLabels(1033, 'refused authentication', 'API key');
+        VerifyLocalizedProviderError(1033, 401, false, 'PreconditionFailed', 'refused authentication', 'API key');
     end;
 
-    /// <summary>Icelandic resources localize runtime errors and the implementation's error declarations.</summary>
+    /// <summary>Icelandic auth errors and next steps use the published resources.</summary>
     [Test]
     procedure AC8_IcelandicErrorLabels()
     begin
-        VerifyLocalizedErrorLabels(1039, 'hafnaði auðkenningu', 'API-lykil');
+        VerifyLocalizedProviderError(1039, 401, false, 'PreconditionFailed', 'hafnaði auðkenningu', 'API-lykil');
     end;
 
-    local procedure VerifyLocalizedErrorLabels(LanguageId: Integer; ExpectedError: Text; ExpectedNextStep: Text)
+    /// <summary>English retry errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_EnglishRetryLabels()
+    begin
+        VerifyLocalizedProviderError(1033, 429, false, 'Retryable', 'temporarily unavailable', 'Wait and retry');
+    end;
+
+    /// <summary>Icelandic retry errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_IcelandicRetryLabels()
+    begin
+        VerifyLocalizedProviderError(1039, 429, false, 'Retryable', 'tímabundið ekki tiltækur', 'Bíddu og reyndu aftur');
+    end;
+
+    /// <summary>English blocked errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_EnglishBlockedLabels()
+    begin
+        VerifyLocalizedProviderError(1033, 0, true, 'PreconditionFailed', 'HttpClient calls are blocked', 'Allow HttpClient Requests');
+    end;
+
+    /// <summary>Icelandic blocked errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_IcelandicBlockedLabels()
+    begin
+        VerifyLocalizedProviderError(1039, 0, true, 'PreconditionFailed', 'HttpClient köll eru lokuð', 'leyfa HttpClient-beiðnir');
+    end;
+
+    /// <summary>English provider errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_EnglishProviderLabels()
+    begin
+        VerifyLocalizedProviderError(1033, 400, false, 'PreconditionFailed', 'could not complete the prompt', 'API key');
+    end;
+
+    /// <summary>Icelandic provider errors and next steps use the published resources.</summary>
+    [Test]
+    procedure AC8_IcelandicProviderLabels()
+    begin
+        VerifyLocalizedProviderError(1039, 400, false, 'PreconditionFailed', 'gat ekki unnið kvaðninguna', 'API-lykil');
+    end;
+
+    /// <summary>English invalid prompt answers retain the invariant code and localized guidance.</summary>
+    [Test]
+    procedure AC8_EnglishPromptLabels()
+    begin
+        VerifyLocalizedPromptError(1033, 'The prompt must be a JSON string.', 'Send the text to complete in prompt.');
+    end;
+
+    /// <summary>Icelandic invalid prompt answers retain the invariant code and localized guidance.</summary>
+    [Test]
+    procedure AC8_IcelandicPromptLabels()
+    begin
+        VerifyLocalizedPromptError(1039, 'Kvaðningin í prompt verður að vera JSON-strengur.', 'Sendu textann sem á að vinna í prompt.');
+    end;
+
+    local procedure VerifyLocalizedProviderError(LanguageId: Integer; HttpStatus: Integer; HttpBlocked: Boolean; ExpectedCode: Text; ExpectedError: Text; ExpectedNextStep: Text)
     var
         TempArgument: Record "Message Argument ori" temporary;
         ProviderBase: Codeunit "LangModel Prov. Base ori";
@@ -723,22 +779,45 @@ codeunit 96032 "LLM 65 Prompt Tests"
         ErrorText: Text;
         OriginalLanguage: Integer;
     begin
+        // GIVEN an isolated temporary argument and the caller's language.
         TempArgument.Init();
         TempArgument.ID := CreateGuid();
         TempArgument.Insert(true);
         OriginalLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
-        ProviderBase.RespondPromptError(TempArgument, ProviderBase.BuildPromptError(401, false));
+        // WHEN the shared runtime mapper handles transport metadata.
+        ProviderBase.RespondPromptError(TempArgument, ProviderBase.BuildPromptError(HttpStatus, HttpBlocked));
         Response.ReadFrom(TempArgument.GetResponseText());
         Impl.GetErrors(Errors);
         GlobalLanguage(OriginalLanguage);
-        AssertCodedError(Response, 'PreconditionFailed');
-        Assert.IsTrue(Response.GetText('error').Contains(ExpectedError), 'Authentication error follows the caller language.');
-        Assert.IsTrue(Response.GetText('nextStep').Contains(ExpectedNextStep), 'Localized API key guidance.');
+        // THEN runtime labels localize, and contract declarations share them.
+        // Foundation #777 separately renders shipping Help chapters in English.
+        AssertCodedError(Response, ExpectedCode);
+        Assert.IsTrue(Response.GetText('error').Contains(ExpectedError), 'Error follows the caller language.');
+        Assert.IsTrue(Response.GetText('nextStep').Contains(ExpectedNextStep), 'Next step follows the caller language.');
         Errors.WriteTo(ErrorText);
         Assert.IsTrue(ErrorText.Contains(ExpectedError), 'Error declaration shares the runtime label.');
+        Assert.IsTrue(ErrorText.Contains(ExpectedNextStep), 'Error declaration shares the next step.');
         Assert.IsTrue(ErrorText.Contains('Retryable'), 'Codes are invariant across languages.');
         Assert.IsTrue(ErrorText.Contains('InvalidParameterFormat'), 'Validation code is invariant.');
+    end;
+
+    local procedure VerifyLocalizedPromptError(LanguageId: Integer; ExpectedError: Text; ExpectedNextStep: Text)
+    var
+        Response: JsonObject;
+        OriginalLanguage: Integer;
+    begin
+        // GIVEN a caller language and a numeric prompt, with no model/provider fixture needed.
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        // WHEN the public dispatcher executes prompt validation.
+        Response := Execute('{"prompt":123}');
+        GlobalLanguage(OriginalLanguage);
+        // THEN the parameter/code remain invariant and both labels localize.
+        AssertCodedError(Response, 'InvalidParameterFormat');
+        Assert.AreEqual('prompt', Response.GetText('parameter'), 'Invalid input names prompt.');
+        Assert.AreEqual(ExpectedError, Response.GetText('error'), 'Prompt validation error follows the caller language.');
+        Assert.AreEqual(ExpectedNextStep, Response.GetText('nextStep'), 'Prompt guidance follows the caller language.');
     end;
 
     /// <summary>Stored attachment content is resolved and sent by the prompt implementation.</summary>

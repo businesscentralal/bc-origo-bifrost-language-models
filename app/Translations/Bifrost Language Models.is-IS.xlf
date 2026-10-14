@@ -717,6 +717,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu textann sem á að vinna í prompt.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType MissingPromptNextStepTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 3699199952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>prompt is missing or empty.</source>
+          <target>prompt vantar eða er tómt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=prompt vantar eða er tómt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType MissingPromptWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 3883761671" size-unit="char" translate="yes" xml:space="preserve">
           <source>No language model with a chat provider is set up for you.</source>
           <target>Ekkert mállíkan með spjallveitanda er sett upp fyrir þig.</target>
@@ -735,6 +741,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að setja upp mállíkan á uppsetningarsíðu Bifröst mállíkana, með API-lykli þess í leyndarmálum forrita Bifröst.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType NoProviderNextStepTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 945262344" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The selected, the caller's or the default language model has no usable chat provider or API key.</source>
+          <target>Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType NoProviderWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 2904010722" size-unit="char" translate="yes" xml:space="preserve">
           <source>You do not have permission to complete prompts with a language model.</source>
           <target>Þú hefur ekki heimild til að vinna kvaðningar með mállíkani.</target>
@@ -752,6 +764,12 @@
           <target>Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 3636520545" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caller does not hold Foundation's BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app's BIFROST LLM Chat ori.</source>
+          <target>Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 32472158" size-unit="char" translate="yes" xml:space="preserve">
           <source>a non-empty JSON string</source>
@@ -776,6 +794,12 @@
           <target>Slepptu roleCode til að nota þitt eigið eða sjálfgefna mállíkanið, eða notaðu kóða af listanum yfir Bifröst mállíkön.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Slepptu roleCode til að nota þitt eigið eða sjálfgefna mállíkanið, eða notaðu kóða af listanum yfir Bifröst mállíkön.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType RoleNotFoundNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 693364461" size-unit="char" translate="yes" xml:space="preserve">
+          <source>roleCode is sent but no language model has that code.</source>
+          <target>roleCode er sent en ekkert mállíkan hefur þann kóða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=roleCode er sent en ekkert mállíkan hefur þann kóða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType RoleNotFoundWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>One-shot LLM completion — send a prompt, get text back. No tools, no chat.</source>

@@ -11,6 +11,8 @@ All notable changes to Bifrost Language Models are documented here.
 - Test codeunits 96032/96033 cover prompt dispatch for six providers, authentication/rate/server/timeout/blocked errors, secret-fragment rejection, debug logging, prompt types, success/files and restricted chat permissions.
 - AC7 tests in codeunit 96032 explicitly name the Foundation API transport baseline and assert that it grants neither the Chat Gate nor language-model read. The positive test adds both chat permission sets; Foundation transport permissions remain unchanged.
 
+- AC8: codeunit 10035396 now gives every errors-chapter string an Icelandic translator comment. Foundation #777 intentionally renders Help chapter prose in English at both LCIDs 1033/1039; runtime error labels remain localized. Codeunit 96032 covers English/Icelandic authentication, retry, blocked HTTP, provider failure and prompt-validation labels and next steps.
+
 ### Fixed (2026-10-13) - OpenAI endpoint defaults (#60)
 
 - Selecting OpenAI on the language model card fills an empty `Base URL` with `https://api.openai.com/`. `Chat Path` and `Models Path` remain unchanged, including when empty: the provider already appends its endpoint paths. Existing Azure OpenAI and proxy values are preserved; other providers are unchanged. Table 10035335 `Bifrost Language Model ori`; page 10035343 `Bifrost LangModel Card ori` saves the validated provider/defaults before refreshing its fields and waits for the skill editor’s `ControlReady` before refreshing it, so the same card validation can run before the add-in is instantiated. Regression tests in codeunit 96031 `LangModel 60 Defaults Tests` exercise card selection, partial configurations, repeated selection and table validation.
