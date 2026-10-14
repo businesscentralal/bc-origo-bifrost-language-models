@@ -1,0 +1,32 @@
+{
+  "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+  "containerId": "f0654e1a0586",
+  "version": "28.0.0.0",
+  "locale": "en-US",
+  "lcid": 1033,
+  "pageId": 10035343,
+  "fixtureCode": "ZZLM64UI",
+  "provider": "OpenAI",
+  "keysStored": false,
+  "providerCalls": 0,
+  "assertions": [
+    {
+      "name": "Set Personal API Key",
+      "passed": true
+    },
+    {
+      "name": "Set Shared API Key",
+      "passed": true
+    },
+    {
+      "name": "KeyMissing hint",
+      "expected": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+      "passed": false
+    }
+  ],
+  "executed": 1,
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "verifiedAt": "2026-10-14T19:14:39.793Z"
+}

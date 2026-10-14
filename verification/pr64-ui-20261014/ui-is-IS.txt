@@ -1,0 +1,61 @@
+
+
+Bifröst mállíkan
+
+
+
+
+Vistað
+
+
+ZZLM64UI
+Heim
+API-lyklar
+Setja inn persónulegan API-lykil
+Hreinsa persónulegan API-lykil
+Setja inn sameiginlegan API-lykil
+Hreinsa sameiginlegan API-lykil
+
+Almennt
+Kóði
+Lýsing
+Sjálfgefið
+Spjallveitandi
+Enginn
+Copilot
+OpenAI
+Azure OpenAI
+Sérsniðið LLM
+Anthropic
+xAI (Grok)
+Google (Gemini)
+Stillingar veitanda
+Grunnslóð
+Tímamörk (sekúndur)
+Hámarksfjöldi tákna
+Samhengistákn
+Spjallslóð
+Líkanaslóð
+Líkan
+Sannvottun
+
+API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.
+
+Persónulegur lykill geymdur
+Sameiginlegur lykill geymdur
+Hæfni
+
+Notaðu hægri og vinstri örvalyklana til að stilla stærðina. Notaðu Escape-lykilinn til að afturkalla eða Enter-lykilinn til að staðfesta.
+ZZLM64UI
+
+on
+https://api.openai.com/
+120
+16384
+
+
+
+
+on
+on
+Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hann inn einu sinni.

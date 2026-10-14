@@ -1,0 +1,94 @@
+{
+  "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+  "containerId": "f0654e1a0586",
+  "pageId": 10035343,
+  "fullUiAcceptancePassed": false,
+  "executed": 2,
+  "passed": 0,
+  "failed": 2,
+  "skipped": 0,
+  "assertions": {
+    "executed": 6,
+    "passed": 4,
+    "failed": 2,
+    "skipped": 0
+  },
+  "locales": [
+    "en-US",
+    "is-IS"
+  ],
+  "lcids": [
+    1033,
+    1039
+  ],
+  "results": [
+    {
+      "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+      "containerId": "f0654e1a0586",
+      "version": "28.0.0.0",
+      "locale": "en-US",
+      "lcid": 1033,
+      "pageId": 10035343,
+      "fixtureCode": "ZZLM64UI",
+      "provider": "OpenAI",
+      "keysStored": false,
+      "providerCalls": 0,
+      "assertions": [
+        {
+          "name": "Set Personal API Key",
+          "passed": true
+        },
+        {
+          "name": "Set Shared API Key",
+          "passed": true
+        },
+        {
+          "name": "KeyMissing hint",
+          "expected": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "passed": false
+        }
+      ],
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "verifiedAt": "2026-10-14T19:14:39.793Z"
+    },
+    {
+      "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+      "containerId": "f0654e1a0586",
+      "version": "28.0.0.0",
+      "locale": "is-IS",
+      "lcid": 1039,
+      "pageId": 10035343,
+      "fixtureCode": "ZZLM64UI",
+      "provider": "OpenAI",
+      "keysStored": false,
+      "providerCalls": 0,
+      "assertions": [
+        {
+          "name": "Setja inn pers\u00f3nulegan API-lykil",
+          "passed": true
+        },
+        {
+          "name": "Setja inn sameiginlegan API-lykil",
+          "passed": true
+        },
+        {
+          "name": "KeyMissing hint",
+          "expected": "Enginn API-lykill er geymdur fyrir \u00feetta m\u00e1ll\u00edkan. Ekki er h\u00e6gt a\u00f0 flytja lykla fr\u00e1 annarri vi\u00f0b\u00f3t - nota\u00f0u Setja inn pers\u00f3nulegan API-lykil e\u00f0a Setja inn sameiginlegan API-lykil til a\u00f0 sl\u00e1 hann inn einu sinni.",
+          "passed": false
+        }
+      ],
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "verifiedAt": "2026-10-14T19:11:41.278Z"
+    }
+  ],
+  "dataSetup": "Self-created ZZLM64UI through BC Web Client, selected OpenAI without entering any API key; no customer/shared fixture",
+  "observations": "Personal/shared key action captions render correctly in both languages. Localized KeyMissing text exists but textarea is hidden by ms-nav-hidden ancestor and has zero rectangle; fails actual visibility in normal read and edit modes. No DOM manipulation or licensing/provider calls. Product/client root cause unknown; retained Claude owner must diagnose.",
+  "scope": "Evidence-only UI task; no source change; no new full-suite or MCP pass claimed",
+  "finishedAt": "2026-10-14T19:15:02.412201+00:00"
+}

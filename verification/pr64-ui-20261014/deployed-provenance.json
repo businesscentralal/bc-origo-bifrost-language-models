@@ -1,0 +1,9 @@
+{
+  "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+  "containerId": "f0654e1a0586",
+  "version": "28.0.0.0",
+  "expectedSha256": "f3521d4e7a47e900ab8acc7c013889cc9341e3ce55d5cc3f8a20345ec1412b93",
+  "installedSha256": "f3521d4e7a47e900ab8acc7c013889cc9341e3ce55d5cc3f8a20345ec1412b93",
+  "byteMatched": true,
+  "checkedAt": "2026-10-14T19:02:57.972Z"
+}

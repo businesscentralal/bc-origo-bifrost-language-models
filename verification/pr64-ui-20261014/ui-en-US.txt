@@ -1,0 +1,61 @@
+
+
+Bifrost Language Model
+
+
+
+
+Saved
+
+
+ZZLM64UI
+Home
+API Keys
+Set Personal API Key
+Clear Personal API Key
+Set Shared API Key
+Clear Shared API Key
+
+General
+Code
+Description
+Default
+Chat Provider
+None
+Copilot
+OpenAI
+Azure OpenAI
+Custom LLM
+Anthropic
+xAI (Grok)
+Google (Gemini)
+Provider Configuration
+Base URL
+Timeout Seconds
+Max Tokens
+Context Tokens
+Chat Path
+Models Path
+Model
+Authentication
+
+API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.
+
+Personal Key Stored
+Shared Key Stored
+Skill
+
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+ZZLM64UI
+
+on
+https://api.openai.com/
+120
+16384
+
+
+
+
+on
+on
+No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.

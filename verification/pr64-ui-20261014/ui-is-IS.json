@@ -1,0 +1,32 @@
+{
+  "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+  "containerId": "f0654e1a0586",
+  "version": "28.0.0.0",
+  "locale": "is-IS",
+  "lcid": 1039,
+  "pageId": 10035343,
+  "fixtureCode": "ZZLM64UI",
+  "provider": "OpenAI",
+  "keysStored": false,
+  "providerCalls": 0,
+  "assertions": [
+    {
+      "name": "Setja inn persónulegan API-lykil",
+      "passed": true
+    },
+    {
+      "name": "Setja inn sameiginlegan API-lykil",
+      "passed": true
+    },
+    {
+      "name": "KeyMissing hint",
+      "expected": "Enginn API-lykill er geymdur fyrir þetta mállíkan. Ekki er hægt að flytja lykla frá annarri viðbót - notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hann inn einu sinni.",
+      "passed": false
+    }
+  ],
+  "executed": 1,
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "verifiedAt": "2026-10-14T19:11:41.278Z"
+}
