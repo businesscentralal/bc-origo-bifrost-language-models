@@ -718,7 +718,7 @@ codeunit 96032 "LLM 65 Prompt Tests"
         OriginalLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
         ProviderBase.RespondPromptError(TempArgument, ProviderBase.BuildPromptError(401, false));
-        Response := TempArgument.GetResponseJson();
+        Response.ReadFrom(TempArgument.GetResponseText());
         Impl.GetErrors(Errors);
         GlobalLanguage(OriginalLanguage);
         AssertCodedError(Response, 'PreconditionFailed');
