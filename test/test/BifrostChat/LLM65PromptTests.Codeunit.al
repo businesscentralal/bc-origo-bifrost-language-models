@@ -691,6 +691,45 @@ codeunit 96032 "LLM 65 Prompt Tests"
         Assert.IsTrue(ErrorText.Contains('Allow HttpClient Requests'), 'HTTP refusal');
     end;
 
+    /// <summary>Published English error labels are shared by authentication answers and the error chapter.</summary>
+    [Test]
+    procedure AC8_EnglishErrorLabels()
+    begin
+        VerifyLocalizedErrorLabels(1033, 'refused authentication', 'API key');
+    end;
+
+    /// <summary>Icelandic resources localize runtime errors and the implementation's error declarations.</summary>
+    [Test]
+    procedure AC8_IcelandicErrorLabels()
+    begin
+        VerifyLocalizedErrorLabels(1039, 'hafnaði auðkenningu', 'API-lykil');
+    end;
+
+    local procedure VerifyLocalizedErrorLabels(LanguageId: Integer; ExpectedError: Text; ExpectedNextStep: Text)
+    var
+        TempArgument: Record "Message Argument ori" temporary;
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        Impl: Codeunit "LLM Prompt Compl Impl ori";
+        Errors: JsonArray;
+        Response: JsonObject;
+        ErrorText: Text;
+        OriginalLanguage: Integer;
+    begin
+        OriginalLanguage := GlobalLanguage();
+        GlobalLanguage(LanguageId);
+        ProviderBase.RespondPromptError(TempArgument, ProviderBase.BuildPromptError(401, false));
+        Response := TempArgument.GetResponseJson();
+        Impl.GetErrors(Errors);
+        GlobalLanguage(OriginalLanguage);
+        AssertCodedError(Response, 'PreconditionFailed');
+        Assert.IsTrue(Response.GetText('error').Contains(ExpectedError), 'Authentication error follows the caller language.');
+        Assert.IsTrue(Response.GetText('nextStep').Contains(ExpectedNextStep), 'Localized API key guidance.');
+        Errors.WriteTo(ErrorText);
+        Assert.IsTrue(ErrorText.Contains(ExpectedError), 'Error declaration shares the runtime label.');
+        Assert.IsTrue(ErrorText.Contains('Retryable'), 'Codes are invariant across languages.');
+        Assert.IsTrue(ErrorText.Contains('InvalidParameterFormat'), 'Validation code is invariant.');
+    end;
+
     /// <summary>Stored attachment content is resolved and sent by the prompt implementation.</summary>
     [Test]
     procedure AC6_StoredAttachment()
