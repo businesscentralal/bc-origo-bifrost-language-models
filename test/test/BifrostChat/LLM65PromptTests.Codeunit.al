@@ -804,15 +804,23 @@ codeunit 96032 "LLM 65 Prompt Tests"
 
     local procedure VerifyLocalizedPromptError(LanguageId: Integer; ExpectedError: Text; ExpectedNextStep: Text)
     var
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
         Response: JsonObject;
-        OriginalLanguage: Integer;
+        ResponseContentType: Text[100];
+        ResponseText: Text;
+        EmptyTaskId: Guid;
+        MessageId: Guid;
+        ResponseTime: Duration;
     begin
-        // GIVEN a caller language and a numeric prompt, with no model/provider fixture needed.
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(LanguageId);
-        // WHEN the public dispatcher executes prompt validation.
-        Response := Execute('{"prompt":123}');
-        GlobalLanguage(OriginalLanguage);
+        // GIVEN a numeric prompt with an explicit request LCID and no model/provider fixture.
+        RequestContent.AddText('{"prompt":123}');
+        // WHEN the public dispatcher processes the caller's LCID.
+        // Execute uses the configured default language, so a GlobalLanguage change is insufficient.
+        Dispatcher.EnqueueAndProcess("Message Type ori"::"LLM.Prompt.Complete", "Message Version ori"::"1.0", '', '', 'text/json', RequestContent, EmptyTaskId, LanguageId, MessageId, ResponseContent, ResponseContentType, ResponseTime);
+        ResponseContent.GetSubText(ResponseText, 1);
+        Assert.IsTrue(Response.ReadFrom(ResponseText), 'Response must be JSON.');
         // THEN the parameter/code remain invariant and both labels localize.
         AssertCodedError(Response, 'InvalidParameterFormat');
         Assert.AreEqual('prompt', Response.GetText('parameter'), 'Invalid input names prompt.');
