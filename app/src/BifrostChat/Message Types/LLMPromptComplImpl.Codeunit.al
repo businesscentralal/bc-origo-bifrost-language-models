@@ -19,7 +19,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         PromptDeniedExpectedTxt: Label 'the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot', Comment = 'is-IS=heimildasamstæðan BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda';
         PromptDeniedNextStepTxt: Label 'Ask your administrator to assign the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot.', Comment = 'is-IS=Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.';
         MissingPromptErr: Label 'The prompt is missing.', Comment = 'is-IS=Kvaðninguna vantar.';
-        PromptExpectedTxt: Label 'a non-empty text', Comment = 'is-IS=texti sem er ekki tómur';
+        PromptExpectedTxt: Label 'a non-empty JSON string', Comment = 'is-IS=JSON-strengur sem er ekki tómur';
+        InvalidPromptErr: Label 'The prompt must be a JSON string.', Comment = 'is-IS=Kvaðningin í prompt verður að vera JSON-strengur.';
+        InvalidPromptWhenTxt: Label 'prompt is a number, Boolean, null, object or array instead of a JSON string.', Comment = 'is-IS=prompt er tala, rökgildi, null, hlutur eða fylki í stað JSON-strengs.';
         MissingPromptNextStepTxt: Label 'Send the text to complete in prompt.', Comment = 'is-IS=Sendu textann sem á að vinna í prompt.';
         RoleNotFoundErr: Label 'Bifrost Language Model "%1" was not found.', Comment = '%1 = language model code, is-IS=Bifröst mállíkanið "%1" fannst ekki.';
         RoleExpectedTxt: Label 'the code of a Bifrost Language Model', Comment = 'is-IS=kóði Bifröst mállíkans';
@@ -27,9 +29,6 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         NoProviderErr: Label 'No language model with a chat provider is set up for you.', Comment = 'is-IS=Ekkert mállíkan með spjallveitanda er sett upp fyrir þig.';
         NoProviderExpectedTxt: Label 'a Bifrost Language Model with a chat provider and an API key', Comment = 'is-IS=Bifröst mállíkan með spjallveitanda og API-lykli';
         NoProviderNextStepTxt: Label 'Ask your administrator to set up a language model on the Bifrost Language Models setup page, with its API key on Bifrost App Secrets.', Comment = 'is-IS=Biddu kerfisstjóra um að setja upp mállíkan á uppsetningarsíðu Bifröst mállíkana, með API-lykli þess í leyndarmálum forrita Bifröst.';
-        ProviderFailedErr: Label 'The language model could not complete the prompt: %1', Comment = '%1 = the provider''s error text, is-IS=Mállíkanið gat ekki unnið kvaðninguna: %1';
-        ProviderExpectedTxt: Label 'an answer from the language model', Comment = 'is-IS=svar frá mállíkaninu';
-        ProviderFailedNextStepTxt: Label 'Check the language model''s Base URL, model and API key with Test Connection on the Bifrost Language Model card, then try again.', Comment = 'is-IS=Athugaðu grunnslóð, líkan og API-lykil mállíkansins með Prófa tengingu á spjaldi Bifröst mállíkansins og reyndu svo aftur.';
 
     /// <summary>
     /// Reports that the message type implementation is enabled.
@@ -140,13 +139,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     procedure GetErrors(var Errors: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
     begin
         // The rows share their labels with the live answers; Msg Contract Mgt ori builds the chapters in English.
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, PromptDeniedErr, 'The caller does not hold Foundation''s BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app''s BIFROST LLM Chat ori.', PromptDeniedNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, MissingPromptErr, 'prompt is missing or empty.', MissingPromptNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, RoleNotFoundErr, 'roleCode is sent but no language model has that code.', RoleNotFoundNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, 'The selected, the caller''s or the default language model has no usable chat provider or API key.', NoProviderNextStepTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, ProviderFailedErr, 'The provider cannot complete the request, including a file it does not accept; %1 is the provider''s own error text.', ProviderFailedNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, InvalidPromptErr, InvalidPromptWhenTxt, MissingPromptNextStepTxt));
+        ProviderBase.AddPromptErrors(Errors);
         exit(true);
     end;
 
@@ -239,6 +240,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        PromptToken: JsonToken;
         Provider: Interface "Bifrost LangModel Provider ori";
         RequestJson: JsonObject;
         PayloadJson: JsonObject;
@@ -260,12 +263,21 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         end;
 
         RequestJson := Argument.GetRequestJson();
+        if RequestJson.Get('prompt', PromptToken) then
+            if not IsJsonString(PromptToken) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, InvalidPromptErr, 'prompt', '', PromptExpectedTxt, MissingPromptNextStepTxt);
+                exit;
+            end;
         UserPrompt := GetTextValue(RequestJson, 'prompt');
         if UserPrompt = '' then begin
             Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, MissingPromptErr, 'prompt', '', PromptExpectedTxt, MissingPromptNextStepTxt);
             exit;
         end;
 
+        if not BifrostLanguageModel.ReadPermission() then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::PermissionDenied, PromptDeniedErr, '', '', PromptDeniedExpectedTxt, PromptDeniedNextStepTxt);
+            exit;
+        end;
         RoleCodeText := GetTextValue(RequestJson, 'roleCode');
         if StrLen(RoleCodeText) > MaxStrLen(RoleCode) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, StrSubstNo(RoleNotFoundErr, RoleCodeText), 'roleCode', RoleCodeText, RoleExpectedTxt, RoleNotFoundNextStepTxt);
@@ -303,17 +315,21 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         TempChatArg.SetPayload(ResponseText);
         TempChatArg."Procedure Type" := TempChatArg."Procedure Type"::CompletePrompt;
         TempChatArg.SetResultText('');
-        Provider.Execute(TempChatArg);
+        if not TryCompletePrompt(Provider, TempChatArg) then begin
+            ClearLastError();
+            ProviderBase.RespondPromptError(Argument, ResponseJson);
+            exit;
+        end;
         ResponseText := TempChatArg.GetResultText();
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
 
         if not ResponseJson.ReadFrom(ResponseText) then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ProviderFailedErr, ResponseText), '', '', ProviderExpectedTxt, ProviderFailedNextStepTxt);
+            ProviderBase.RespondPromptError(Argument, ResponseJson);
             exit;
         end;
 
         if HasProperty(ResponseJson, 'error') then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, StrSubstNo(ProviderFailedErr, GetTextValue(ResponseJson, 'error')), '', '', ProviderExpectedTxt, ProviderFailedNextStepTxt);
+            ProviderBase.RespondPromptError(Argument, ResponseJson);
             exit;
         end;
 
@@ -326,12 +342,29 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
 
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryCompletePrompt(Provider: Interface "Bifrost LangModel Provider ori"; var TempChatArg: Record "Bifrost Chat Argument ori" temporary)
+    begin
+        Provider.Execute(TempChatArg);
+    end;
+
+    local procedure IsJsonString(Token: JsonToken): Boolean
+    var
+        JsonText: Text;
+    begin
+        if not Token.IsValue() then
+            exit(false);
+        Token.WriteTo(JsonText);
+        exit(JsonText.StartsWith('"'));
+    end;
+
     local procedure GetTextValue(Source: JsonObject; PropertyName: Text): Text
     var
         Token: JsonToken;
     begin
         if Source.Get(PropertyName, Token) then
-            if Token.IsValue() then
+            if IsJsonString(Token) then
                 exit(Token.AsValue().AsText());
         exit('');
     end;

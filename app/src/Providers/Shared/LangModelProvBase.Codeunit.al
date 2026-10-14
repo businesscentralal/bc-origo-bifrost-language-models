@@ -10,7 +10,92 @@ codeunit 10035410 "LangModel Prov. Base ori"
     Access = Internal;
 
     var
+        PromptAuthErr: Label 'The language model provider refused authentication.', Comment = 'is-IS=Veitandi mállíkansins hafnaði auðkenningu.';
+        PromptRetryErr: Label 'The language model provider is temporarily unavailable.', Comment = 'is-IS=Veitandi mállíkansins er tímabundið ekki tiltækur.';
+        PromptProviderErr: Label 'The language model provider could not complete the prompt.', Comment = 'is-IS=Veitandi mállíkansins gat ekki unnið kvaðninguna.';
+        PromptAnswerExpectedTxt: Label 'an answer from the language model', Comment = 'is-IS=svar frá mállíkaninu';
+        PromptSetupNextStepTxt: Label 'Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection.', Comment = 'is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.';
+        PromptRetryNextStepTxt: Label 'Wait and retry. If the failure persists, check the provider status and the limits on the Bifrost Language Model card.', Comment = 'is-IS=Bíddu og reyndu aftur. Ef villan kemur aftur skaltu athuga stöðu veitandans og takmarkanir á spjaldi Bifröst mállíkans.';
+        PromptBlockedNextStepTxt: Label 'Ask an administrator to enable Allow HttpClient Requests for Bifrost Language Models in Extension Management, then retry.', Comment = 'is-IS=Biddu kerfisstjóra um að leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.';
+        PromptAuthWhenTxt: Label 'The provider returns HTTP 401 or 403. Provider error bodies are never returned or logged.', Comment = 'is-IS=Veitandinn skilar HTTP 401 eða 403. Villutexti veitandans er aldrei birtur eða skráður.';
+        PromptRetryWhenTxt: Label 'The provider returns HTTP 408, 429 or 5xx, or the request times out or cannot reach the provider.', Comment = 'is-IS=Veitandinn skilar HTTP 408, 429 eða 5xx, eða beiðnin rennur út á tíma eða nær ekki til veitandans.';
+        PromptBlockedWhenTxt: Label 'Allow HttpClient Requests is disabled for the app.', Comment = 'is-IS=HttpClient-beiðnir eru ekki leyfðar fyrir forritið.';
+        PromptProviderWhenTxt: Label 'The provider refuses the request or returns an invalid response, including an unsupported file.', Comment = 'is-IS=Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.';
         HttpClientBlockedMsg: Label 'HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.', Comment = 'is-IS=HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.';
+
+    /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
+    procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
+    var
+        ErrorCode: Enum "Bifrost Error Code ori";
+        MessageText: Text;
+        NextStep: Text;
+    begin
+        GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
+        Response.Add('error', MessageText);
+        Response.Add('providerStatus', HttpStatus);
+        Response.Add('httpBlocked', HttpBlocked);
+    end;
+
+    /// <summary>Returns a coded, localized prompt failure without reflecting provider-controlled text.</summary>
+    procedure RespondPromptError(var Argument: Record "Message Argument ori"; Response: JsonObject)
+    var
+        ErrorCode: Enum "Bifrost Error Code ori";
+        MessageText: Text;
+        NextStep: Text;
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+    begin
+        HttpStatus := -1;
+        if not TryReadPromptFailure(Response, HttpStatus, HttpBlocked) then begin
+            ClearLastError();
+            HttpStatus := -1;
+            HttpBlocked := false;
+        end;
+        GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
+        Argument.RespondWithError(ErrorCode, MessageText, '', '', PromptAnswerExpectedTxt, NextStep);
+    end;
+
+    /// <summary>Adds the same safe error labels used by prompt execution to its public contract.</summary>
+    procedure AddPromptErrors(var Errors: JsonArray)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptAuthErr, PromptAuthWhenTxt, PromptSetupNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::Retryable, PromptRetryErr, PromptRetryWhenTxt, PromptRetryNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HttpClientBlockedMsg, PromptBlockedWhenTxt, PromptBlockedNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptProviderErr, PromptProviderWhenTxt, PromptSetupNextStepTxt));
+    end;
+
+    [TryFunction]
+    local procedure TryReadPromptFailure(Response: JsonObject; var HttpStatus: Integer; var HttpBlocked: Boolean)
+    begin
+        if Response.Contains('providerStatus') then
+            HttpStatus := Response.GetInteger('providerStatus');
+        if Response.Contains('httpBlocked') then
+            HttpBlocked := Response.GetBoolean('httpBlocked');
+    end;
+
+    local procedure GetPromptFailure(HttpStatus: Integer; HttpBlocked: Boolean; var ErrorCode: Enum "Bifrost Error Code ori"; var MessageText: Text; var NextStep: Text)
+    begin
+        ErrorCode := "Bifrost Error Code ori"::PreconditionFailed;
+        MessageText := PromptProviderErr;
+        NextStep := PromptSetupNextStepTxt;
+        if HttpBlocked then begin
+            MessageText := HttpClientBlockedMsg;
+            NextStep := PromptBlockedNextStepTxt;
+            exit;
+        end;
+        case HttpStatus of
+            401, 403:
+                MessageText := PromptAuthErr;
+            0, 408, 429, 500 .. 599:
+                begin
+                    ErrorCode := "Bifrost Error Code ori"::Retryable;
+                    MessageText := PromptRetryErr;
+                    NextStep := PromptRetryNextStepTxt;
+                end;
+        end;
+    end;
 
     /// <summary>
     /// Returns whether the current user may view, set or clear the shared (service) API key.
@@ -132,7 +217,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
             Error(HttpClientBlockedMsg);
     end;
 
-    local procedure CanSendHttpRequests(): Boolean
+    /// <summary>Returns whether the environment permits outgoing provider requests.</summary>
+    procedure CanSendHttpRequests(): Boolean
     var
         Handled: Boolean;
         Allowed: Boolean;

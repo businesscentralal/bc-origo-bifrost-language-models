@@ -603,6 +603,72 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1776159594" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an answer from the language model</source>
+          <target>svar frá mállíkaninu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=svar frá mállíkaninu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptAnswerExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2121685947" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model provider refused authentication.</source>
+          <target>Veitandi mállíkansins hafnaði auðkenningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins hafnaði auðkenningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptAuthErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 84509180" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The provider returns HTTP 401 or 403. Provider error bodies are never returned or logged.</source>
+          <target>Veitandinn skilar HTTP 401 eða 403. Villutexti veitandans er aldrei birtur eða skráður.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandinn skilar HTTP 401 eða 403. Villutexti veitandans er aldrei birtur eða skráður.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptAuthWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 13842555" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to enable Allow HttpClient Requests for Bifrost Language Models in Extension Management, then retry.</source>
+          <target>Biddu kerfisstjóra um að leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptBlockedNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 223295868" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allow HttpClient Requests is disabled for the app.</source>
+          <target>HttpClient-beiðnir eru ekki leyfðar fyrir forritið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-beiðnir eru ekki leyfðar fyrir forritið.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptBlockedWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3746628148" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model provider could not complete the prompt.</source>
+          <target>Veitandi mállíkansins gat ekki unnið kvaðninguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins gat ekki unnið kvaðninguna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptProviderErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3747857843" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The provider refuses the request or returns an invalid response, including an unsupported file.</source>
+          <target>Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptProviderWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3913878835" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model provider is temporarily unavailable.</source>
+          <target>Veitandi mállíkansins er tímabundið ekki tiltækur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er tímabundið ekki tiltækur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptRetryErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3929032611" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Wait and retry. If the failure persists, check the provider status and the limits on the Bifrost Language Model card.</source>
+          <target>Bíddu og reyndu aftur. Ef villan kemur aftur skaltu athuga stöðu veitandans og takmarkanir á spjaldi Bifröst mállíkans.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bíddu og reyndu aftur. Ef villan kemur aftur skaltu athuga stöðu veitandans og takmarkanir á spjaldi Bifröst mállíkans.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptRetryNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3728145188" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The provider returns HTTP 408, 429 or 5xx, or the request times out or cannot reach the provider.</source>
+          <target>Veitandinn skilar HTTP 408, 429 eða 5xx, eða beiðnin rennur út á tíma eða nær ekki til veitandans.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandinn skilar HTTP 408, 429 eða 5xx, eða beiðnin rennur út á tíma eða nær ekki til veitandans.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptRetryWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 15258514" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection.</source>
+          <target>Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1319966414 - NamedType 1281857675" size-unit="char" translate="yes" xml:space="preserve">
           <source>A language model code must be specified before an API key can be stored.</source>
           <target>Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</target>
@@ -626,6 +692,18 @@
           <target>Persónulegur API-lykill fyrir mállíkanið %1.</target>
           <note from="Developer" annotates="general" priority="2">%1 = language model code, is-IS=Persónulegur API-lykill fyrir mállíkanið %1.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Secrets ori - NamedType UserKeyDescTok</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 2403977524" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The prompt must be a JSON string.</source>
+          <target>Kvaðningin í prompt verður að vera JSON-strengur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kvaðningin í prompt verður að vera JSON-strengur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType InvalidPromptErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 250906932 - NamedType 1196321971" size-unit="char" translate="yes" xml:space="preserve">
+          <source>prompt is a number, Boolean, null, object or array instead of a JSON string.</source>
+          <target>prompt er tala, rökgildi, null, hlutur eða fylki í stað JSON-strengs.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=prompt er tala, rökgildi, null, hlutur eða fylki í stað JSON-strengs.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType InvalidPromptWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 1213728415" size-unit="char" translate="yes" xml:space="preserve">
           <source>The prompt is missing.</source>
@@ -676,28 +754,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 32472158" size-unit="char" translate="yes" xml:space="preserve">
-          <source>a non-empty text</source>
-          <target>texti sem er ekki tómur</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=texti sem er ekki tómur</note>
+          <source>a non-empty JSON string</source>
+          <target>JSON-strengur sem er ekki tómur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=JSON-strengur sem er ekki tómur</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptExpectedTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 250906932 - NamedType 683296137" size-unit="char" translate="yes" xml:space="preserve">
-          <source>an answer from the language model</source>
-          <target>svar frá mállíkaninu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=svar frá mállíkaninu</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType ProviderExpectedTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 250906932 - NamedType 1251151049" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The language model could not complete the prompt: %1</source>
-          <target>Mállíkanið gat ekki unnið kvaðninguna: %1</target>
-          <note from="Developer" annotates="general" priority="2">%1 = the provider's error text, is-IS=Mállíkanið gat ekki unnið kvaðninguna: %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType ProviderFailedErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 250906932 - NamedType 3035640009" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check the language model's Base URL, model and API key with Test Connection on the Bifrost Language Model card, then try again.</source>
-          <target>Athugaðu grunnslóð, líkan og API-lykil mállíkansins með Prófa tengingu á spjaldi Bifröst mállíkansins og reyndu svo aftur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og API-lykil mállíkansins með Prófa tengingu á spjaldi Bifröst mállíkansins og reyndu svo aftur.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType ProviderFailedNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 840745974" size-unit="char" translate="yes" xml:space="preserve">
           <source>the code of a Bifrost Language Model</source>
