@@ -113,7 +113,10 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         GlobalLanguage(PreviousLanguage);
 
         // [THEN] the read of the language model fails with a permission error and the provider is not called
-        Assert.ExpectedError('permission');
+        // The platform message is localized (is-IS: 'Núverandi heimildir ...'), so assert the table id it names, which is language-neutral and specific.
+        Assert.ExpectedError('10035335');
+        if LanguageId = 1033 then
+            Assert.ExpectedError('permission');
         Assert.IsFalse(MockProvider.WasCompletePromptCalled(), 'the provider must not be called without BIFROST LLM Chat ori');
     end;
 
