@@ -134,7 +134,11 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
     begin
+        // Seed as an administrator of the app; each scenario then lowers the session to the permission sets under test.
+        LibraryLowerPermissions.SetO365Basic();
+        LibraryLowerPermissions.AddPermissionSet('BIFROST Full ori');
         MockProvider.Reset();
         if BifrostLanguageModel.Get(ModelCodeTok) then
             BifrostLanguageModel.Delete(true);
