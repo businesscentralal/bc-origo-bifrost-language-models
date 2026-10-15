@@ -1,0 +1,42 @@
+[
+  {
+    "guard": "Test-NoClientCallstack",
+    "exitCode": 0,
+    "summary": "No call stack is returned or documented to callers.\n"
+  },
+  {
+    "guard": "Test-ValidatedTableView",
+    "exitCode": 0,
+    "summary": "Every applied tableView is validated first.\n"
+  },
+  {
+    "guard": "Test-ContractParameterKeys",
+    "exitCode": 0,
+    "summary": "Every contract parameter is a key the code reads, and every key the code reads is declared (0 allow-listed).\n"
+  },
+  {
+    "guard": "Test-NoObsolete",
+    "exitCode": 0,
+    "summary": "No obsolete declaration and no AL0432/AL0667 pragma in the app, apart from the allow-listed VAT Amount Line pragmas.\n"
+  },
+  {
+    "guard": "Test-PermissionCoverage",
+    "exitCode": 0,
+    "summary": "Every page, query, report and xmlport is granted by an assignable permission set.\n"
+  },
+  {
+    "guard": "Test-MixedLanguageLabels",
+    "exitCode": 0,
+    "summary": "No procedure answers a Locked English sentence.\n"
+  },
+  {
+    "guard": "Test-IcelandicKeywordCounts",
+    "exitCode": 0,
+    "summary": "Every Icelandic keyword list has at least as many entries as the English one (1 in the source, 1 in the xlf).\n"
+  },
+  {
+    "guard": "Test-IcelandicXlfInSync",
+    "exitCode": 0,
+    "summary": "The committed is-IS.xlf is what tools/Update-IcelandicXlf.ps1 generates from the build.\n"
+  }
+]

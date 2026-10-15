@@ -1,0 +1,25 @@
+{
+  "baselineSha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+  "diagnosticProductHasCodeChanges": false,
+  "diagnosticTestAppIncludesNewTests": true,
+  "native": {
+    "executed": 4,
+    "passed": 0,
+    "failed": 4,
+    "skipped": 0,
+    "evidence": "diagnostic-tests.xml",
+    "finding": "First keyless assertion: TestField.Visible false in EN/IS read/edit"
+  },
+  "browser": {
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "skipped": 0,
+    "locale": "en-US",
+    "evidence": "diagnostic-en-US.json",
+    "finding": "Localized text populated, field ancestor ms-nav-hidden, zero rendered bounds"
+  },
+  "hypothesis": "Conditional field visibility is evaluated before current-record auth state reaches field visibility; parent-group binding may avoid stale field hidden state. Candidate runtime remains unverified.",
+  "providerCalls": 0,
+  "secretValuesStoredByBaselineBrowser": 0
+}

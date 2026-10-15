@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="96032 LangModel Hint Tests ori" timestamp="2026-10-15T10:52:19" hostname="f010ca023e48-business-central-589958f45c-f929d" time="1.826" tests="0" failures="4" errors="0" skipped="0" total="4">
+    <testcase classname="96032 LangModel Hint Tests ori" name="EnglishRead_KeyPresenceTransitions" time="1.69" result="Fail">
+      <failure message="Assert.AreEqual failed. Expected:&lt;Yes&gt; (Boolean). Actual:&lt;No&gt; (Boolean). The hint must follow provider and key presence..">"Library Assert"(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267
+"LangModel Hint Tests ori"(CodeUnit 96032).AssertCardHint line 10 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).VerifyKeyPresenceTransitions line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).EnglishRead_KeyPresenceTransitions line 2 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"Test Runner - Mgt"(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Runner - Isol. Codeunit"(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267
+"Command Line Test Tool"(Page 130455)."RunSelectedTests - OnAction"(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267</failure>
+    </testcase>
+    <testcase classname="96032 LangModel Hint Tests ori" name="EnglishEdit_KeyPresenceTransitions" time="0.046" result="Fail">
+      <failure message="Assert.AreEqual failed. Expected:&lt;Yes&gt; (Boolean). Actual:&lt;No&gt; (Boolean). The hint must follow provider and key presence..">"Library Assert"(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267
+"LangModel Hint Tests ori"(CodeUnit 96032).AssertCardHint line 10 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).VerifyKeyPresenceTransitions line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).EnglishEdit_KeyPresenceTransitions line 2 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"Test Runner - Mgt"(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Runner - Isol. Codeunit"(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267
+"Command Line Test Tool"(Page 130455)."RunSelectedTests - OnAction"(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267</failure>
+    </testcase>
+    <testcase classname="96032 LangModel Hint Tests ori" name="IcelandicRead_KeyPresenceTransitions" time="0.053" result="Fail">
+      <failure message="Assert.AreEqual failed. Expected:&lt;J�&gt; (Boolean). Actual:&lt;Nei&gt; (Boolean). The hint must follow provider and key presence..">"Library Assert"(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267
+"LangModel Hint Tests ori"(CodeUnit 96032).AssertCardHint line 10 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).VerifyKeyPresenceTransitions line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).IcelandicRead_KeyPresenceTransitions line 2 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"Test Runner - Mgt"(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Runner - Isol. Codeunit"(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267
+"Command Line Test Tool"(Page 130455)."RunSelectedTests - OnAction"(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267</failure>
+    </testcase>
+    <testcase classname="96032 LangModel Hint Tests ori" name="IcelandicEdit_KeyPresenceTransitions" time="0.037" result="Fail">
+      <failure message="Assert.AreEqual failed. Expected:&lt;J�&gt; (Boolean). Actual:&lt;Nei&gt; (Boolean). The hint must follow provider and key presence..">"Library Assert"(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267
+"LangModel Hint Tests ori"(CodeUnit 96032).AssertCardHint line 10 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).VerifyKeyPresenceTransitions line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"LangModel Hint Tests ori"(CodeUnit 96032).IcelandicEdit_KeyPresenceTransitions line 2 - Bifrost Language Models - Tests by Origo version 28.0.0.0
+"Test Runner - Mgt"(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Runner - Isol. Codeunit"(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267
+"Test Suite Mgt."(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267
+"Command Line Test Tool"(Page 130455)."RunSelectedTests - OnAction"(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

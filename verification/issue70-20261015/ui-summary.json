@@ -1,0 +1,44 @@
+{
+  "sha": "c8cfcefab64f3938c08b43bec24de07bc3ba42ec",
+  "containerId": "f010ca023e48",
+  "productVersion": "28.0.0.0",
+  "foundationVersion": "28.0.4.556",
+  "installedDefaultByteMatched": true,
+  "locales": [
+    "en-US",
+    "is-IS"
+  ],
+  "lcids": [
+    1033,
+    1039
+  ],
+  "page": 10035343,
+  "fixtureCode": "XLM70UI",
+  "dataSetup": "Created own saved model through Web Client; selected OpenAI, no real provider credentials; synthetic values entered through masked set-personal/shared-key dialogs only",
+  "scenarioGroups": [
+    "keyless initial reopen read/edit",
+    "real set-personal action read/edit",
+    "real set-shared with personal present read/edit",
+    "real clear-personal leaving shared read/edit",
+    "real clear-shared restoring localized instruction read/edit"
+  ],
+  "executed": 24,
+  "passed": 24,
+  "failed": 0,
+  "skipped": 0,
+  "transitionScenarios": 20,
+  "independentInitialKeylessScenarios": 4,
+  "assertions": 72,
+  "assertionsPassed": 72,
+  "verified": true,
+  "actualRenderedBoundsChecked": true,
+  "noHiddenAncestorChecked": true,
+  "visualInspection": [
+    "candidate-en-US-read.png",
+    "candidate-is-IS-read.png"
+  ],
+  "providerCalls": 0,
+  "licenceEulaWrites": 0,
+  "cleanup": "Owned f010ca023e48 deleted HTTP204 and independently absent; all owned fixtures/secret values removed with container; settings/auth copy removed.",
+  "verifiedAt": "2026-10-15T11:01:41.529274+00:00"
+}

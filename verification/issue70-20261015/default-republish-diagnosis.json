@@ -1,0 +1,11 @@
+{
+  "sha": "c8cfcefab64f3938c08b43bec24de07bc3ba42ec",
+  "initialPublishStatus": 422,
+  "reason": "Installed test app references product internal objects; replacing with no-IVT Default cannot recompile that dependent test app. Server explicitly restored original extensions.",
+  "readbackProved": "Installed product still matched candidate test-product SHA256 after failed Default republish",
+  "repair": "Uninstall and unpublish only worker-installed test extension9c452c6e-df9b-4eb0-9a54-7ea8f32483ec in individually owned f010ca023e48; republish exact-tip no-IVT Default; read back bytes before UI.",
+  "sourceChanges": false,
+  "testPassInvalidated": false,
+  "fullSuiteSummary": "candidate-tests-summary.json",
+  "actualStateEvidence": "apps-before-unpublish.json"
+}

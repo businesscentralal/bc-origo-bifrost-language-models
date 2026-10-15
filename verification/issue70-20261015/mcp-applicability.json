@@ -1,0 +1,10 @@
+{
+  "sha": "c8cfcefab64f3938c08b43bec24de07bc3ba42ec",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Only page10035343 visibility layout, native TestPage tests and CHANGELOG change. No message implementation, contract, enum registration, dispatch, request/response or provider execution code changes. LLM.Prompt.Complete is unchanged.",
+  "executed": 0,
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "status": "not applicable; no MCP pass claimed"
+}
