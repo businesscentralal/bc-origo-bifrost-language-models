@@ -1,0 +1,14 @@
+{
+  "sha": "71974e38acd895e85b81c6d12aea7c96b94aa02b",
+  "fullSuite": true,
+  "executed": 188,
+  "passed": 188,
+  "failed": 0,
+  "skipped": 0,
+  "source": "Downloaded exact-tip CI XML; independently counted testcase nodes, reconciled job totals",
+  "artifactId": 11935386047,
+  "runUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38618532262",
+  "jobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38618532262/job/116151155788",
+  "xmlSha256": "7a08cd1910f4fd92ee15bd59d2b7d8db3bdbc9c1162cf5ba5fa1398615282e4c",
+  "reconciledAt": "2026-10-15T08:29:51.302156+00:00"
+}

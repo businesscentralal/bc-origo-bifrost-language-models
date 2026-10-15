@@ -1,0 +1,217 @@
+{
+  "sha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+  "containerId": "f0e43ba43246",
+  "version": "28.0.0.0",
+  "locale": "en-US",
+  "lcid": 1033,
+  "pageId": 10035343,
+  "fixtureCode": "ZZLM64UI",
+  "provider": "OpenAI",
+  "keysStored": false,
+  "providerCalls": 0,
+  "results": [
+    {
+      "mode": "read",
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "display": "block",
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "inline-block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption ms-nav-hidden",
+              "display": "none",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex",
+              "ariaHidden": null
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "name": "Set Personal API Key",
+          "passed": true
+        },
+        {
+          "name": "Set Shared API Key",
+          "passed": true
+        },
+        {
+          "name": "KeyMissing hint actually visible",
+          "passed": false
+        }
+      ],
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    },
+    {
+      "mode": "edit",
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "display": "block",
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "inline-block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption ms-nav-hidden",
+              "display": "none",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex",
+              "ariaHidden": null
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex",
+              "ariaHidden": null
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "name": "Set Personal API Key",
+          "passed": true
+        },
+        {
+          "name": "Set Shared API Key",
+          "passed": true
+        },
+        {
+          "name": "KeyMissing hint actually visible",
+          "passed": false
+        }
+      ],
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    }
+  ],
+  "executed": 2,
+  "passed": 0,
+  "failed": 2,
+  "skipped": 0,
+  "verifiedAt": "2026-10-15T08:39:31.823Z"
+}

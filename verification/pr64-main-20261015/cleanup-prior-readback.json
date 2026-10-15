@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-15T08:33:11.623530+00:00",
+  "successfulListHttp": 200,
+  "priorOwnedUi": {
+    "id": "f0654e1a0586",
+    "absent": true
+  },
+  "pairedCi": {
+    "id": "f090f21e9877",
+    "deletionJobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38618532262/job/116153860090",
+    "absent": true
+  },
+  "currentOwnedBaseline": {
+    "id": "f0e43ba43246",
+    "present": true
+  }
+}

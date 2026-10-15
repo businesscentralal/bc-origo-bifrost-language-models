@@ -1,0 +1,35 @@
+[
+  {
+    "app": "default-app",
+    "sha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm64-20261015T082628/LM.Default.app",
+    "sha256": "8f44d911532e44fe67fad46a962a51c898e29f6cbc9f2115e809d53cea0abc1f",
+    "finishedAt": "2026-10-15T08:29:38.783679+00:00"
+  },
+  {
+    "app": "test-product",
+    "sha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm64-20261015T082628/symbols/Origo_Bifrost Language Models_28.0.0.0.app",
+    "sha256": "692e517ab53d426c157f0d5884957f8e29e530c2cc29f2bad766904b998613ae",
+    "finishedAt": "2026-10-15T08:29:49.807627+00:00"
+  },
+  {
+    "app": "test",
+    "sha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm64-20261015T082628/LM.Tests.app",
+    "sha256": "21493b63715451f8c2debdab19edddfd49ba5a21246a7c953a32fb5325181c51",
+    "finishedAt": "2026-10-15T08:29:59.594290+00:00"
+  }
+]

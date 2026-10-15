@@ -1,0 +1,33 @@
+- page 10035342 `Bifrost Chat Model List ori`
+- codeunit 10035390 `Copilot Install ori`
+- codeunit 10035385 `Copilot LangModel Prov. ori`
+- pageextension 10035347 `Bifrost Chat CustomerList ori`
+- pageextension 10035356 `Bifrost Chat IncomingDocs ori`
+- pageextension 10035359 `Bifrost Chat ItemList ori`
+- pageextension 10035361 `Bifrost Chat PurchCrMemos ori`
+- pageextension 10035367 `Bifrost Chat PurchInvoices ori`
+- pageextension 10035364 `Bifrost Chat PurchOrders ori`
+- pageextension 10035366 `Bifrost Chat PurchQuotes ori`
+- pageextension 10035369 `Bifrost Chat PurchRetOrds ori`
+- pageextension 10035371 `Bifrost Chat SalesCrMemos ori`
+- pageextension 10035377 `Bifrost Chat SalesInvoices ori`
+- pageextension 10035374 `Bifrost Chat SalesOrders ori`
+- pageextension 10035376 `Bifrost Chat SalesQuotes ori`
+- pageextension 10035379 `Bifrost Chat SalesRetOrds ori`
+- pageextension 10035381 `Bifrost Chat VendorList ori`
+- codeunit 10035382 `LangModel Chat Provider ori`
+- table 10035337 `Bifrost Chat Argument ori`
+- enum 10035338 `Bifrost Chat Proc. Type ori`
+- page 10035343 `Bifrost LangModel Card ori`
+- page 10035344 `Bifrost LangModel List ori`
+- codeunit 10035389 `Bifrost LangModel None ori`
+- table 10035335 `Bifrost Language Model ori`
+- codeunit 10035396 `LLM Prompt Compl Impl ori`
+- pageextension 10035402 `User Setup Editor LangMdl ori`
+- permissionset 10035407 `BIFROST ChatSvc ori`
+- permissionset 10035405 `BIFROST LLM Rd ori`
+- codeunit 10035414 `Azure OAI LangModel Prov. ori`
+- table 10035406 `Chat Svc Gate ori`
+- codeunit 10035412 `LangModel Chat Proxy ori`
+- codeunit 10035422 `LangModel Secrets ori`
+- page 10035421 `LangModel Setup ori`

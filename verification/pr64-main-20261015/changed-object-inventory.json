@@ -1,0 +1,200 @@
+[
+  {
+    "path": "app/src/BifrostChat/BifrostChatModelList.Page.al",
+    "type": "page",
+    "id": 10035342,
+    "name": "Bifrost Chat Model List ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Copilot/CopilotInstall.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035390,
+    "name": "Copilot Install ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Copilot/CopilotLangModelProv.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035385,
+    "name": "Copilot LangModel Prov. ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Customers/BifrostChatCustomerList.PageExt.al",
+    "type": "pageextension",
+    "id": 10035347,
+    "name": "Bifrost Chat CustomerList ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/IncomingDocuments/BifrostChatIncomingDocs.PageExt.al",
+    "type": "pageextension",
+    "id": 10035356,
+    "name": "Bifrost Chat IncomingDocs ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Items/BifrostChatItemList.PageExt.al",
+    "type": "pageextension",
+    "id": 10035359,
+    "name": "Bifrost Chat ItemList ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchCrMemos.PageExt.al",
+    "type": "pageextension",
+    "id": 10035361,
+    "name": "Bifrost Chat PurchCrMemos ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchInvoices.PageExt.al",
+    "type": "pageextension",
+    "id": 10035367,
+    "name": "Bifrost Chat PurchInvoices ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchOrders.PageExt.al",
+    "type": "pageextension",
+    "id": 10035364,
+    "name": "Bifrost Chat PurchOrders ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchQuotes.PageExt.al",
+    "type": "pageextension",
+    "id": 10035366,
+    "name": "Bifrost Chat PurchQuotes ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchRetOrds.PageExt.al",
+    "type": "pageextension",
+    "id": 10035369,
+    "name": "Bifrost Chat PurchRetOrds ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Sales/BifrostChatSalesCrMemos.PageExt.al",
+    "type": "pageextension",
+    "id": 10035371,
+    "name": "Bifrost Chat SalesCrMemos ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Sales/BifrostChatSalesInvoices.PageExt.al",
+    "type": "pageextension",
+    "id": 10035377,
+    "name": "Bifrost Chat SalesInvoices ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Sales/BifrostChatSalesOrders.PageExt.al",
+    "type": "pageextension",
+    "id": 10035374,
+    "name": "Bifrost Chat SalesOrders ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Sales/BifrostChatSalesQuotes.PageExt.al",
+    "type": "pageextension",
+    "id": 10035376,
+    "name": "Bifrost Chat SalesQuotes ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Sales/BifrostChatSalesRetOrds.PageExt.al",
+    "type": "pageextension",
+    "id": 10035379,
+    "name": "Bifrost Chat SalesRetOrds ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Extensions/Vendors/BifrostChatVendorList.PageExt.al",
+    "type": "pageextension",
+    "id": 10035381,
+    "name": "Bifrost Chat VendorList ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LangModelChatProvider.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035382,
+    "name": "LangModel Chat Provider ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostChatArgument.Table.al",
+    "type": "table",
+    "id": 10035337,
+    "name": "Bifrost Chat Argument ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostChatProcType.Enum.al",
+    "type": "enum",
+    "id": 10035338,
+    "name": "Bifrost Chat Proc. Type ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostLangModelCard.Page.al",
+    "type": "page",
+    "id": 10035343,
+    "name": "Bifrost LangModel Card ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostLangModelList.Page.al",
+    "type": "page",
+    "id": 10035344,
+    "name": "Bifrost LangModel List ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostLangModelNone.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035389,
+    "name": "Bifrost LangModel None ori"
+  },
+  {
+    "path": "app/src/BifrostChat/LanguageModel/BifrostLanguageModel.Table.al",
+    "type": "table",
+    "id": 10035335,
+    "name": "Bifrost Language Model ori"
+  },
+  {
+    "path": "app/src/BifrostChat/Message Types/LLMPromptComplImpl.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035396,
+    "name": "LLM Prompt Compl Impl ori"
+  },
+  {
+    "path": "app/src/Extensions/UserSetupEditorLangMdl.PageExt.al",
+    "type": "pageextension",
+    "id": 10035402,
+    "name": "User Setup Editor LangMdl ori"
+  },
+  {
+    "path": "app/src/Permission Set/BIFROSTChatSvc.PermissionSet.al",
+    "type": "permissionset",
+    "id": 10035407,
+    "name": "BIFROST ChatSvc ori"
+  },
+  {
+    "path": "app/src/Permission Set/BIFROSTLLMRead.PermissionSet.al",
+    "type": "permissionset",
+    "id": 10035405,
+    "name": "BIFROST LLM Rd ori"
+  },
+  {
+    "path": "app/src/Providers/AzureOpenAI/AzureOAILangModelProv.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035414,
+    "name": "Azure OAI LangModel Prov. ori"
+  },
+  {
+    "path": "app/src/Providers/Shared/ChatSvcGate.Table.al",
+    "type": "table",
+    "id": 10035406,
+    "name": "Chat Svc Gate ori"
+  },
+  {
+    "path": "app/src/Providers/Shared/LangModelChatProxy.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035412,
+    "name": "LangModel Chat Proxy ori"
+  },
+  {
+    "path": "app/src/Setup/LangModelSecrets.Codeunit.al",
+    "type": "codeunit",
+    "id": 10035422,
+    "name": "LangModel Secrets ori"
+  },
+  {
+    "path": "app/src/Setup/LangModelSetup.Page.al",
+    "type": "page",
+    "id": 10035421,
+    "name": "LangModel Setup ori"
+  }
+]
