@@ -1,0 +1,12 @@
+Microsoft (R) AL Compiler version 30.0.42.60748
+Copyright (C) Microsoft Corporation. All rights reserved
+
+Compilation started for project 'Bifrost Language Models - Tests' containing '30' files at '11:24:46.038'.
+
+evidence/tasks/1792060823.013579/lm70-amend/build-source/test/src/MockBifrostChatProvider.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/tasks/1792060823.013579/lm70-amend/build-source/test/test/Setup/LangModelSecretsTests.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/tasks/1792060823.013579/lm70-amend/build-source/test/test/BifrostChat/CopilotInstallTests.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
+evidence/tasks/1792060823.013579/lm70-amend/build-source/test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al(12,1): info AA0477: The using statements are not in a sorted order.
+
+Compilation ended at '11:24:55.973'.
+

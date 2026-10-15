@@ -1,0 +1,10 @@
+{
+  "id": "f0826d7c880c",
+  "worker": "worker-6",
+  "deleted": 1,
+  "total": 1,
+  "absenceVerified": true,
+  "ownedTestDataRemovedWithContainer": true,
+  "verifiedAt": "2026-10-15T11:40:48.387Z",
+  "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163"
+}

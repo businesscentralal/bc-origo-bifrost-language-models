@@ -1,0 +1,10 @@
+{
+  "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Model-card layout only; amendment changes test object ID/name and CHANGELOG. No provider, message implementation/contract/registration or dispatcher source changes.",
+  "executed": 0,
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "status": "not applicable; no MCP pass claimed"
+}

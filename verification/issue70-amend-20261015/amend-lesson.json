@@ -1,0 +1,26 @@
+{
+  "id": "language-models71-claude6190688726-object-name-id-allocation",
+  "repo": "businesscentralal/bc-origo-bifrost-language-models",
+  "reviewedSha": "c8cfcefab64f3938c08b43bec24de07bc3ba42ec",
+  "source": {
+    "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/71#issuecomment-6190688726",
+    "author": "gunnargestsson",
+    "kind": "Claude independent amendment; additional allocation instruction1792062780.201949"
+  },
+  "category": "confirmed test naming warning and open-PR object ID reservation conflict",
+  "finding": "Object name LangModel Hint Tests ori did not match LangModelHintTests.Codeunit.al under target alc18 CodeCopAA0215;96032 is reserved by ClaudePR66. Local alc30 all-analyzer run reported0warnings, so that evidence did not establish target-compiler warning parity.",
+  "rootCause": "Followed general ori affix for a test object despite sibling naming; used main/free-ID notes and recent PR titles without inspecting all open-PR object reservations. Compiler-version difference missed target warning.",
+  "prevention": [
+    "Inspect all open PR additions/reservations before allocating IDs;96035 explicitly assigned here",
+    "Keep test object name consistent with filename and sibling pattern",
+    "Record compiler/analyzer versions; require target CI warning result as well as local0/0",
+    "Recompile/publish/readback and rerun full suite/UI at changed SHA; old artifact evidence is historical"
+  ],
+  "status": "Amend implementation in progress; source renamed96035 LangModel Hint Tests; exact new-tip verification pending",
+  "evidence": {
+    "amend": "/workspace/evidence/tasks/1792060823.013579/lm70/amend-comment.json",
+    "reservation": "/workspace/evidence/tasks/1792060823.013579/lm70/pr66-files.json",
+    "newEvidence": "/workspace/evidence/tasks/1792060823.013579/lm70-amend"
+  },
+  "recordedAt": "2026-10-15T11:22:20.274883+00:00"
+}

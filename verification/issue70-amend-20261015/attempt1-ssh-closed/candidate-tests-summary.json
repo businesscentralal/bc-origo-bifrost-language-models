@@ -1,0 +1,12 @@
+{
+  "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+  "uncommittedSource": false,
+  "containerId": "f0826d7c880c",
+  "startedAt": "2026-10-15T11:34:05.450Z",
+  "finishedAt": "2026-10-15T11:37:16.201Z",
+  "fullSuite": true,
+  "total": 0,
+  "exitCode": 255,
+  "ok": false,
+  "xmlSaved": false
+}
