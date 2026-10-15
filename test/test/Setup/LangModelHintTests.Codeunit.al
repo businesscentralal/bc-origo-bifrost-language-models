@@ -7,7 +7,7 @@ using System.TestLibraries.Utilities;
 /// Checks the missing-key hint across languages, page modes and both secret scopes.
 /// Browser verification additionally checks the actual rendered field bounds.
 /// </summary>
-codeunit 96032 "LangModel Hint Tests ori"
+codeunit 96035 "LangModel Hint Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
