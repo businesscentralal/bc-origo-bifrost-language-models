@@ -7,7 +7,7 @@ using System.Environment.Configuration;
 /// sandbox answers every licensed message type with an HTTP-disabled error until Allow HttpClient Requests is on
 /// for every registered Bifrost application. Production install behaviour is unchanged; this codeunit lives in the test app only.
 /// </summary>
-codeunit 96033 "LangModel Test Install"
+codeunit 96036 "LangModel Test Install"
 {
     Subtype = Install;
 
