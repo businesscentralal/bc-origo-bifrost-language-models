@@ -1,0 +1,42 @@
+{
+  "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+  "sourceOwner": "worker-6",
+  "containerId": "f07733f709a3",
+  "dependency": "Foundation28.0.4.557",
+  "status": "reproduced actual failing precondition; no candidate71 clearance",
+  "sequence": [
+    "Fresh W1 sandbox",
+    "Foundation557 Default publish",
+    "PR71d47 Default product publish and byte readback",
+    "PR71d47 Test product republish and byte readback",
+    "PR71d47 original Test app install",
+    "read NAV App Setting before96004",
+    "full96000..96199suite"
+  ],
+  "nativeFullSuite": {
+    "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+    "uncommittedSource": false,
+    "containerId": "f07733f709a3",
+    "startedAt": "2026-10-15T12:33:13.754Z",
+    "finishedAt": "2026-10-15T12:35:43.059Z",
+    "fullSuite": true,
+    "total": 192,
+    "passed": 180,
+    "failed": 12,
+    "skipped": 0,
+    "errors": 0,
+    "exitCode": 1,
+    "ok": false,
+    "xmlSaved": true
+  },
+  "navSettings": "No NAV App Setting rows afterDefault, afterTestproduct and afterTestapp/before96004; no manualHTTP changes",
+  "sourceDiff": "Only CHANGELOG, card conditional group,96035hinttests. No lifecycle, HTTP settings or request dispatch delta. New96035 has no install/upgrade/eventsubscriber, runs last and passes4/4. First failure index53in96004beforehinttestexecution.",
+  "rootCause": "Foundation557 registered-app HTTP precondition rejects native queue dispatch while the original PR71fixture leaves registered modules disabled; assertion expectations forHelp.Fields and codedMissingParameter are therefore not reached.",
+  "comparativeEvidence": "PR66deea pairedCI192/192includes its separate owned Test install fixture, perworker5. This is comparison evidence, notPR71pass or pure causalitycontrol.",
+  "causalLimit": "No pre-change188-test/foundation557 control executed. Do not claim a controlled isolation of every delta. Runtime failure and default-setting precondition are proved for exactpublished71candidate.",
+  "repairRoute": "Architect5365: preserveClaude66custody; aftergated66merge mergeofficialmain into71,compileboth0/0,publish/readback andfreshpairedCI/acceptance. No parallelfixture rewrite or unchangedCIretry.",
+  "forbiddenActionsPerformed": false,
+  "nextOwner": "worker-6",
+  "dependencyUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/66",
+  "checkedAt": "2026-10-15T12:36:23.199767+00:00"
+}

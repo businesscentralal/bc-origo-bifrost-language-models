@@ -1,0 +1,16 @@
+{
+  "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+  "uncommittedSource": false,
+  "containerId": "f07733f709a3",
+  "startedAt": "2026-10-15T12:33:13.754Z",
+  "finishedAt": "2026-10-15T12:35:43.059Z",
+  "fullSuite": true,
+  "total": 192,
+  "passed": 180,
+  "failed": 12,
+  "skipped": 0,
+  "errors": 0,
+  "exitCode": 1,
+  "ok": false,
+  "xmlSaved": true
+}

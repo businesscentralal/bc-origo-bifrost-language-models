@@ -1,0 +1,1050 @@
+{
+  "failed": [
+    {
+      "index": 53,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_ThreeEndpointFieldsWriteRestricted",
+      "message": "Assert.IsTrue failed. Help.Fields.Get answers a result: {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}",
+      "text": "Library Assert(CodeUnit 130002).IsTrue line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Field Restrict Tests(CodeUnit 96004).GetFieldFlags line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLangModel Field Restrict Tests(CodeUnit 96004).FieldRestrict_ThreeEndpointFieldsWriteRestricted line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger)"
+    },
+    {
+      "index": 54,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_EndpointFieldsNotReadRestricted",
+      "message": "Assert.IsTrue failed. Help.Fields.Get answers a result: {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}",
+      "text": "Library Assert(CodeUnit 130002).IsTrue line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Field Restrict Tests(CodeUnit 96004).GetFieldFlags line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLangModel Field Restrict Tests(CodeUnit 96004).FieldRestrict_EndpointFieldsNotReadRestricted line 5 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) li"
+    },
+    {
+      "index": 55,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_NeighbourFieldsNotRestricted",
+      "message": "Assert.IsTrue failed. Help.Fields.Get answers a result: {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}",
+      "text": "Library Assert(CodeUnit 130002).IsTrue line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Field Restrict Tests(CodeUnit 96004).GetFieldFlags line 16 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLangModel Field Restrict Tests(CodeUnit 96004).FieldRestrict_NeighbourFieldsNotRestricted line 5 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line "
+    },
+    {
+      "index": 144,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_MissingPrompt_IsCodedMissingParameter",
+      "message": "There is no property with the 'code' key on the JSON object.",
+      "text": "LLM Prompt Contract Tests(CodeUnit 96019).AssertCodedError line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLLM Prompt Contract Tests(CodeUnit 96019).Execute_MissingPrompt_IsCodedMissingParameter line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 145,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_UnknownRoleCode_IsCodedRecordNotFound",
+      "message": "There is no property with the 'code' key on the JSON object.",
+      "text": "LLM Prompt Contract Tests(CodeUnit 96019).AssertCodedError line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLLM Prompt Contract Tests(CodeUnit 96019).Execute_UnknownRoleCode_IsCodedRecordNotFound line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 146,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut",
+      "message": "There is no property with the 'code' key on the JSON object.",
+      "text": "LLM Prompt Contract Tests(CodeUnit 96019).AssertCodedError line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nLLM Prompt Contract Tests(CodeUnit 96019).Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut line 6 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 160,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_CreatesModelAndStoresKeysWithoutAnsweringThem",
+      "message": "Assert.AreEqual failed. Expected:<Success> (Text). Actual:<Error> (Text). {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}.",
+      "text": "Library Assert(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Test Tools Tests(CodeUnit 96028).Set_CreatesModelAndStoresKeysWithoutAnsweringThem line 15 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 161,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_UnknownProviderAndMissingCode_AreReportedTogether",
+      "message": "Assert.IsTrue failed. The unknown provider is named: {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}",
+      "text": "Library Assert(CodeUnit 130002).IsTrue line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Test Tools Tests(CodeUnit 96028).Set_UnknownProviderAndMissingCode_AreReportedTogether line 10 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 162,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Delete_RemovesTheModelAndReportsUnknownCodes",
+      "message": "Assert.AreEqual failed. Expected:<Success> (Text). Actual:<Error> (Text). {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}.",
+      "text": "Library Assert(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Test Tools Tests(CodeUnit 96028).Delete_RemovesTheModelAndReportsUnknownCodes line 12 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 163,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_RunsToolCallsAndReturnsTheReply",
+      "message": "Assert.AreEqual failed. Expected:<Success> (Text). Actual:<Error> (Text). {\"status\":\"Error\",\"error\":\"HTTP is disabled for one or more registered Bifrost applications. An administrator with write permission on NAV App Setting must enable Allow HttpClient Requests for the disabled applications. Visit https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default for setup.\",\"requestUrl\":\"https://cosmo-alpaca-enterprise.westeurope.cloudapp.azure.com:443/f07733f709a3/?company=CRONUS%20International%20Ltd.&page=10077914&tenant=default\"}.",
+      "text": "Library Assert(CodeUnit 130002).AreEqual line 3 - Library Assert by Microsoft version 28.5.54151.56267\nLangModel Test Tools Tests(CodeUnit 96028).Chat_RunsToolCallsAndReturnsTheReply line 17 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 164,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_ProviderError_IsPreconditionFailed",
+      "message": "There is no property with the 'code' key on the JSON object.",
+      "text": "LangModel Test Tools Tests(CodeUnit 96028).Chat_ProviderError_IsPreconditionFailed line 15 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    },
+    {
+      "index": 165,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_UnknownModel_IsRecordNotFound",
+      "message": "There is no property with the 'code' key on the JSON object.",
+      "text": "LangModel Test Tools Tests(CodeUnit 96028).Chat_UnknownModel_IsRecordNotFound line 9 - Bifrost Language Models - Tests by Origo version 28.0.0.0\nTest Runner - Mgt(CodeUnit 130454).RunTests line 26 - Test Runner by Microsoft version 28.5.54151.56267\nTest Runner - Isol. Codeunit(CodeUnit 130450).OnRun(Trigger) line 4 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunTests line 2 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunSelectedTests line 35 - Test Runner by Microsoft version 28.5.54151.56267\nTest Suite Mgt.(CodeUnit 130456).RunNextTest line 20 - Test Runner by Microsoft version 28.5.54151.56267\nCommand Line Test Tool(Page 130455).RunNextTest - OnAction(Trigger) line 7 - Test Runner by Microsoft version 28.5.54151.56267\n"
+    }
+  ],
+  "suiteOrder": [
+    {
+      "index": 0,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetLangModelProvider_NoSetup_FallsBackToNone"
+    },
+    {
+      "index": 1,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse"
+    },
+    {
+      "index": 2,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue"
+    },
+    {
+      "index": 3,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse"
+    },
+    {
+      "index": 4,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields"
+    },
+    {
+      "index": 5,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_NoneProvider_ReturnsDisabledFlag"
+    },
+    {
+      "index": 6,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "SendChatMessage_RoleMock_RoundTrips"
+    },
+    {
+      "index": 7,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "SendChatMessage_NoneProvider_ReturnsErrorJson"
+    },
+    {
+      "index": 8,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetAvailableModels_RoleMock_PopulatesBuffer"
+    },
+    {
+      "index": 9,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetAvailableModels_RoleMock_NoModels_ReturnsFalse"
+    },
+    {
+      "index": 10,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "IsConfigured_BlankCode_IgnoresDefaultModel"
+    },
+    {
+      "index": 11,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "IsConfigured_UserCode_UsesThatModelNotDefault"
+    },
+    {
+      "index": 12,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "IsConfigured_MissingModel_ReturnsFalse"
+    },
+    {
+      "index": 13,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "SendChatMessage_BlankCode_ReturnsNotEnabledError"
+    },
+    {
+      "index": 14,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "ContinueWithToolResults_BlankCode_ReturnsNotEnabledError"
+    },
+    {
+      "index": 15,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "TryIt_BlankUserCode_UsesTestContextModel"
+    },
+    {
+      "index": 16,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetLangModelProviderWithModel_BlankCode_UsesDefaultModel"
+    },
+    {
+      "index": 17,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetLangModelProvider_UserRole_TakesPrecedenceOverDefault"
+    },
+    {
+      "index": 18,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "ContinueWithToolResults_RoleMock_DelegatesToMock"
+    },
+    {
+      "index": 19,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "ContinueWithToolResults_NoneProvider_ReturnsErrorJson"
+    },
+    {
+      "index": 20,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_DebugMode_IncludesDebugTrue"
+    },
+    {
+      "index": 21,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_RoleWithSkill_IncludesContextSkill"
+    },
+    {
+      "index": 22,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_RoleWithoutSkill_NoContextSkill"
+    },
+    {
+      "index": 23,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "BuildConfigJson_NoUserSetup_NoContextSkill"
+    },
+    {
+      "index": 24,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "SendChatMessage_ArgumentFieldsPopulated"
+    },
+    {
+      "index": 25,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_CustomerList_OpensFocus"
+    },
+    {
+      "index": 26,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_IncomingDocuments_OpensFocus"
+    },
+    {
+      "index": 27,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_ItemList_OpensFocus"
+    },
+    {
+      "index": 28,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_PurchaseCreditMemos_OpensFocus"
+    },
+    {
+      "index": 29,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_PurchaseInvoices_OpensFocus"
+    },
+    {
+      "index": 30,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_PurchaseOrders_OpensFocus"
+    },
+    {
+      "index": 31,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_PurchaseQuotes_OpensFocus"
+    },
+    {
+      "index": 32,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_PurchaseReturnOrders_OpensFocus"
+    },
+    {
+      "index": 33,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SalesCreditMemos_OpensFocus"
+    },
+    {
+      "index": 34,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SalesInvoiceList_OpensFocus"
+    },
+    {
+      "index": 35,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SalesOrderList_OpensFocus"
+    },
+    {
+      "index": 36,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SalesQuotes_OpensFocus"
+    },
+    {
+      "index": 37,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SalesReturnOrderList_OpensFocus"
+    },
+    {
+      "index": 38,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_VendorList_OpensFocus"
+    },
+    {
+      "index": 39,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_UnassignedUser_HidesAction"
+    },
+    {
+      "index": 40,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_MissingAssignedModel_HidesAction"
+    },
+    {
+      "index": 41,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_EmptyCurrentRecord_OpensFocus"
+    },
+    {
+      "index": 42,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_SequentialCustomers_FreshContext"
+    },
+    {
+      "index": 43,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_NoBoundObserver_OpensFocus"
+    },
+    {
+      "index": 44,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "OpenRecordChat_WrongExpectedContext_IsRejected"
+    },
+    {
+      "index": 45,
+      "class": "96002 LangModel Chat Provider Tests",
+      "name": "GetLangModelProviderWithModel_NoModels_ReturnsNone"
+    },
+    {
+      "index": 46,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "SetSkill_GetSkill_ReturnsStoredText"
+    },
+    {
+      "index": 47,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "GetSkill_NoContent_ReturnsEmptyString"
+    },
+    {
+      "index": 48,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "SetSkill_LargeContent_RoundTripsCorrectly"
+    },
+    {
+      "index": 49,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "SetSkill_OverwriteExisting_ReturnsNewContent"
+    },
+    {
+      "index": 50,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "GetContextTokens_ZeroUsesTheProviderDefault"
+    },
+    {
+      "index": 51,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "GetContextTokens_SetValueWins"
+    },
+    {
+      "index": 52,
+      "class": "96003 Bifrost Language Model Tests",
+      "name": "GetContextTokens_ProviderDefaults"
+    },
+    {
+      "index": 53,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_ThreeEndpointFieldsWriteRestricted"
+    },
+    {
+      "index": 54,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_EndpointFieldsNotReadRestricted"
+    },
+    {
+      "index": 55,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_NeighbourFieldsNotRestricted"
+    },
+    {
+      "index": 56,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_TableLevelChecksStayFalse"
+    },
+    {
+      "index": 57,
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_HintForEndpointFieldsEmptyForNeighbour"
+    },
+    {
+      "index": 58,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "GetSecretCodes_BuildBothCodesFromLanguageModelCode"
+    },
+    {
+      "index": 59,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "GetSecretCodes_LongestLanguageModelCode_FitsInCode50"
+    },
+    {
+      "index": 60,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "GetSecretCodes_BlankLanguageModelCode_ReturnsBlank"
+    },
+    {
+      "index": 61,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "Insert_LanguageModel_RegistersBothSecretsWithCorrectScope"
+    },
+    {
+      "index": 62,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "Register_CalledTwice_IsIdempotent"
+    },
+    {
+      "index": 63,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "ServiceKey_SetIsSetClear_RoundTrips"
+    },
+    {
+      "index": 64,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "UserKey_SetIsSetClear_RoundTrips"
+    },
+    {
+      "index": 65,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "ServiceAndUserKey_AreStoredIndependently"
+    },
+    {
+      "index": 66,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey"
+    },
+    {
+      "index": 67,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey"
+    },
+    {
+      "index": 68,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "TryGetApiKey_NoKeyStored_ReturnsFalse"
+    },
+    {
+      "index": 69,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "TryGetApiKey_BlankLanguageModelCode_ReturnsFalse"
+    },
+    {
+      "index": 70,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage"
+    },
+    {
+      "index": 71,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets"
+    },
+    {
+      "index": 72,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "SetServiceKey_BlankLanguageModelCode_Errors"
+    },
+    {
+      "index": 73,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "Delete_LanguageModel_ClearsBothSecrets"
+    },
+    {
+      "index": 74,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "Rename_LanguageModel_MovesSecretsToTheNewCode"
+    },
+    {
+      "index": 75,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "CountModelsWithoutKey_Empty_ReturnsZero"
+    },
+    {
+      "index": 76,
+      "class": "96009 LangModel Secrets Tests",
+      "name": "CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites"
+    },
+    {
+      "index": 77,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "IsConfigured_WithKeyAndUrl_ReturnsTrue"
+    },
+    {
+      "index": 78,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "IsConfigured_WithoutKey_ReturnsFalse"
+    },
+    {
+      "index": 79,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "IsConfigured_WithKeyNoUrl_UsesDefault"
+    },
+    {
+      "index": 80,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetBaseUrl_ArgumentOverridesDefault"
+    },
+    {
+      "index": 81,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetBaseUrl_EmptyArgument_FallsBackToDefault"
+    },
+    {
+      "index": 82,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetModel_ArgumentOverridesDefault"
+    },
+    {
+      "index": 83,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetTimeoutMs_ArgumentValue_Used"
+    },
+    {
+      "index": 84,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetTimeoutMs_Zero_UsesDefault"
+    },
+    {
+      "index": 85,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetMaxTokens_ArgumentValue_Used"
+    },
+    {
+      "index": 86,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "GetMaxTokens_Zero_UsesDefault"
+    },
+    {
+      "index": 87,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "ParseTokenUsage_StandardFormat"
+    },
+    {
+      "index": 88,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "ParseTokenUsage_MissingUsage_ReturnsZero"
+    },
+    {
+      "index": 89,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "ParseTokenUsage_InvalidJson_ReturnsZero"
+    },
+    {
+      "index": 90,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "AttachFiles_AddsImageUrlBlock"
+    },
+    {
+      "index": 91,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "AttachFiles_PdfUsesFileBlock"
+    },
+    {
+      "index": 92,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "AttachFiles_NoFiles_LeavesMessageUnchanged"
+    },
+    {
+      "index": 93,
+      "class": "96010 LangModel Prov Base Tests",
+      "name": "AttachFiles_PreservesSystemMessage"
+    },
+    {
+      "index": 94,
+      "class": "96011 LangModel API Client Tests",
+      "name": "ExtractText_StandardResponse"
+    },
+    {
+      "index": 95,
+      "class": "96011 LangModel API Client Tests",
+      "name": "ExtractText_EmptyChoices_ReturnsEmpty"
+    },
+    {
+      "index": 96,
+      "class": "96011 LangModel API Client Tests",
+      "name": "ExtractText_NoChoices_ReturnsEmpty"
+    },
+    {
+      "index": 97,
+      "class": "96011 LangModel API Client Tests",
+      "name": "ExtractText_ContentIsNull_ReturnsEmpty"
+    },
+    {
+      "index": 98,
+      "class": "96011 LangModel API Client Tests",
+      "name": "ExtractText_ContentArray_ReturnsEmpty"
+    },
+    {
+      "index": 99,
+      "class": "96012 LangModel Providers Tests",
+      "name": "OpenAI_Metadata"
+    },
+    {
+      "index": 100,
+      "class": "96012 LangModel Providers Tests",
+      "name": "AzureOpenAI_Metadata"
+    },
+    {
+      "index": 101,
+      "class": "96012 LangModel Providers Tests",
+      "name": "CustomLLM_Metadata"
+    },
+    {
+      "index": 102,
+      "class": "96012 LangModel Providers Tests",
+      "name": "Anthropic_Metadata"
+    },
+    {
+      "index": 103,
+      "class": "96012 LangModel Providers Tests",
+      "name": "xAI_Metadata"
+    },
+    {
+      "index": 104,
+      "class": "96012 LangModel Providers Tests",
+      "name": "Gemini_Metadata"
+    },
+    {
+      "index": 105,
+      "class": "96012 LangModel Providers Tests",
+      "name": "IsConfigured_WithoutApiKey_ReturnsFalse_ForEveryExternalProvider"
+    },
+    {
+      "index": 106,
+      "class": "96012 LangModel Providers Tests",
+      "name": "SetAzureChatPath_Blank_UsesDefaultDeploymentPath"
+    },
+    {
+      "index": 107,
+      "class": "96012 LangModel Providers Tests",
+      "name": "SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion"
+    },
+    {
+      "index": 108,
+      "class": "96012 LangModel Providers Tests",
+      "name": "SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment"
+    },
+    {
+      "index": 109,
+      "class": "96013 Chat Svc Gate Tests",
+      "name": "ChatSvcGate_WritePermission_WithPermissionsDisabled"
+    },
+    {
+      "index": 110,
+      "class": "96013 Chat Svc Gate Tests",
+      "name": "ProviderBase_HasServiceKeyPermission_WithPermissionsDisabled"
+    },
+    {
+      "index": 111,
+      "class": "96013 Chat Svc Gate Tests",
+      "name": "ChatSvcGate_WritePermission_WithRestrictivePermissions"
+    },
+    {
+      "index": 112,
+      "class": "96013 Chat Svc Gate Tests",
+      "name": "ChatSvcGate_WritePermission_WithoutPermissionSet"
+    },
+    {
+      "index": 113,
+      "class": "96013 Chat Svc Gate Tests",
+      "name": "ChatSvcGate_Table_IsAccessible"
+    },
+    {
+      "index": 114,
+      "class": "96014 LangModel Setup Page Tests",
+      "name": "LangModelSetupPage_Opens"
+    },
+    {
+      "index": 115,
+      "class": "96014 LangModel Setup Page Tests",
+      "name": "LangModelSetupPage_CountsTheLanguageModels"
+    },
+    {
+      "index": 116,
+      "class": "96014 LangModel Setup Page Tests",
+      "name": "SetupOri_ExposesTheSingleLangModelAppsAction"
+    },
+    {
+      "index": 117,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskRequestBody_DebugMode_ReturnsBodyUnchanged"
+    },
+    {
+      "index": 118,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskRequestBody_NormalMode_IsRedacted"
+    },
+    {
+      "index": 119,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskResponseBody_DebugMode_ReturnsBodyUnchanged"
+    },
+    {
+      "index": 120,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskResponseBody_NormalMode_IsRedacted"
+    },
+    {
+      "index": 121,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskResponseBody_EmptyBody_StaysEmptyInDebugMode"
+    },
+    {
+      "index": 122,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "MaskErrorText_IsNeverRedacted"
+    },
+    {
+      "index": 123,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "GetBaseUrl_StripsPathAndQuery"
+    },
+    {
+      "index": 124,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "GetBaseUrl_HostOnly_ReturnsHost"
+    },
+    {
+      "index": 125,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "GetBaseUrl_NoScheme_ReturnsInput"
+    },
+    {
+      "index": 126,
+      "class": "96015 LLM Req Log Masker Tests",
+      "name": "GetBaseUrl_Empty_ReturnsEmpty"
+    },
+    {
+      "index": 127,
+      "class": "96016 LangModel Registration Tests",
+      "name": "AppRegistry_ListsLanguageModelsWithItsSetupPage"
+    },
+    {
+      "index": 128,
+      "class": "96017 Copilot Upgrade Tests",
+      "name": "UpgradePerCompany_WithoutSetupPermission_Claims"
+    },
+    {
+      "index": 129,
+      "class": "96017 Copilot Upgrade Tests",
+      "name": "UpgradePerCompany_WhenAnotherProviderHolds_LeavesItUnchanged"
+    },
+    {
+      "index": 130,
+      "class": "96018 Copilot Install Tests",
+      "name": "ClaimChatProvider_WithoutSetupPermission_Claims"
+    },
+    {
+      "index": 131,
+      "class": "96018 Copilot Install Tests",
+      "name": "ClaimChatProvider_WhenAnotherProviderHolds_LeavesItUnchanged"
+    },
+    {
+      "index": 132,
+      "class": "96018 Copilot Install Tests",
+      "name": "ClaimChatProvider_WhenNone_ClaimsLanguageModels"
+    },
+    {
+      "index": 133,
+      "class": "96018 Copilot Install Tests",
+      "name": "ClaimChatProvider_Twice_IsIdempotent"
+    },
+    {
+      "index": 134,
+      "class": "96018 Copilot Install Tests",
+      "name": "ClaimChatProvider_MissingSetupRow_CreatesAndClaims"
+    },
+    {
+      "index": 135,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_DeclinedAbsent_LeavesModelsUnchanged"
+    },
+    {
+      "index": 136,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_AcceptedAbsent_CreatesDefault"
+    },
+    {
+      "index": 137,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_AcceptedOtherDefault_PreservesSelection"
+    },
+    {
+      "index": 138,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_DeclinedExisting_PreservesModelAndSkill"
+    },
+    {
+      "index": 139,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_AcceptedExisting_RefreshesOnlySkill"
+    },
+    {
+      "index": 140,
+      "class": "96018 Copilot Install Tests",
+      "name": "InitDefaults_ModelWriteFailure_PropagatesWithoutSuccess"
+    },
+    {
+      "index": 141,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Contract_HasRequiredChaptersAndValidContent"
+    },
+    {
+      "index": 142,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Discovery_HasLanguageModelSpecificText"
+    },
+    {
+      "index": 143,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Contract_NamesBothPermissionSets"
+    },
+    {
+      "index": 144,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_MissingPrompt_IsCodedMissingParameter"
+    },
+    {
+      "index": 145,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_UnknownRoleCode_IsCodedRecordNotFound"
+    },
+    {
+      "index": 146,
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut"
+    },
+    {
+      "index": 147,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "HistoryBudget_FollowsTheContextSize"
+    },
+    {
+      "index": 148,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "HistoryBudget_ZeroContextUsesTheFallback"
+    },
+    {
+      "index": 149,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "HistoryBudget_ToolDefinitionsAndTinyContextKeepAFloor"
+    },
+    {
+      "index": 150,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "RemoveOrphanedToolMessages_LeadingToolMessageIsRemoved"
+    },
+    {
+      "index": 151,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "RemoveOrphanedToolMessages_PairedCallsAreKept"
+    },
+    {
+      "index": 152,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "RemoveOrphanedToolMessages_CallWithoutResultIsDropped"
+    },
+    {
+      "index": 153,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "RemoveOrphanedResponsesItems_DropsUnpairedItems"
+    },
+    {
+      "index": 154,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "NeedsFigureCheck_FiguresWithoutToolCall_IsTrue"
+    },
+    {
+      "index": 155,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "NeedsFigureCheck_FiguresAfterToolCall_IsFalse"
+    },
+    {
+      "index": 156,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "NeedsFigureCheck_ToolCallInAnEarlierTurn_DoesNotCount"
+    },
+    {
+      "index": 157,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "NeedsFigureCheck_AfterTheFollowUp_IsFalse"
+    },
+    {
+      "index": 158,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "NeedsFigureCheck_AnthropicToolUseBlocksCount"
+    },
+    {
+      "index": 159,
+      "class": "96022 LangModel Turn Guard Tests",
+      "name": "ContainsFigures_RecognisesAmountsOnly"
+    },
+    {
+      "index": 160,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_CreatesModelAndStoresKeysWithoutAnsweringThem"
+    },
+    {
+      "index": 161,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_UnknownProviderAndMissingCode_AreReportedTogether"
+    },
+    {
+      "index": 162,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Delete_RemovesTheModelAndReportsUnknownCodes"
+    },
+    {
+      "index": 163,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_RunsToolCallsAndReturnsTheReply"
+    },
+    {
+      "index": 164,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_ProviderError_IsPreconditionFailed"
+    },
+    {
+      "index": 165,
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_UnknownModel_IsRecordNotFound"
+    },
+    {
+      "index": 166,
+      "class": "96029 LangModel Chat Proxy Tests",
+      "name": "NeedsReasoningOff_ToolsAndMatchingError_IsTrue"
+    },
+    {
+      "index": 167,
+      "class": "96029 LangModel Chat Proxy Tests",
+      "name": "NeedsReasoningOff_NoTools_IsFalse"
+    },
+    {
+      "index": 168,
+      "class": "96029 LangModel Chat Proxy Tests",
+      "name": "NeedsReasoningOff_AlreadySet_IsFalse"
+    },
+    {
+      "index": 169,
+      "class": "96029 LangModel Chat Proxy Tests",
+      "name": "NeedsReasoningOff_UnrelatedError_IsFalse"
+    },
+    {
+      "index": 170,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_EmptyEndpoints_FillsDefaults"
+    },
+    {
+      "index": 171,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_ProxyEndpoints_KeepsExistingValues"
+    },
+    {
+      "index": 172,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_AzureEndpoints_KeepsExistingValues"
+    },
+    {
+      "index": 173,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_OnlyBaseUrl_LeavesPathsEmpty"
+    },
+    {
+      "index": 174,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_OnlyChatPath_FillsBaseUrlOnly"
+    },
+    {
+      "index": 175,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_OnlyModelsPath_FillsBaseUrlOnly"
+    },
+    {
+      "index": 176,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_RepeatedSelection_KeepsUserEdits"
+    },
+    {
+      "index": 177,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_TableValidation_FillsDefaults"
+    },
+    {
+      "index": 178,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_AzureSelection_LeavesEndpointsEmpty"
+    },
+    {
+      "index": 179,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_DefaultBase_BuildsEndpointUrls"
+    },
+    {
+      "index": 180,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls"
+    },
+    {
+      "index": 181,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls"
+    },
+    {
+      "index": 182,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_WhitespaceBase_DefaultsOnCard"
+    },
+    {
+      "index": 183,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_WhitespaceBase_UsesRuntimeDefault"
+    },
+    {
+      "index": 184,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_VersionedBase_BuildsSingleV1Urls"
+    },
+    {
+      "index": 185,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC01_VersionedTrailingSlash_BuildsSingleV1Urls"
+    },
+    {
+      "index": 186,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_PathsWithoutLeadingSlash_BuildsEndpointUrls"
+    },
+    {
+      "index": 187,
+      "class": "96031 LangModel 60 Defaults Tests",
+      "name": "Scenario_AC02_VersionedPaths_PreservesSegmentBoundaries"
+    },
+    {
+      "index": 188,
+      "class": "96035 LangModel Hint Tests",
+      "name": "EnglishRead_KeyPresenceTransitions"
+    },
+    {
+      "index": 189,
+      "class": "96035 LangModel Hint Tests",
+      "name": "EnglishEdit_KeyPresenceTransitions"
+    },
+    {
+      "index": 190,
+      "class": "96035 LangModel Hint Tests",
+      "name": "IcelandicRead_KeyPresenceTransitions"
+    },
+    {
+      "index": 191,
+      "class": "96035 LangModel Hint Tests",
+      "name": "IcelandicEdit_KeyPresenceTransitions"
+    }
+  ]
+}
