@@ -6,7 +6,7 @@ using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
 
 /// <summary>Issue 65 prompt dispatch regressions across six providers, failure classes, inputs and attachments.</summary>
-codeunit 96032 "LLM 65 Prompt Tests"
+codeunit 96034 "LLM 65 Prompt Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
