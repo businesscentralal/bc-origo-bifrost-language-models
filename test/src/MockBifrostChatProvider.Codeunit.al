@@ -30,6 +30,8 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         LastDebugMode: Boolean;
         SendResponseValue: Text;
         ContinueResponseValue: Text;
+        CompleteResponseValue: Text;
+        CompletePromptCalled: Boolean;
         ConfigJsonValue: Text;
         IsConfiguredValue: Boolean;
         IsConfiguredCalled: Boolean;
@@ -65,6 +67,11 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                     LastSendPayload := Argument.GetPayload();
                     CaptureArgument(Argument);
                     Argument.SetResultText(SendResponseValue);
+                end;
+            ProcType::CompletePrompt:
+                begin
+                    CompletePromptCalled := true;
+                    Argument.SetResultText(CompleteResponseValue);
                 end;
             ProcType::ContinueWithToolResults:
                 begin
@@ -162,6 +169,8 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         LastDebugMode := false;
         SendResponseValue := '';
         ContinueResponseValue := '';
+        CompleteResponseValue := '';
+        CompletePromptCalled := false;
         ConfigJsonValue := '';
         IsConfiguredValue := false;
         IsConfiguredCalled := false;
@@ -194,6 +203,22 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     procedure SetSendResponse(ResponseJson: Text)
     begin
         SendResponseValue := ResponseJson;
+    end;
+
+    /// <summary>
+    /// Sets the mock CompletePrompt response fixture used by LLM.Prompt.Complete tests.
+    /// </summary>
+    procedure SetCompleteResponse(ResponseJson: Text)
+    begin
+        CompleteResponseValue := ResponseJson;
+    end;
+
+    /// <summary>
+    /// Returns whether the mock received a CompletePrompt call.
+    /// </summary>
+    procedure WasCompletePromptCalled(): Boolean
+    begin
+        exit(CompletePromptCalled);
     end;
 
     /// <summary>

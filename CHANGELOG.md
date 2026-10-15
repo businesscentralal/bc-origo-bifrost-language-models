@@ -2,36 +2,14 @@
 
 All notable changes to Bifrost Language Models are documented here.
 
-## [28.0.0.0] - 2026-10-14
+## [Unreleased]
 
-First release. Bifrost Language Models adds Bifrost Chat and a choice of language models to Business Central, on top of Bifrost Foundation 28.0.1 or later. Enable **Allow HttpClient Requests** for the app (the Bifrost Setup page offers a setup wizard for it) before using an external provider.
-
-### Added
-
-- Bifrost Chat on 36 list and card pages (customers, vendors, items, sales and purchase documents, entries, incoming documents), with a language model per user.
-- Language models you configure yourself: Microsoft Copilot, OpenAI, Azure OpenAI, Anthropic, xAI, Google Gemini and any OpenAI-compatible endpoint. API keys are kept in the Bifröst secret store, as a shared key or a personal key per language model.
-- The `LLM.Prompt.Complete` message type for one-shot completions from a playbook or integration, with coded error answers.
-- The MCP tool server, which lets the assistant read and write Business Central under the signed-in user's own permissions.
-- Permission sets `BIFROST LLM ori` (full), `BIFROST LLM Rd ori` (read-only), `BIFROST LLM Chat ori` (provider access, for non-Copilot providers) and `BIFROST ChatSvc ori` (manage the shared key). Foundation's `BIFROST Full ori` and `BIFROST Read ori` roles now include the Language Models objects, so administrators and readers need no second assignment.
-- Icelandic translation and help pages in English and Icelandic, published on https://docs.bifrost.origo.is/en-us/language-models/.
-
-### Changed
+### Changed (2026-10-14) - AppSource readiness metadata (#66)
 
 - The app links to the documentation, privacy statement and licence terms on docs.bifrost.origo.is. The Copilot capability's Learn more link points to the Language Models documentation.
 - `BIFROST LLM Chat ori` now also grants read on the language model table, so a user with that set and Foundation's `BIFROST Chat ori` can run `LLM.Prompt.Complete` without a permission error.
 - The enum extension that registers Language Models as a chat provider is renamed `LangModel Chat Prov Type ori` (id 10035384 unchanged) so every object carries the `ori` affix. It is part of the first release, so nothing that was published is affected.
-- Bifrost Chat is shown only to users with a Language Model Code on their Bifrost User Setup. Import a configuration package for User Setup to set the code for many users at once.
-- Selecting OpenAI on the language model card fills an empty Base URL with the OpenAI address, and request addresses no longer repeat slashes or `/v1`.
-- The chat history budget follows each model's context size (new Context Tokens field, with a default per provider), and the model is asked once to verify figures in an answer when no tool was used.
-
-### Fixed
-
-- The first chat of the day no longer fails with a transaction error when an API key had not been used yet that day.
-- Azure OpenAI and OpenAI reasoning models no longer refuse chat requests that carry tools; Google Gemini no longer rejects the request; Azure OpenAI completions use the configured chat path; strict OpenAI-compatible gateways accept the message order.
-- A failed Gemini connection test shows an error, and a failed connection test no longer leaves the session on the tested model.
-- The shared endpoint fields of a language model cannot be written through the generic data API, so an API key cannot be redirected to another server.
-
-### Technical detail
+- Foundation's `BIFROST Full ori` and `BIFROST Read ori` roles now include the Language Models objects through permission set extensions 10035426 `BIFROST LLM Full ori` and 10035427 `BIFROST LLM Read ori`, so administrators and readers need no second assignment.
 
 ### Fixed (2026-10-13) - OpenAI endpoint defaults (#60)
 
@@ -144,7 +122,7 @@ First release. Bifrost Language Models adds Bifrost Chat and a choice of languag
 - On the Bifrost User Setup card, Language Model Code is shown in General, after Foundation's Charge Type and Session Source Approval Type, instead of at the end of Linked Records.
 - The Bifrost Foundation dependency floor in `app/app.json` and `test/app.json` is raised to `28.0.0.152`, the first Foundation build with the User Setup `group(General)` anchor.
 
-### Changed (initial build)
+### Changed
 
 - Bifrost Chat is only shown to users with a Language Model Code. Users who relied on the Default language model for chat no longer see Bifrost Chat until a Language Model Code is set on their Bifrost User Setup. To assign a code to many users at once, import a configuration package for User Setup ori that fills in "Bifrost Language Model Code".
 
@@ -153,7 +131,7 @@ First release. Bifrost Language Models adds Bifrost Chat and a choice of languag
 - `.AL-Go/settings.json` `appDependencyProbingPaths` for bc-origo-bifrost-core sets `version` to `latest`. `release_status` stays `latestBuild`. AL-Go GetArtifacts matches a specific version exactly; only `latest` uses the last successful CICD run.
 - The app builds against that latest Foundation CI build. The Foundation dependency floor is `28.0.0.0` in `app/app.json` and `test/app.json`.
 - `fullBuildPatterns` lists `.AL-Go/settings.json`, so a settings-only change runs the full Build (Default) and Build (Test) instead of being skipped by incremental builds.
-### Security (initial build)
+### Security
 
 - Default (release) builds no longer ship the test app's internalsVisibleTo grant; the strip moved to PipelineInitialize.ps1 because Alpaca never ran PreCompileApp.ps1 (core#129).
 
@@ -168,6 +146,8 @@ First release. Bifrost Language Models adds Bifrost Chat and a choice of languag
 - CI/CD run [36117014819](https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/36117014819) on `aec4d53` failed both builds with AL0132: `Record "Setup ori"` does not contain `GetRequestDebugMode` (LangModelAPIClient, LangModelChatProvider, CopilotChatProxy, AnthropicLangModelProxy, GeminiLangModelProv).
 - Cause: `.AL-Go/settings.json` `appDependencyProbingPaths` for bc-origo-bifrost-core pinned `version: 1.0.0.102`, which predates `GetRequestDebugMode` (added in core build 1.0.0.124).
 - Fix: probing version raised to `1.0.0.132`, the core build live on the Bifrost sandbox as Foundation 28.0.0.132 (includes core#107 and core#114). App/test app.json unchanged.
+
+## [28.0.0.0] - 2026-09-07
 
 ### Changed (2026-10-12) - Retry eligibility test documentation
 
@@ -306,7 +286,7 @@ aggregates the outstanding setup work of all installed Bifröst apps in one plac
   internal.
 
 
-Origin: the chat module was moved out of **Bifrost Foundation** 28.0.0.0 into this separate AppSource app, installed side by side with Foundation and depending on it.
+First release. The chat module was moved out of **Bifrost Foundation** 28.0.0.0 into this separate AppSource app, installed side by side with Foundation and depending on it.
 
 ### Fixed (2026-09-07)
 
@@ -334,7 +314,7 @@ The app was called **Bifrost Bragi** while it was being built. Bifröst apps are
 - Icelandic captions that carried the old app name now read "Bifröst mállíkön" / "Bifröst mállíkana".
 - The documentation site slug stays `bragi` for now (`help`, `contextSensitiveHelpUrl` and `ContextSensitiveHelpPage = 'bragi-setup'`); the folders in `businesscentralal/bifrost` are renamed in a separate change, and the app.json URLs follow then.
 
-### Added (initial build)
+### Added
 
 - **App identity**: `Bifrost Language Models` (new app id), test app `Bifrost Language Models - Tests`. Object range 10035335-10035484, test range 96000-96199. Namespace `Origo.Bifrost.LanguageModels` (tests `Origo.Bifrost.LanguageModels.Test`). Depends on Bifrost Foundation 28.0.0.0. Help published to <https://businesscentralal.github.io/bifrost>.
 - **Bifrost Chat**: control add-in `Bifrost Chat ori` with its scripts and styles, `Bifrost Chat FactBox ori`, `Chat Focus ori`, `Bifrost Chat Model List ori`, `Bifrost Chat Mgt ori`, `Bifrost Chat Transfer ori`, `Bifrost Chat Argument ori`, `Bifrost Chat Proc. Type ori`, `Bifrost Chat Utils ori` and 36 page extensions `Bifrost Chat <Page> ori` that put the FactBox on the customer, vendor, item, sales, purchase, ledger entry and incoming document pages.
@@ -365,7 +345,7 @@ The app was called **Bifrost Bragi** while it was being built. Bifröst apps are
   - Both codes are registered when a language model is inserted or renamed, and from `Copilot Install ori.OnInstallAppPerCompany` and the new `Copilot Upgrade ori.OnUpgradePerCompany` for every existing language model. Registration is idempotent.
 - Icelandic translation `app/Translations/Bifrost Language Models.is-IS.xlf` (253 units, all translated), HTML help in `app/Help/en-US` and `app/Help/is-IS` (`BifrostChat.html`, `BifrostLangModelCard.html`, `BifrostLangModelList.html`, `index.html`).
 
-### Changed (initial build)
+### Changed
 
 - Object ids were renumbered from the Foundation range into 10035335-10035484 and test ids into 96000-96199. Object **names are unchanged**, so no caller or configuration that refers to an object by name is affected.
 - `Bifrost Chat Utils ori.GetIdentityJson()` replaces the direct call into Foundation's internal `Help WhoAmI Get Impl ori`: the chat pages now build the connection-validation identity by running the public `Help.WhoAmI.Get` message type through Foundation's `Msg Interface ori`, dropping the response envelope status and the personal system prompt.
