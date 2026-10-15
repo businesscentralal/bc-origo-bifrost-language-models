@@ -21,7 +21,7 @@ Chat with Business Central using OpenAI, Anthropic, Gemini, xAI, Azure OpenAI or
 ## Description (basic HTML; Partner Center does not render Markdown, max 3000 characters including markup)
 
 ```html
-<p>Bifrost Language Models adds a chat panel to the Business Central cards where it helps. Users ask the assistant to look things up or to get work done in Business Central, from the page they are working on, using the AI provider your company chooses. The assistant works with the user's own data under the user's own permissions.</p>
+<p>Bifrost Language Models adds a chat panel to the Business Central pages where it helps. Users ask the assistant to look things up or to get work done in Business Central, from the page they are working on, using the AI provider your company chooses. The assistant works with the user's own data under the user's own permissions.</p>
 <p>The app builds on Bifrost Foundation, which supplies the chat itself and lets the assistant read and act on Business Central data. Bifrost Language Models supplies the language models behind it.</p>
 <p><b>What you get</b></p>
 <ul>
