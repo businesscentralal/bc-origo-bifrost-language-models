@@ -1,0 +1,119 @@
+{
+  "candidateSha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+  "controlSha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+  "BCImage": "sandbox-28.5.54151.56267-w1",
+  "runtimeFoundationVersion": "28.0.4.557",
+  "runtimeFoundationArtifactSha256": "38651d128be7b7adf0dafce6c509dd9217e2de8a5b7bd4b9195fc91b70c5eb06",
+  "compiledAgainstSame556Symbols": true,
+  "candidateNative": {
+    "sha": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+    "uncommittedSource": false,
+    "containerId": "f07733f709a3",
+    "startedAt": "2026-10-15T12:33:13.754Z",
+    "finishedAt": "2026-10-15T12:35:43.059Z",
+    "fullSuite": true,
+    "total": 192,
+    "passed": 180,
+    "failed": 12,
+    "skipped": 0,
+    "errors": 0,
+    "exitCode": 1,
+    "ok": false,
+    "xmlSaved": true
+  },
+  "controlNative": {
+    "sha": "043bdd4d1df13870bf54098503137f56b62e9b56",
+    "uncommittedSource": false,
+    "containerId": "f0578ff99c3a",
+    "startedAt": "2026-10-15T13:02:28.618Z",
+    "finishedAt": "2026-10-15T13:11:02.684Z",
+    "fullSuite": true,
+    "total": 188,
+    "passed": 176,
+    "failed": 12,
+    "skipped": 0,
+    "errors": 0,
+    "exitCode": 1,
+    "ok": false,
+    "xmlSaved": true
+  },
+  "commonTests": 188,
+  "sameFailures": true,
+  "failures": [
+    {
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_EndpointFieldsNotReadRestricted"
+    },
+    {
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_NeighbourFieldsNotRestricted"
+    },
+    {
+      "class": "96004 LangModel Field Restrict Tests",
+      "name": "FieldRestrict_ThreeEndpointFieldsWriteRestricted"
+    },
+    {
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_MissingPrompt_IsCodedMissingParameter"
+    },
+    {
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut"
+    },
+    {
+      "class": "96019 LLM Prompt Contract Tests",
+      "name": "Execute_UnknownRoleCode_IsCodedRecordNotFound"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_ProviderError_IsPreconditionFailed"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_RunsToolCallsAndReturnsTheReply"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Chat_UnknownModel_IsRecordNotFound"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Delete_RemovesTheModelAndReportsUnknownCodes"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_CreatesModelAndStoresKeysWithoutAnsweringThem"
+    },
+    {
+      "class": "96028 LangModel Test Tools Tests",
+      "name": "Set_UnknownProviderAndMissingCode_AreReportedTogether"
+    }
+  ],
+  "addedCandidateTests": [
+    {
+      "class": "96035 LangModel Hint Tests",
+      "name": "EnglishEdit_KeyPresenceTransitions",
+      "passed": true
+    },
+    {
+      "class": "96035 LangModel Hint Tests",
+      "name": "EnglishRead_KeyPresenceTransitions",
+      "passed": true
+    },
+    {
+      "class": "96035 LangModel Hint Tests",
+      "name": "IcelandicEdit_KeyPresenceTransitions",
+      "passed": true
+    },
+    {
+      "class": "96035 LangModel Hint Tests",
+      "name": "IcelandicRead_KeyPresenceTransitions",
+      "passed": true
+    }
+  ],
+  "navAppSettings": "Missing/allrowsabsentafterDefault/Testproduct/Testappbefore96004onbothfreshenvironments;missingmeansdisabledinFoundation.IsHttpEnabled. No manualHTTPenablement.",
+  "conclusion": "All188commoncasesandsame12failuresmatch;theonly4additionalcandidatecases96035passlast. The3-filehintdeltaisnotrequiredtoreproducethe12failures. RegisteredHTTPfixturepreconditionfailswith557onunchangedmainandPR71. ThisdoesnotwaivePR71CIorproveitsfuturetip.",
+  "repairRoute": "NEWERArchitect1792069256.899869single-core1008fix;no per-appHTTPworkarounds.NoPR66fixturecopy/unchangedretry.Afterapprovedofficialcore1008dependencyavailable,verifyexactpackage/sourceSHAandfreshpairedDefault/TestCIfor71andTreasury103.",
+  "verifiedAt": "2026-10-15T13:13:18.370995+00:00",
+  "routeDependencyUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/issues/1008"
+}
