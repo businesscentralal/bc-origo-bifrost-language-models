@@ -17,7 +17,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         ModelCodeTok: Label 'S4-PERM', Locked = true;
 
     /// <summary>
-    /// Verifies that a session with only BIFROST Chat ori and BIFROST LLM Chat ori passes the permission check and reads the language model, in English.
+    /// Verifies that a session with only BIFROST API ori (transport), BIFROST Chat ori and BIFROST LLM Chat ori passes the permission check and reads the language model, in English.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
@@ -28,7 +28,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
     end;
 
     /// <summary>
-    /// Verifies that a session with only BIFROST Chat ori and BIFROST LLM Chat ori passes the permission check and reads the language model, in Icelandic.
+    /// Verifies that a session with only BIFROST API ori (transport), BIFROST Chat ori and BIFROST LLM Chat ori passes the permission check and reads the language model, in Icelandic.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
@@ -72,10 +72,11 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         Initialize();
         MockProvider.SetIsConfigured(true);
         MockProvider.SetCompleteResponse('{"text":"mock completion"}');
-        // [GIVEN] a session with only BIFROST Chat ori and BIFROST LLM Chat ori
+        // [GIVEN] a session with only BIFROST API ori (transport), BIFROST Chat ori and BIFROST LLM Chat ori
         PreviousLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
         LibraryLowerPermissions.SetO365Basic();
+        LibraryLowerPermissions.AddPermissionSet('BIFROST API ori'); // the transport every MCP/API caller holds; indirect access to the message tables
         LibraryLowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LibraryLowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
 
@@ -104,6 +105,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         PreviousLanguage := GlobalLanguage();
         GlobalLanguage(LanguageId);
         LibraryLowerPermissions.SetO365Basic();
+        LibraryLowerPermissions.AddPermissionSet('BIFROST API ori'); // the transport every MCP/API caller holds; indirect access to the message tables
         LibraryLowerPermissions.AddPermissionSet('BIFROST Chat ori');
 
         // [WHEN] LLM.Prompt.Complete runs for that language model
