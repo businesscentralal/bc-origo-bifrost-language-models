@@ -119,18 +119,19 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
 
     local procedure Execute(RequestBody: Text) ResponseJson: JsonObject
     var
-        TempArgument: Record "Message Argument ori" temporary;
-        PromptImpl: Codeunit "LLM Prompt Compl Impl ori";
-        RequestJson: JsonObject;
+        Dispatcher: Codeunit "Dispatcher ori";
+        RequestContent: BigText;
+        ResponseContent: BigText;
+        MessageVersion: Enum "Message Version ori";
+        ResponseContentType: Text[100];
+        ResponseText: Text;
     begin
-        // Call the implementation directly: the dispatcher path adds Foundation's own queue and licence handling, which this test is not about.
-        Assert.IsTrue(RequestJson.ReadFrom(RequestBody), RequestBody);
-        TempArgument.Init();
-        TempArgument.Version := TempArgument.Version::"1.0";
-        TempArgument.Insert();
-        TempArgument.SetRequestJson(RequestJson);
-        PromptImpl.ExecuteBifrostTask(TempArgument);
-        ResponseJson := TempArgument.GetResponseJson();
+        // Go through the dispatcher: the implementation asserts Argument.AssertIsLicensed(), and only Foundation's message task
+        // can mark a call as licensed (SetLicensed is internal). Calling the implementation directly fails every case with the licence error.
+        RequestContent.AddText(RequestBody);
+        Dispatcher.Execute("Message Type ori"::"LLM.Prompt.Complete", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
+        ResponseContent.GetSubText(ResponseText, 1);
+        Assert.IsTrue(ResponseJson.ReadFrom(ResponseText), ResponseText);
     end;
 
     local procedure Initialize()
