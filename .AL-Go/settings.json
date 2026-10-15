@@ -33,7 +33,6 @@
     "tools/Get-SharedAlpacaBuildOrder.ps1",
     "tools/SharedAlpacaContainer.ps1",
     "tools/Test-SharedAlpacaContainer.ps1",
-    ".github/workflows/BifrostPipeline.yaml",
     ".github/workflows/**",
     "tools/Test-BifrostPipeline.ps1",
     "app/Translations/*.xlf"

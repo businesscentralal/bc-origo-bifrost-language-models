@@ -152,7 +152,7 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
         RequestBody.Add('max_completion_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
         RequestBody.Add('messages', Messages);
 
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + '/v1/chat/completions';
+        ChatUrl := GetCompletionUrl(Argument);
         Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         ApiClient.LogLastRequest();
@@ -221,6 +221,22 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
             LowerName.StartsWith('gpt-7'));
     end;
 
+    /// <summary>
+    /// Builds the one-shot OpenAI completion endpoint used by CompletePrompt.
+    /// </summary>
+    procedure GetCompletionUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
+    begin
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), '/v1/chat/completions'));
+    end;
+
+    /// <summary>
+    /// Builds the OpenAI models endpoint used by model discovery and connection checks.
+    /// </summary>
+    procedure GetModelsUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
+    begin
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), '/v1/models'));
+    end;
+
     local procedure DoGetAvailableModels(var Argument: Record "Bifrost Chat Argument ori" temporary): Boolean
     var
         TempNameValueBuffer: Record "Name/Value Buffer" temporary;
@@ -236,7 +252,7 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
         if BaseUrl = '' then
             exit(false);
 
-        ModelsArray := ApiClient.ListModelsFromEndpoint(BaseUrl + '/v1/models', AuthHeaderNameTok, Argument.GetApiKey());
+        ModelsArray := ApiClient.ListModelsFromEndpoint(GetModelsUrl(Argument), AuthHeaderNameTok, Argument.GetApiKey());
 
         foreach ModelToken in ModelsArray do begin
             ModelObject := ModelToken.AsObject();
@@ -270,7 +286,7 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
             Argument.SetErrorMessage(NoBaseUrlErr);
             exit(false);
         end;
-        ApiClient.ListModelsFromEndpoint(BaseUrl + '/v1/models', AuthHeaderNameTok, Argument.GetApiKey());
+        ApiClient.ListModelsFromEndpoint(GetModelsUrl(Argument), AuthHeaderNameTok, Argument.GetApiKey());
         exit(true);
     end;
 

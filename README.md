@@ -39,6 +39,16 @@ addressed by a secret code per language model, and is passed as `SecretText` all
    `Bifrost Language Model ori` row: a code, a description, the chat provider, the endpoint (`Base URL`,
    `Model`, `Chat Path`, `Models Path`), the limits (`Timeout Seconds`, `Max Tokens`, `Context Tokens`) and
    the skill text that becomes part of the system instruction.
+   Selecting **OpenAI** fills an empty or whitespace-only **Base URL** with `https://api.openai.com/`.
+   **Chat Path** and **Models Path** remain unchanged; the provider adds its endpoint paths.
+   Existing base URLs, including custom Azure OpenAI and proxy endpoints, are preserved.
+   Requests trim surrounding whitespace and trailing slashes from the resolved base before adding endpoint paths.
+
+   **Íslenska:** Þegar **OpenAI** er valið fær auður reitur **Grunnslóð** eða reitur með bilum eingöngu gildið
+   `https://api.openai.com/`. **Spjallslóð** og **Líkanaslóð** haldast óbreyttar;
+   veitandinn bætir við endapunktsslóðum. Fyrirliggjandi grunnslóðir haldast,
+   þar á meðal sérsniðnar slóðir fyrir Azure OpenAI og milliliða.
+   Beiðnir fjarlægja bil í kringum grunnslóðina og skástrik í lok hennar áður en endapunktsslóð er bætt við.
 2. **Store the API key.** On `Bifrost LangModel Card ori` the actions **Set Shared API Key** and
    **Set Personal API Key** write the key through `LangModel Secrets ori` into Foundation's secret store. The
    card only shows the read-only *Shared Key Stored* / *Personal Key Stored* flags. The shared-key actions
@@ -148,7 +158,7 @@ Objects use the `ori` affix convention; the existing enumextension `LangModel Ch
 | --- | --- | --- |
 | 10035342 | `Bifrost Chat Model List ori` | Lookup for picking one of the models the provider reports. |
 | 10035343 | `Bifrost LangModel Card ori` | Edits one language model, its skill markdown and its API-key actions. |
-| 10035344 | `Bifrost LangModel List ori` | Lists language models. Its explicit Copilot initialization action asks for confirmation through `Copilot Install ori` (10035390); declining leaves models unchanged. |
+| 10035344 | `Bifrost LangModel List ori` | List of language models. |
 | 10035421 | `LangModel Setup ori` | The module's own setup page, the only place it is configured. |
 
 ### Page extensions
@@ -193,8 +203,6 @@ Objects use the `ori` affix convention; the existing enumextension `LangModel Ch
 | 10035381 | `Bifrost Chat VendorList ori` | `Vendor List` | Adds the Foundation chat FactBox and supplies the current record context. |
 | 10035402 | `User Setup Editor LangMdl ori` | `User Setup Editor ori` (Foundation) | Adds the language model field and the chat FactBox to the Bifröst user setup editor. |
 | 10035403 | `Setup LangModel ori` | `Setup ori` (Foundation) | Adds exactly one *Apps* action opening `LangModel Setup ori`, plus its actionref in `Category_Apps`. |
-
-The 14 list actions open Foundation's chat focus through `LangModel Chat Provider ori` (10035382), preserving the original table, SystemId and caption. Card and entry pages feed the FactBox. Both surfaces use Foundation's chat visibility gate and the `bifrost-chat` help page.
 
 ### Enums and interface
 

@@ -156,7 +156,7 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         RequestBody.Add('messages', Messages);
 
         SetAzureChatPath(Argument);
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + Argument."Chat Path";
+        ChatUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), Argument."Chat Path");
         Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         ApiClient.LogLastRequest();
@@ -236,6 +236,14 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
             Argument."Chat Path" := StrSubstNo(Argument."Chat Path", ProviderBase.GetModel(Argument, ''), ApiVersionTok);
     end;
 
+    /// <summary>
+    /// Builds the configured Azure models endpoint without changing the stored path or base URL.
+    /// </summary>
+    procedure GetModelsUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
+    begin
+        exit(ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), Argument."Models Path"));
+    end;
+
     local procedure DoGetAvailableModels(var Argument: Record "Bifrost Chat Argument ori" temporary): Boolean
     var
         TempNameValueBuffer: Record "Name/Value Buffer" temporary;
@@ -250,7 +258,7 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         if Argument."Models Path" = '' then
             exit(false);
 
-        ModelsUrl := ProviderBase.GetBaseUrl(Argument, '') + Argument."Models Path";
+        ModelsUrl := GetModelsUrl(Argument);
         ModelsArray := ApiClient.ListModelsFromEndpoint(ModelsUrl, AuthHeaderNameTok, Argument.GetApiKey());
 
         foreach ModelToken in ModelsArray do begin
