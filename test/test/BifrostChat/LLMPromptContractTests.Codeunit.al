@@ -2,6 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -116,15 +117,20 @@ codeunit 96019 "LLM Prompt Contract Tests"
 
     local procedure Execute(RequestBody: Text) ResponseJson: JsonObject
     var
+        TempHttpSettings: Record "NAV App Setting" temporary;
+        TestSetup: Codeunit "LangModel Test Setup Events";
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
         MessageVersion: Enum "Message Version ori";
         ResponseContentType: Text[100];
         ResponseText: Text;
+        MissingHttpAppIds: List of [Guid];
     begin
         RequestContent.AddText(RequestBody);
+        TestSetup.ArrangeRegisteredAppHttp(TempHttpSettings, MissingHttpAppIds);
         Dispatcher.Execute("Message Type ori"::"LLM.Prompt.Complete", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
+        TestSetup.RestoreRegisteredAppHttp(TempHttpSettings, MissingHttpAppIds);
         ResponseContent.GetSubText(ResponseText, 1);
         Assert.IsTrue(ResponseJson.ReadFrom(ResponseText), ResponseText);
     end;

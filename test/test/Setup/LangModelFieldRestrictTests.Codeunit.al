@@ -2,6 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -105,6 +106,8 @@ codeunit 96004 "LangModel Field Restrict Tests"
     /// </summary>
     local procedure GetFieldFlags(FieldNumbersJson: Text; var Flags: Dictionary of [Integer, JsonObject])
     var
+        TempHttpSettings: Record "NAV App Setting" temporary;
+        TestSetup: Codeunit "LangModel Test Setup Events";
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
@@ -114,9 +117,12 @@ codeunit 96004 "LangModel Field Restrict Tests"
         ResponseJson: JsonObject;
         ResultToken: JsonToken;
         FieldToken: JsonToken;
+        MissingHttpAppIds: List of [Guid];
     begin
         RequestContent.AddText(StrSubstNo('{"tableNumber":%1,"fieldNumbers":%2}', Format(Database::"Bifrost Language Model ori", 0, 9), FieldNumbersJson));
+        TestSetup.ArrangeRegisteredAppHttp(TempHttpSettings, MissingHttpAppIds);
         Dispatcher.Execute("Message Type ori"::"Help.Fields.Get", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
+        TestSetup.RestoreRegisteredAppHttp(TempHttpSettings, MissingHttpAppIds);
         ResponseContent.GetSubText(ResponseText, 1);
         Assert.IsTrue(ResponseJson.ReadFrom(ResponseText), ResponseText);
         Assert.IsTrue(ResponseJson.Get('result', ResultToken), 'Help.Fields.Get answers a result: ' + ResponseText);

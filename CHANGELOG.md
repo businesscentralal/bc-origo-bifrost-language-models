@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-15) - Native dispatcher test HTTP setup
+
+- Test helper 96000 `LangModel Test Setup Events` arranges the registered-app HTTP precondition for dispatcher-based tests in codeunits 96004, 96019 and 96028, then restores only the original settings immediately after dispatch. This lets the existing field, coded-error and test-tool assertions run against Foundation's registered-app gate. No production code, credentials, licence/EULA state, exclusions or assertions change.
+
 ### Fixed (2026-10-15) - Missing API key instruction (#70)
 
 - Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.
