@@ -21,7 +21,7 @@ Spjallaðu við Business Central með OpenAI, Anthropic, Gemini, xAI, Azure Open
 ## Lýsing (einfalt HTML; Partner Center birtir ekki Markdown, hámark 3000 stafir með merkjum)
 
 ```html
-<p>Bifröst mállíkön bæta spjallglugga við þau spjöld í Business Central þar sem hann gagnast. Notendur biðja aðstoðarmanninn að finna upplýsingar eða vinna verk í Business Central, af þeirri síðu sem þeir eru að vinna á, með þeim gervigreindarveitanda sem fyrirtækið velur. Aðstoðarmaðurinn vinnur með gögn notandans sjálfs og með þeim réttindum sem hann hefur.</p>
+<p>Bifröst mállíkön bæta spjallglugga við þær síður í Business Central þar sem hann gagnast. Notendur biðja aðstoðarmanninn að finna upplýsingar eða vinna verk í Business Central, af þeirri síðu sem þeir eru að vinna á, með þeim gervigreindarveitanda sem fyrirtækið velur. Aðstoðarmaðurinn vinnur með gögn notandans sjálfs og með þeim réttindum sem hann hefur.</p>
 <p>Forritið byggir á Bifrost Foundation, sem sér um sjálft spjallið og gerir aðstoðarmanninum kleift að lesa og vinna með gögn í Business Central. Bifröst mállíkön sjá um mállíkönin sjálf.</p>
 <p><b>Hvað færðu</b></p>
 <ul>
