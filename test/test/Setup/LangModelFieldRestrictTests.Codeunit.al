@@ -106,6 +106,7 @@ codeunit 96004 "LangModel Field Restrict Tests"
     local procedure GetFieldFlags(FieldNumbersJson: Text; var Flags: Dictionary of [Integer, JsonObject])
     var
         Dispatcher: Codeunit "Dispatcher ori";
+        TestSetup: Codeunit "LangModel Test Setup Events";
         RequestContent: BigText;
         ResponseContent: BigText;
         MessageVersion: Enum "Message Version ori";
@@ -115,6 +116,7 @@ codeunit 96004 "LangModel Field Restrict Tests"
         ResultToken: JsonToken;
         FieldToken: JsonToken;
     begin
+        TestSetup.EnableDispatcherHttp();
         RequestContent.AddText(StrSubstNo('{"tableNumber":%1,"fieldNumbers":%2}', Format(Database::"Bifrost Language Model ori", 0, 9), FieldNumbersJson));
         Dispatcher.Execute("Message Type ori"::"Help.Fields.Get", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
         ResponseContent.GetSubText(ResponseText, 1);
