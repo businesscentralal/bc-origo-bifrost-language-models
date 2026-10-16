@@ -1,0 +1,14 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "worker": "worker-6",
+  "task": "1792151046.862049",
+  "name": "codex-worker6-lm73-b3df90b-w1",
+  "id": "f030496f8435",
+  "createdAt": "2026-10-16T20:38:54.777Z",
+  "retained": true,
+  "reason": "Architect1792180242.899649 and Gunnar13:03 retention rule: preserve until Bifr\u00f6st Tester postdeployment UAT passes and issue73 closes.",
+  "pendingCleanup": true,
+  "priorContainer": "f0f446957dd5",
+  "priorDeletion": "DELETE204/GET404 verified2026-10-16T12:19:16.618Z; never replayed",
+  "resourceNameRecordedInPR": true
+}

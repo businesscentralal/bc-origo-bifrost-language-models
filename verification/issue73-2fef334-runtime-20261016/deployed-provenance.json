@@ -1,0 +1,24 @@
+[
+  {
+    "app": "Bifrost Language Models",
+    "mode": "test-product",
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "containerId": "f030496f8435",
+    "version": "28.0.0.0",
+    "expectedSha256": "1e5682c46e4c3f760c35c845175924c41eecc86c95c8ad0a3c8d6555a3248ddc",
+    "installedSha256": "1e5682c46e4c3f760c35c845175924c41eecc86c95c8ad0a3c8d6555a3248ddc",
+    "byteMatched": true,
+    "checkedAt": "2026-10-16T20:51:16.830Z"
+  },
+  {
+    "app": "Bifrost Language Models - Tests",
+    "mode": "test",
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "containerId": "f030496f8435",
+    "version": "28.0.0.0",
+    "expectedSha256": "da7dd8607a1572b6444be6de50f65e33352858f79ad014f75461c68008d8002a",
+    "installedSha256": "da7dd8607a1572b6444be6de50f65e33352858f79ad014f75461c68008d8002a",
+    "byteMatched": true,
+    "checkedAt": "2026-10-16T20:51:16.775Z"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "PR diff against main a70aaf3 changes only five assertion test codeunits, test app translation setting/XLF and CHANGELOG. No product AL or message-type implementation/contract/registration changed. No shipping/licensing MCP pass claimed.",
+  "productDiffAgainstMain": "empty",
+  "fixtureSetup": "Fresh individually owned container; all AL suite fixtures created by tests; UI only reads setup/list and declines initialization; no API key, licence or EULA writes.",
+  "cleanup": "Unit-test fixture cleanup/isolation plus retained owned environment until Tester UAT/issue closure under Architect1792180242; no deletion yet."
+}

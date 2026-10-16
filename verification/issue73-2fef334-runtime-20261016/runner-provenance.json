@@ -1,0 +1,13 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "runner": "Owned in-container Client Services / PsTestFunctions full96000..96199; actual native Command Line Test Tool130455 language observations",
+  "privateRunnerUsedSha256": "4f3c5c94e88a74162a4b8cb14428dd29c84002747aeb4fd5280ece7ede3ff110",
+  "supportedCultureParameter": "New-ClientContext -culture en-US/is-IS",
+  "source": "run-tests.mjs and owned-run-tests.mjs retained privately; no AL filters or exclusions introduced",
+  "native1033Observation": "native-initial.jsonl",
+  "native1039Observation": "native-is-session.jsonl",
+  "environmentId": "f030496f8435",
+  "fixtureOwnership": "Fresh worker6-owned container; suite seeds own records; no customer/shared data used",
+  "sshEnsure": "sshEnabled PATCH204; endpoint ready; no Stop/Start or NST restart",
+  "noLicensingOrTrialWrites": true
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "app": "default-app",
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/LM.Default.app",
+    "sha256": "1b9c58040fa2ec96f329379bc254f1d416394396d06bbe5e2cc0b1e2ee5c7fd0",
+    "finishedAt": "2026-10-16T20:44:48.969167+00:00"
+  },
+  {
+    "app": "test-product",
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/symbols/Origo_Bifrost Language Models_28.0.0.0.app",
+    "sha256": "1e5682c46e4c3f760c35c845175924c41eecc86c95c8ad0a3c8d6555a3248ddc",
+    "finishedAt": "2026-10-16T20:44:59.468548+00:00"
+  },
+  {
+    "app": "test",
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/LM.Tests.app",
+    "sha256": "da7dd8607a1572b6444be6de50f65e33352858f79ad014f75461c68008d8002a",
+    "finishedAt": "2026-10-16T20:45:08.916746+00:00"
+  }
+]

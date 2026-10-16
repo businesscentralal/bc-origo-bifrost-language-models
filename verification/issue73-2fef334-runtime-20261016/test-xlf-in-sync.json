@@ -1,0 +1,10 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "exitCode": 0,
+  "command": "pwsh -NoProfile -File tools/Test-IcelandicXlfInSync.ps1 -TranslationsFolder build-source/test/Translations",
+  "summary": "The committed is-IS.xlf is what tools/Update-IcelandicXlf.ps1 generates from the build.",
+  "units": 7,
+  "targets": 7,
+  "missing": 0,
+  "observedAt": "2026-10-16T20:50:45.173995+00:00"
+}

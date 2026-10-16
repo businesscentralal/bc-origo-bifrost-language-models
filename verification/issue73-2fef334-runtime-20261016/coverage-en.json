@@ -1,0 +1,244 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "containerId": "f030496f8435",
+  "lcid": 1033,
+  "totalSourceMethods": 188,
+  "totalExecutedMethods": 188,
+  "missing": [],
+  "unexpected": [],
+  "perCodeunit": [
+    {
+      "codeunit": 96002,
+      "name": "96002 LangModel Chat Provider Tests",
+      "lcid": 1033,
+      "executed": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96003,
+      "name": "96003 Bifrost Language Model Tests",
+      "lcid": 1033,
+      "executed": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96004,
+      "name": "96004 LangModel Field Restrict Tests",
+      "lcid": 1033,
+      "executed": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96009,
+      "name": "96009 LangModel Secrets Tests",
+      "lcid": 1033,
+      "executed": 19,
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96010,
+      "name": "96010 LangModel Prov Base Tests",
+      "lcid": 1033,
+      "executed": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96011,
+      "name": "96011 LangModel API Client Tests",
+      "lcid": 1033,
+      "executed": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96012,
+      "name": "96012 LangModel Providers Tests",
+      "lcid": 1033,
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96013,
+      "name": "96013 Chat Svc Gate Tests",
+      "lcid": 1033,
+      "executed": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96014,
+      "name": "96014 LangModel Setup Page Tests",
+      "lcid": 1033,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96015,
+      "name": "96015 LLM Req Log Masker Tests",
+      "lcid": 1033,
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96016,
+      "name": "96016 LangModel Registration Tests",
+      "lcid": 1033,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96017,
+      "name": "96017 Copilot Upgrade Tests",
+      "lcid": 1033,
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96018,
+      "name": "96018 Copilot Install Tests",
+      "lcid": 1033,
+      "executed": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96019,
+      "name": "96019 LLM Prompt Contract Tests",
+      "lcid": 1033,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96022,
+      "name": "96022 LangModel Turn Guard Tests",
+      "lcid": 1033,
+      "executed": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96028,
+      "name": "96028 LangModel Test Tools Tests",
+      "lcid": 1033,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96029,
+      "name": "96029 LangModel Chat Proxy Tests",
+      "lcid": 1033,
+      "executed": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96031,
+      "name": "96031 LangModel 60 Defaults Tests",
+      "lcid": 1033,
+      "executed": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    }
+  ],
+  "changedCodeunits": [
+    {
+      "codeunit": 96002,
+      "name": "96002 LangModel Chat Provider Tests",
+      "lcid": 1033,
+      "executed": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96004,
+      "name": "96004 LangModel Field Restrict Tests",
+      "lcid": 1033,
+      "executed": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96009,
+      "name": "96009 LangModel Secrets Tests",
+      "lcid": 1033,
+      "executed": 19,
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96018,
+      "name": "96018 Copilot Install Tests",
+      "lcid": 1033,
+      "executed": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    {
+      "codeunit": 96019,
+      "name": "96019 LLM Prompt Contract Tests",
+      "lcid": 1033,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    }
+  ],
+  "sourceMethodsMatchExactly": true
+}

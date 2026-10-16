@@ -1,0 +1,224 @@
+{
+  "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+  "sourceCheckout": "/workspace/lm73-worker6",
+  "sourceStatus": "clean",
+  "productDiffAgainstMain": "empty",
+  "compile": [
+    {
+      "app": "default-app",
+      "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/LM.Default.app",
+      "sha256": "1b9c58040fa2ec96f329379bc254f1d416394396d06bbe5e2cc0b1e2ee5c7fd0",
+      "finishedAt": "2026-10-16T20:44:48.969167+00:00"
+    },
+    {
+      "app": "test-product",
+      "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/symbols/Origo_Bifrost Language Models_28.0.0.0.app",
+      "sha256": "1e5682c46e4c3f760c35c845175924c41eecc86c95c8ad0a3c8d6555a3248ddc",
+      "finishedAt": "2026-10-16T20:44:59.468548+00:00"
+    },
+    {
+      "app": "test",
+      "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/recovery-b3df90b/LM.Tests.app",
+      "sha256": "da7dd8607a1572b6444be6de50f65e33352858f79ad014f75461c68008d8002a",
+      "finishedAt": "2026-10-16T20:45:08.916746+00:00"
+    }
+  ],
+  "tests": {
+    "1033": {
+      "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+      "uncommittedSource": false,
+      "containerId": "f030496f8435",
+      "startedAt": "2026-10-16T20:46:58.038Z",
+      "finishedAt": "2026-10-16T20:48:58.458Z",
+      "culture": "en-US",
+      "lcid": 1033,
+      "fullSuite": true,
+      "total": 188,
+      "passed": 188,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "exitCode": 0,
+      "ok": true,
+      "xmlSaved": true
+    },
+    "1039": {
+      "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+      "uncommittedSource": false,
+      "containerId": "f030496f8435",
+      "startedAt": "2026-10-16T20:49:56.651Z",
+      "finishedAt": "2026-10-16T20:50:30.754Z",
+      "culture": "is-IS",
+      "lcid": 1039,
+      "fullSuite": true,
+      "total": 188,
+      "passed": 188,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "exitCode": 0,
+      "ok": true,
+      "xmlSaved": true
+    }
+  },
+  "perCodeunitCounts": {
+    "1033": [
+      {
+        "codeunit": 96002,
+        "name": "96002 LangModel Chat Provider Tests",
+        "lcid": 1033,
+        "executed": 46,
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96004,
+        "name": "96004 LangModel Field Restrict Tests",
+        "lcid": 1033,
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96009,
+        "name": "96009 LangModel Secrets Tests",
+        "lcid": 1033,
+        "executed": 19,
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96018,
+        "name": "96018 Copilot Install Tests",
+        "lcid": 1033,
+        "executed": 11,
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96019,
+        "name": "96019 LLM Prompt Contract Tests",
+        "lcid": 1033,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    ],
+    "1039": [
+      {
+        "codeunit": 96002,
+        "name": "96002 LangModel Chat Provider Tests",
+        "lcid": 1039,
+        "executed": 46,
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96004,
+        "name": "96004 LangModel Field Restrict Tests",
+        "lcid": 1039,
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96009,
+        "name": "96009 LangModel Secrets Tests",
+        "lcid": 1039,
+        "executed": 19,
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96018,
+        "name": "96018 Copilot Install Tests",
+        "lcid": 1039,
+        "executed": 11,
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      {
+        "codeunit": 96019,
+        "name": "96019 LLM Prompt Contract Tests",
+        "lcid": 1039,
+        "executed": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    ]
+  },
+  "ui": {
+    "executed": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "mcp": {
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "touchedMessageTypes": [],
+    "notApplicableReason": "PR diff against main a70aaf3 changes only five assertion test codeunits, test app translation setting/XLF and CHANGELOG. No product AL or message-type implementation/contract/registration changed. No shipping/licensing MCP pass claimed.",
+    "productDiffAgainstMain": "empty",
+    "fixtureSetup": "Fresh individually owned container; all AL suite fixtures created by tests; UI only reads setup/list and declines initialization; no API key, licence or EULA writes.",
+    "cleanup": "Unit-test fixture cleanup/isolation plus retained owned environment until Tester UAT/issue closure under Architect1792180242; no deletion yet."
+  },
+  "retainedContainer": {
+    "sha": "2fef3349f1c8b28eb327d60ac24086ff8b0dd534",
+    "worker": "worker-6",
+    "task": "1792151046.862049",
+    "name": "codex-worker6-lm73-b3df90b-w1",
+    "id": "f030496f8435",
+    "createdAt": "2026-10-16T20:38:54.777Z",
+    "retained": true,
+    "reason": "Architect1792180242.899649 and Gunnar13:03 retention rule: preserve until Bifr\u00f6st Tester postdeployment UAT passes and issue73 closes.",
+    "pendingCleanup": true,
+    "priorContainer": "f0f446957dd5",
+    "priorDeletion": "DELETE204/GET404 verified2026-10-16T12:19:16.618Z; never replayed",
+    "resourceNameRecordedInPR": true
+  },
+  "ci": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38964558062",
+  "pending": [
+    "current-tip normal CI",
+    "Claude exact-head/list/count attestation under Architect1792180242",
+    "Reviewer amendment resolution/clearance",
+    "eligible non-author approval",
+    "Architect merge/same-SHA deployment and Tester UAT",
+    "owned cleanup after Tester UAT plus issue closure",
+    "genuine Secretary ACK"
+  ],
+  "verifiedAt": "2026-10-16T20:51:34.047615+00:00"
+}

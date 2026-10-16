@@ -1,0 +1,13 @@
+{
+  "appliedLessonIds": [
+    "lm73-1792151046-lesson-application",
+    "language-models57-worker7-native-suite-locale-20261016",
+    "language-models74-review5549381918-worker6-exact-tip-locale"
+  ],
+  "standardsSnapshot": {
+    "commit": "ac05e88ab51ed4c9bbfb843508fc2484afe5ec8f",
+    "syncedAt": "2026-10-03T17:42:20.1615660Z",
+    "freshlySynced": false
+  },
+  "verificationPlan": "Count188current source methods; execute both full suites under explicit cultures; separately observe native LanguageID and capture bilingual UI; publish raw results and per-unit count reconciliation before Claude attestation."
+}
