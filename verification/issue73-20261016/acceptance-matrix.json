@@ -1,0 +1,128 @@
+{
+  "issue": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/issues/73",
+  "baseSha": "3c69ae7240f333712dbdf6be85bdebd64c22c135",
+  "rows": [
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_DeclinedAbsent_LeavesModelsUnchanged",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_AcceptedAbsent_CreatesDefault",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_AcceptedOtherDefault_PreservesSelection",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_DeclinedExisting_PreservesModelAndSkill",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_AcceptedExisting_RefreshesOnlySkill",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96018,
+      "codeunitName": "Copilot Install Tests",
+      "method": "InitDefaults_ModelWriteFailure_PropagatesWithoutSuccess",
+      "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96002,
+      "codeunitName": "LangModel Chat Provider Tests",
+      "method": "SendChatMessage_BlankCode_ReturnsNotEnabledError",
+      "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96002,
+      "codeunitName": "LangModel Chat Provider Tests",
+      "method": "ContinueWithToolResults_BlankCode_ReturnsNotEnabledError",
+      "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96019,
+      "codeunitName": "LLM Prompt Contract Tests",
+      "method": "Discovery_HasLanguageModelSpecificText",
+      "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al",
+      "implementation": "English discovery read pinned1033; caller language restored before assertions, including error path",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96004,
+      "codeunitName": "LangModel Field Restrict Tests",
+      "method": "FieldRestrict_HintForEndpointFieldsEmptyForNeighbour",
+      "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    },
+    {
+      "codeunit": 96009,
+      "codeunitName": "LangModel Secrets Tests",
+      "method": "SetServiceKey_BlankLanguageModelCode_Errors",
+      "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al",
+      "implementation": "Exact expected translated label in active session language",
+      "verification1033": "pending;0executed",
+      "verification1039": "pending;0executed",
+      "historicalFailureIdentity": "source-inferred; worker7 raw failure detail requested"
+    }
+  ],
+  "fullConfiguredInventory": {
+    "methods": 188,
+    "codeunits": 18
+  },
+  "productSourceChanged": false,
+  "mcp": {
+    "touchedMessageTypes": [],
+    "notApplicableReason": "Only test assertion labels, English discovery-test locale scope and test-app translation packaging change; product AL and all production message types match main."
+  },
+  "candidateSha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "branch": "fix/worker6-73-locale-independent-tests",
+  "compiledAtCandidate": "Default product/Test product/testapp each0errors0warnings;CodeCop/UICop/AppSourceCop"
+}

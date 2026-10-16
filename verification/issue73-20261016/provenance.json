@@ -1,0 +1,68 @@
+{
+  "candidateSha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "baseSha": "3c69ae7240f333712dbdf6be85bdebd64c22c135",
+  "sourceTree": "e8f34359eebfa00b01b629da20953602739d001f",
+  "productSourceMatchesMain": true,
+  "version": {
+    "app": "28.0.0.0",
+    "test": "28.0.0.0"
+  },
+  "compiler": "Microsoft AL Compiler30.0.42.60748;target-CI compiler result remains separate",
+  "analyzers": [
+    "CodeCop",
+    "UICop",
+    "AppSourceCop"
+  ],
+  "compile": [
+    {
+      "app": "default-app",
+      "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/LM.Default.app",
+      "sha256": "dc6c92b32aba501be7c02393b63562a2ba8ff9f866725b9c4ea24ef449e0593a",
+      "finishedAt": "2026-10-16T11:58:24.592821+00:00"
+    },
+    {
+      "app": "test-product",
+      "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/symbols/Origo_Bifrost Language Models_28.0.0.0.app",
+      "sha256": "7f9c57bbf23f1c6d85d2036a6f68d997593cd110df7f837ee8951b37913afa2c",
+      "finishedAt": "2026-10-16T11:58:37.467612+00:00"
+    },
+    {
+      "app": "test",
+      "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+      "uncommittedSource": false,
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "output": "/workspace/evidence/lm-locale-1792151046/LM.Tests.app",
+      "sha256": "44df9585a3dc62d32cdbde8096ab0f7479129fc78b91681414a53e515c0b99d0",
+      "finishedAt": "2026-10-16T11:58:49.933460+00:00"
+    }
+  ],
+  "testXlf": {
+    "units": 7,
+    "targets": 7,
+    "missing": 0,
+    "inSyncGuard": "passed",
+    "sha256": "f992e2e5712706dade4383086b924930221d23513b905acc964c4a3241e62715"
+  },
+  "runtime": {
+    "deployed": false,
+    "executed": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "status": "pending;do not treat zero execution as pass"
+  },
+  "resourcesCreated": [],
+  "timestamp": "2026-10-16T11:59:51.679004+00:00"
+}
