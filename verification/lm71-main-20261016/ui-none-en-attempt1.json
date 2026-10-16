@@ -1,0 +1,8 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "containerId": "f043ac8a8059",
+  "status": "automation locator failure before assertions",
+  "scenarioAssertionsExecuted": 0,
+  "error": "Read-only provider renders as input text, not select; select.inputValue timed out. ProviderNone set through ordinaryUI before failure. No product failure inferred.",
+  "finishedAt": "2026-10-16T19:01:50.662233+00:00"
+}

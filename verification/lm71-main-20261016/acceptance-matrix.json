@@ -6,16 +6,16 @@
     {
       "criterion": "Saved keyless model shows localized hint in English/Icelandic read/edit",
       "implementation": "conditional KeyMissingHintGroup retained",
-      "verification": "new-tip owned UI pending; d47 evidence historical"
+      "verification": "Owned exact-tip EN/IS1033/1039 UI, saved keyless read/edit, actual bounds/ancestor checks and visual screenshots pass."
     },
     {
       "criterion": "Personal/shared/both key scopes hide hint; last key removal restores hint; no-key provider stays hidden",
       "implementation": "page behavior/test96035 retained",
-      "verification": "new-tip full configured tests and UI pending"
+      "verification": "Owned exact-tip28/28UI scenarios84/84assertions pass;192/192 full native suite incl4test96035 cases and bothLCIDs pass. Synthetickeys cleared; modelremoved andemptylistverified."
     },
     {
       "criterion": "Compile app and test app0errors0warnings",
-      "verification": "3 exact-clean-SHA local invocations pass with CodeCop/UICop/AppSourceCop; compiler30.0.42.60748; cached Foundation556. CI target version parity pending"
+      "verification": "ExactSHA Default/noIVT product,Test product,testapp each0errors0warnings with CodeCop/UICop/AppSourceCop and officialFoundation569. Deployed packages byte matched;10guards pass. CI target compiler evidence separate pending."
     },
     {
       "criterion": "Main conflict repaired preserving merged fixes",

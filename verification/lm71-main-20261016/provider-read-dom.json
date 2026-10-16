@@ -1,0 +1,10 @@
+{
+  "html": "<div id=\"b15\" class=\"ms-nav-edit-control-container\" controlname=\"Chat Provider\"><a class=\"ms-nav-edit-control-caption thm-bgcolor--minflat thm-font-size-small thm-segoeNormal thm-color--brand-secondary--not_FCM\" id=\"b15lbl\" tabindex=\"-1\" role=\"button\">Chat Provider</a><div class=\"edit-container thm-bgcolor--minflat edit-container-read ms-nav-enumeration\"><span class=\"stringcontrol-read value thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--medmaxflat thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM\" tabindex=\"0\" id=\"b15ee\" role=\"textbox\" aria-readonly=\"true\" title=\"None\" aria-labelledby=\"b15lbl\">None</span></div></div>",
+  "labels": [
+    {
+      "tag": "SPAN",
+      "label": "(Blank)",
+      "text": ""
+    }
+  ]
+}

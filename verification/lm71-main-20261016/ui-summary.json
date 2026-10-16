@@ -1,0 +1,98 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "containerId": "f043ac8a8059",
+  "containerName": "codex-worker6-lm71-main-w1",
+  "productVersion": "28.0.0.0",
+  "foundationVersion": "28.0.5.569",
+  "deployedDefaultByteMatched": true,
+  "locales": [
+    "en-US",
+    "is-IS"
+  ],
+  "lcids": [
+    1033,
+    1039
+  ],
+  "pageId": 10035343,
+  "executed": 28,
+  "passed": 28,
+  "failed": 0,
+  "skipped": 0,
+  "assertions": 84,
+  "assertionsPassed": 84,
+  "scenarios": "Saved keyless model read/edit; keyless/personal/both/shared/last-key-cleared state transitions read/edit; providerNone auth/hint hidden read/edit. Actual userlocale changed through MySettings.",
+  "renderedBoundsAndHiddenAncestorsChecked": true,
+  "screenshotsVisuallyInspected": [
+    "candidate-en-US-read.png",
+    "candidate-is-IS-read.png",
+    "none-en-US-read.png"
+  ],
+  "providerCalls": 0,
+  "licenceEulaWrites": 0,
+  "dataSetup": "Fresh UI-created XLM70UI and synthetic keys only; both scopes cleared through actual UI actions; model deleted and empty list visually verified. Environment retained under current rule.",
+  "results": [
+    {
+      "file": "candidate-en-US.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "transitions-en-US.json",
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "none-en-US.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "candidate-is-IS.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "transitions-is-IS.json",
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "none-is-IS.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "historicalAutomationAttempts": {
+    "attempt1": "Noneprovider readonly locator timeout before assertions",
+    "attempt2": "2scenarios/1pass/1false negative in providerselector; screenshot/DOM confirmed correctNone productstate. Both retained under ui-none-attempt2. Corrected final runs reverified identical assertions through actualspan[role=textbox]."
+  },
+  "verified": true,
+  "finishedAt": "2026-10-16T19:06:21.616626+00:00",
+  "userLanguageRestoredToEnglish": true,
+  "cleanup": {
+    "containerId": "f043ac8a8059",
+    "fixture": "XLM70UI",
+    "deletedThroughWebClient": true,
+    "absenceVerifiedOnList": true,
+    "keysClearedByPriorUIActions": true,
+    "providerCalls": 0,
+    "containerRetained": true,
+    "environmentDeletion": false,
+    "finishedAt": "2026-10-16T19:07:11.866Z",
+    "screenshotVisuallyInspected": true,
+    "languageModelListEmpty": true,
+    "secretRegistrationMetadata": "Product may retain empty registration metadata by design; both synthetic value scopes cleared through UI, model deleted, retained environment final deletion after TesterUAT/issue closure."
+  }
+}

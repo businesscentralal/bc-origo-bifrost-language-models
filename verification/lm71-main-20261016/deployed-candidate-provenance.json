@@ -1,0 +1,11 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "uncommittedSource": false,
+  "containerId": "f043ac8a8059",
+  "version": "28.0.0.0",
+  "mode": "candidate",
+  "expectedSha256": "59ef9cf2591139d62117d64f753dcf159f586537d06d4aa14e71f5bf481677c7",
+  "installedSha256": "59ef9cf2591139d62117d64f753dcf159f586537d06d4aa14e71f5bf481677c7",
+  "byteMatched": true,
+  "checkedAt": "2026-10-16T19:08:05.270Z"
+}

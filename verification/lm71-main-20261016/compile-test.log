@@ -1,12 +1,12 @@
 Microsoft (R) AL Compiler version 30.0.42.60748
 Copyright (C) Microsoft Corporation. All rights reserved
 
-Compilation started for project 'Bifrost Language Models - Tests' containing '30' files at '18:49:11.081'.
+Compilation started for project 'Bifrost Language Models - Tests' containing '30' files at '18:52:16.244'.
 
 evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/build-source/test/src/MockBifrostChatProvider.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
 evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/build-source/test/test/Setup/LangModelSecretsTests.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
 evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/build-source/test/test/BifrostChat/CopilotInstallTests.Codeunit.al(4,1): info AA0477: The using statements are not in a sorted order.
 evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/build-source/test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al(12,1): info AA0477: The using statements are not in a sorted order.
 
-Compilation ended at '18:49:20.248'.
+Compilation ended at '18:52:26.109'.
 

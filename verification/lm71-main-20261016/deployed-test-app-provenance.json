@@ -1,0 +1,13 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "uncommittedSource": false,
+  "containerId": "f043ac8a8059",
+  "version": "28.0.0.0",
+  "mode": "test-app",
+  "expectedSha256": "d2702f8b8eaa6f52ba97c81fe365ed77087ad88a6c89697a628edca715ebaf52",
+  "installedSha256": "d2702f8b8eaa6f52ba97c81fe365ed77087ad88a6c89697a628edca715ebaf52",
+  "byteMatched": true,
+  "checkedAt": "2026-10-16T19:08:05.695Z",
+  "appName": "Bifrost Language Models - Tests",
+  "appId": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec"
+}

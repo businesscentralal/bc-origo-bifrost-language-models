@@ -1,0 +1,72 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "environmentId": "f043ac8a8059",
+  "compileFoundation": "28.0.5.569",
+  "deployedFoundation": {
+    "sha": "5263d693f511ba30b13b103a7ec0cf5d16e990fc",
+    "uncommittedSource": false,
+    "containerId": "f043ac8a8059",
+    "version": "28.0.5.569",
+    "mode": "default",
+    "expectedSha256": "8e272544945a3a4bc575733dadf95c7c251628a2d6f1ef4189972c80039f7c0e",
+    "installedSha256": "8e272544945a3a4bc575733dadf95c7c251628a2d6f1ef4189972c80039f7c0e",
+    "byteMatched": true,
+    "checkedAt": "2026-10-16T18:57:42.788Z"
+  },
+  "configuredSuite": {
+    "extensionId": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+    "codeunitRange": "96000..96199",
+    "sourceConfiguration": {
+      "testFolders": [
+        "test"
+      ],
+      "testAppId": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec"
+    }
+  },
+  "permissions": "Owned fresh development environment with existing approved developer identity, no changed credentials; testPermissions source remainsDisabled as existing test app convention; native fullsuite not yet run.",
+  "capabilities": {
+    "containerId": "f043ac8a8059",
+    "readAt": "2026-10-16T18:58:32.217Z",
+    "apps": [
+      {
+        "Id": "5d86850b-0d76-4eca-bd7b-951ad998e997",
+        "Name": "Tests-TestLibraries",
+        "Publisher": "Microsoft",
+        "Version": "28.5.54151.56408"
+      },
+      {
+        "Id": "7505e808-6e52-4b96-a328-82573391297a",
+        "Name": "Bifrost Foundation",
+        "Publisher": "Origo",
+        "Version": "28.0.5.569"
+      },
+      {
+        "Id": "23de40a6-dfe8-4f80-80db-d70f83ce8caf",
+        "Name": "Test Runner",
+        "Publisher": "Microsoft",
+        "Version": "28.5.54151.56408"
+      },
+      {
+        "Id": "dd0be2ea-f733-4d65-bb34-a28f4624fb14",
+        "Name": "Library Assert",
+        "Publisher": "Microsoft",
+        "Version": "28.5.54151.56408"
+      },
+      {
+        "Id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+        "Name": "Bifrost Language Models",
+        "Publisher": "Origo",
+        "Version": "28.0.0.0"
+      },
+      {
+        "Id": "2ed02040-0300-4d64-b8c5-a48d09dddfc6",
+        "Name": "Icelandic language (Iceland)",
+        "Publisher": "Microsoft",
+        "Version": "28.5.54151.56408"
+      }
+    ]
+  },
+  "dataSetup": "Fresh self-created UI modelXLM70UI; synthetic keys only through standard UI. Native suite self-seeds isolated test records.",
+  "licenceEulaWrites": 0,
+  "providerCalls": 0
+}

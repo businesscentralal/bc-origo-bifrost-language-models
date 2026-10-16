@@ -1,0 +1,14 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "The complete PR diff against main77e507b changes page10035343 group visibility, test96035 TestPage coverage and CHANGELOG. No message implementation, contract, dispatch, registration or provider execution changes. Main integration retains already merged independent code; no touched message types in this PR.",
+  "requests": 0,
+  "passed": 0,
+  "licensingWrites": 0,
+  "reviewedDiffCommand": "git diff origin/main HEAD --stat",
+  "reviewedDiffFiles": [
+    "CHANGELOG.md",
+    "app/src/BifrostChat/LanguageModel/BifrostLangModelCard.Page.al",
+    "test/test/Setup/LangModelHintTests.Codeunit.al"
+  ]
+}

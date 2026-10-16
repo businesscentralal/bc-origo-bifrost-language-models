@@ -1,0 +1,15 @@
+{
+  "classification": "verification helper defect, not product defect",
+  "rootCause": "Readonly BC enumeration is span[role=textbox], neither select nor input. Screenshot and provider-read-dom.json prove actual None state and hidden hint/authentication.",
+  "attempt1": "timeout before assertions",
+  "attempt2": {
+    "executed": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "failedAssertion": "providerselected lookup incorrectly expected readonlyinput"
+  },
+  "repair": "Read exact Chat Provider control wrapper span[role=textbox]; preserve providervalue/hint/authentication assertions. Inspect current edit dropdown and skip setNone when already0.",
+  "sourceChanged": false,
+  "recordedAt": "2026-10-16T19:02:55.340558+00:00"
+}

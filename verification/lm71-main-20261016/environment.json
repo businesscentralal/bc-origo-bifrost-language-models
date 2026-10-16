@@ -1,0 +1,9 @@
+{
+  "id": "f043ac8a8059",
+  "ok": true,
+  "statusCode": 202,
+  "createdAt": "2026-10-16T18:51:00.288Z",
+  "worker": "worker-6",
+  "sourceBase": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "candidateDeployed": false
+}
