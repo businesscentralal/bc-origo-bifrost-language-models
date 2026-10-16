@@ -1,0 +1,33 @@
+{
+  "issueUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/issues/70",
+  "prUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/71",
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "acceptance": [
+    {
+      "criterion": "Saved keyless model shows localized hint in English/Icelandic read/edit",
+      "implementation": "conditional KeyMissingHintGroup retained",
+      "verification": "new-tip owned UI pending; d47 evidence historical"
+    },
+    {
+      "criterion": "Personal/shared/both key scopes hide hint; last key removal restores hint; no-key provider stays hidden",
+      "implementation": "page behavior/test96035 retained",
+      "verification": "new-tip full configured tests and UI pending"
+    },
+    {
+      "criterion": "Compile app and test app0errors0warnings",
+      "verification": "3 exact-clean-SHA local invocations pass with CodeCop/UICop/AppSourceCop; compiler30.0.42.60748; cached Foundation556. CI target version parity pending"
+    },
+    {
+      "criterion": "Main conflict repaired preserving merged fixes",
+      "verification": "normal merge77e507b with both changelog sections; canonical Github readback3f360e2"
+    },
+    {
+      "criterion": "MCP every touched message type",
+      "verification": "Not applicable; PR against main changes page visibility/TestPage tests/CHANGELOG only; no message types changed;0requests/0passes"
+    },
+    {
+      "criterion": "Independent verification/review/merge/deployment/UAT/cleanup",
+      "verification": "pending; no completion claimed"
+    }
+  ]
+}

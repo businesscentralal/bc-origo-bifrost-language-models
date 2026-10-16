@@ -1,0 +1,35 @@
+[
+  {
+    "app": "default-app",
+    "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/LM.Default.app",
+    "sha256": "15a7ed4226db94091b53e80a8143097134d2b31194f43ea61e1ec295be6329dc",
+    "finishedAt": "2026-10-16T18:48:37.831359+00:00"
+  },
+  {
+    "app": "test-product",
+    "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/symbols/Origo_Bifrost Language Models_28.0.0.0.app",
+    "sha256": "ce2b7a62afc0fd1e03a4485a81aaefd2276288318ef3a1210f874c89736f252a",
+    "finishedAt": "2026-10-16T18:49:10.213888+00:00"
+  },
+  {
+    "app": "test",
+    "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+    "uncommittedSource": false,
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "output": "/workspace/evidence/tasks/1792174605.385969-target-businesscentralal_bc-origo-bifrost-language-models-71/LM.Tests.app",
+    "sha256": "e59004e8a3c66d3c67e292acd80ea97693c678cde2f7c343bb0501eb6d61a066",
+    "finishedAt": "2026-10-16T18:49:20.960665+00:00"
+  }
+]
