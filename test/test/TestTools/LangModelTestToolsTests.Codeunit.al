@@ -2,7 +2,6 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
-using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 
 /// <summary>
@@ -163,77 +162,15 @@ codeunit 96028 "LangModel Test Tools Tests"
         Assert.AreEqual('code', ResponseJson.GetText('parameter'), ResponseText);
     end;
 
-    /// <summary>Fresh dispatcher fixtures create missing HTTP settings for both required apps.</summary>
-    [Test]
-    procedure HttpSetup_MissingRows_CreatesOnlyRequiredSettings()
-    var
-        NavAppSetting: Record "NAV App Setting";
-        TestSetup: Codeunit "LangModel Test Setup Events";
-        FoundationAppId: Guid;
-        LanguageModelsAppId: Guid;
-        OtherAppId: Guid;
-    begin
-        FoundationAppId := '{7505e808-6e52-4b96-a328-82573391297a}';
-        LanguageModelsAppId := '{f1722684-0c24-4022-a2e0-0f63154aca76}';
-        OtherAppId := CreateGuid();
-        NavAppSetting.Init();
-        NavAppSetting."App ID" := OtherAppId;
-        NavAppSetting."Allow HttpClient Requests" := false;
-        NavAppSetting.Insert();
-        if NavAppSetting.Get(FoundationAppId) then
-            NavAppSetting.Delete();
-        if NavAppSetting.Get(LanguageModelsAppId) then
-            NavAppSetting.Delete();
-
-        TestSetup.EnableDispatcherHttp();
-
-        Assert.IsTrue(NavAppSetting.Get(FoundationAppId), 'Foundation setting was created.');
-        Assert.IsTrue(NavAppSetting."Allow HttpClient Requests", 'Foundation HTTP was enabled.');
-        Assert.IsTrue(NavAppSetting.Get(LanguageModelsAppId), 'Language Models setting was created.');
-        Assert.IsTrue(NavAppSetting."Allow HttpClient Requests", 'Language Models HTTP was enabled.');
-        NavAppSetting.Get(OtherAppId);
-        Assert.IsFalse(NavAppSetting."Allow HttpClient Requests", 'Other applications remain disabled.');
-    end;
-
-    /// <summary>Explicitly disabled HTTP settings are prepared before positive dispatcher assertions.</summary>
-    [Test]
-    procedure HttpSetup_DisabledRows_EnablesBothAndIsRepeatable()
-    var
-        NavAppSetting: Record "NAV App Setting";
-        TestSetup: Codeunit "LangModel Test Setup Events";
-        FoundationAppId: Guid;
-        LanguageModelsAppId: Guid;
-    begin
-        FoundationAppId := '{7505e808-6e52-4b96-a328-82573391297a}';
-        LanguageModelsAppId := '{f1722684-0c24-4022-a2e0-0f63154aca76}';
-        TestSetup.EnableDispatcherHttp();
-        NavAppSetting.Get(FoundationAppId);
-        NavAppSetting."Allow HttpClient Requests" := false;
-        NavAppSetting.Modify();
-        NavAppSetting.Get(LanguageModelsAppId);
-        NavAppSetting."Allow HttpClient Requests" := false;
-        NavAppSetting.Modify();
-
-        TestSetup.EnableDispatcherHttp();
-        TestSetup.EnableDispatcherHttp();
-
-        NavAppSetting.Get(FoundationAppId);
-        Assert.IsTrue(NavAppSetting."Allow HttpClient Requests", 'Foundation HTTP was enabled.');
-        NavAppSetting.Get(LanguageModelsAppId);
-        Assert.IsTrue(NavAppSetting."Allow HttpClient Requests", 'Language Models HTTP was enabled.');
-    end;
-
     local procedure Execute(MessageType: Enum "Message Type ori"; RequestBody: Text) ResponseJson: JsonObject
     var
         Dispatcher: Codeunit "Dispatcher ori";
-        TestSetup: Codeunit "LangModel Test Setup Events";
         RequestContent: BigText;
         ResponseContent: BigText;
         MessageVersion: Enum "Message Version ori";
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
-        TestSetup.EnableDispatcherHttp();
         RequestContent.AddText(RequestBody);
         Dispatcher.Execute(MessageType, MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
         ResponseContent.GetSubText(ResponseText, 1);

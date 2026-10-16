@@ -117,14 +117,12 @@ codeunit 96019 "LLM Prompt Contract Tests"
     local procedure Execute(RequestBody: Text) ResponseJson: JsonObject
     var
         Dispatcher: Codeunit "Dispatcher ori";
-        TestSetup: Codeunit "LangModel Test Setup Events";
         RequestContent: BigText;
         ResponseContent: BigText;
         MessageVersion: Enum "Message Version ori";
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
-        TestSetup.EnableDispatcherHttp();
         RequestContent.AddText(RequestBody);
         Dispatcher.Execute("Message Type ori"::"LLM.Prompt.Complete", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
         ResponseContent.GetSubText(ResponseText, 1);
