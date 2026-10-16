@@ -20,42 +20,42 @@ table 10035337 "Bifrost Chat Argument ori"
     {
         field(1; "Language Model SystemId"; Guid)
         {
-            Caption = 'Language Model SystemId';
+            Caption = 'Language Model SystemId', Comment = 'is-IS=Kerfiskenni mállíkans';
             DataClassification = SystemMetadata;
         }
         field(2; "Procedure Type"; Enum "Bifrost Chat Proc. Type ori")
         {
-            Caption = 'Procedure Type';
+            Caption = 'Procedure Type', Comment = 'is-IS=Aðgerðartegund';
             DataClassification = SystemMetadata;
         }
         field(10; "Base URL"; Text[250])
         {
-            Caption = 'Base URL';
+            Caption = 'Base URL', Comment = 'is-IS=Grunnslóð';
             DataClassification = SystemMetadata;
         }
         field(11; Model; Text[100])
         {
-            Caption = 'Model';
+            Caption = 'Model', Comment = 'is-IS=Líkan';
             DataClassification = SystemMetadata;
         }
         field(12; "Timeout Ms"; Integer)
         {
-            Caption = 'Timeout (ms)';
+            Caption = 'Timeout (ms)', Comment = 'is-IS=Tímamörk (ms)';
             DataClassification = SystemMetadata;
         }
         field(13; "Max Tokens"; Integer)
         {
-            Caption = 'Max Tokens';
+            Caption = 'Max Tokens', Comment = 'is-IS=Hámarksfjöldi tákna';
             DataClassification = SystemMetadata;
         }
         field(14; "Chat Path"; Text[250])
         {
-            Caption = 'Chat Path';
+            Caption = 'Chat Path', Comment = 'is-IS=Spjallslóð';
             DataClassification = SystemMetadata;
         }
         field(15; "Models Path"; Text[250])
         {
-            Caption = 'Models Path';
+            Caption = 'Models Path', Comment = 'is-IS=Líkanaslóð';
             DataClassification = SystemMetadata;
         }
         field(16; "Context Tokens"; Integer)
@@ -65,27 +65,27 @@ table 10035337 "Bifrost Chat Argument ori"
         }
         field(40; "Debug Mode"; Boolean)
         {
-            Caption = 'Debug Mode';
+            Caption = 'Debug Mode', Comment = 'is-IS=Villuleitarhamur';
             DataClassification = SystemMetadata;
         }
         field(50; "Result Boolean"; Boolean)
         {
-            Caption = 'Result Boolean';
+            Caption = 'Result Boolean', Comment = 'is-IS=Niðurstaða (rökgildi)';
             DataClassification = SystemMetadata;
         }
         field(51; "Result Integer"; Integer)
         {
-            Caption = 'Result Integer';
+            Caption = 'Result Integer', Comment = 'is-IS=Niðurstaða (heiltala)';
             DataClassification = SystemMetadata;
         }
         field(52; "Input Tokens"; Integer)
         {
-            Caption = 'Input Tokens';
+            Caption = 'Input Tokens', Comment = 'is-IS=Inntakstákn';
             DataClassification = SystemMetadata;
         }
         field(53; "Output Tokens"; Integer)
         {
-            Caption = 'Output Tokens';
+            Caption = 'Output Tokens', Comment = 'is-IS=Úttakstákn';
             DataClassification = SystemMetadata;
         }
     }

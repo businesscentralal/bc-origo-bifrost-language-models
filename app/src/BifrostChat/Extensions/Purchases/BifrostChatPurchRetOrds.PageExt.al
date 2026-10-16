@@ -17,7 +17,7 @@ pageextension 10035369 "Bifrost Chat PurchRetOrds ori" extends "Purchase Return 
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this return order in Business Central.', Comment = 'is-IS=Spjalla um þessa vöruskilapöntun í Business Central';
+                ToolTip = 'Chat about this return order in Business Central.', Comment = 'is-IS=Spjalla um þessa vöruskilapöntun í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;

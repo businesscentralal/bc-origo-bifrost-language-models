@@ -16,7 +16,7 @@ pageextension 10035402 "User Setup Editor LangMdl ori" extends "User Setup Edito
             {
                 ApplicationArea = All;
                 Caption = 'Language Model Code', Comment = 'is-IS=Kóði mállíkans';
-                ToolTip = 'Specifies the language model this user chats with in Bifrost Chat. If empty, Bifrost Chat is not available for this user.', Comment = 'is-IS=Tilgreinir mállíkanið sem þessi notandi spjallar við í Bifröst Chat. Ef tómt er Bifröst Chat ekki tiltækt fyrir þennan notanda.';
+                ToolTip = 'Specifies the language model this user chats with in Bifrost Chat. If empty, Bifrost Chat is not available for this user.', Comment = 'is-IS=Tilgreinir mállíkanið sem þessi notandi spjallar við í Bifröst spjalli. Ef reiturinn er auður er Bifröst spjall ekki tiltækt fyrir þennan notanda.';
 
                 trigger OnValidate()
                 begin

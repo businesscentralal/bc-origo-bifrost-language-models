@@ -20,7 +20,7 @@ codeunit 10035422 "LangModel Secrets ori"
         UserCodeSuffixTok: Label '-USER-API-KEY', Locked = true;
         ServiceKeyDescTok: Label 'Shared API key for language model %1.', Comment = '%1 = language model code, is-IS=Sameiginlegur API-lykill fyrir mállíkanið %1.';
         UserKeyDescTok: Label 'Personal API key for language model %1.', Comment = '%1 = language model code, is-IS=Persónulegur API-lykill fyrir mállíkanið %1.';
-        NoServiceKeyPermissionErr: Label 'You need the BIFROST ChatSvc ori permission set to manage the shared API key of a language model.', Comment = 'is-IS=Þú þarft heimildasafnið BIFROST ChatSvc ori til að stjórna sameiginlegum API-lykli mállíkans.';
+        NoServiceKeyPermissionErr: Label 'You need the BIFROST ChatSvc ori permission set to manage the shared API key of a language model.', Comment = 'is-IS=Þú þarft heimildasamstæðuna BIFROST ChatSvc ori til að stjórna sameiginlegum API-lykli mállíkans.';
         LanguageModelCodeMissingErr: Label 'A language model code must be specified before an API key can be stored.', Comment = 'is-IS=Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.';
 
     /// <summary>
