@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-15) - Preserve the Bifrost pipeline (PR #57)
+
+- Added `.github/workflows/BifrostPipeline.yaml` and `tools/Test-BifrostPipeline.ps1` to verify sequential Default/Test builds, shared physical container identity, Test production-app republishing, Default internals stripping, signing requests, deferred cleanup, merged settings before secrets, and Test-only upgrade skipping. `AGENTS.md` records these preservation requirements for system updates.
+- `.AL-Go/settings.json` selects a full paired Default/Test build for `.github/workflows/**`, `tools/Test-BifrostPipeline.ps1` and `app/Translations/*.xlf` changes.
+- `LangModel Chat Provider Tests` (codeunit 96002) closes the real customer page, deletes its fixture and restores routing before expected assertion errors can roll back the customer. The wrong-table, wrong-SystemId and wrong-caption checks still reject incorrect context and recheck the original captured values.
+
 ### Added (2026-10-15) - AppSource offer texts
 
 - Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.

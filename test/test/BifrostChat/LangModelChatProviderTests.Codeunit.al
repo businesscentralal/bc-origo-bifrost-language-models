@@ -1289,6 +1289,12 @@ codeunit 96002 "LangModel Chat Provider Tests"
         SourcePage.ori_BifrostChat.Invoke();
         ChatFocus.Close();
         AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, ExpectedCaption);
+        // Expected assertion errors roll back uncommitted database changes.
+        // Finish the real page and customer lifecycle before testing captured values.
+        SourcePage.Close();
+        UnbindSubscription(ContextSpy);
+        SourceRecord.Delete(false);
+        RestoreRouting(OriginalProvider);
         // [WHEN] Each expected value is independently wrong.
         asserterror AssertCapturedContext(ContextSpy, Database::Vendor, SourceRecord.SystemId, ExpectedCaption);
         Assert.ExpectedError('Forwarded table must match the original action.');
@@ -1298,14 +1304,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
         Assert.ExpectedError('Forwarded caption must match the original action.');
         // [THEN] Negative assertions did not change the captured values.
         AssertCapturedContext(ContextSpy, Database::Customer, SourceRecord.SystemId, ExpectedCaption);
-        SourcePage.Close();
-        UnbindSubscription(ContextSpy);
         ContextSpy.Reset();
-        // asserterror rolls the insert back. Get would fail the test when the row is already gone.
-        SourceRecord.SetRange("No.", SourceRecord."No.");
-        if not SourceRecord.IsEmpty() then
-            SourceRecord.DeleteAll(false);
-        RestoreRouting(OriginalProvider);
     end;
 
     local procedure AssertCapturedContext(var ContextSpy: Codeunit "LangModel Context Spy ori"; ExpectedTableId: Integer; ExpectedSystemId: Guid; ExpectedCaption: Text)
