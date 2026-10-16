@@ -1,0 +1,30 @@
+[
+  {
+    "issueUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/issues/70",
+    "acceptance": "Localized saved keyless hint in1033/1039 read/edit; personal/shared/both keys hide; last removal restores; no-key provider hides; preserve text",
+    "implemented": true,
+    "sourceAlUnchangedFrom": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+    "verifiedCurrentCandidate": false,
+    "status": "Pending fresh runtime on approved dependency; historical d47 UI24/24 and native four hint cases are separate evidence."
+  },
+  {
+    "acceptance": "Claude name/ID amendment",
+    "implemented": true,
+    "authorResolvedAt": "d47c161c8247b26e7809ca8852d4fbd93c37f163",
+    "authorReceipt": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/71#issuecomment-6191340590",
+    "newCandidateCompile": "3 invocations0errors0warnings; ID/name unchanged"
+  },
+  {
+    "acceptance": "Current main conflict",
+    "implemented": true,
+    "verifiedCurrentCandidate": true,
+    "sha": "8180b3089c2a334465a73a73e40a6737cde57e98",
+    "evidence": "Local merge committed, both changelog entries retained; product/test AL and XLF diff against d47 empty;8guards pass."
+  },
+  {
+    "acceptance": "Reviewer red-suite amendment5540152845",
+    "status": "OPEN; historical d47 pipeline192/180/12/0; new candidate not run",
+    "author": "Grok PR Reviewer",
+    "dependent": "approved official Foundation containing core1008"
+  }
+]
