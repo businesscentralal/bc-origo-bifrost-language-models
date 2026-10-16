@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-10-15) - AppSource offer texts
+
+- Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.
+
 ### Changed (2026-10-14) - Icelandic translations reviewed for AppSource (#64)
 
 - The Icelandic (is-IS) texts were reviewed for AppSource: the texts in 33 objects now follow the Business Central glossary (core#702), for example heimildasamstæða, viðskiptamaður, kreditreikningur, Sannvottun, skilaboðategund and tákn. The API key actions on the language model card now read "Setja inn persónulegan API-lykil" and "Setja inn sameiginlegan API-lykil", and the missing-key hints use the same wording. English texts, logic and object IDs are unchanged. Changed objects:
