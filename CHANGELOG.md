@@ -8,6 +8,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 - Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.
 
+### Fixed (2026-10-15) - Preserve the Bifrost pipeline (PR #57)
+
+- Added `.github/workflows/BifrostPipeline.yaml` and `tools/Test-BifrostPipeline.ps1` to verify sequential Default/Test builds, shared physical container identity, Test production-app republishing, Default internals stripping, signing requests, deferred cleanup, merged settings before secrets, and Test-only upgrade skipping. `AGENTS.md` records these preservation requirements for system updates.
+- `.AL-Go/settings.json` selects a full paired Default/Test build for `.github/workflows/**`, `tools/Test-BifrostPipeline.ps1` and `app/Translations/*.xlf` changes.
+- `LangModel Chat Provider Tests` (codeunit 96002) closes the real customer page, deletes its fixture and restores routing before expected assertion errors can roll back the customer. The wrong-table, wrong-SystemId and wrong-caption checks still reject incorrect context and recheck the original captured values.
+
 ### Added (2026-10-15) - AppSource offer texts
 
 - Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.
