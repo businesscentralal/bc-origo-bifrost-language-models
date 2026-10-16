@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-16) - Locale-independent test assertions (#73)
+
+- Test codeunits 96002, 96004, 96009 and 96018 compare chat errors, endpoint hints, missing-model errors and Copilot confirmation/success messages against translated expected labels in the active session language. The test app includes Icelandic translations for those labels. Codeunit 96019 reads English discovery text under LCID1033 and restores the caller's language before assertions, including when discovery raises an error. Product source and test coverage remain unchanged.
+
+- Keep the expected Icelandic labels in test codeunits 96002 and 96018 synchronized with the reviewed product wording from #64 after merging main.
+
 ### Fixed (2026-10-15) - Preserve the Bifrost pipeline (PR #57)
 
 - Added `.github/workflows/BifrostPipeline.yaml` and `tools/Test-BifrostPipeline.ps1` to verify sequential Default/Test builds, shared physical container identity, Test production-app republishing, Default internals stripping, signing requests, deferred cleanup, merged settings before secrets, and Test-only upgrade skipping. `AGENTS.md` records these preservation requirements for system updates.
