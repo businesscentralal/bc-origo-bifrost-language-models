@@ -17,7 +17,7 @@ pageextension 10035367 "Bifrost Chat PurchInvoices ori" extends "Purchase Invoic
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this invoice in Business Central.', Comment = 'is-IS=Spjalla um þennan reikning í Business Central';
+                ToolTip = 'Chat about this invoice in Business Central.', Comment = 'is-IS=Spjalla um þennan reikning í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;

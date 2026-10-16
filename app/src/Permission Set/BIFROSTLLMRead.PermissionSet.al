@@ -11,7 +11,7 @@ using Origo.Bifrost;
 permissionset 10035405 "BIFROST LLM Rd ori"
 {
     Assignable = true;
-    Caption = 'Bifrost Language Models Read', MaxLength = 30, Comment = 'is-IS=Bifröst mállíkön lestur';
+    Caption = 'Bifrost Language Models Read', MaxLength = 30, Comment = 'is-IS=Bifröst mállíkön - Lesaðgangur';
 
     Permissions =
         table "Bifrost Language Model ori" = X,

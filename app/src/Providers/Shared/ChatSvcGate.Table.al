@@ -10,7 +10,7 @@ table 10035406 "Chat Svc Gate ori"
 {
     Access = Internal;
     Extensible = false;
-    Caption = 'Chat Service Gate', Comment = 'is-IS=LLM þjónustuhlið';
+    Caption = 'Chat Service Gate', Comment = 'is-IS=Spjallþjónustuhlið';
     DataClassification = SystemMetadata;
 
     fields

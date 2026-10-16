@@ -17,7 +17,7 @@ pageextension 10035359 "Bifrost Chat ItemList ori" extends "Item List"
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this item in Business Central.', Comment = 'is-IS=Spjalla um þessa vöru í Business Central';
+                ToolTip = 'Chat about this item in Business Central.', Comment = 'is-IS=Spjalla um þessa vöru í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;
