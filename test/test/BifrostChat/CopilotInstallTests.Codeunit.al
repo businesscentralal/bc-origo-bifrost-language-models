@@ -23,7 +23,7 @@ codeunit 96018 "Copilot Install Tests"
         HadSetupRow: Boolean;
         ConfirmAnswer: Boolean;
         SuccessMessages: Integer;
-        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?';
+        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\Viltu halda áfram?';
         DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
 
     /// <summary>

@@ -5,8 +5,8 @@
       <group id="body">
         <trans-unit id="Codeunit 687115114 - NamedType 750120336" size-unit="char" translate="yes" xml:space="preserve">
           <source>This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?</source>
-          <target>Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</note>
+          <target>Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\Viltu halda áfram?</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\Viltu halda áfram?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install Tests - NamedType ConfirmQst</note>
         </trans-unit>
         <trans-unit id="Codeunit 687115114 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
@@ -17,8 +17,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2603271315 - NamedType 3848368221" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.</source>
-          <target>Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</note>
+          <target>Bifröst spjall er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans í Uppsetningu notanda Bifröst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst spjall er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans í Uppsetningu notanda Bifröst.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Chat Provider Tests - NamedType ChatNotEnabledErrTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 3502724028 - NamedType 3681133756" size-unit="char" translate="yes" xml:space="preserve">

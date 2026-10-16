@@ -24,7 +24,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
 
     var
         Assert: Codeunit "Library Assert";
-        ChatNotEnabledErrTxt: Label 'Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.', Comment = 'is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.';
+        ChatNotEnabledErrTxt: Label 'Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.', Comment = 'is-IS=Bifröst spjall er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans í Uppsetningu notanda Bifröst.';
 
     /// <summary>
     /// Verifies that when no user setup or default role exists, ShowBifrostChat returns false.
