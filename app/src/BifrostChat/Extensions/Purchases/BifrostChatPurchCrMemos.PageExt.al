@@ -17,7 +17,7 @@ pageextension 10035361 "Bifrost Chat PurchCrMemos ori" extends "Purchase Credit 
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this credit memo in Business Central.', Comment = 'is-IS=Spjalla um þessa kreditnótu í Business Central';
+                ToolTip = 'Chat about this credit memo in Business Central.', Comment = 'is-IS=Spjalla um þennan kreditreikning í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;
