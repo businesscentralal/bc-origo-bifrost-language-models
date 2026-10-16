@@ -1,0 +1,36 @@
+{
+  "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "containerId": "f0f446957dd5",
+  "locale": "en-US",
+  "lcid": 1033,
+  "startedAt": "2026-10-16T12:18:24.451Z",
+  "finishedAt": "2026-10-16T12:18:35.076Z",
+  "executed": 3,
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {
+      "scenario": "Localized setup page renders",
+      "pageId": 10035421,
+      "passed": true,
+      "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-setup.png"
+    },
+    {
+      "scenario": "Localized model list renders",
+      "pageId": 10035344,
+      "passed": true,
+      "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-list.png"
+    },
+    {
+      "scenario": "Actual Copilot initialization confirmation is localized; decline preserves grid",
+      "pageId": 10035344,
+      "passed": true,
+      "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-confirmation.png",
+      "providerCalls": 0,
+      "beforeGrid": "\t\t\n\t\t\t\t\t",
+      "afterGrid": "\t\t\n\t\t\t\t\t"
+    }
+  ],
+  "ownedData": "No new UI model required; isolated fresh owned container; no provider call or key/licence data write. Native suite fixtures are self-created; all removed with container."
+}

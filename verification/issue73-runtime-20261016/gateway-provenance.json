@@ -1,0 +1,8 @@
+{
+  "scriptByteIdenticalToSnapshot": true,
+  "sha256": "77728c515a833f771eca5c11a8ed3364c6ee9781f8946ec044108b75eb8fc87c",
+  "snapshotCommit": "ac05e88ab51ed4c9bbfb843508fc2484afe5ec8f",
+  "firstInvocation": "Failed at760 because mcp/config path is absent and USERPROFILE null onLinux",
+  "successfulInvocation": "Byte-identical script copied under own gateway/tools, with gateway/config symlink to same snapshot config; no checks/exclusions changed; no shared source modified",
+  "filesScanned": 29
+}

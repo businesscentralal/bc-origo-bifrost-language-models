@@ -1,0 +1,1130 @@
+[
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "SetSkill_GetSkill_ReturnsStoredText",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "GetSkill_NoContent_ReturnsEmptyString",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "SetSkill_LargeContent_RoundTripsCorrectly",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "SetSkill_OverwriteExisting_ReturnsNewContent",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "GetContextTokens_ZeroUsesTheProviderDefault",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "GetContextTokens_SetValueWins",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96003,
+    "codeunitName": "Bifrost Language Model Tests",
+    "method": "GetContextTokens_ProviderDefaults",
+    "path": "test/test/BifrostChat/BifrostLanguageModelTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "ClaimChatProvider_WithoutSetupPermission_Claims",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "ClaimChatProvider_WhenAnotherProviderHolds_LeavesItUnchanged",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "ClaimChatProvider_WhenNone_ClaimsLanguageModels",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "ClaimChatProvider_Twice_IsIdempotent",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "ClaimChatProvider_MissingSetupRow_CreatesAndClaims",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_DeclinedAbsent_LeavesModelsUnchanged",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_AcceptedAbsent_CreatesDefault",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_AcceptedOtherDefault_PreservesSelection",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_DeclinedExisting_PreservesModelAndSkill",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_AcceptedExisting_RefreshesOnlySkill",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96018,
+    "codeunitName": "Copilot Install Tests",
+    "method": "InitDefaults_ModelWriteFailure_PropagatesWithoutSuccess",
+    "path": "test/test/BifrostChat/CopilotInstallTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96017,
+    "codeunitName": "Copilot Upgrade Tests",
+    "method": "UpgradePerCompany_WithoutSetupPermission_Claims",
+    "path": "test/test/BifrostChat/CopilotUpgradeTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96017,
+    "codeunitName": "Copilot Upgrade Tests",
+    "method": "UpgradePerCompany_WhenAnotherProviderHolds_LeavesItUnchanged",
+    "path": "test/test/BifrostChat/CopilotUpgradeTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetLangModelProvider_NoSetup_FallsBackToNone",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_NoneProvider_ReturnsDisabledFlag",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "SendChatMessage_RoleMock_RoundTrips",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "SendChatMessage_NoneProvider_ReturnsErrorJson",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetAvailableModels_RoleMock_PopulatesBuffer",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetAvailableModels_RoleMock_NoModels_ReturnsFalse",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "IsConfigured_BlankCode_IgnoresDefaultModel",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "IsConfigured_UserCode_UsesThatModelNotDefault",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "IsConfigured_MissingModel_ReturnsFalse",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "SendChatMessage_BlankCode_ReturnsNotEnabledError",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "ContinueWithToolResults_BlankCode_ReturnsNotEnabledError",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "TryIt_BlankUserCode_UsesTestContextModel",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetLangModelProviderWithModel_BlankCode_UsesDefaultModel",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetLangModelProvider_UserRole_TakesPrecedenceOverDefault",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "ContinueWithToolResults_RoleMock_DelegatesToMock",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "ContinueWithToolResults_NoneProvider_ReturnsErrorJson",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_DebugMode_IncludesDebugTrue",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_RoleWithSkill_IncludesContextSkill",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_RoleWithoutSkill_NoContextSkill",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "BuildConfigJson_NoUserSetup_NoContextSkill",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "SendChatMessage_ArgumentFieldsPopulated",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_CustomerList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_IncomingDocuments_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_ItemList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_PurchaseCreditMemos_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_PurchaseInvoices_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_PurchaseOrders_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_PurchaseQuotes_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_PurchaseReturnOrders_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SalesCreditMemos_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SalesInvoiceList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SalesOrderList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SalesQuotes_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SalesReturnOrderList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_VendorList_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_UnassignedUser_HidesAction",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_MissingAssignedModel_HidesAction",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_EmptyCurrentRecord_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_SequentialCustomers_FreshContext",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_NoBoundObserver_OpensFocus",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "OpenRecordChat_WrongExpectedContext_IsRejected",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96002,
+    "codeunitName": "LangModel Chat Provider Tests",
+    "method": "GetLangModelProviderWithModel_NoModels_ReturnsNone",
+    "path": "test/test/BifrostChat/LangModelChatProviderTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Contract_HasRequiredChaptersAndValidContent",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Discovery_HasLanguageModelSpecificText",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Contract_NamesBothPermissionSets",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Execute_MissingPrompt_IsCodedMissingParameter",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Execute_UnknownRoleCode_IsCodedRecordNotFound",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96019,
+    "codeunitName": "LLM Prompt Contract Tests",
+    "method": "Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut",
+    "path": "test/test/BifrostChat/LLMPromptContractTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96013,
+    "codeunitName": "Chat Svc Gate Tests",
+    "method": "ChatSvcGate_WritePermission_WithPermissionsDisabled",
+    "path": "test/test/Providers/ChatSvcGateTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96013,
+    "codeunitName": "Chat Svc Gate Tests",
+    "method": "ProviderBase_HasServiceKeyPermission_WithPermissionsDisabled",
+    "path": "test/test/Providers/ChatSvcGateTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96013,
+    "codeunitName": "Chat Svc Gate Tests",
+    "method": "ChatSvcGate_WritePermission_WithRestrictivePermissions",
+    "path": "test/test/Providers/ChatSvcGateTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96013,
+    "codeunitName": "Chat Svc Gate Tests",
+    "method": "ChatSvcGate_WritePermission_WithoutPermissionSet",
+    "path": "test/test/Providers/ChatSvcGateTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96013,
+    "codeunitName": "Chat Svc Gate Tests",
+    "method": "ChatSvcGate_Table_IsAccessible",
+    "path": "test/test/Providers/ChatSvcGateTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96011,
+    "codeunitName": "LangModel API Client Tests",
+    "method": "ExtractText_StandardResponse",
+    "path": "test/test/Providers/LangModelAPIClientTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96011,
+    "codeunitName": "LangModel API Client Tests",
+    "method": "ExtractText_EmptyChoices_ReturnsEmpty",
+    "path": "test/test/Providers/LangModelAPIClientTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96011,
+    "codeunitName": "LangModel API Client Tests",
+    "method": "ExtractText_NoChoices_ReturnsEmpty",
+    "path": "test/test/Providers/LangModelAPIClientTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96011,
+    "codeunitName": "LangModel API Client Tests",
+    "method": "ExtractText_ContentIsNull_ReturnsEmpty",
+    "path": "test/test/Providers/LangModelAPIClientTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96011,
+    "codeunitName": "LangModel API Client Tests",
+    "method": "ExtractText_ContentArray_ReturnsEmpty",
+    "path": "test/test/Providers/LangModelAPIClientTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96029,
+    "codeunitName": "LangModel Chat Proxy Tests",
+    "method": "NeedsReasoningOff_ToolsAndMatchingError_IsTrue",
+    "path": "test/test/Providers/LangModelChatProxyTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96029,
+    "codeunitName": "LangModel Chat Proxy Tests",
+    "method": "NeedsReasoningOff_NoTools_IsFalse",
+    "path": "test/test/Providers/LangModelChatProxyTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96029,
+    "codeunitName": "LangModel Chat Proxy Tests",
+    "method": "NeedsReasoningOff_AlreadySet_IsFalse",
+    "path": "test/test/Providers/LangModelChatProxyTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96029,
+    "codeunitName": "LangModel Chat Proxy Tests",
+    "method": "NeedsReasoningOff_UnrelatedError_IsFalse",
+    "path": "test/test/Providers/LangModelChatProxyTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "IsConfigured_WithKeyAndUrl_ReturnsTrue",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "IsConfigured_WithoutKey_ReturnsFalse",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "IsConfigured_WithKeyNoUrl_UsesDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetBaseUrl_ArgumentOverridesDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetBaseUrl_EmptyArgument_FallsBackToDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetModel_ArgumentOverridesDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetTimeoutMs_ArgumentValue_Used",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetTimeoutMs_Zero_UsesDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetMaxTokens_ArgumentValue_Used",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "GetMaxTokens_Zero_UsesDefault",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "ParseTokenUsage_StandardFormat",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "ParseTokenUsage_MissingUsage_ReturnsZero",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "ParseTokenUsage_InvalidJson_ReturnsZero",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "AttachFiles_AddsImageUrlBlock",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "AttachFiles_PdfUsesFileBlock",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "AttachFiles_NoFiles_LeavesMessageUnchanged",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96010,
+    "codeunitName": "LangModel Prov Base Tests",
+    "method": "AttachFiles_PreservesSystemMessage",
+    "path": "test/test/Providers/LangModelProvBaseTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "OpenAI_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "AzureOpenAI_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "CustomLLM_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "Anthropic_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "xAI_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "Gemini_Metadata",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "IsConfigured_WithoutApiKey_ReturnsFalse_ForEveryExternalProvider",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "SetAzureChatPath_Blank_UsesDefaultDeploymentPath",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96012,
+    "codeunitName": "LangModel Providers Tests",
+    "method": "SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment",
+    "path": "test/test/Providers/LangModelProvidersTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "HistoryBudget_FollowsTheContextSize",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "HistoryBudget_ZeroContextUsesTheFallback",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "HistoryBudget_ToolDefinitionsAndTinyContextKeepAFloor",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "RemoveOrphanedToolMessages_LeadingToolMessageIsRemoved",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "RemoveOrphanedToolMessages_PairedCallsAreKept",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "RemoveOrphanedToolMessages_CallWithoutResultIsDropped",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "RemoveOrphanedResponsesItems_DropsUnpairedItems",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "NeedsFigureCheck_FiguresWithoutToolCall_IsTrue",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "NeedsFigureCheck_FiguresAfterToolCall_IsFalse",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "NeedsFigureCheck_ToolCallInAnEarlierTurn_DoesNotCount",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "NeedsFigureCheck_AfterTheFollowUp_IsFalse",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "NeedsFigureCheck_AnthropicToolUseBlocksCount",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96022,
+    "codeunitName": "LangModel Turn Guard Tests",
+    "method": "ContainsFigures_RecognisesAmountsOnly",
+    "path": "test/test/Providers/LangModelTurnGuardTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskRequestBody_DebugMode_ReturnsBodyUnchanged",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskRequestBody_NormalMode_IsRedacted",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskResponseBody_DebugMode_ReturnsBodyUnchanged",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskResponseBody_NormalMode_IsRedacted",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskResponseBody_EmptyBody_StaysEmptyInDebugMode",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "MaskErrorText_IsNeverRedacted",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "GetBaseUrl_StripsPathAndQuery",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "GetBaseUrl_HostOnly_ReturnsHost",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "GetBaseUrl_NoScheme_ReturnsInput",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96015,
+    "codeunitName": "LLM Req Log Masker Tests",
+    "method": "GetBaseUrl_Empty_ReturnsEmpty",
+    "path": "test/test/Providers/LLMReqLogMaskerTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_EmptyEndpoints_FillsDefaults",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_ProxyEndpoints_KeepsExistingValues",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_AzureEndpoints_KeepsExistingValues",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_OnlyBaseUrl_LeavesPathsEmpty",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_OnlyChatPath_FillsBaseUrlOnly",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_OnlyModelsPath_FillsBaseUrlOnly",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_RepeatedSelection_KeepsUserEdits",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_TableValidation_FillsDefaults",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_AzureSelection_LeavesEndpointsEmpty",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_DefaultBase_BuildsEndpointUrls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_WhitespaceBase_DefaultsOnCard",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_WhitespaceBase_UsesRuntimeDefault",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_VersionedBase_BuildsSingleV1Urls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC01_VersionedTrailingSlash_BuildsSingleV1Urls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_PathsWithoutLeadingSlash_BuildsEndpointUrls",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96031,
+    "codeunitName": "LangModel 60 Defaults Tests",
+    "method": "Scenario_AC02_VersionedPaths_PreservesSegmentBoundaries",
+    "path": "test/test/Setup/LangModel60DefaultsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96004,
+    "codeunitName": "LangModel Field Restrict Tests",
+    "method": "FieldRestrict_ThreeEndpointFieldsWriteRestricted",
+    "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96004,
+    "codeunitName": "LangModel Field Restrict Tests",
+    "method": "FieldRestrict_EndpointFieldsNotReadRestricted",
+    "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96004,
+    "codeunitName": "LangModel Field Restrict Tests",
+    "method": "FieldRestrict_NeighbourFieldsNotRestricted",
+    "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96004,
+    "codeunitName": "LangModel Field Restrict Tests",
+    "method": "FieldRestrict_TableLevelChecksStayFalse",
+    "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96004,
+    "codeunitName": "LangModel Field Restrict Tests",
+    "method": "FieldRestrict_HintForEndpointFieldsEmptyForNeighbour",
+    "path": "test/test/Setup/LangModelFieldRestrictTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96016,
+    "codeunitName": "LangModel Registration Tests",
+    "method": "AppRegistry_ListsLanguageModelsWithItsSetupPage",
+    "path": "test/test/Setup/LangModelRegistrationTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "GetSecretCodes_BuildBothCodesFromLanguageModelCode",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "GetSecretCodes_LongestLanguageModelCode_FitsInCode50",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "GetSecretCodes_BlankLanguageModelCode_ReturnsBlank",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "Insert_LanguageModel_RegistersBothSecretsWithCorrectScope",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "Register_CalledTwice_IsIdempotent",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "ServiceKey_SetIsSetClear_RoundTrips",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "UserKey_SetIsSetClear_RoundTrips",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "ServiceAndUserKey_AreStoredIndependently",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "TryGetApiKey_NoKeyStored_ReturnsFalse",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "TryGetApiKey_BlankLanguageModelCode_ReturnsFalse",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "SetServiceKey_BlankLanguageModelCode_Errors",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "Delete_LanguageModel_ClearsBothSecrets",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "Rename_LanguageModel_MovesSecretsToTheNewCode",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "CountModelsWithoutKey_Empty_ReturnsZero",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96009,
+    "codeunitName": "LangModel Secrets Tests",
+    "method": "CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites",
+    "path": "test/test/Setup/LangModelSecretsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96014,
+    "codeunitName": "LangModel Setup Page Tests",
+    "method": "LangModelSetupPage_Opens",
+    "path": "test/test/Setup/LangModelSetupPageTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96014,
+    "codeunitName": "LangModel Setup Page Tests",
+    "method": "LangModelSetupPage_CountsTheLanguageModels",
+    "path": "test/test/Setup/LangModelSetupPageTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96014,
+    "codeunitName": "LangModel Setup Page Tests",
+    "method": "SetupOri_ExposesTheSingleLangModelAppsAction",
+    "path": "test/test/Setup/LangModelSetupPageTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Set_CreatesModelAndStoresKeysWithoutAnsweringThem",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Set_UnknownProviderAndMissingCode_AreReportedTogether",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Delete_RemovesTheModelAndReportsUnknownCodes",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Chat_RunsToolCallsAndReturnsTheReply",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Chat_ProviderError_IsPreconditionFailed",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  },
+  {
+    "codeunit": 96028,
+    "codeunitName": "LangModel Test Tools Tests",
+    "method": "Chat_UnknownModel_IsRecordNotFound",
+    "path": "test/test/TestTools/LangModelTestToolsTests.Codeunit.al"
+  }
+]

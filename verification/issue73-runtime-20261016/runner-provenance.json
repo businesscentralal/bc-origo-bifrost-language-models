@@ -1,0 +1,15 @@
+{
+  "candidateSha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "runner": "Standard in-container Client Services + native Command Line Test Tool130455, PsTestFunctions full96000..96199",
+  "privateRunnerOriginalSha256": "9ee579ffe16c35aa07fa6a08e045d9e2b21e964cc1c7aa963c3bc778f8ccc6fa",
+  "privateRunnerUsedSha256": "4f3c5c94e88a74162a4b8cb14428dd29c84002747aeb4fd5280ece7ede3ff110",
+  "onlyRunnerChange": "Parameterize supported New-ClientContext -culture; expliciten-US/is-IS. No test filters/exclusions/assertions changed. Native MySettings and actual Command Line Test Tool Language ID1039 were independently observed.",
+  "testCasesMatchSource": {
+    "1033": true,
+    "1039": true
+  },
+  "actualUiLanguageSettingsApplied": true,
+  "nativeLanguage1039Evidence": "native-is-session.jsonl",
+  "sshRestarts": false,
+  "noLicensingOrTrialWrites": true
+}

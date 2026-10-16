@@ -1,0 +1,73 @@
+{
+  "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "containerId": "f0f446957dd5",
+  "executed": 6,
+  "passed": 6,
+  "failed": 0,
+  "skipped": 0,
+  "locales": [
+    "en-US",
+    "is-IS"
+  ],
+  "lcids": [
+    1033,
+    1039
+  ],
+  "scenarios": [
+    {
+      "locale": "en-US",
+      "results": [
+        {
+          "scenario": "Localized setup page renders",
+          "pageId": 10035421,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-setup.png"
+        },
+        {
+          "scenario": "Localized model list renders",
+          "pageId": 10035344,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-list.png"
+        },
+        {
+          "scenario": "Actual Copilot initialization confirmation is localized; decline preserves grid",
+          "pageId": 10035344,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-en-US-confirmation.png",
+          "providerCalls": 0,
+          "beforeGrid": "\t\t\n\t\t\t\t\t",
+          "afterGrid": "\t\t\n\t\t\t\t\t"
+        }
+      ]
+    },
+    {
+      "locale": "is-IS",
+      "results": [
+        {
+          "scenario": "Localized setup page renders",
+          "pageId": 10035421,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-is-IS-setup.png"
+        },
+        {
+          "scenario": "Localized model list renders",
+          "pageId": 10035344,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-is-IS-list.png"
+        },
+        {
+          "scenario": "Actual Copilot initialization confirmation is localized; decline preserves grid",
+          "pageId": 10035344,
+          "passed": true,
+          "screenshot": "/workspace/evidence/lm-locale-1792151046/ui-is-IS-confirmation.png",
+          "providerCalls": 0,
+          "beforeGrid": "\t\t\n\t\t\t\t\t",
+          "afterGrid": "\t\t\n\t\t\t\t\t"
+        }
+      ]
+    }
+  ],
+  "summary": "Actual localized setup/list and Copilot init confirmation in1033/1039; declined confirmations preserve model grid; no provider calls/licensing changes.",
+  "confirmationScreenshotsVisuallyInspected": true,
+  "visualInspectionAt": "2026-10-16T12:20:46.774497+00:00"
+}

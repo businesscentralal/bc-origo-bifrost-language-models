@@ -1,0 +1,12 @@
+{
+  "id": "f0f446957dd5",
+  "worker": "worker-6",
+  "task": "1792151046.862049",
+  "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "deleted": 1,
+  "total": 1,
+  "absenceVerified": true,
+  "getStatusCode": 404,
+  "ownedTestDataRemovedWithContainer": true,
+  "verifiedAt": "2026-10-16T12:19:16.618Z"
+}

@@ -1,0 +1,10 @@
+{
+  "sha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "Only existing test assertions, test discovery locale scope and test-app translation packaging/XLF change. No product AL, message implementation, contract, enum registration, provider or dispatch changes. Existing test message-type implementations are unchanged.",
+  "executed": 0,
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "status": "not applicable; no MCP pass claimed"
+}

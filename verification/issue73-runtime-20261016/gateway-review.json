@@ -1,0 +1,61 @@
+{
+  "candidateSha": "8f7431a71fd1a3baa02bcf5619b1f5063499679f",
+  "baseSha": "3c69ae7240f333712dbdf6be85bdebd64c22c135",
+  "filesScannedEach": 29,
+  "candidateSummary": {
+    "ready": false,
+    "total": 23,
+    "failed": 9,
+    "passed": 14
+  },
+  "baselineSummary": {
+    "passed": 14,
+    "total": 23,
+    "failed": 9,
+    "ready": false
+  },
+  "newFindingIdentities": [
+    {
+      "check": "caption_translation",
+      "finding": {
+        "file": "LangModelTestMsgType.EnumExt.al",
+        "text": "Caption = 'Test.LanguageModel.Delete', Locked = true;"
+      }
+    },
+    {
+      "check": "caption_translation",
+      "finding": {
+        "file": "LangModelTestMsgType.EnumExt.al",
+        "text": "Caption = 'Test.LanguageModel.Set', Locked = true;"
+      }
+    },
+    {
+      "check": "caption_translation",
+      "finding": {
+        "file": "LangModelTestMsgType.EnumExt.al",
+        "text": "Caption = 'Test.LanguageModel.Chat', Locked = true;"
+      }
+    }
+  ],
+  "removedFindingIdentities": [
+    {
+      "check": "changelog",
+      "finding": "CHANGELOG.md not found"
+    }
+  ],
+  "findingsNotSuppressed": true,
+  "triage": {
+    "app_json": "Existing test app lacks telemetry; no product metadata changed.",
+    "xml_doc_comments": "Scanner looks immediately above procedure and misses existing XML docs separated by [Test]/[HandlerFunctions]; no new public procedure.",
+    "try_prefix_convention": "Existing test method names reference TryGetApiKey/TryIt; they are [Test], not missing TryFunctions. New local TryReadDiscovery is explicitly [TryFunction].",
+    "modernization": "Regex matches NAS within namespace and User Setup in current Foundation Bifrost user model, not legacyNAS/authentication. No authentication change.",
+    "read_isolation": "Existing fixture patterns only; no record loop/read change in this diff.",
+    "global_variables": "Existing test mocks/state; new object-level variables are labels.",
+    "caption_translation": "Three newly surfaced scanner findings arise because TranslationFile now makes the test app multi-locale. All3Test.LanguageModel.Set/Delete/Chat captions already exist unchanged as Locked technical message-type identifiers. They must remain exact technical tokens, not translated prose. Test message-type enum/implementations are unchanged. These are contextual false positives; no allow-list/exclusion or source alteration was made.",
+    "other": "Existing test style/findings unchanged and disclosed; no test/assertion/warning exclusions added."
+  },
+  "changedScopeReview": "All5changedtestcodeunits preserve188methods and strong assertions;5expectedlabels have actualis-IS targets. English-only discovery has bounded TryFunction read and caller-language restoration before any failure/assertion. Product source, public API/IDs/permissions/dependencies/version unchanged. CHANGELOG names actualtestIDs. No product docs change required.",
+  "remainingIndependentGates": "Claude exact-head independent verification; targetCI compiler/suite; Grok clearance/approval/Architect merge/UAT",
+  "newConfirmedScopeDefects": [],
+  "newScannerFindings": 3
+}
