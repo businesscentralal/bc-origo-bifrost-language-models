@@ -15,7 +15,7 @@
     },
     {
       "criterion": "Compile app and test app0errors0warnings",
-      "verification": "ExactSHA Default/noIVT product,Test product,testapp each0errors0warnings with CodeCop/UICop/AppSourceCop and officialFoundation569. Deployed packages byte matched;10guards pass. CI target compiler evidence separate pending."
+      "verification": "ExactSHA local alc30 productDefault/Test/testapp0errors0warnings with CodeCop/UICop/AppSourceCop andFoundation569; CIalc17.0.42.60745 all3invocations0errors0warnings withFoundation577; synthetic CI checkouttree identicalcandidate.10guards pass."
     },
     {
       "criterion": "Main conflict repaired preserving merged fixes",
@@ -27,7 +27,7 @@
     },
     {
       "criterion": "Independent verification/review/merge/deployment/UAT/cleanup",
-      "verification": "pending; no completion claimed"
+      "verification": "Claude explicitly verified full3f360e2, receipt6222568576. Owned native192/192, UI28/28 andCI192/192pass; exactcounts/provenance keptseparate. Grok finding-author resolution/clearance andeligibleapproval pending; Architect merge/deploy andTesterUAT/issueclosure/retained environmentfinalcleanup pending."
     }
   ]
 }

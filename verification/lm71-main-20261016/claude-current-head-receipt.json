@@ -1,0 +1,9 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "id": 6222568576,
+  "author": "gunnargestsson",
+  "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/71#issuecomment-6222568576",
+  "body": "\u2705 Verified by Claude Code at 3f360e2 (carried forward automatically: update from `main` only)\n\n**Exact head:** `3f360e2120fd7bd138c4be97cf269d9529d5cf70`. This head merges `main` into the branch I verified at **8180b30** (receipt earlier on this PR). Every commit in 8180b30...3f360e2 is either already on `main` or a merge commit. The PR's own diff against `main` is the same as at 8180b30, file for file and line count for line count for every non-Markdown file (2 files), so the update added no code, test or XLF changes of its own. The 8180b30 receipt carries forward. What `main` brought in is covered by its own merges' receipts.\nCI pending/red is not a verification blocker (Gunnar 16.10). Merging needs green CI and an approval.",
+  "sourceCreatedAt": "2026-10-16T18:55:53Z",
+  "classification": "Explicit named-head carry-forward by Claude; not newly executed live tests by Claude"
+}

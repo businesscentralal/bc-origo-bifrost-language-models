@@ -1,0 +1,93 @@
+{
+  "sha": "3f360e2120fd7bd138c4be97cf269d9529d5cf70",
+  "runId": 38950302751,
+  "runUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38950302751",
+  "attempt": 1,
+  "conclusion": "success",
+  "syntheticCheckoutSha": "fa4d48725c1812cf9159ff0479757c7e82c1d552",
+  "checkoutTree": "4a5322aaced813162165edf32fce72fa45f7fc6b",
+  "candidateTree": "4a5322aaced813162165edf32fce72fa45f7fc6b",
+  "candidateTreeMatchesCheckout": true,
+  "compile": [
+    {
+      "artifactId": 12069126113,
+      "sha256": "f828c8811944651c0a20605fd758a1ab3b2348ca88fb09c1bffe9751631e2a6b",
+      "compilerVersions": [
+        "17.0.42.60745"
+      ],
+      "invocations": 1,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "artifactId": 12068039183,
+      "sha256": "af5bc2513fd17946105675f1193891fc811aee7297cfd5d416b242298b4e673b",
+      "compilerVersions": [
+        "17.0.42.60745",
+        "17.0.42.60745"
+      ],
+      "invocations": 2,
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "tests": {
+    "executed": 192,
+    "passed": 192,
+    "failed": 0,
+    "skipped": 0,
+    "fullSuite": true,
+    "artifactId": 12067804681,
+    "junitSha256": "64d885cb2e107f659e08e77369762a97f2c281e32ba5b57c136ec98b0a6e9a79"
+  },
+  "sharedContainerId": "f0c9d236da87",
+  "foundationVersionBothModes": "28.0.5.577",
+  "productVersion": "28.0.2147483647.148",
+  "realTestProductRepublish": [
+    "2026-10-16T19:02:51.8614579Z Bifrost: republishing Test MainApp 28.0.2147483647.148 on shared container f0c9d236da87, SHA256=8296F277FC43097819A9B677F30836CB26457EBCCA49550F70DB2BA2EE71271B."
+  ],
+  "defaultNoInternals": true,
+  "defaultSkipUpgrade": false,
+  "testSkipUpgrade": true,
+  "signing": {
+    "observedPrDefaultDoNotSignApps": true,
+    "signedPrArtifactClaimed": false,
+    "sourceMainSigningConditionalRetained": true,
+    "scope": "Inherited PR branch policy, unchanged by this PR; main signing condition preserved. Disclosed for Architect/Reviewer, no waiver or pipeline change invented."
+  },
+  "ownedDeveloperEnvironmentSeparate": {
+    "id": "f043ac8a8059",
+    "foundationVersion": "28.0.5.569",
+    "nativeTests": {
+      "executed": 192,
+      "passed": 192,
+      "failed": 0,
+      "skipped": 0
+    },
+    "ui": {
+      "executed": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "cleanup": [
+    {
+      "name": "bc38950302751",
+      "id": "f0c9d236da87",
+      "status": 404,
+      "absent": true,
+      "checkedAt": "2026-10-16T19:14:06.567Z",
+      "writes": 0
+    },
+    {
+      "name": "codex-worker6-lm71-main-w1",
+      "id": "f043ac8a8059",
+      "status": 200,
+      "absent": false,
+      "checkedAt": "2026-10-16T19:14:06.787Z",
+      "writes": 0
+    }
+  ],
+  "checkedAt": "2026-10-16T19:14:45.680912+00:00"
+}
