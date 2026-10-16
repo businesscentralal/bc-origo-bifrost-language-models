@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-10-15) - AppSource offer texts
+
+- Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.
+
 ### Fixed (2026-10-13) - OpenAI endpoint defaults (#60)
 
 - Selecting OpenAI on the language model card fills an empty `Base URL` with `https://api.openai.com/`. `Chat Path` and `Models Path` remain unchanged, including when empty: the provider already appends its endpoint paths. Existing Azure OpenAI and proxy values are preserved; other providers are unchanged. Table 10035335 `Bifrost Language Model ori`; page 10035343 `Bifrost LangModel Card ori` saves the validated provider/defaults before refreshing its fields and waits for the skill editor’s `ControlReady` before refreshing it, so the same card validation can run before the add-in is instantiated. Regression tests in codeunit 96031 `LangModel 60 Defaults Tests` exercise card selection, partial configurations, repeated selection and table validation.
