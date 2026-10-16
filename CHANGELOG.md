@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-16) - Locale-independent test assertions (#73)
+
+- Test codeunits 96002, 96004, 96009 and 96018 compare chat errors, endpoint hints, missing-model errors and Copilot confirmation/success messages against translated expected labels in the active session language. The test app includes Icelandic translations for those labels. Codeunit 96019 reads English discovery text under LCID1033 and restores the caller's language before assertions, including when discovery raises an error. Product source and test coverage remain unchanged.
+
 ### Added (2026-10-15) - AppSource offer texts
 
 - Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.

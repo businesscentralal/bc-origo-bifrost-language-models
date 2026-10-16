@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="is-IS" original="Bifrost Language Models - Tests">
+    <body>
+      <group id="body">
+        <trans-unit id="Codeunit 687115114 - NamedType 750120336" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?</source>
+          <target>Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install Tests - NamedType ConfirmQst</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 687115114 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot defaults initialized successfully.</source>
+          <target>Copilot sjálfgildi frumstillt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálfgildi frumstillt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install Tests - NamedType DoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2603271315 - NamedType 3848368221" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.</source>
+          <target>Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Chat Provider Tests - NamedType ChatNotEnabledErrTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3502724028 - NamedType 3681133756" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.</source>
+          <target>Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Field Restrict Tests - NamedType EndpointHintTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1868504861 - NamedType 1281857675" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A language model code must be specified before an API key can be stored.</source>
+          <target>Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Secrets Tests - NamedType LanguageModelCodeMissingErr</note>
+        </trans-unit>
+        <trans-unit id="EnumExtension 3555081229 - EnumValue 1417814126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 3617384391">
+          <source>Mock</source>
+          <target>Mock</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mock</note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension Mock Bifrost LangModel Prov. - EnumValue Mock - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="EnumExtension 4050223175 - EnumValue 3529413369 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1670964381">
+          <source>Mock other provider</source>
+          <target>Önnur prófunarveita</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Önnur prófunarveita</note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension Mock Chat Provider Type - EnumValue MockOtherProvider - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

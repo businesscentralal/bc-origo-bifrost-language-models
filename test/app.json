@@ -79,5 +79,8 @@
     "AS0015",
     "AS0054"
   ],
-  "runtime": "17.0"
+  "runtime": "17.0",
+  "features": [
+    "TranslationFile"
+  ]
 }

@@ -23,6 +23,8 @@ codeunit 96018 "Copilot Install Tests"
         HadSetupRow: Boolean;
         ConfirmAnswer: Boolean;
         SuccessMessages: Integer;
+        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?';
+        DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
 
     /// <summary>
     /// Verifies that install claims Language Models without direct setup permission.
@@ -338,8 +340,7 @@ codeunit 96018 "Copilot Install Tests"
     [ConfirmHandler]
     procedure ConfirmInit(Question: Text[1024]; var Reply: Boolean)
     begin
-        Assert.IsTrue(StrPos(Question, 'Microsoft Billed') > 0, 'Confirmation must disclose Microsoft billing.');
-        Assert.IsTrue(StrPos(Question, 'COPILOT') > 0, 'Confirmation must identify the affected model.');
+        Assert.AreEqual(ConfirmQst, Question, 'Confirmation must disclose billing, the affected model and skill refresh in the session language.');
         Reply := ConfirmAnswer;
     end;
 
@@ -353,7 +354,7 @@ codeunit 96018 "Copilot Install Tests"
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         CopilotCapability: Codeunit "Copilot Capability";
     begin
-        Assert.AreEqual('Copilot defaults initialized successfully.', MessageText, 'Unexpected success text.');
+        Assert.AreEqual(DoneMsg, MessageText, 'Unexpected success text in the session language.');
         Assert.IsTrue(LanguageModel.Get('COPILOT'), 'Model must exist before reporting success.');
         Assert.IsTrue(CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori", LangModelSecrets.GetAppId()), 'Capability must be registered before success.');
         SuccessMessages += 1;

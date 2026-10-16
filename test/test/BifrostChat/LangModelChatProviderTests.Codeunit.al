@@ -24,6 +24,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
 
     var
         Assert: Codeunit "Library Assert";
+        ChatNotEnabledErrTxt: Label 'Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.', Comment = 'is-IS=Bifröst Chat er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans á Bifröst notandauppsetningu þinni.';
 
     /// <summary>
     /// Verifies that when no user setup or default role exists, ShowBifrostChat returns false.
@@ -1401,7 +1402,7 @@ codeunit 96002 "LangModel Chat Provider Tests"
 
     local procedure ChatNotEnabledErr(): Text
     begin
-        exit('Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.');
+        exit(ChatNotEnabledErrTxt);
     end;
 
     local procedure SetRoleModel(RoleCode: Code[20]; Model: Text[100])
