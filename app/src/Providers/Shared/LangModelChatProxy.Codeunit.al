@@ -17,7 +17,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ToolServer: Codeunit "MCP Tool Server ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
-        MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=AI mállíkan skilaði svari án "message"-reits. Sýnishorn af svari: %1';
+        MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=Gervigreindarlíkanið skilaði vali án "message"-reits. Sýnishorn af svari: %1';
 
     /// <summary>
     /// Builds and sends an OpenAI-compatible chat request using the supplied model argument and optional extra request fields.

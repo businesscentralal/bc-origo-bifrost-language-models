@@ -45,14 +45,34 @@ codeunit 96019 "LLM Prompt Contract Tests"
     [Test]
     procedure Discovery_HasLanguageModelSpecificText()
     var
+        OriginalLanguage: Integer;
+        Keywords: Text;
+        SelectionDescription: Text;
+        FailureText: Text;
+        DiscoveryRead: Boolean;
+    begin
+        // [SCENARIO] #73: English discovery wording is asserted explicitly, regardless of the runner's language.
+        OriginalLanguage := GlobalLanguage(1033);
+        DiscoveryRead := TryReadDiscovery(Keywords, SelectionDescription);
+        FailureText := GetLastErrorText();
+        GlobalLanguage(OriginalLanguage);
+        if not DiscoveryRead then
+            Error(FailureText);
+        Assert.AreEqual(OriginalLanguage, GlobalLanguage(), 'English discovery must restore the caller''s language.');
+        Assert.IsTrue(Keywords.Contains('one-shot AI completion'), 'English keywords');
+        Assert.IsTrue(SelectionDescription.Contains('without tools'), 'English selection description');
+    end;
+
+    [TryFunction]
+    local procedure TryReadDiscovery(var Keywords: Text; var SelectionDescription: Text)
+    var
         Discovery: Interface "Msg Discovery ori";
         MessageType: Enum "Message Type ori";
     begin
-        // [SCENARIO] The type can be found and distinguished from dedicated message types.
         MessageType := "Message Type ori"::"LLM.Prompt.Complete";
         Discovery := MessageType;
-        Assert.IsTrue(Discovery.GetKeywords().Contains('one-shot AI completion'), 'English keywords');
-        Assert.IsTrue(Discovery.GetSelectionDescription().Contains('without tools'), 'selection description');
+        Keywords := Discovery.GetKeywords();
+        SelectionDescription := Discovery.GetSelectionDescription();
     end;
 
     /// <summary>

@@ -31,7 +31,7 @@ page 10035342 "Bifrost Chat Model List ori"
                 {
                     ApplicationArea = All;
                     Caption = 'Model', Comment = 'is-IS=Líkan';
-                    ToolTip = 'Specifies the AI model identifier available from the active Chat via Bifrost provider.', Comment = 'is-IS=Tilgreinir auðkenni gervigreindarlíkans sem er tiltækt frá virkum Bifröst Spjallveitanda.';
+                    ToolTip = 'Specifies the AI model identifier available from the active Chat via Bifrost provider.', Comment = 'is-IS=Tilgreinir auðkenni gervigreindarlíkans sem virkur spjallveitandi Bifröst býður upp á.';
                 }
             }
         }

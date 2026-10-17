@@ -121,7 +121,7 @@ table 10035335 "Bifrost Language Model ori"
         }
         field(23; "Max Tokens"; Integer)
         {
-            Caption = 'Max Tokens', Comment = 'is-IS=Hámarksfjöldi tókena';
+            Caption = 'Max Tokens', Comment = 'is-IS=Hámarksfjöldi tákna';
             DataClassification = CustomerContent;
             MinValue = 0;
             MaxValue = 128000;
@@ -143,7 +143,7 @@ table 10035335 "Bifrost Language Model ori"
         field(26; "Context Tokens"; Integer)
         {
             Caption = 'Context Tokens', Comment = 'is-IS=Samhengistákn';
-            ToolTip = 'Specifies the context size of the model in tokens: how much text the model can read in one request. Bifrost uses it to decide how much of the earlier conversation it sends with each chat message; the current question is always kept. 0 uses the provider default.', Comment = 'is-IS=Tilgreinir samhengisstærð líkansins í tókenum: hversu mikinn texta líkanið getur lesið í einni beiðni. Bifröst notar hana til að ákveða hversu mikið af fyrra samtali er sent með hverjum spjallskilaboðum; núverandi spurning er alltaf send. 0 notar sjálfgefið gildi veitanda.';
+            ToolTip = 'Specifies the context size of the model in tokens: how much text the model can read in one request. Bifrost uses it to decide how much of the earlier conversation it sends with each chat message; the current question is always kept. 0 uses the provider default.', Comment = 'is-IS=Tilgreinir samhengisstærð líkansins í táknum: hversu mikinn texta líkanið getur lesið í einni beiðni. Bifröst notar hana til að ákveða hversu mikið af fyrra samtali er sent með hverjum spjallskilaboðum; núverandi spurning er alltaf send. 0 notar sjálfgefið gildi veitanda.';
             DataClassification = CustomerContent;
             MinValue = 0;
             MaxValue = 10000000;
