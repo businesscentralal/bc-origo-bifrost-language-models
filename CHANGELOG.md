@@ -8,6 +8,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 - Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.
 
+### Fixed (2026-10-16) - Locale-independent test assertions (#73)
+
+- Test codeunits 96002, 96004, 96009 and 96018 compare chat errors, endpoint hints, missing-model errors and Copilot confirmation/success messages against translated expected labels in the active session language. The test app includes Icelandic translations for those labels. Codeunit 96019 reads English discovery text under LCID1033 and restores the caller's language before assertions, including when discovery raises an error. Product source and test coverage remain unchanged.
+
+- Keep the expected Icelandic labels in test codeunits 96002 and 96018 synchronized with the reviewed product wording from #64 after merging main.
+
 ### Fixed (2026-10-15) - Preserve the Bifrost pipeline (PR #57)
 
 - Added `.github/workflows/BifrostPipeline.yaml` and `tools/Test-BifrostPipeline.ps1` to verify sequential Default/Test builds, shared physical container identity, Test production-app republishing, Default internals stripping, signing requests, deferred cleanup, merged settings before secrets, and Test-only upgrade skipping. `AGENTS.md` records these preservation requirements for system updates.
