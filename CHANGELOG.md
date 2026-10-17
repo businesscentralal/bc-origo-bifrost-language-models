@@ -6,10 +6,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Changed (2026-10-14) - AppSource readiness metadata (#66)
 
-- The app links to the documentation, privacy statement and licence terms on docs.bifrost.origo.is. The Copilot capability's Learn more link points to the Language Models documentation.
-- `BIFROST LLM Chat ori` now also grants read on the language model table, so a user with that set and Foundation's `BIFROST Chat ori` can run `LLM.Prompt.Complete` without a permission error.
+- The app links to the documentation, privacy statement and licence terms on docs.bifrost.origo.is. The Copilot capability's Learn more link in codeunit 10035390 `Copilot Install ori` points to the Language Models documentation.
+- Permission set 10035398 `BIFROST LLM Chat ori` now also grants read on the language model table, so a user with that set and Foundation's `BIFROST Chat ori` can run `LLM.Prompt.Complete` without a permission error.
 - The enum extension that registers Language Models as a chat provider is renamed `LangModel Chat Prov Type ori` (id 10035384 unchanged) so every object carries the `ori` affix. It is part of the first release, so nothing that was published is affected.
 - Foundation's `BIFROST Full ori` and `BIFROST Read ori` roles now include the Language Models objects through permission set extensions 10035426 `BIFROST LLM Full ori` and 10035427 `BIFROST LLM Read ori`, so administrators and readers need no second assignment.
+- New test codeunit 96032 `LLM Prompt Compl Perm Tests` covers restricted chat permissions. Changed test codeunit 96001 `Mock Bifrost Chat Provider` supports the permission regression tests.
 
 ### Fixed (2026-10-16) - Locale-independent test assertions (#73)
 
