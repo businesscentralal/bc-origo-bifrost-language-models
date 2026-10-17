@@ -1,0 +1,79 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "runId": 38986203181,
+  "runUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38986203181",
+  "attempt": 1,
+  "conclusion": "success",
+  "checkout": {
+    "candidateSha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+    "candidateTree": "33e9e2eec7d04180a0d2a82a7e6a94e4f79535f2",
+    "checkoutSha": "09d4b98de3210628dd660c55fa9a701065021d7c",
+    "checkoutTree": "33e9e2eec7d04180a0d2a82a7e6a94e4f79535f2",
+    "treesMatch": true
+  },
+  "compile": [
+    {
+      "artifactId": 12083242955,
+      "name": "bc-origo-bifrost-language-models-fix_worker6-keymissing-hint-70-BuildOutput-PR71-20261017",
+      "file": "/workspace/evidence/tasks/1792194528.691849-target-businesscentralal_bc-origo-bifrost-language-models-71/ci-12083242955/BuildOutput.txt",
+      "errors": 0,
+      "warnings": 0,
+      "compilerVersions": [
+        "17.0.42.60745"
+      ],
+      "sha256": "3264e3854e012189221f873642a4689e4e250bedd2af51bbebe52a2e66431fb2"
+    },
+    {
+      "artifactId": 12082774032,
+      "name": "bc-origo-bifrost-language-models-fix_worker6-keymissing-hint-70-TestBuildOutput-PR71-20261017",
+      "file": "/workspace/evidence/tasks/1792194528.691849-target-businesscentralal_bc-origo-bifrost-language-models-71/ci-12082774032/BuildOutput.txt",
+      "errors": 0,
+      "warnings": 0,
+      "compilerVersions": [
+        "17.0.42.60745",
+        "17.0.42.60745"
+      ],
+      "sha256": "a0246e503b3aa95601f7dc895950d0611719fe028bf65f63dfb93cfd5b96c937"
+    }
+  ],
+  "tests": {
+    "executed": 192,
+    "passed": 192,
+    "failed": 0,
+    "skipped": 0,
+    "fullSuite": true,
+    "artifactId": 12082813977,
+    "junitSha256": "c1909b1762455c2672a8c53920b7f7fe944442b437dc2ae5e8c8774b10a33cd7",
+    "fourHintTestsPassed": true,
+    "nativeAndCiTestNamesIdentical": true
+  },
+  "sharedContainerId": "f099499a91fb",
+  "foundationVersionBothModes": "28.0.5.587",
+  "productVersion": "28.0.2147483647.153",
+  "realTestProductRepublish": [
+    "2026-10-17T00:32:40.3973263Z Bifrost: republishing Test MainApp 28.0.2.0 on shared container shared-123, SHA256=FDEE5D3FB2BA8044915EB6689829815D3E5F78826D3ABE427211D9B57C3D979F.",
+    "2026-10-17T00:36:11.2167053Z Bifrost: republishing Test MainApp 28.0.2147483647.153 on shared container f099499a91fb, SHA256=AF76D13DB3946B5BB0044608EC23EA72B77F31AA009BD49AF18A53F35AA91E27."
+  ],
+  "defaultNoInternals": true,
+  "defaultSkipUpgrade": false,
+  "testSkipUpgrade": true,
+  "signing": {
+    "observedPrDefaultDoNotSignApps": true,
+    "signedPrArtifactClaimed": false,
+    "sourceMainSigningConditionalRetained": true,
+    "scope": "Inherited PR policy unchanged; source guard preserves main signing condition. Disclosed for Architect/Reviewer; no new waiver or pipeline change."
+  },
+  "ciContainerCleanup": {
+    "id": "f099499a91fb",
+    "status": 404,
+    "absent": true,
+    "writesByWorker": 0
+  },
+  "ownedDeveloperEnvironmentSeparate": {
+    "id": "f043ac8a8059",
+    "foundationVersion": "28.0.5.569",
+    "suite": "192/192/0/0",
+    "ui": "28/28/0/0;84assertions"
+  },
+  "checkedAt": "2026-10-17T00:45:56.230945+00:00"
+}

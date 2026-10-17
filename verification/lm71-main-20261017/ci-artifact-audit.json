@@ -1,0 +1,37 @@
+[
+  {
+    "artifactId": 12083242955,
+    "name": "bc-origo-bifrost-language-models-fix_worker6-keymissing-hint-70-BuildOutput-PR71-20261017",
+    "file": "/workspace/evidence/tasks/1792194528.691849-target-businesscentralal_bc-origo-bifrost-language-models-71/ci-12083242955/BuildOutput.txt",
+    "errors": 0,
+    "warnings": 0,
+    "compilerVersions": [
+      "17.0.42.60745"
+    ],
+    "sha256": "3264e3854e012189221f873642a4689e4e250bedd2af51bbebe52a2e66431fb2"
+  },
+  {
+    "artifactId": 12082813977,
+    "name": "bc-origo-bifrost-language-models-fix_worker6-keymissing-hint-70-TestTestResults-PR71-20261017",
+    "file": "/workspace/evidence/tasks/1792194528.691849-target-businesscentralal_bc-origo-bifrost-language-models-71/ci-12082813977/TestResults.xml",
+    "tests": {
+      "executed": 192,
+      "passed": 192,
+      "failed": 0,
+      "skipped": 0
+    },
+    "sha256": "c1909b1762455c2672a8c53920b7f7fe944442b437dc2ae5e8c8774b10a33cd7"
+  },
+  {
+    "artifactId": 12082774032,
+    "name": "bc-origo-bifrost-language-models-fix_worker6-keymissing-hint-70-TestBuildOutput-PR71-20261017",
+    "file": "/workspace/evidence/tasks/1792194528.691849-target-businesscentralal_bc-origo-bifrost-language-models-71/ci-12082774032/BuildOutput.txt",
+    "errors": 0,
+    "warnings": 0,
+    "compilerVersions": [
+      "17.0.42.60745",
+      "17.0.42.60745"
+    ],
+    "sha256": "a0246e503b3aa95601f7dc895950d0611719fe028bf65f63dfb93cfd5b96c937"
+  }
+]

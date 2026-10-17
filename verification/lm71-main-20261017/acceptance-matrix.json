@@ -6,16 +6,16 @@
     {
       "criterion": "Saved keyless OpenAI model shows localized hint in EN/IS read/edit",
       "implementation": "Conditional KeyMissingHintGroup on page10035343;96035TestPage tests",
-      "verification": "pending fresh owned runtime"
+      "verification": "28/28EN/IS Web Client scenarios /84assertions including rendered bounds/hidden ancestors;192/192full native tests include4Hint tests."
     },
     {
       "criterion": "Personal/shared/both key hide hint; removing last key restores it; None provider hides authentication",
-      "verification": "pending fresh owned UI/native suite"
+      "verification": "All specified transitions andNone pass both locales read/edit."
     },
     {
       "criterion": "Compile0errors0warnings + full suite0failures0skips",
       "compile": "all3modes0/0",
-      "fullSuite": "pending"
+      "fullSuite": "Developer192/192/0failed/0skipped;CI192/192/0/0. Local3compiles0/0;CI3compiles0/0."
     },
     {
       "criterion": "No touched message type",
@@ -23,7 +23,7 @@
     },
     {
       "criterion": "Claude/Grok exact-tip/approval/Architect deployment/TesterUAT/cleanup",
-      "verification": "pending"
+      "verification": "Exact-head Claude receipt6227320246 present; Grok finding-author resolution/current-tip clearance/eligible approval, Architect deploy/TesterUAT/final environmentcleanup pending."
     }
   ]
 }
