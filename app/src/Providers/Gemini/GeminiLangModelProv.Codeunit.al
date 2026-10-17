@@ -162,7 +162,6 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ChatUrl: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         SystemPrompt := GetJsonText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then begin
             SystemMsg.Add('role', 'system');
@@ -176,9 +175,12 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         RequestBody.Add('messages', Messages);
 
         ChatUrl := GetOpenAICompatBaseUrl(Argument) + '/chat/completions';
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ApiClient.ExtractText(Response));
         ResponseObj.WriteTo(ResultText);
@@ -206,7 +208,6 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ResultText: Text;
         GenerateUrlTok: Label '%1/models/%2:generateContent', Locked = true;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         UserPrompt := GetFirstUserMessage(PayloadObject);
 
         AddFilesAsInlineData(PayloadObject, Parts);
@@ -236,6 +237,11 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
 
         Response := SendGenerateContent(GenerateUrl, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
+
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ExtractGenerateContentText(Response));
         ResponseObj.WriteTo(ResultText);
@@ -299,40 +305,11 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
     end;
 
     [NonDebuggable]
-    local procedure SendGenerateContent(Url: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject) Response: JsonObject
+    local procedure SendGenerateContent(Url: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject): JsonObject
     var
-        HttpClientVar: HttpClient;
-        HttpContent: HttpContent;
-        HttpResponse: HttpResponseMessage;
-        ContentHeaders: HttpHeaders;
-        DefaultHeaders: HttpHeaders;
-        RequestText: Text;
-        ResponseText: Text;
-        StartTime: DateTime;
+        ApiClient: Codeunit "LangModel API Client ori";
     begin
-        RequestBody.WriteTo(RequestText);
-        HttpContent.WriteFrom(RequestText);
-        HttpContent.GetHeaders(ContentHeaders);
-        if ContentHeaders.Contains('Content-Type') then
-            ContentHeaders.Remove('Content-Type');
-        ContentHeaders.Add('Content-Type', 'application/json');
-        DefaultHeaders := HttpClientVar.DefaultRequestHeaders();
-        DefaultHeaders.Add(ApiKeyHeaderTok, ApiKey);
-        HttpClientVar.Timeout(TimeoutMs);
-
-        StartTime := CurrentDateTime();
-        if not HttpClientVar.Post(Url, HttpContent, HttpResponse) then
-            Error(CallFailedErr, GetLastErrorText());
-
-        HttpResponse.Content.ReadAs(ResponseText);
-        if not HttpResponse.IsSuccessStatusCode() then
-            Error(ApiStatusErr, Format(HttpResponse.HttpStatusCode()), GetErrorDetail(ResponseText));
-
-        if not Response.ReadFrom(ResponseText) then
-            Error(CallFailedErr, InvalidResponseJsonTxt);
-
-        LogApiCall('generateContent', 'POST', Url,
-            HttpResponse.HttpStatusCode(), CurrentDateTime() - StartTime, RequestText, ResponseText);
+        exit(ApiClient.SendPromptToEndpoint(Url, ApiKeyHeaderTok, ApiKey, TimeoutMs, RequestBody));
     end;
 
     local procedure GetOpenAICompatBaseUrl(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
@@ -543,19 +520,5 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
                 exit(JToken.AsValue().AsText());
     end;
 
-    local procedure LogApiCall(Operation: Text[50]; HttpMethod: Text[10]; RequestUrl: Text; HttpStatus: Integer; Elapsed: Duration; RequestText: Text; ResponseText: Text)
-    var
-        Setup: Record "Setup ori";
-        Logger: Codeunit "Request Logger ori";
-        ServiceNameTok: Label 'LLM', Locked = true;
-    begin
-        if not Setup.GetRequestDebugMode() then
-            exit;
 
-        Logger.Log(Operation, HttpMethod, RequestUrl, ServiceNameTok,
-            HttpStatus, Elapsed, true, '',
-            RequestText, ResponseText,
-            Enum::"Request Log Type ori"::"LLM");
-        Logger.Insert();
-    end;
 }

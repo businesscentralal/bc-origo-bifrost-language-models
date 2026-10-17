@@ -135,7 +135,6 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
         ChatUrl: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         if not PayloadObject.ReadFrom(Argument.GetPayload()) then
             exit(BuildErrorJson('Invalid payload JSON.'));
 
@@ -153,9 +152,12 @@ codeunit 10035413 "OpenAI LangModel Prov. ori" implements "Bifrost LangModel Pro
         RequestBody.Add('messages', Messages);
 
         ChatUrl := GetCompletionUrl(Argument);
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ApiClient.ExtractText(Response));
         ResponseObj.WriteTo(ResultText);

@@ -4,7 +4,7 @@
 **Publisher:** Origo — **Version:** 28.0.0.0 (AL-Go stamps build and revision) — **Target:** Cloud (BC 28, runtime 17.0)  
 **App ID:** `f1722684-0c24-4022-a2e0-0f63154aca76` — **Test app ID:** `9c452c6e-df9b-4eb0-9a54-7ea8f32483ec`  
 **Object ID range:** 10035335–10035484 (tests 96000–96199) — **Namespace:** `Origo.Bifrost.LanguageModels`  
-**Depends on:** Bifrost Foundation 28.0.1.0 or later  
+**Depends on:** Bifrost Foundation 28.0.4.0 or later  
 **Environments:** Business Central online (SaaS) and owned, disposable COSMO Alpaca W1 verification environments
 
 ---
@@ -238,8 +238,8 @@ Objects use the `ori` affix convention; the enumextension is `LangModel Chat Pro
 | 10035396 | `LLM Prompt Compl Impl ori` | `LLM.Prompt.Complete`: one-shot completion, coded errors, contract chapters. |
 | 10035408 | `LangModel Field Restrict ori` | Restricts generic data writes to endpoint fields and supplies the dedicated-page hint. |
 | 10035409 | `LLM Req Log Masker ori` | Strips API keys from logged LLM requests and redacts bodies outside debug mode. |
-| 10035410 | `LangModel Prov. Base ori` | Shared helpers: config resolution, service-key permission check, token-usage parsing, multi-modal messages. |
-| 10035411 | `LangModel API Client ori` | HTTP client for the OpenAI-compatible providers with a caller-supplied auth header. |
+| 10035410 | `LangModel Prov. Base ori` | Shared helpers: config resolution, service-key permission check, token-usage parsing, multi-modal messages and safe prompt error mapping. |
+| 10035411 | `LangModel API Client ori` | HTTP client with a caller-supplied auth header and safe one-shot transport for all six external providers. |
 | 10035412 | `LangModel Chat Proxy ori` | The OpenAI-compatible tool loop (Chat Completions and Responses) against Foundation's MCP Tool Server. |
 | 10035413 | `OpenAI LangModel Prov. ori` | OpenAI provider (Bearer token). |
 | 10035414 | `Azure OAI LangModel Prov. ori` | Azure OpenAI provider (`api-key` header, deployment-specific chat and models paths). |
@@ -269,7 +269,7 @@ Objects use the `ori` affix convention; the enumextension is `LangModel Chat Pro
 
 | App | ID | Purpose |
 | --- | --- | --- |
-| Bifrost Foundation | `7505e808-6e52-4b96-a328-82573391297a` | 28.0.1.0 or later: the message-type kernel, the chat (control add-in, FactBox, `Bifrost Chat Mgt ori`, MCP Tool Server, chat gate), the secret store, the request log, `User Setup ori`, `Setup ori` and its public `TryClaimChatProvider`. |
+| Bifrost Foundation | `7505e808-6e52-4b96-a328-82573391297a` | 28.0.4.0 or later: the `Retryable` error code, message-type kernel, the chat (control add-in, FactBox, `Bifrost Chat Mgt ori`, MCP Tool Server, chat gate), the secret store, the request log, `User Setup ori`, `Setup ori` and its public `TryClaimChatProvider`. |
 
 `app.json` declares no other dependency and `internalsVisibleTo` only the test app *Bifrost Language Models -
 Tests* (stripped from Default builds by `.AL-Go/PipelineInitialize.ps1`). It suppresses **AA0215** and **AS0081**

@@ -22,7 +22,7 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation **28.0.1.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): the first Foundation version with `Setup ori.TryClaimChatProvider` public again (core#881). AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
+- Bifrost Foundation **28.0.4.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): includes the `Retryable` error code needed by prompt failures and the public `Setup ori.TryClaimChatProvider`. AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
 
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
@@ -81,7 +81,9 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   codeunits **96024-96027** (`Test LangModel Set Impl`, `Test LangModel Delete Impl`, `Test LangModel Chat Impl`,
   `LangModel Test Tools`), test codeunit **96028** `LangModel Test Tools Tests`.
   From #50 (#49): **96004** `LangModel Field Restrict Tests`. Test codeunit **96029** `LangModel Chat Proxy Tests` (#54).
-  Test codeunit **96030** `LangModel Context Spy ori` (manual value-only test observer). Issue #60: **96031** `LangModel 60 Defaults Tests`. Free: 96005-96008, 96032-96199.
+  Test codeunit **96030** `LangModel Context Spy ori` (manual value-only test observer). Issue #60: **96031** `LangModel 60 Defaults Tests`.
+  Issue #65: **96033** `LLM 65 HTTP Mock`, **96034** `LLM 65 Prompt Tests`.
+  Reserved in Claude-owned PR #66: **96032** `LLM Prompt Compl Perm Tests`. Free: 96005-96008, 96035-96199.
 
 ### Testing the chat of every provider
 - `tools/Set-TestLanguageModels.ps1` creates one language model per provider from `%USERPROFILE%\.bifrost\test-language-models.json`
@@ -177,7 +179,7 @@ Key rules always in effect:
 - Compile locally with alc.exe + CodeCop/UICop/AppSourceCop, zero errors and zero warnings. After a caption change
   run `tools/Update-IcelandicXlf.ps1` and compile again; before a PR run every guard in `tools/` (the *Source Guards*
   workflow runs all but `Test-IcelandicXlfInSync`, which needs a build).
-  Symbols: `app/.alpackages` (Microsoft symbols + a Foundation 28.0.1.x `.app`),
+  Symbols: `app/.alpackages` (Microsoft symbols + a Foundation 28.0.4.x `.app`),
   `test/.alpackages` (Microsoft test libraries + Foundation + the freshly built Bifrost Language Models app).
 - Publish and test without VS Code (pwsh 7, credential from the user-level env vars `BC28IS_USER` /
   `BC28IS_PASSWORD`, never from files) with the Foundation tooling:
