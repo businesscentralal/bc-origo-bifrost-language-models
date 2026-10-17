@@ -1,0 +1,29 @@
+{
+  "issue": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/issues/70",
+  "pr": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/71",
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "criteria": [
+    {
+      "criterion": "Saved keyless OpenAI model shows localized hint in EN/IS read/edit",
+      "implementation": "Conditional KeyMissingHintGroup on page10035343;96035TestPage tests",
+      "verification": "pending fresh owned runtime"
+    },
+    {
+      "criterion": "Personal/shared/both key hide hint; removing last key restores it; None provider hides authentication",
+      "verification": "pending fresh owned UI/native suite"
+    },
+    {
+      "criterion": "Compile0errors0warnings + full suite0failures0skips",
+      "compile": "all3modes0/0",
+      "fullSuite": "pending"
+    },
+    {
+      "criterion": "No touched message type",
+      "verification": "PR diff reviewed vs main; no MCP pass claimed"
+    },
+    {
+      "criterion": "Claude/Grok exact-tip/approval/Architect deployment/TesterUAT/cleanup",
+      "verification": "pending"
+    }
+  ]
+}

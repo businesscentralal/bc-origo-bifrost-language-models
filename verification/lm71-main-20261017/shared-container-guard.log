@@ -1,0 +1,4 @@
+Bifrost shared container: phase=Test, id=shared-123, container mode=Default.
+Bifrost: republishing Test MainApp 28.0.2.0 on shared container shared-123, SHA256=3406EC72A5262D4E51E71564FEA08C9E2674D65EFA9943844A61420CDBD03D57.
+Bifrost: Test MainApp republish completed; the test app may now be deployed.
+Shared Alpaca pipeline checks passed: plan validation, mode preservation, physical identity, compatibility guard, republish ordering, missing grant, and Default passthrough.

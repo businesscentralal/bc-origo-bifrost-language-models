@@ -1,0 +1,9 @@
+{
+  "sha": "0353b1dc18c6ba30f2a97e2dd3c46f0b123434e7",
+  "runId": 38960769489,
+  "jobId": 117175342353,
+  "failure": "HTTP500 in Get-AlpacaAppInfo during Default publish pipeline; Test job skipped before native tests",
+  "log": "prior-default-job.log",
+  "sourceRepair": "No pipeline source defect established from this log. Current assignment merges main and publishes compiled changed candidate triggering normal fresh paired retry. No Test-only reuse or pipeline suppression.",
+  "newCandidateSha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b"
+}

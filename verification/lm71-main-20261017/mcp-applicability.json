@@ -1,0 +1,8 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "touchedMessageTypes": [],
+  "notApplicableReason": "PR diff vs current main2592d10 changes page10035343 layout visibility, TestPage96035 and CHANGELOG only. Provider/LLM.Prompt.Complete/registration/contract/dispatch have no PR-specific changes; main translations and locale tests preserved. MCP cannot render Web Client layout.",
+  "executed": 0,
+  "passed": 0,
+  "notRun": true
+}
