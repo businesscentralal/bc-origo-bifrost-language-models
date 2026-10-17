@@ -1,0 +1,52 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "runId": 38985811887,
+  "jobId": 117258552501,
+  "phase": "test",
+  "jobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38985811887/job/117258552501",
+  "logSha256": "f04af1b648771ffa8b32604b222916d41f54996451566915fadcda2ade0efca9",
+  "diagnostics": [],
+  "compiler": [
+    "2026-10-17T00:28:16.2508412Z Compilation started for project 'Bifrost Language Models' containing '85' files at '00:28:05.477'.\r",
+    "2026-10-17T00:28:16.2843919Z Compilation ended at '00:28:16.176'.\r",
+    "2026-10-17T00:28:33.1426780Z Compilation started for project 'Bifrost Language Models - Tests' containing '30' files at '00:28:24.081'.\r",
+    "2026-10-17T00:28:33.1519078Z Compilation ended at '00:28:33.092'.\r"
+  ],
+  "results": [
+    "2026-10-17T00:32:10.8770355Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:10.8770778Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:10.8771257Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:11.9581192Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:11.9581662Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:11.9582539Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:13.6459094Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:13.6459370Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:13.6459671Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:13.6818438Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:13.6818934Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:13.6819228Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:17.0276174Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:17.0276677Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:17.0277205Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:17.0665982Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:17.0666243Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:17.0666533Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:19.6881896Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:19.6882385Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:19.6882908Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:19.7276868Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:19.7277221Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:19.7277920Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:23.4705368Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:23.4705632Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:23.4705929Z   doNotRunPageScriptingTests: False\r",
+    "2026-10-17T00:32:23.5057741Z   doNotRunTests: False\r",
+    "2026-10-17T00:32:23.5057996Z   doNotRunBcptTests: False\r",
+    "2026-10-17T00:32:23.5058280Z   doNotRunPageScriptingTests: False\r"
+  ],
+  "foundation": [
+    "2026-10-17T00:26:58.1285228Z - D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app\r",
+    "2026-10-17T00:26:58.1296711Z - (D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app)\r",
+    "2026-10-17T00:27:14.8874462Z - D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app\r"
+  ]
+}

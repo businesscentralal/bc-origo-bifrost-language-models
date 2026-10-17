@@ -1,0 +1,26 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "ciContainerId": "f0eeb51ff8e5",
+  "default": [
+    "2026-10-17T00:21:29.1633271Z Bifrost: build mode 'Default' - removed internalsVisibleTo and the AS0081 suppression from app/app.json.",
+    "2026-10-17T00:21:31.4341788Z Bifrost shared container: phase=Default, id=f0eeb51ff8e5, container mode=Default."
+  ],
+  "test": [
+    "2026-10-17T00:27:09.8729205Z Bifrost shared container: phase=Test, id=f0eeb51ff8e5, container mode=Default.",
+    "2026-10-17T00:29:07.1648410Z Bifrost: republishing Test MainApp 28.0.2147483647.152 on shared container f0eeb51ff8e5, SHA256=58B02D530E7324F3DFEC8339119511568D6E2BD9C7DA033CE1017D263238F81D.",
+    "2026-10-17T00:29:15.5572892Z Bifrost: Test MainApp republish completed; the test app may now be deployed."
+  ],
+  "dependencyDefault": [
+    "28.0.1.0",
+    "28.0.5.587"
+  ],
+  "dependencyTest": [
+    "28.0.1.0",
+    "28.0.5.587"
+  ],
+  "signedShippingArtifactClaimed": false,
+  "foundationInstalledVersions": {
+    "Default": "28.0.5.587",
+    "Test": "28.0.5.587"
+  }
+}

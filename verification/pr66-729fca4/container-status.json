@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-17T00:35:32.871Z",
+  "httpStatus": 200,
+  "id": "f0fa8adbe94f",
+  "displayName": "brokkr-worker2-lm66-20261017",
+  "status": {
+    "state": "Stopped",
+    "imageBuilding": false,
+    "imageBuildError": false
+  }
+}

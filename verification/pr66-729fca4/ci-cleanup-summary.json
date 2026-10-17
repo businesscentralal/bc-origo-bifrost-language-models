@@ -1,0 +1,14 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "runId": 38985811887,
+  "jobId": 117260287325,
+  "phase": "cleanup",
+  "jobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38985811887/job/117260287325",
+  "logSha256": "d418d011149987211b78edf94b337ec31820f9e35189d6ae66aebb01dcc814ae",
+  "diagnostics": [],
+  "compiler": [],
+  "results": [
+    "2026-10-17T00:33:05.6174188Z   Deleted 1 of 1 containers"
+  ],
+  "foundation": []
+}

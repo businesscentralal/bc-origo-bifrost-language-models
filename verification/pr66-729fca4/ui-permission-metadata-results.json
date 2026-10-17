@@ -1,0 +1,24 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "containerId": "f0fa8adbe94f",
+  "locale": "en-US",
+  "scope": "Standard Web Client expanded permission metadata; no restricted Full/Read-user execution claim",
+  "verified": true,
+  "scenarios": [
+    {
+      "scenario": "BIFROST FULL ORI expanded TableData10035335 grant",
+      "expected": "RIMD",
+      "passed": true
+    },
+    {
+      "scenario": "BIFROST READ ORI expanded TableData10035335 grant",
+      "expected": "R",
+      "passed": true
+    },
+    {
+      "scenario": "BIFROST LLM CHAT ORI TableData10035335 Read grant",
+      "expected": "R",
+      "passed": true
+    }
+  ]
+}

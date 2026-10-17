@@ -1,0 +1,246 @@
+Skip to main content
+CRONUS International Ltd.
+Finance
+Cash Management
+Sales
+Purchasing
+Shopify
+All Reports
+
+Permission Sets:
+All
+
+
+New
+Delete
+Edit List
+Permissions
+
+
+
+
+
+	
+Permission Set
+	
+	
+Name
+	
+Type
+	
+Extension Name
+	
+		
+				
+	BIFROST API ORI		API Access	System	Bifrost Foundation	
+	BIFROST APPRADM ORI		Approval Admin	System	Bifrost Foundation	
+	BIFROST APPRLOG ORI		Approval Log Read	System	Bifrost Foundation	
+	BIFROST CHAT ORI		Chat Gate	System	Bifrost Foundation	
+	BIFROST CHATSVC ORI		Chat Service Gate	System	Bifrost Language Models	
+	BIFROST COMEM ORI		Edit Company Memory	System	Bifrost Foundation	
+	BIFROST FA POST ORI		FA Posting Gate	System	Bifrost Foundation	
+	BIFROST FORCE ORI		Force Field Access	System	Bifrost Foundation	
+	BIFROST FULL ORI		Full Access	System	Bifrost Foundation	
+	BIFROST GL POST ORI		G/L Posting Gate	System	Bifrost Foundation	
+	BIFROST INTEGR. ORI		API Integration	System	Bifrost Foundation	
+	BIFROST ITEMPOST ORI		Item Posting Gate	System	Bifrost Foundation	
+	BIFROST JOB POST ORI		Project Posting Gate	System	Bifrost Foundation	
+	BIFROST LICADM ORI		License Admin	System	Bifrost Foundation	
+	BIFROST LLM CHAT ORI	
+	Bifrost LLM Chat	System	Bifrost Language Models	
+	BIFROST LLM ORI		Bifrost Language Models	System	Bifrost Language Models	
+	BIFROST LLM RD ORI		Bifrost Language Models Read	System	Bifrost Language Models	
+	BIFROST READ ORI		Read-Only	System	Bifrost Foundation	
+	BIFROST REQLGADM ORI		Request Log Admin	System	Bifrost Foundation	
+	BIFROST RES POST ORI		Resource Posting Gate	System	Bifrost Foundation	
+	BIFROST SRCAPADM ORI		All Session Source Approvals	System	Bifrost Foundation	
+	BIFROST SRCAPCFG ORI		Session Source Approval Config	System	Bifrost Foundation	
+	BIFROST SRCAPOWN ORI		Own Session Source Approval	System	Bifrost Foundation	
+	BIFROST TRANSL. ORI		API Translation	System	Bifrost Foundation	
+	BIFROST WEBHOOK ORI		Inbound Webhook	System	Bifrost Foundation	
+Details
+Attachments (0)
+Permissions
+	
+Object Type
+	
+	
+Object ID
+	
+Object Name
+	
+Read Permission
+	
+Insert Permission
+	
+Modify Permission
+	
+Delete Permission
+	
+Execute Permission
+	
+Security Filter
+	
+		
+									
+	Table Data		10035335	Bifrost Language Model	Yes	 	 	 	 		
+	Codeunit		10035409	LLM Req Log Masker ori	 	 	 	 	Yes		
+	Codeunit		10035410	LangModel Prov. Base ori	 	 	 	 	Yes		
+	Codeunit		10035411	LangModel API Client ori	 	 	 	 	Yes		
+	Codeunit		10035412	LangModel Chat Proxy ori	 	 	 	 	Yes		
+	Codeunit		10035413	OpenAI LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035414	Azure OAI LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035415	Custom LLM LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035416	Anthropic LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035417	Anthropic LangModel Proxy ori	 	 	 	 	Yes		
+	Codeunit		10035418	xAI LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035419	Gemini LangModel Prov. ori	 	 	 	 	Yes		
+	Codeunit		10035422	LangModel Secrets ori	 	 	 	 	Yes		
+	Codeunit		10035425	LangModel Turn Guard ori	 	 	 	 	Yes		
+	Codeunit	
+	10078305	Secret Store ori	 	 	 	 	Yes		
+Included Permission Sets
+	
+Permission Set
+	
+	
+Name
+	
+		
+		
+(There is nothing to show in this view)
+Users
+	
+User Name
+	
+	
+Company
+	
+		
+		
+(Loading view...)
+
+
+
+
+
+
+BIFROST LLM CHAT ORI (System)
+View all permissions
+More options
+General
+Permission Set
+BIFROST LLM CHAT ORI
+Name
+Bifrost LLM Chat
+Permissions
+
+
+		
+Type
+	
+	
+Object Type
+	
+Object ID
+	
+Object Name
+	
+Object Caption
+	
+Read Permission
+	
+Insert Permission
+	
+Modify Permission
+	
+Delete Permission
+	
+Execute Permission
+	
+Security Filter
+	
+			
+											
+		Include	
+	Table Data	10035335	Bifrost Language Model ori	Bifrost Language Model	Yes	 	 	 	 		
+		Include		Codeunit	10035409	LLM Req Log Masker ori	LLM Req Log Masker ori	 	 	 	 	Yes		
+		Include		Codeunit	10035410	LangModel Prov. Base ori	LangModel Prov. Base ori	 	 	 	 	Yes		
+		Include		Codeunit	10035411	LangModel API Client ori	LangModel API Client ori	 	 	 	 	Yes		
+		Include		Codeunit	10035412	LangModel Chat Proxy ori	LangModel Chat Proxy ori	 	 	 	 	Yes		
+		Include		Codeunit	10035413	OpenAI LangModel Prov. ori	OpenAI LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035414	Azure OAI LangModel Prov. ori	Azure OAI LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035415	Custom LLM LangModel Prov. ori	Custom LLM LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035416	Anthropic LangModel Prov. ori	Anthropic LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035417	Anthropic LangModel Proxy ori	Anthropic LangModel Proxy ori	 	 	 	 	Yes		
+		Include		Codeunit	10035418	xAI LangModel Prov. ori	xAI LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035419	Gemini LangModel Prov. ori	Gemini LangModel Prov. ori	 	 	 	 	Yes		
+		Include		Codeunit	10035422	LangModel Secrets ori	LangModel Secrets ori	 	 	 	 	Yes		
+		Include		Codeunit	10035425	LangModel Turn Guard ori	LangModel Turn Guard ori	 	 	 	 	Yes		
+		Include		Codeunit	10078305	Secret Store ori	Secret Store ori	 	 	 	 	Yes		
+Permission Sets
+		
+Type
+	
+	
+Permission Set
+	
+Name
+	
+Scope
+	
+			
+				
+(There is nothing to show in this view)
+Result
+		
+Permission Set
+	
+	
+Name
+	
+Scope
+	
+Inclusion Status
+	
+			
+				
+(There is nothing to show in this view)
+
+About permissions
+
+You manage permissions by assigning permission sets to individual users and to security groups. You can only modify permission sets that you created, not the predefined ones.
+Show Help
+Take a tour
+
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Permission Sets" now has 25 items
+
+Permission Set, sorted in Ascending order
+
+Type, sorted in Ascending order
+
+Object Type, sorted in Ascending order
+
+Object ID, sorted in Ascending order
+
+Permission Set, sorted in Ascending order
+
+List with title "Expanded Permissions Factbox" now has 15 items
+
+25 suggestions available for BIFROST.
+
+List with title "Included PermissionSet FactBox" now has 0 items
+
+BIFROST LLM CHAT ORI (System). Permission Set
+
+List with title "Permissions" now has 15 items
+
+Object Type, sorted in Ascending order
+
+Object ID, sorted in Ascending order
+
+Type, sorted in Ascending order
+
+Permission Set, sorted in Ascending order

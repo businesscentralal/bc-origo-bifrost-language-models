@@ -1,0 +1,15 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "runId": 38985811887,
+  "runUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38985811887",
+  "artifactId": 12082904411,
+  "xmlEntry": "TestResults.xml",
+  "xmlSha256": "3617d079ed14981ae0e0c1f475734093204dd278c696e5d79366fd47530af482",
+  "fullSuite": true,
+  "executed": 192,
+  "passed": 192,
+  "failed": 0,
+  "skipped": 0,
+  "missingSourceMethods": [],
+  "verified": true
+}

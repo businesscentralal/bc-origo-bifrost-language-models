@@ -1,0 +1,318 @@
+Skip to main content
+CRONUS International Ltd.
+Finance
+Cash Management
+Sales
+Purchasing
+Shopify
+All Reports
+
+Permission Sets:
+All
+
+
+New
+Delete
+Edit List
+Permissions
+
+
+
+
+
+	
+Permission Set
+	
+	
+Name
+	
+Type
+	
+Extension Name
+	
+		
+				
+	BIFROST READ ORI	
+	Read-Only	System	Bifrost Foundation	
+Details
+Attachments (0)
+Permissions
+	
+Object Type
+	
+	
+Object ID
+	
+Object Name
+	
+Read Permission
+	
+Insert Permission
+	
+Modify Permission
+	
+Delete Permission
+	
+Execute Permission
+	
+Security Filter
+	
+		
+									
+
+	Codeunit		10078318	Setup Notifications ori	 	 	 	 	Yes		
+	Codeunit		10078384	Usage Sync Runner ori	 	 	 	 	Yes		
+	Page		10035342	Available Models	 	 	 	 	Yes		
+	Page		10035343	Bifrost Language Model	 	 	 	 	Yes		
+	Page		10035344	Bifrost Language Models	 	 	 	 	Yes		
+	Page		10035421	Bifrost Language Models Setup	 	 	 	 	Yes		
+	Page		10077885	Bifrost Delete Log	 	 	 	 	Yes		
+	Page		10077886	Bifrost Delete Setup	 	 	 	 	Yes		
+	Page		10077887	Select User or Application	 	 	 	 	Yes		
+	Page		10077888	Bifrost Field Accesses	 	 	 	 	Yes		
+	Page		10077889	Select Field	 	 	 	 	Yes		
+	Page		10077898	Chat via Bifrost	 	 	 	 	Yes		
+	Page		10077899	Chat via Bifrost	 	 	 	 	Yes		
+	Page		10077905	Caller Identity	 	 	 	 	Yes		
+	Page		10077906	Bifrost Message Editor	 	 	 	 	Yes		
+	Page		10077907	Bifrost Messages	 	 	 	 	Yes		
+	Page		10077908	Bifrost Request	 	 	 	 	Yes		
+	Page		10077909	Bifrost Response	 	 	 	 	Yes		
+	Page		10077910	Bifrost Note Card	 	 	 	 	Yes		
+	Page		10077912	Message	 	 	 	 	Yes		
+	Page		10077913	Bifrost Notes	 	 	 	 	Yes		
+	Page		10077915	Active Background Tasks	 	 	 	 	Yes		
+	Page		10077916	Background Sessions	 	 	 	 	Yes		
+	Page		10077917	Bifrost Message Types	 	 	 	 	Yes		
+	Page		10077919	User Setup Preview	 	 	 	 	Yes		
+	Page		10077920	Bifrost User Setup	 	 	 	 	Yes		
+	Page		10077922	Bifrost Translations	 	 	 	 	Yes		
+	Page		10077923	Select Translation Source	 	 	 	 	Yes		
+	Page		10077926	ChangeLog Guard Exceptions	 	 	 	 	Yes		
+	Page		10078034	Bifrost Field Sensitivities	 	 	 	 	Yes		
+	Page		10078266	Bifrost Request Log	 	 	 	 	Yes		
+	Page		10078267	Bifrost Request Log Entry	 	 	 	 	Yes		
+	Page		10078306	Set Secret	 	 	 	 	Yes		
+	Page		10078307	Bifrost App Secrets	 	 	 	 	Yes		
+	Page		10078330	Approve Session Source	 	 	 	 	Yes		
+	Query	
+	10077888	Bifrost Translation Sources	 	 	 	 	Yes		
+Included Permission Sets
+	
+Permission Set
+	
+	
+Name
+	
+		
+		
+	BIFROST REQLOG ORI	
+	Bifrost ReqLog	
+Users
+	
+User Name
+	
+	
+Company
+	
+		
+		
+(Loading view...)
+
+
+Permission Set
+
+
+
+
+
+BIFROST READ ORI (System)
+View all permissions
+More options
+General
+Permission Set
+BIFROST READ ORI
+Name
+Read-Only
+Permissions
+
+
+		
+Type
+	
+	
+Object Type
+	
+Object ID
+	
+Object Name
+	
+Object Caption
+	
+Read Permission
+	
+Insert Permission
+	
+Modify Permission
+	
+Delete Permission
+	
+Execute Permission
+	
+Security Filter
+	
+			
+											
+		Include	
+	Table Data	10035335	Bifrost Language Model ori	Bifrost Language Model	Yes	 	 	 	 		
+		Include		Table Data	10035337	Bifrost Chat Argument ori	Bifrost Chat Argument	Yes	Yes	Yes	Yes	 		
+		Include		Table Data	10077885	Approval Log ori	Bifrost Approval Log	Yes	 	 	 	 		
+		Include		Table Data	10077886	Delete Log ori	Bifrost Delete Log	Yes	 	 	 	 		
+		Include		Table Data	10077887	Delete Setup ori	Bifrost Delete Setup	Yes	 	 	 	 		
+		Include		Table Data	10077888	User/App Buffer ori	Bifrost User/App Buffer	Yes	 	 	 	 		
+		Include		Table Data	10077889	Field Access ori	Bifrost Field Access	Yes	 	 	 	 		
+		Include		Table Data	10077890	Incoming Document Url ori	Incoming Document Url	Yes	 	 	 	 		
+		Include		Table Data	10077892	Chat Gate ori	Bifrost Chat Gate	Yes	 	 	 	 		
+		Include		Table Data	10077897	Message ori	Bifrost Message	Yes	 	 	 	 		
+		Include		Table Data	10077898	Note ori	Bifrost Note	Yes	 	 	 	 		
+		Include		Table Data	10077900	Force Access ori	BIFROST Force ori	Yes	 	 	 	 		
+		Include		Table Data	10077901	Setup ori	Bifrost Setup	Yes	 	 	 	 		
+		Include		Table Data	10077909	User Setup ori	Bifrost User Setup	Indirect	 	 	 	 		
+		Include		Table Data	10077911	Translation ori	Bifrost Translation	Yes	 	 	 	 		
+		Include		Table Data	10077913	ChangeLog Guard Exception ori	ChangeLog Guard Exception	Yes	 	 	 	 		
+		Include		Table Data	10077914	License Access ori	Bifrost License Access	Yes	 	 	 	 		
+		Include		Table Data	10078033	Field Sensitivity ori	Bifrost Field Sensitivity	Yes	 	 	 	 		
+		Include		Table Data	10078304	App Secret ori	Bifrost App Secret	Yes	 	 	 	 		
+		Include		Table Data	10078316	Registered App ori	Bifrost Registered App	Yes	Yes	Yes	Yes	 		
+		Include		Table Data	10078327	Approved Session Source ori	Approved Session Source	Yes	 	 	 	 		
+		Include		Table	10035335	Bifrost Language Model ori	Bifrost Language Model	 	 	 	 	Yes		
+		Include		Table	10035337	Bifrost Chat Argument ori	Bifrost Chat Argument	 	 	 	 	Yes		
+		Include		Table	10077885	Approval Log ori	Bifrost Approval Log	 	 	 	 	Yes		
+		Include		Table	10077886	Delete Log ori	Bifrost Delete Log	 	 	 	 	Yes		
+		Include		Table	10077887	Delete Setup ori	Bifrost Delete Setup	 	 	 	 	Yes		
+		Include		Table	10077888	User/App Buffer ori	Bifrost User/App Buffer	 	 	 	 	Yes		
+		Include		Table	10077889	Field Access ori	Bifrost Field Access	 	 	 	 	Yes		
+		Include		Table	10077892	Chat Gate ori	Bifrost Chat Gate	 	 	 	 	Yes		
+		Include		Table	10077897	Message ori	Bifrost Message	 	 	 	 	Yes		
+		Include		Table	10077898	Note ori	Bifrost Note	 	 	 	 	Yes		
+		Include		Table	10077901	Setup ori	Bifrost Setup	 	 	 	 	Yes		
+		Include		Table	10077902	Message Type List ori	Bifrost Message Type List	 	 	 	 	Yes		
+		Include		Table	10077909	User Setup ori	Bifrost User Setup	 	 	 	 	Yes		
+		Include		Table	10077911	Translation ori	Bifrost Translation	 	 	 	 	Yes		
+		Include		Table	10077912	Translation Source ori	Bifrost Translation Source	 	 	 	 	Yes		
+
+Permission Sets
+		
+Type
+	
+	
+Permission Set
+	
+Name
+	
+Scope
+	
+			
+				
+		Include	
+	BIFROST REQLOG ORI	Bifrost ReqLog	System	
+Result
+		
+Permission Set
+	
+	
+Name
+	
+Scope
+	
+Inclusion Status
+	
+			
+				
+		
+BIFROST REQLOG ORI
+	
+	Bifrost ReqLog	System	Full	
+
+
+Expanded Permissions
+
+
+
+
+	
+Object Type
+	
+	
+Object ID
+	
+Object Name
+	
+Object Caption
+	
+Read Permission
+	
+Insert Permission
+	
+Modify Permission
+	
+Delete Permission
+	
+Execute Permission
+	
+Security Filter
+	
+		
+										
+	Table Data	
+	10035335	Bifrost Language Model ori	Bifrost Language Model	Yes	 	 	 	 		
+	Table		10035335	Bifrost Language Model ori	Bifrost Language Model	 	 	 	 	Yes		
+
+Object Type
+
+Specifies the type of object that the permissions apply to in the current database.
+
+Show Help
+Use the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept.
+
+List with title "Permission Sets" now has one item
+
+Permission Set, sorted in Ascending order
+
+Type, sorted in Ascending order
+
+Object Type, sorted in Ascending order
+
+Object ID, sorted in Ascending order
+
+Permission Set, sorted in Ascending order
+
+List with title "Expanded Permissions Factbox" now has 76 items
+
+One suggestion available for BIFROST READ ORI.
+
+List with title "Included PermissionSet FactBox" now has one item
+
+BIFROST READ ORI (System). Permission Set
+
+List with title "Permissions" now has 147 items
+
+Object Type, sorted in Ascending order
+
+Object ID, sorted in Ascending order
+
+Type, sorted in Ascending order
+
+Permission Set, sorted in Ascending order
+
+List with title "Permission Sets" now has one item
+
+List with title "Permission Sets" now has one item
+
+List with title "Expanded Permissions" now has 2 items
+
+Object Type, sorted in Ascending order
+
+Object ID, sorted in Ascending order
+
+2 suggestions available for 10035335.

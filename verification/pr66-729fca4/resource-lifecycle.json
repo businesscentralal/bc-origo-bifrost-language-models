@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-17T00:34:52.924Z",
+  "owner": "worker-2",
+  "containerId": "f0fa8adbe94f",
+  "displayName": "brokkr-worker2-lm66-20261017",
+  "before": {
+    "state": "Running",
+    "statusMessage": "Running",
+    "imageBuilding": false,
+    "imageBuildError": false
+  },
+  "stopHttpStatus": 204,
+  "retainedState": {
+    "state": "Stopped",
+    "imageBuilding": false,
+    "imageBuildError": false
+  },
+  "developmentContainerDeleted": false,
+  "retention": "Retain same environment until Tester postdeployment UAT and closure; stop only after owned checks, no idle running environment",
+  "ciContainer": {
+    "id": "f0eeb51ff8e5",
+    "getStatus": 404,
+    "cleanupReported": "CI job117260287325 Deleted1of1",
+    "workerDeletedResource": false
+  },
+  "verifiedAt": "2026-10-17T00:35:08.152Z"
+}

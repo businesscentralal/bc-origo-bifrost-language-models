@@ -23,14 +23,15 @@
       "id": "S3",
       "criterion": "Permission set extensions10035426/10035427 grant own objects",
       "implemented": true,
-      "runtime": "Source compiled0/0, native full suite192/192perlocale; optional permission metadata UI in progress. No restricted Full/Read role runtime pass claimed."
+      "runtime": "Standard Web Client expanded permission metadata: Full RIMD / Read R on TableData10035335, LLM Chat R. This is metadata evidence; restricted Full/Read-user execution not claimed."
     },
     {
       "id": "S4",
       "criterion": "LLM.Prompt.Complete read grant/restricted allow/deny1033/1039",
       "implemented": true,
       "native": "Four positive/negative permission tests included in each192/192 full suite, LCIDs1033/1039; own S4-PERM fixture rolled back, empty model table observed in both UI sessions.",
-      "mcp": "UNVERIFIED; EULA_REQUIRED before shipping message execution,0passed; live second-user UAT disposition6187885720 preserved; no broad licensing waiver inferred"
+      "mcp": "UNVERIFIED; EULA_REQUIRED before shipping message execution,0passed; live second-user UAT disposition6187885720 preserved; no broad licensing waiver inferred",
+      "ui": "Web Client selected LLM Chat role shows Read on TableData10035335; native restricted positive/negative tests and UAT disposition remain separately identified."
     },
     {
       "id": "S5",
@@ -49,8 +50,15 @@
       "id": "Delivery",
       "criterion": "main merge, green CI, container, exact-tip Claude/Reviewer/approval",
       "implemented": "main merge complete; container f0fa8adbe94f retained",
-      "verified": "Published729fca4, compiler0/0,384/384native0failed0skipped,10/10UI and11/11URLs; fixture rows0 and owned user language restored.",
-      "pending": "MCP EULA disposition; CI Test in progress; Claude current-tip receipt and explicit amendment resolution; Grok current-tip clearance and eligible approval; Architect merge/deploy, Tester UAT and retained-container closure"
+      "verified": "Published729fca4; all compilers0/0; owned native192/192perlocale,10/10workflowUI+3/3permissionmetadata,11/11URLs; CI38985811887Default+Testgreen192/192/0/0; CIcontainer404; developmentcontainerretainedStopped; fixtures0.",
+      "pending": "Shipping MCP explicit EULA disposition and genuine acceptance; Claude new-tip verification/finding-author resolution; Grok clearance, eligible approval; Architect merge/deploy, Tester UAT and retained container closure."
     }
-  ]
+  ],
+  "uiCounts": {
+    "workflowScenarios1033": 5,
+    "workflowScenarios1039": 5,
+    "extraPermissionMetadata1033": 3,
+    "total": 13,
+    "failed": 0
+  }
 }
