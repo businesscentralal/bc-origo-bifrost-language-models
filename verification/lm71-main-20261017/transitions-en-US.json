@@ -1,0 +1,699 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "containerId": "f043ac8a8059",
+  "locale": "en-US",
+  "lcid": 1033,
+  "fixtureCode": "XLM70UI",
+  "providerCalls": 0,
+  "syntheticValuesOnly": true,
+  "results": [
+    {
+      "state": "keyless",
+      "mode": "read",
+      "expectedVisible": true,
+      "personal": false,
+      "shared": false,
+      "visible": true,
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 911,
+            "y": 664,
+            "width": 467,
+            "height": 98.640625,
+            "top": 664,
+            "right": 1378,
+            "bottom": 762.640625,
+            "left": 911
+          },
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-group no-caption",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex"
+            }
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "keyless",
+      "mode": "edit",
+      "expectedVisible": true,
+      "personal": false,
+      "shared": false,
+      "visible": true,
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 911,
+            "y": 664,
+            "width": 467,
+            "height": 98.640625,
+            "top": 664,
+            "right": 1378,
+            "bottom": 762.640625,
+            "left": 911
+          },
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-group no-caption",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex"
+            }
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "personal",
+      "mode": "read",
+      "expectedVisible": false,
+      "personal": true,
+      "shared": false,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "personal",
+      "mode": "edit",
+      "expectedVisible": false,
+      "personal": true,
+      "shared": false,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "both",
+      "mode": "read",
+      "expectedVisible": false,
+      "personal": true,
+      "shared": true,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        },
+        {
+          "label": null,
+          "checked": true
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "both",
+      "mode": "edit",
+      "expectedVisible": false,
+      "personal": true,
+      "shared": true,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        },
+        {
+          "label": null,
+          "checked": true
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "shared",
+      "mode": "read",
+      "expectedVisible": false,
+      "personal": false,
+      "shared": true,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "shared",
+      "mode": "edit",
+      "expectedVisible": false,
+      "personal": false,
+      "shared": true,
+      "visible": false,
+      "hints": [],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": true
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "cleared",
+      "mode": "read",
+      "expectedVisible": true,
+      "personal": false,
+      "shared": false,
+      "visible": true,
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 911,
+            "y": 620,
+            "width": 467,
+            "height": 98.640625,
+            "top": 620,
+            "right": 1378,
+            "bottom": 718.640625,
+            "left": 911
+          },
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-group no-caption",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex"
+            }
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "state": "cleared",
+      "mode": "edit",
+      "expectedVisible": true,
+      "personal": false,
+      "shared": false,
+      "visible": true,
+      "hints": [
+        {
+          "value": "No API key is stored for this language model yet. Keys cannot be moved from another extension - use Set Personal API Key or Set Shared API Key to enter it once.",
+          "rect": {
+            "x": 911,
+            "y": 620,
+            "width": 467,
+            "height": 98.640625,
+            "top": 620,
+            "right": 1378,
+            "bottom": 718.640625,
+            "left": 911
+          },
+          "ancestors": [
+            {
+              "tag": "TEXTAREA",
+              "cls": "multilinestringcontrol-read value ms-nav-unfavorable-styleview thm--bold--italicw--inhtrans thm-styleview-color--style-unfavorable_medmaxflat_45 thm-font-size-small thm-segoeNormal thm-color--style-standard_medmaxflat_45--not_FCM thm-bgcolor--palette--1726194350 thm-bdrcolor--brand-primary_minflat_45--focus--not_FCM thm-outlinecolor--brand-primary_minflat_45--focus--not_FCM",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "edit-container ms-nav-editcontrol-nocaption thm-bgcolor--minflat edit-container-read",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-edit-control-container no-caption",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-group no-caption",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "multiple-columns-group chrome-desktop-multiple-columns-group",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "collapsibleTab-container",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-band expanded",
+              "display": "block"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-cardform part-autoheight-lastChild control-addin-form",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-content",
+              "display": "flex"
+            },
+            {
+              "tag": "DIV",
+              "cls": "ms-nav-layout-main ms-nav-scrollable",
+              "display": "flex"
+            }
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        },
+        {
+          "label": null,
+          "checked": false
+        }
+      ],
+      "assertions": [
+        {
+          "name": "localized hint rendered iff neither key exists",
+          "passed": true
+        },
+        {
+          "name": "owned fixture is displayed",
+          "passed": true
+        },
+        {
+          "name": "personal/shared key indicators match expected state",
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "executed": 10,
+  "passed": 10,
+  "failed": 0,
+  "skipped": 0
+}

@@ -1,0 +1,53 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "containerId": "f043ac8a8059",
+  "locale": "en-US",
+  "lcid": 1033,
+  "fixture": "XLM70UI",
+  "providerCalls": 0,
+  "executed": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {
+      "mode": "read",
+      "assertions": [
+        {
+          "name": "no-key provider None selected",
+          "passed": true
+        },
+        {
+          "name": "missing-key hint hidden",
+          "passed": true
+        },
+        {
+          "name": "authentication group hidden",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "hints": []
+    },
+    {
+      "mode": "edit",
+      "assertions": [
+        {
+          "name": "no-key provider None selected",
+          "passed": true
+        },
+        {
+          "name": "missing-key hint hidden",
+          "passed": true
+        },
+        {
+          "name": "authentication group hidden",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "hints": []
+    }
+  ],
+  "finishedAt": "2026-10-17T00:34:22.077Z"
+}

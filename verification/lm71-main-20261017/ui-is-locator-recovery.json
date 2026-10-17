@@ -1,0 +1,8 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "firstAttempt": "Timed out finding old Authentication caption Auðkenning. Current merged main label is Sannvottun (page10035343 line143).",
+  "testAssertionsExecuted": 0,
+  "productFailureEstablished": false,
+  "repair": "Private helper caption aligned with current product/XLF. No assertion/source/exclusion change; same full rendered visibility checks will run.",
+  "fixtureState": "OpenAI/keyless preserved; first attempt had no key action or data write."
+}

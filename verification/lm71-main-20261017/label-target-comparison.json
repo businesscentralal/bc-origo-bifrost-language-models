@@ -1,0 +1,51 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "totalTestTargets": 7,
+  "sharedProductLabels": 5,
+  "matched": 5,
+  "mismatched": 0,
+  "rows": [
+    {
+      "source": "This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\\Do you want to continue?",
+      "testTarget": "Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\\Viltu halda áfram?",
+      "productTarget": "Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\\Viltu halda áfram?",
+      "matchesProduct": true
+    },
+    {
+      "source": "Copilot defaults initialized successfully.",
+      "testTarget": "Copilot sjálfgildi frumstillt.",
+      "productTarget": "Copilot sjálfgildi frumstillt.",
+      "matchesProduct": true
+    },
+    {
+      "source": "Bifrost Chat is not enabled for this user. Set a Language Model Code on your Bifrost User Setup.",
+      "testTarget": "Bifröst spjall er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans í Uppsetningu notanda Bifröst.",
+      "productTarget": "Bifröst spjall er ekki virkt fyrir þennan notanda. Stilltu kóða mállíkans í Uppsetningu notanda Bifröst.",
+      "matchesProduct": true
+    },
+    {
+      "source": "Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.",
+      "testTarget": "Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.",
+      "productTarget": "Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.",
+      "matchesProduct": true
+    },
+    {
+      "source": "A language model code must be specified before an API key can be stored.",
+      "testTarget": "Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.",
+      "productTarget": "Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.",
+      "matchesProduct": true
+    },
+    {
+      "source": "Mock",
+      "testTarget": "Mock",
+      "productTarget": null,
+      "matchesProduct": null
+    },
+    {
+      "source": "Mock other provider",
+      "testTarget": "Önnur prófunarveita",
+      "productTarget": null,
+      "matchesProduct": null
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "uncommittedSource": false,
+  "containerId": "f043ac8a8059",
+  "startedAt": "2026-10-17T00:41:56.944Z",
+  "finishedAt": "2026-10-17T00:44:15.601Z",
+  "fullSuite": true,
+  "total": 192,
+  "passed": 192,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "exitCode": 0,
+  "ok": true,
+  "xmlSaved": true,
+  "independentXmlCount": {
+    "executed": 192,
+    "passed": 192,
+    "failed": 0,
+    "skipped": 0
+  },
+  "junitSha256": "2c518321c1e74c57048a4d9c5c58e448c782e6f07faded04d65a9fde620d737b",
+  "foundationVersion": "28.0.5.569",
+  "productVersion": "28.0.0.0",
+  "testAppVersion": "28.0.0.0",
+  "bcVersion": "28.5.54151.56408",
+  "installedProductAndTestAppBytesMatched": true,
+  "range": "96000..96199",
+  "extensionId": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec"
+}

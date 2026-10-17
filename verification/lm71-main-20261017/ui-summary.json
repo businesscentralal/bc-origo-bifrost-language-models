@@ -1,0 +1,79 @@
+{
+  "executed": 28,
+  "passed": 28,
+  "failed": 0,
+  "skipped": 0,
+  "sha": "a6da20c9d770c6179f52cb2ffd0e7d0fe483563b",
+  "containerId": "f043ac8a8059",
+  "containerName": "codex-worker6-lm71-main-w1",
+  "foundationVersion": "28.0.5.569",
+  "productVersion": "28.0.0.0",
+  "defaultDeploymentByteMatched": true,
+  "locales": [
+    "en-US",
+    "is-IS"
+  ],
+  "lcids": [
+    1033,
+    1039
+  ],
+  "pageId": 10035343,
+  "assertions": 84,
+  "assertionsPassed": 84,
+  "results": [
+    {
+      "file": "candidate-en-US.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "transitions-en-US.json",
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "none-en-US.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "candidate-is-IS.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "transitions-is-IS.json",
+      "executed": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "none-is-IS.json",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "providerCalls": 0,
+  "licenceEulaWrites": 0,
+  "dataSetup": "Self-created XLM70UI through Web Client; synthetic keys entered/cleared via actual personal/shared key actions. No shared/customer data.",
+  "scenarios": "Saved keyless read/edit; keyless/personal/both/shared/last-key-cleared transitions read/edit; Noneprovider authentication/hint hidden read/edit.",
+  "renderedBoundsAndHiddenAncestorsChecked": true,
+  "screenshotsVisuallyInspected": [
+    "candidate-en-US-read.png",
+    "candidate-is-IS-read.png"
+  ],
+  "historicalHarnessAttempt": "ui-is-locator-recovery.json; old main caption,0assertionsexecuted. Original preflight did not confirm empty list; second read DOM/screenshot confirmed it before any fixture creation.",
+  "verified": true,
+  "finishedAt": "2026-10-17T00:39:35.728552+00:00"
+}

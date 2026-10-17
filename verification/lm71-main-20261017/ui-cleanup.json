@@ -1,0 +1,14 @@
+{
+  "containerId": "f043ac8a8059",
+  "fixture": "XLM70UI",
+  "deletedThroughWebClient": true,
+  "absenceVerifiedOnList": true,
+  "keysClearedByPriorUIActions": true,
+  "providerCalls": 0,
+  "containerRetained": true,
+  "environmentDeletion": false,
+  "finishedAt": "2026-10-17T00:40:42.315Z",
+  "screenshotVisuallyInspected": true,
+  "languageModelListEmpty": true,
+  "secretRegistrationMetadata": "Empty registration metadata may persist by product design; synthetic personal/shared values cleared through actual UI actions, model deleted. Final environment deletion only after TesterUAT and issueclosure."
+}
