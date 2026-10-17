@@ -159,16 +159,21 @@ page 10035343 "Bifrost LangModel Card ori"
                     Editable = false;
                     Enabled = HasServiceKeyPerm;
                 }
-                field(KeyMissingHintField; KeyMissingHint)
+                group(KeyMissingHintGroup)
                 {
-                    ApplicationArea = All;
-                    Caption = 'Note', Comment = 'is-IS=Athugasemd';
-                    ToolTip = 'Specifies what to do when no API key is stored for this language model yet.', Comment = 'is-IS=Tilgreinir hvað eigi að gera þegar enginn API-lykill er geymdur fyrir þetta mállíkan.';
-                    Editable = false;
-                    MultiLine = true;
                     ShowCaption = false;
                     Visible = KeyMissingVisible;
-                    Style = Unfavorable;
+
+                    field(KeyMissingHintField; KeyMissingHint)
+                    {
+                        ApplicationArea = All;
+                        Caption = 'Note', Comment = 'is-IS=Athugasemd';
+                        ToolTip = 'Specifies what to do when no API key is stored for this language model yet.', Comment = 'is-IS=Tilgreinir hvað eigi að gera þegar enginn API-lykill er geymdur fyrir þetta mállíkan.';
+                        Editable = false;
+                        MultiLine = true;
+                        ShowCaption = false;
+                        Style = Unfavorable;
+                    }
                 }
             }
             group(SkillContent)
