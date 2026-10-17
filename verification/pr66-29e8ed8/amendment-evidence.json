@@ -1,0 +1,63 @@
+{
+  "sha": "29e8ed86ea08ae51fea36b0441025c97fda7262d",
+  "parentSha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "changedFiles": [
+    "CHANGELOG.md"
+  ],
+  "objectIds": [
+    10035398,
+    10035390,
+    96032,
+    96001
+  ],
+  "appAndTestSourceIdenticalToParent": true,
+  "newRuntimeExecution": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0
+  },
+  "historicalRuntimeSha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "historicalRuntime": {
+    "1033": {
+      "total": 192,
+      "passed": 192,
+      "failed": 0,
+      "skipped": 0
+    },
+    "1039": {
+      "total": 192,
+      "passed": 192,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "historicalUiScenarios": 13,
+  "mcp": {
+    "touchedMessageTypes": [
+      "LLM.Prompt.Complete"
+    ],
+    "verified": false,
+    "passed": 0,
+    "gate": "EULA_REQUIRED",
+    "notMergeBlockerAuthority": "1792198295.070349",
+    "licensingWrites": false
+  },
+  "claudeCarryForward": {
+    "receipt": 6215370592,
+    "originalSha": "cb7b12c4b748328d24a8362886982d5e66d1fa09",
+    "dispositionedTo": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+    "review": 5555156374,
+    "docsOnlyCarryForwardPerReview": true,
+    "newHeadAttestationPending": true
+  },
+  "container": {
+    "id": "f0fa8adbe94f",
+    "name": "brokkr-worker2-lm66-20261017",
+    "owner": "worker-2",
+    "retained": true,
+    "lastObservedState": "Stopped",
+    "newResourceMutation": false
+  },
+  "checkpointCorrection": "Previous private checkpoint/lesson assertion that 96032/96001 were already present in Unreleased was incorrect; corrected in this documentation commit."
+}
