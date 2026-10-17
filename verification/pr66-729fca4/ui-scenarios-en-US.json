@@ -1,0 +1,33 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "containerId": "f0fa8adbe94f",
+  "locale": "en-US",
+  "lcid": 1033,
+  "verified": true,
+  "events": [
+    {
+      "scenario": "model list renders in actual en-US",
+      "passed": true
+    },
+    {
+      "scenario": "native self-created language model fixtures rolled back; model list empty",
+      "passed": true
+    },
+    {
+      "scenario": "new unsaved card and provider enum render after enumextension rename; no provider call or row saved",
+      "passed": true
+    },
+    {
+      "scenario": "installed Copilot capability appears with localized caption",
+      "passed": true
+    },
+    {
+      "scenario": "Copilot Learn More emits exact docs URL (navigation intercepted; target checked separately without credentials)",
+      "passed": true
+    }
+  ],
+  "urls": [
+    "https://docs.bifrost.origo.is/en-us/language-models/"
+  ],
+  "at": "2026-10-17T00:31:49.547Z"
+}

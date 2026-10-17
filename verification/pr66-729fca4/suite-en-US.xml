@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="96002 LangModel Chat Provider Tests" timestamp="2026-10-17T00:25:56" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="29.266" tests="46" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;231.031&quot;, &quot;Free Memory (Gb)&quot;: &quot;37.2&quot; }" />
+      <property name="platform.info" value="{ &quot;Version&quot;: &quot;28.0.54946.56347+5e1faaf35c78577c14f3ac5f19037f4bec46550c&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dutch language (Netherlands)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Any&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Audit File Export&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_APIV1_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Samples Tests&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_PlanConfiguration_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (Canada)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Cloud Migration - Previous Release&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Tests-TestLibraries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (New Zealand)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Universal Print Integration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Austria)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Foundation Test Libraries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Foundation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;ESG Statistical Accounts Demo Tool&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - Azure Blob Service Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;API Reports - Finance&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Permissions Mock&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dynamics 365 Business Central v14 Reimplementation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Continia&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payment Links to PayPal&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;PEPPOL&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Core&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Essential Business Headlines&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intelligent Cloud Base&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Italian language (Italy)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;System Application Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bank Account Reconciliation With AI&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Base Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Pagero&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales Lines Suggestions&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dynamics BC Excel Reports&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Language Models&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.0.0&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;EU 3-Party Trade Purchase&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Troubleshoot FA Ledger Entries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Design Experience&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Spanish language (Mexico)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Swedish language (Sweden)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Excise Taxes&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Cloud Migration API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Calculate Sustainability Emission with Copilot&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Shopify Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Foundation&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.5.569&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Quality Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (United States)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - FORNAV&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Error Messages with Recommendations&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payment Practices&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (France)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Belgium)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Avalara&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Czech language (Czechia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;SAF-T&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Statistical Accounts&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Test Runner&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Canada)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subscription Billing&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Russian language (Russia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Bank Deposits&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Bifrost Language Models - Tests&quot;, &quot;Publisher&quot;: &quot;Origo&quot;, &quot;Version&quot;: &quot;28.0.0.0&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Italian language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Test Toolkit&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Library Assert&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Enforced Digital Vouchers&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - SMTP Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Norwegian language (Norway)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - SignUp&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_SyncBaseApp_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - SFTP Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intrastat Core Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Company Hub&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Danish language (Denmark)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Intrastat Core&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - SharePoint Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sustainability Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;API - Cross Environment Intercompany&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central Intelligent Cloud&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Core Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Review General Ledger Entries&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Onboarding Signals&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Germany)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Late Payment Prediction&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_ClientAddIns_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Create Product Information With Copilot&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Email Logging Using Graph API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Power BI Report embeddings for Dynamics 365 Business Central&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_APIV2_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Outlook REST API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Microsoft 365 Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit - Evaluation&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Quality Management Contoso Coffee Demo Dataset&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Withholding Tax&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (Australia)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Send remittance advice by email&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Simplified Bank Statement Import&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Data Search&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Icelandic language (Iceland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;French language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Data Archive&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Service Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Payables Agent&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Microsoft Pay Payments&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Service Declaration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Business Central 14 Historical Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subscription Billing Demo Data&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Microsoft Dynamics 365 - SmartList&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - B2Brouter&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External File Storage - Azure File Service Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - Current User Connector&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;External Storage - Document Attachments&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;System Application&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Logiq&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales Order Agent&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Application Test Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Connectivity Apps&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;VAT Group Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Test Internal Library&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit Samples&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Spanish language (Spain)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Manufacturing&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;English language (United Kingdom)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Performance Toolkit Tests&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sustainability&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;E-Document Connector - Microsoft 365&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Send To Email Printer&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Finnish language (Finland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Library Variable Storage&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;AI Development Toolkit - Design&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Subcontracting&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Business_Events_&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Field Service Integration&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Sales and Inventory Forecast&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Dutch language (Belgium)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_Master_Data_Management&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Email - SMTP API&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;_Exclude_ReportLayouts&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Recommended Apps&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;German language (Switzerland)&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="app.info" value="{ &quot;Name&quot;: &quot;Agent Samples&quot;, &quot;Publisher&quot;: &quot;Microsoft&quot;, &quot;Version&quot;: &quot;28.5.54151.56408&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;254.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.7&quot; }" />
+    </properties>
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetLangModelProvider_NoSetup_FallsBackToNone" time="1" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse" time="0.104" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue" time="0.043" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse" time="0.013" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields" time="0.046" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_NoneProvider_ReturnsDisabledFlag" time="0.02" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="SendChatMessage_RoleMock_RoundTrips" time="0.023" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="SendChatMessage_NoneProvider_ReturnsErrorJson" time="0.016" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetAvailableModels_RoleMock_PopulatesBuffer" time="0.023" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetAvailableModels_RoleMock_NoModels_ReturnsFalse" time="0.013" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="IsConfigured_BlankCode_IgnoresDefaultModel" time="0.016" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="IsConfigured_UserCode_UsesThatModelNotDefault" time="0.026" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="IsConfigured_MissingModel_ReturnsFalse" time="0.017" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="SendChatMessage_BlankCode_ReturnsNotEnabledError" time="0.014" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="ContinueWithToolResults_BlankCode_ReturnsNotEnabledError" time="0.017" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="TryIt_BlankUserCode_UsesTestContextModel" time="0.02" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetLangModelProviderWithModel_BlankCode_UsesDefaultModel" time="0.024" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetLangModelProvider_UserRole_TakesPrecedenceOverDefault" time="0.014" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="ContinueWithToolResults_RoleMock_DelegatesToMock" time="0.02" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="ContinueWithToolResults_NoneProvider_ReturnsErrorJson" time="0.016" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_DebugMode_IncludesDebugTrue" time="0.016" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_RoleWithSkill_IncludesContextSkill" time="0.027" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_RoleWithoutSkill_NoContextSkill" time="0.014" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="BuildConfigJson_NoUserSetup_NoContextSkill" time="0.017" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="SendChatMessage_ArgumentFieldsPopulated" time="0.02" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_CustomerList_OpensFocus" time="11.31" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_IncomingDocuments_OpensFocus" time="0.873" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_ItemList_OpensFocus" time="5.01" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_PurchaseCreditMemos_OpensFocus" time="1.38" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_PurchaseInvoices_OpensFocus" time="0.96" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_PurchaseOrders_OpensFocus" time="0.306" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_PurchaseQuotes_OpensFocus" time="0.28" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_PurchaseReturnOrders_OpensFocus" time="0.14" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SalesCreditMemos_OpensFocus" time="1.247" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SalesInvoiceList_OpensFocus" time="0.643" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SalesOrderList_OpensFocus" time="1.043" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SalesQuotes_OpensFocus" time="0.62" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SalesReturnOrderList_OpensFocus" time="0.503" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_VendorList_OpensFocus" time="1.047" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_UnassignedUser_HidesAction" time="0.324" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_MissingAssignedModel_HidesAction" time="0.23" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_EmptyCurrentRecord_OpensFocus" time="0.027" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_SequentialCustomers_FreshContext" time="0.987" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_NoBoundObserver_OpensFocus" time="0.364" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="OpenRecordChat_WrongExpectedContext_IsRejected" time="0.383" />
+    <testcase classname="96002 LangModel Chat Provider Tests" name="GetLangModelProviderWithModel_NoModels_ReturnsNone" time="0.01" />
+  </testsuite>
+  <testsuite name="96003 Bifrost Language Model Tests" timestamp="2026-10-17T00:25:57" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.197" tests="7" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;254.359&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;254.688&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.7&quot; }" />
+    </properties>
+    <testcase classname="96003 Bifrost Language Model Tests" name="SetSkill_GetSkill_ReturnsStoredText" time="0.116" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="GetSkill_NoContent_ReturnsEmptyString" time="0.01" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="SetSkill_LargeContent_RoundTripsCorrectly" time="0.016" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="SetSkill_OverwriteExisting_ReturnsNewContent" time="0.013" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="GetContextTokens_ZeroUsesTheProviderDefault" time="0.003" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="GetContextTokens_SetValueWins" time="0.003" />
+    <testcase classname="96003 Bifrost Language Model Tests" name="GetContextTokens_ProviderDefaults" time="0.036" />
+  </testsuite>
+  <testsuite name="96004 LangModel Field Restrict Tests" timestamp="2026-10-17T00:25:58" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.455" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;254.719&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.7&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;255.266&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+    </properties>
+    <testcase classname="96004 LangModel Field Restrict Tests" name="FieldRestrict_ThreeEndpointFieldsWriteRestricted" time="0.403" />
+    <testcase classname="96004 LangModel Field Restrict Tests" name="FieldRestrict_EndpointFieldsNotReadRestricted" time="0.013" />
+    <testcase classname="96004 LangModel Field Restrict Tests" name="FieldRestrict_NeighbourFieldsNotRestricted" time="0.016" />
+    <testcase classname="96004 LangModel Field Restrict Tests" name="FieldRestrict_TableLevelChecksStayFalse" time="0.013" />
+    <testcase classname="96004 LangModel Field Restrict Tests" name="FieldRestrict_HintForEndpointFieldsEmptyForNeighbour" time="0.01" />
+  </testsuite>
+  <testsuite name="96009 LangModel Secrets Tests" timestamp="2026-10-17T00:25:59" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.547" tests="19" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;255.297&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;255.953&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+    </properties>
+    <testcase classname="96009 LangModel Secrets Tests" name="GetSecretCodes_BuildBothCodesFromLanguageModelCode" time="0.01" />
+    <testcase classname="96009 LangModel Secrets Tests" name="GetSecretCodes_LongestLanguageModelCode_FitsInCode50" time="0.007" />
+    <testcase classname="96009 LangModel Secrets Tests" name="GetSecretCodes_BlankLanguageModelCode_ReturnsBlank" time="0.01" />
+    <testcase classname="96009 LangModel Secrets Tests" name="Insert_LanguageModel_RegistersBothSecretsWithCorrectScope" time="0.02" />
+    <testcase classname="96009 LangModel Secrets Tests" name="Register_CalledTwice_IsIdempotent" time="0.023" />
+    <testcase classname="96009 LangModel Secrets Tests" name="ServiceKey_SetIsSetClear_RoundTrips" time="0.073" />
+    <testcase classname="96009 LangModel Secrets Tests" name="UserKey_SetIsSetClear_RoundTrips" time="0.027" />
+    <testcase classname="96009 LangModel Secrets Tests" name="ServiceAndUserKey_AreStoredIndependently" time="0.024" />
+    <testcase classname="96009 LangModel Secrets Tests" name="TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey" time="0.027" />
+    <testcase classname="96009 LangModel Secrets Tests" name="TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey" time="0.023" />
+    <testcase classname="96009 LangModel Secrets Tests" name="TryGetApiKey_NoKeyStored_ReturnsFalse" time="0.016" />
+    <testcase classname="96009 LangModel Secrets Tests" name="TryGetApiKey_BlankLanguageModelCode_ReturnsFalse" time="0.017" />
+    <testcase classname="96009 LangModel Secrets Tests" name="MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage" time="0.017" />
+    <testcase classname="96009 LangModel Secrets Tests" name="MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets" time="0.023" />
+    <testcase classname="96009 LangModel Secrets Tests" name="SetServiceKey_BlankLanguageModelCode_Errors" time="0.017" />
+    <testcase classname="96009 LangModel Secrets Tests" name="Delete_LanguageModel_ClearsBothSecrets" time="0.037" />
+    <testcase classname="96009 LangModel Secrets Tests" name="Rename_LanguageModel_MovesSecretsToTheNewCode" time="0.113" />
+    <testcase classname="96009 LangModel Secrets Tests" name="CountModelsWithoutKey_Empty_ReturnsZero" time="0.02" />
+    <testcase classname="96009 LangModel Secrets Tests" name="CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites" time="0.043" />
+  </testsuite>
+  <testsuite name="96010 LangModel Prov Base Tests" timestamp="2026-10-17T00:25:59" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.118" tests="17" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;256.000&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;256.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+    </properties>
+    <testcase classname="96010 LangModel Prov Base Tests" name="IsConfigured_WithKeyAndUrl_ReturnsTrue" time="0.01" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="IsConfigured_WithoutKey_ReturnsFalse" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="IsConfigured_WithKeyNoUrl_UsesDefault" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetBaseUrl_ArgumentOverridesDefault" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetBaseUrl_EmptyArgument_FallsBackToDefault" time="0.007" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetModel_ArgumentOverridesDefault" time="0.01" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetTimeoutMs_ArgumentValue_Used" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetTimeoutMs_Zero_UsesDefault" time="0.007" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetMaxTokens_ArgumentValue_Used" time="0.007" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="GetMaxTokens_Zero_UsesDefault" time="0.003" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="ParseTokenUsage_StandardFormat" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="ParseTokenUsage_MissingUsage_ReturnsZero" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="ParseTokenUsage_InvalidJson_ReturnsZero" time="0.01" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="AttachFiles_AddsImageUrlBlock" time="0.013" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="AttachFiles_PdfUsesFileBlock" time="0.003" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="AttachFiles_NoFiles_LeavesMessageUnchanged" time="0.006" />
+    <testcase classname="96010 LangModel Prov Base Tests" name="AttachFiles_PreservesSystemMessage" time="0.006" />
+  </testsuite>
+  <testsuite name="96011 LangModel API Client Tests" timestamp="2026-10-17T00:26:00" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.034" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;256.359&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;256.547&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+    </properties>
+    <testcase classname="96011 LangModel API Client Tests" name="ExtractText_StandardResponse" time="0.01" />
+    <testcase classname="96011 LangModel API Client Tests" name="ExtractText_EmptyChoices_ReturnsEmpty" time="0.006" />
+    <testcase classname="96011 LangModel API Client Tests" name="ExtractText_NoChoices_ReturnsEmpty" time="0.006" />
+    <testcase classname="96011 LangModel API Client Tests" name="ExtractText_ContentIsNull_ReturnsEmpty" time="0.006" />
+    <testcase classname="96011 LangModel API Client Tests" name="ExtractText_ContentArray_ReturnsEmpty" time="0.006" />
+  </testsuite>
+  <testsuite name="96012 LangModel Providers Tests" timestamp="2026-10-17T00:26:00" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.062" tests="10" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;256.578&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;256.797&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+    </properties>
+    <testcase classname="96012 LangModel Providers Tests" name="OpenAI_Metadata" time="0.01" />
+    <testcase classname="96012 LangModel Providers Tests" name="AzureOpenAI_Metadata" time="0.007" />
+    <testcase classname="96012 LangModel Providers Tests" name="CustomLLM_Metadata" time="0.003" />
+    <testcase classname="96012 LangModel Providers Tests" name="Anthropic_Metadata" time="0.01" />
+    <testcase classname="96012 LangModel Providers Tests" name="xAI_Metadata" time="0.007" />
+    <testcase classname="96012 LangModel Providers Tests" name="Gemini_Metadata" time="0.007" />
+    <testcase classname="96012 LangModel Providers Tests" name="IsConfigured_WithoutApiKey_ReturnsFalse_ForEveryExternalProvider" time="0.006" />
+    <testcase classname="96012 LangModel Providers Tests" name="SetAzureChatPath_Blank_UsesDefaultDeploymentPath" time="0.006" />
+    <testcase classname="96012 LangModel Providers Tests" name="SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion" time="0.003" />
+    <testcase classname="96012 LangModel Providers Tests" name="SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment" time="0.003" />
+  </testsuite>
+  <testsuite name="96013 Chat Svc Gate Tests" timestamp="2026-10-17T00:26:02" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="1.864" tests="5" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;256.828&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.6&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;258.609&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.5&quot; }" />
+    </properties>
+    <testcase classname="96013 Chat Svc Gate Tests" name="ChatSvcGate_WritePermission_WithPermissionsDisabled" time="0.007" />
+    <testcase classname="96013 Chat Svc Gate Tests" name="ProviderBase_HasServiceKeyPermission_WithPermissionsDisabled" time="0.007" />
+    <testcase classname="96013 Chat Svc Gate Tests" name="ChatSvcGate_WritePermission_WithRestrictivePermissions" time="1.833" />
+    <testcase classname="96013 Chat Svc Gate Tests" name="ChatSvcGate_WritePermission_WithoutPermissionSet" time="0.01" />
+    <testcase classname="96013 Chat Svc Gate Tests" name="ChatSvcGate_Table_IsAccessible" time="0.007" />
+  </testsuite>
+  <testsuite name="96014 LangModel Setup Page Tests" timestamp="2026-10-17T00:26:03" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.303" tests="3" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;258.609&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.5&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;259.016&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.5&quot; }" />
+    </properties>
+    <testcase classname="96014 LangModel Setup Page Tests" name="LangModelSetupPage_Opens" time="0.11" />
+    <testcase classname="96014 LangModel Setup Page Tests" name="LangModelSetupPage_CountsTheLanguageModels" time="0.04" />
+    <testcase classname="96014 LangModel Setup Page Tests" name="SetupOri_ExposesTheSingleLangModelAppsAction" time="0.153" />
+  </testsuite>
+  <testsuite name="96015 LLM Req Log Masker Tests" timestamp="2026-10-17T00:26:04" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.066" tests="10" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;259.047&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.5&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;259.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.4&quot; }" />
+    </properties>
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskRequestBody_DebugMode_ReturnsBodyUnchanged" time="0.01" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskRequestBody_NormalMode_IsRedacted" time="0.01" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskResponseBody_DebugMode_ReturnsBodyUnchanged" time="0.006" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskResponseBody_NormalMode_IsRedacted" time="0.007" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskResponseBody_EmptyBody_StaysEmptyInDebugMode" time="0.007" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="MaskErrorText_IsNeverRedacted" time="0.003" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="GetBaseUrl_StripsPathAndQuery" time="0.006" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="GetBaseUrl_HostOnly_ReturnsHost" time="0.003" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="GetBaseUrl_NoScheme_ReturnsInput" time="0.007" />
+    <testcase classname="96015 LLM Req Log Masker Tests" name="GetBaseUrl_Empty_ReturnsEmpty" time="0.007" />
+  </testsuite>
+  <testsuite name="96016 LangModel Registration Tests" timestamp="2026-10-17T00:26:04" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.01" tests="1" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;259.328&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.4&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;259.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.3&quot; }" />
+    </properties>
+    <testcase classname="96016 LangModel Registration Tests" name="AppRegistry_ListsLanguageModelsWithItsSetupPage" time="0.01" />
+  </testsuite>
+  <testsuite name="96017 Copilot Upgrade Tests" timestamp="2026-10-17T00:26:04" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.088" tests="2" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;259.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.3&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;259.578&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.1&quot; }" />
+    </properties>
+    <testcase classname="96017 Copilot Upgrade Tests" name="UpgradePerCompany_WithoutSetupPermission_Claims" time="0.074" />
+    <testcase classname="96017 Copilot Upgrade Tests" name="UpgradePerCompany_WhenAnotherProviderHolds_LeavesItUnchanged" time="0.014" />
+  </testsuite>
+  <testsuite name="96018 Copilot Install Tests" timestamp="2026-10-17T00:26:07" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="1.316" tests="11" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;259.578&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.1&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;260.625&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.0&quot; }" />
+    </properties>
+    <testcase classname="96018 Copilot Install Tests" name="ClaimChatProvider_WithoutSetupPermission_Claims" time="0.267" />
+    <testcase classname="96018 Copilot Install Tests" name="ClaimChatProvider_WhenAnotherProviderHolds_LeavesItUnchanged" time="0.05" />
+    <testcase classname="96018 Copilot Install Tests" name="ClaimChatProvider_WhenNone_ClaimsLanguageModels" time="0.04" />
+    <testcase classname="96018 Copilot Install Tests" name="ClaimChatProvider_Twice_IsIdempotent" time="0.066" />
+    <testcase classname="96018 Copilot Install Tests" name="ClaimChatProvider_MissingSetupRow_CreatesAndClaims" time="0.133" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_DeclinedAbsent_LeavesModelsUnchanged" time="0.42" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_AcceptedAbsent_CreatesDefault" time="0.14" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_AcceptedOtherDefault_PreservesSelection" time="0.063" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_DeclinedExisting_PreservesModelAndSkill" time="0.043" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_AcceptedExisting_RefreshesOnlySkill" time="0.047" />
+    <testcase classname="96018 Copilot Install Tests" name="InitDefaults_ModelWriteFailure_PropagatesWithoutSuccess" time="0.047" />
+  </testsuite>
+  <testsuite name="96019 LLM Prompt Contract Tests" timestamp="2026-10-17T00:26:08" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.462" tests="6" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;260.688&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.0&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;261.297&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.9&quot; }" />
+    </properties>
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Contract_HasRequiredChaptersAndValidContent" time="0.06" />
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Discovery_HasLanguageModelSpecificText" time="0.013" />
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Contract_NamesBothPermissionSets" time="0.013" />
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Execute_MissingPrompt_IsCodedMissingParameter" time="0.296" />
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Execute_UnknownRoleCode_IsCodedRecordNotFound" time="0.05" />
+    <testcase classname="96019 LLM Prompt Contract Tests" name="Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut" time="0.03" />
+  </testsuite>
+  <testsuite name="96022 LangModel Turn Guard Tests" timestamp="2026-10-17T00:26:10" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.858" tests="13" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;261.344&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.9&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;261.906&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.8&quot; }" />
+    </properties>
+    <testcase classname="96022 LangModel Turn Guard Tests" name="HistoryBudget_FollowsTheContextSize" time="0.013" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="HistoryBudget_ZeroContextUsesTheFallback" time="0.006" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="HistoryBudget_ToolDefinitionsAndTinyContextKeepAFloor" time="0.007" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="RemoveOrphanedToolMessages_LeadingToolMessageIsRemoved" time="0.054" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="RemoveOrphanedToolMessages_PairedCallsAreKept" time="0.01" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="RemoveOrphanedToolMessages_CallWithoutResultIsDropped" time="0.007" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="RemoveOrphanedResponsesItems_DropsUnpairedItems" time="0.01" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="NeedsFigureCheck_FiguresWithoutToolCall_IsTrue" time="0.714" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="NeedsFigureCheck_FiguresAfterToolCall_IsFalse" time="0.01" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="NeedsFigureCheck_ToolCallInAnEarlierTurn_DoesNotCount" time="0.007" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="NeedsFigureCheck_AfterTheFollowUp_IsFalse" time="0.006" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="NeedsFigureCheck_AnthropicToolUseBlocksCount" time="0.007" />
+    <testcase classname="96022 LangModel Turn Guard Tests" name="ContainsFigures_RecognisesAmountsOnly" time="0.007" />
+  </testsuite>
+  <testsuite name="96028 LangModel Test Tools Tests" timestamp="2026-10-17T00:26:10" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.287" tests="6" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;261.906&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.8&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;262.484&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.8&quot; }" />
+    </properties>
+    <testcase classname="96028 LangModel Test Tools Tests" name="Set_CreatesModelAndStoresKeysWithoutAnsweringThem" time="0.133" />
+    <testcase classname="96028 LangModel Test Tools Tests" name="Set_UnknownProviderAndMissingCode_AreReportedTogether" time="0.017" />
+    <testcase classname="96028 LangModel Test Tools Tests" name="Delete_RemovesTheModelAndReportsUnknownCodes" time="0.034" />
+    <testcase classname="96028 LangModel Test Tools Tests" name="Chat_RunsToolCallsAndReturnsTheReply" time="0.063" />
+    <testcase classname="96028 LangModel Test Tools Tests" name="Chat_ProviderError_IsPreconditionFailed" time="0.027" />
+    <testcase classname="96028 LangModel Test Tools Tests" name="Chat_UnknownModel_IsRecordNotFound" time="0.013" />
+  </testsuite>
+  <testsuite name="96029 LangModel Chat Proxy Tests" timestamp="2026-10-17T00:26:11" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.033" tests="4" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;262.484&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.8&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;262.625&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.0&quot; }" />
+    </properties>
+    <testcase classname="96029 LangModel Chat Proxy Tests" name="NeedsReasoningOff_ToolsAndMatchingError_IsTrue" time="0.013" />
+    <testcase classname="96029 LangModel Chat Proxy Tests" name="NeedsReasoningOff_NoTools_IsFalse" time="0.003" />
+    <testcase classname="96029 LangModel Chat Proxy Tests" name="NeedsReasoningOff_AlreadySet_IsFalse" time="0.007" />
+    <testcase classname="96029 LangModel Chat Proxy Tests" name="NeedsReasoningOff_UnrelatedError_IsFalse" time="0.01" />
+  </testsuite>
+  <testsuite name="96031 LangModel 60 Defaults Tests" timestamp="2026-10-17T00:26:12" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.581" tests="18" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;262.625&quot;, &quot;Free Memory (Gb)&quot;: &quot;36.0&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;263.406&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.9&quot; }" />
+    </properties>
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_EmptyEndpoints_FillsDefaults" time="0.1" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_ProxyEndpoints_KeepsExistingValues" time="0.07" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_AzureEndpoints_KeepsExistingValues" time="0.046" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_OnlyBaseUrl_LeavesPathsEmpty" time="0.05" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_OnlyChatPath_FillsBaseUrlOnly" time="0.04" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_OnlyModelsPath_FillsBaseUrlOnly" time="0.06" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_RepeatedSelection_KeepsUserEdits" time="0.063" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_TableValidation_FillsDefaults" time="0.006" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_AzureSelection_LeavesEndpointsEmpty" time="0.046" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_DefaultBase_BuildsEndpointUrls" time="0.013" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls" time="0.006" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls" time="0.006" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_WhitespaceBase_DefaultsOnCard" time="0.047" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_WhitespaceBase_UsesRuntimeDefault" time="0.004" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_VersionedBase_BuildsSingleV1Urls" time="0.007" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC01_VersionedTrailingSlash_BuildsSingleV1Urls" time="0.003" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_PathsWithoutLeadingSlash_BuildsEndpointUrls" time="0.01" />
+    <testcase classname="96031 LangModel 60 Defaults Tests" name="Scenario_AC02_VersionedPaths_PreservesSegmentBoundaries" time="0.004" />
+  </testsuite>
+  <testsuite name="96032 LLM Prompt Compl Perm Tests" timestamp="2026-10-17T00:26:15" hostname="f0fa8adbe94f-business-central-7947b74bfd-pj8nf" time="0.764" tests="4" errors="0" failures="0" skipped="0">
+    <properties>
+      <property name="extensionid" value="9c452c6e-df9b-4eb0-9a54-7ea8f32483ec" />
+      <property name="appName" value="Bifrost Language Models - Tests" />
+      <property name="processinfo.start" value="{ &quot;CPU&quot;: &quot;263.469&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.9&quot; }" />
+      <property name="processinfo.end" value="{ &quot;CPU&quot;: &quot;263.750&quot;, &quot;Free Memory (Gb)&quot;: &quot;35.6&quot; }" />
+    </properties>
+    <testcase classname="96032 LLM Prompt Compl Perm Tests" name="Execute_ChatAndLLMChatOnly_RunsPastPermissionCheck_1033" time="0.314" />
+    <testcase classname="96032 LLM Prompt Compl Perm Tests" name="Execute_ChatAndLLMChatOnly_RunsPastPermissionCheck_1039" time="0.057" />
+    <testcase classname="96032 LLM Prompt Compl Perm Tests" name="Execute_ChatOnlyWithoutLLMChat_FailsWithPermissionError_1033" time="0.103" />
+    <testcase classname="96032 LLM Prompt Compl Perm Tests" name="Execute_ChatOnlyWithoutLLMChat_FailsWithPermissionError_1039" time="0.29" />
+  </testsuite>
+</testsuites>

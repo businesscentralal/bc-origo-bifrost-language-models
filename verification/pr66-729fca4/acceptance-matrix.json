@@ -1,0 +1,56 @@
+{
+  "repo": "businesscentralal/bc-origo-bifrost-language-models",
+  "pr": 66,
+  "issueUrls": [],
+  "source": "PR body AppSource S1-S5/S8 and actual reviews",
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "acceptance": [
+    {
+      "id": "S1",
+      "criterion": "Documentation, privacy, EULA and contextual help URLs",
+      "implemented": true,
+      "compile": "0errors0warnings",
+      "runtime": "11/11 documentation/context targets HTTP200;10/10 combined UI scenarios with5perlocale include actual Copilot docs target"
+    },
+    {
+      "id": "S2",
+      "criterion": "Enumextension10035384 renamed with ori affix",
+      "implemented": true,
+      "compile": "0errors0warnings",
+      "runtime": "Installed renamed enum extension; model lists/cards and provider selector render in actual English/Icelandic UI; no saved UI fixture"
+    },
+    {
+      "id": "S3",
+      "criterion": "Permission set extensions10035426/10035427 grant own objects",
+      "implemented": true,
+      "runtime": "Source compiled0/0, native full suite192/192perlocale; optional permission metadata UI in progress. No restricted Full/Read role runtime pass claimed."
+    },
+    {
+      "id": "S4",
+      "criterion": "LLM.Prompt.Complete read grant/restricted allow/deny1033/1039",
+      "implemented": true,
+      "native": "Four positive/negative permission tests included in each192/192 full suite, LCIDs1033/1039; own S4-PERM fixture rolled back, empty model table observed in both UI sessions.",
+      "mcp": "UNVERIFIED; EULA_REQUIRED before shipping message execution,0passed; live second-user UAT disposition6187885720 preserved; no broad licensing waiver inferred"
+    },
+    {
+      "id": "S5",
+      "criterion": "Copilot Learn more points to docs",
+      "implemented": true,
+      "runtime": "Actual standard7775 Origo capability visible inEnglish/Icelandic; clicking Learn More emits exact https://docs.bifrost.origo.is/en-us/language-models/ target in each; external navigation intercepted and target independently200 without credentials"
+    },
+    {
+      "id": "S8",
+      "criterion": "CHANGELOG unreleased metadata/test object names and released history",
+      "implemented": true,
+      "verified": true,
+      "evidence": "729fca4 merge preserves main history and original released sections;96032/96001 named"
+    },
+    {
+      "id": "Delivery",
+      "criterion": "main merge, green CI, container, exact-tip Claude/Reviewer/approval",
+      "implemented": "main merge complete; container f0fa8adbe94f retained",
+      "verified": "Published729fca4, compiler0/0,384/384native0failed0skipped,10/10UI and11/11URLs; fixture rows0 and owned user language restored.",
+      "pending": "MCP EULA disposition; CI Test in progress; Claude current-tip receipt and explicit amendment resolution; Grok current-tip clearance and eligible approval; Architect merge/deploy, Tester UAT and retained-container closure"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "at": "2026-10-17T00:30:17.791Z",
+  "results": [
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/language-models/",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/language-models/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/licensing/privacy/",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/licensing/privacy/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/licensing/eula/",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/licensing/eula/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-chat",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-chat/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-lang-model-card",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-lang-model-card/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-lang-model-list",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/help/language-models/bifrost-lang-model-list/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/en-us/help/language-models/language-models-setup",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/en-us/help/language-models/language-models-setup/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-chat",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-chat/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-lang-model-card",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-lang-model-card/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-lang-model-list",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/is-is/help/language-models/bifrost-lang-model-list/",
+      "passed": true
+    },
+    {
+      "url": "https://docs.bifrost.origo.is/is-is/help/language-models/language-models-setup",
+      "status": 200,
+      "finalUrl": "https://docs.bifrost.origo.is/is-is/help/language-models/language-models-setup/",
+      "passed": true
+    }
+  ],
+  "passed": 11,
+  "failed": 0,
+  "credentialsSent": false
+}

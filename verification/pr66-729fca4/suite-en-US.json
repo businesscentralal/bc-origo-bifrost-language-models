@@ -1,0 +1,27 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "containerId": "f0fa8adbe94f",
+  "locale": "en-US",
+  "lcid": 1033,
+  "startedAt": "2026-10-17T00:24:07.067Z",
+  "finishedAt": "2026-10-17T00:26:14.627Z",
+  "exitCode": 0,
+  "fullSuite": true,
+  "filter": {
+    "extensionId": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+    "testSuite": "DEFAULT",
+    "companyName": "CRONUS International Ltd."
+  },
+  "executed": 192,
+  "passed": 192,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "failures": [],
+  "verified": true,
+  "runner": "installed SDK buildRemoteTestScript with culture selection and Get-Tests suite discovery; no test exclusions or altered assertions",
+  "helperHashes": {
+    "psTestFunctions": "d20afb9a696be8c7120a55049b01cc023f811599a975d84ab579912cb80c770f",
+    "clientContext": "af1cf6979c8da97e42c446a21d8008eec61279c4aad75c5347f221e5bbec3fd2"
+  }
+}

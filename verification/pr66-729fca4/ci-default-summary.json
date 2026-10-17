@@ -1,0 +1,32 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "jobId": 117257153033,
+  "jobUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/38985811887/job/117257153033",
+  "logSha256": "ac197da8b2b7fdf5d2dfbfe500761a003345e43f7cd733ebdea60031aa5731ca",
+  "diagnostics": [],
+  "compilationEnded": [
+    "2026-10-17T00:22:58.6500945Z Compilation started for project 'Bifrost Language Models' containing '85' files at '00:22:53.045'.\r",
+    "2026-10-17T00:22:58.6649633Z Compilation ended at '00:22:58.578'.\r"
+  ],
+  "foundation": [
+    "2026-10-17T00:21:20.4246297Z - D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app\r",
+    "2026-10-17T00:21:20.4253210Z - (D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app)\r",
+    "2026-10-17T00:21:33.7728038Z - D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app\r",
+    "2026-10-17T00:21:33.7737987Z - (D:\\a\\bc-origo-bifrost-language-models\\bc-origo-bifrost-language-models\\.dependencies\\Origo_Bifrost Foundation_28.0.5.587.app)\r",
+    "2026-10-17T00:21:33.8661422Z - 7505e808-6e52-4b96-a328-82573391297a:Origo_Bifrost Foundation_28.0.1.0.app\r",
+    "2026-10-17T00:21:33.8964904Z Copying Origo_Bifrost Foundation_28.0.5.587.app to symbols folder and dependencies folder\r",
+    "2026-10-17T00:22:51.6394384Z - .\\Origo_Bifrost Foundation_28.0.5.587.app (using altool)\r",
+    "2026-10-17T00:23:22.5345413Z - .\\Origo_Bifrost Foundation_28.0.5.587.app (using altool)\r",
+    "2026-10-17T00:23:22.7366173Z - C:\\Users\\runneradmin\\AppData\\Local\\Temp\\tpd4rxgp.g2a\\Origo_Bifrost Foundation_28.0.5.587.app (using altool)\r",
+    "2026-10-17T00:23:22.7443750Z   - publish project dependency app 'C:\\Users\\runneradmin\\AppData\\Local\\Temp\\tpd4rxgp.g2a\\Origo_Bifrost Foundation_28.0.5.587.app' (7505e808-6e52-4b96-a328-82573391297a, Bifrost Foundation, Origo, 28.0.5.587)\r"
+  ],
+  "signing": [
+    "2026-10-17T00:21:29.1633271Z Bifrost: build mode 'Default' - removed internalsVisibleTo and the AS0081 suppression from app/app.json.",
+    "2026-10-17T00:21:33.7866214Z # Bifrost: never ship the test app's internalsVisibleTo grant.",
+    "2026-10-17T00:21:33.7870147Z         if ($appJson.PSObject.Properties.Name -contains 'internalsVisibleTo') {",
+    "2026-10-17T00:21:33.7871219Z             $appJson.PSObject.Properties.Remove('internalsVisibleTo')",
+    "2026-10-17T00:21:33.7874175Z         Write-Host \"Bifrost: build mode '$($env:BuildMode)' - removed internalsVisibleTo and the AS0081 suppression from app/app.json.\"",
+    "2026-10-17T00:23:14.9549452Z   Creating Self Signed Certificate",
+    "2026-10-17T00:23:14.9554645Z   Self Signed Certificate Thumbprint 5CED17819ED9D98561A43175AA82B881FA472840"
+  ]
+}

@@ -1,0 +1,22 @@
+Microsoft (R) AL Compiler version 18.1.43.24897
+Copyright (C) Microsoft Corporation. All rights reserved
+
+Compilation started for project 'Bifrost Language Models' containing '85' files at '00:17:52.366'.
+
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Vendors/BifrostChatVendorList.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Customers/BifrostChatCustomerList.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/IncomingDocuments/BifrostChatIncomingDocs.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Items/BifrostChatItemList.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchCrMemos.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchInvoices.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Sales/BifrostChatSalesCrMemos.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Sales/BifrostChatSalesInvoices.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchOrders.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Sales/BifrostChatSalesOrders.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchQuotes.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Purchases/BifrostChatPurchRetOrds.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Sales/BifrostChatSalesQuotes.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+evidence/lm66-worker2/task1792194528/compile-default-app/src/BifrostChat/Extensions/Sales/BifrostChatSalesRetOrds.PageExt.al(5,1): info AA0477: The using statements are not in a sorted order.
+
+Compilation ended at '00:18:04.031'.
+

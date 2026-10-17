@@ -1,0 +1,17 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "phase": "test-product",
+  "errors": 0,
+  "warnings": 0,
+  "compileCompleted": true,
+  "exitCode": 0,
+  "analyzers": [
+    "CodeCop",
+    "UICop"
+  ],
+  "dirty": false,
+  "internalsVisibleToRemoved": false,
+  "version": "28.0.0.0",
+  "artifactSha256": "ab2685421b4e08b9f20d4d8b448d9d7a51a576f2a0d06362caaeeddbba93c150",
+  "diagnostics": []
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Test-ContractParameterKeys",
+    "exitCode": 0,
+    "summary": "Every contract parameter is a key the code reads, and every key the code reads is declared (0 allow-listed).\n"
+  },
+  {
+    "name": "Test-IcelandicKeywordCounts",
+    "exitCode": 0,
+    "summary": "Every Icelandic keyword list has at least as many entries as the English one (1 in the source, 1 in the xlf).\n"
+  },
+  {
+    "name": "Test-IcelandicXlfInSync",
+    "exitCode": 0,
+    "summary": "The committed is-IS.xlf is what tools/Update-IcelandicXlf.ps1 generates from the build.\n"
+  },
+  {
+    "name": "Test-MixedLanguageLabels",
+    "exitCode": 0,
+    "summary": "No procedure answers a Locked English sentence.\n"
+  },
+  {
+    "name": "Test-NoClientCallstack",
+    "exitCode": 0,
+    "summary": "No call stack is returned or documented to callers.\n"
+  },
+  {
+    "name": "Test-NoObsolete",
+    "exitCode": 0,
+    "summary": "No obsolete declaration and no AL0432/AL0667 pragma in the app, apart from the allow-listed VAT Amount Line pragmas.\n"
+  },
+  {
+    "name": "Test-PermissionCoverage",
+    "exitCode": 0,
+    "summary": "Every page, query, report and xmlport is granted by an assignable permission set.\n"
+  },
+  {
+    "name": "Test-ValidatedTableView",
+    "exitCode": 0,
+    "summary": "Every applied tableView is validated first.\n"
+  },
+  {
+    "name": "Test-BifrostPipeline",
+    "exitCode": 0,
+    "summary": "Bifrost pipeline contract passed: sequential builds, shared identity, Test republish wiring, production internals stripping, cleanup, signing request, settings sync and upgrade modes.\n"
+  },
+  {
+    "name": "Test-SharedAlpacaContainer",
+    "exitCode": 0,
+    "summary": "Bifrost shared container: phase=Test, id=shared-123, container mode=Default.\nBifrost: republishing Test MainApp 28.0.2.0 on shared container shared-123, SHA256=2C41014218B8F92EEB81B8A37FADEEF3D52F163DE1D3E8BD60687112E19FCC42.\nBifrost: Test MainApp republish completed; the test app may now be deployed.\nShared Alpaca pipeline checks passed: plan validation, mode preservation, physical identity, compatibility guard, republish ordering, missing grant, and Default passthrough.\n"
+  }
+]

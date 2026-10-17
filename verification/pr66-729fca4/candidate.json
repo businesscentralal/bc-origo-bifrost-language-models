@@ -1,0 +1,22 @@
+{
+  "sha": "729fca40378bcd7e01dc04138ed87f69e116dfde",
+  "mainSha": "2592d100a1d20444afe263515d68c8cf508aa655",
+  "sourceManifestHash": "7dc0c7b8539b3054d4363ae6497fcf9005c1cbbbefe76caca301654e80bb2b49",
+  "symbolHashes": {
+    "Microsoft.Any.1.0.0.0.app": "ae3d224111d1a8beb359f7dcaa13801f96cc35131b63e46d3c72975f28daca45",
+    "Microsoft.Application.28.0.0.0.app": "bae1e8c18324ee58f9d7f0be5150d099aee5ed470ba98ba47d753b14152f0d89",
+    "Microsoft.Application_Test_Library.28.5.0.0.app": "a3e18a6894ae2f5a5322b67d5164b66d647d9507ede68c1994a6e8ffb7a0513f",
+    "Microsoft.Base_Application.28.0.0.0.app": "ee8658deb38db9266a25ae658fb2626749b2725adf5bbdbd85f23cf07ccd4219",
+    "Microsoft.Business_Foundation.28.5.0.0.app": "2ef57ee32de3edeab87c216f295e6a2af701e9d3c0e5054d5cfd0d8f96063a52",
+    "Microsoft.IS_Core.28.0.0.0.app": "b258881e4dae5bf9fd00ee8ea1dc36e284b761c546496377588cd7ebb522521c",
+    "Microsoft.Library_Assert.1.0.0.0.app": "d3614861eb56e10ed1a3ad3ccf9f9ab5af37617070827d5bf55f28b8ea586a53",
+    "Microsoft.Library_Variable_Storage.1.0.0.0.app": "33a331a56d68abb517e7351474a9f994676a891994b7795180e1fb9805269075",
+    "Microsoft.Permissions_Mock.28.5.0.0.app": "99bfa841ee4544e32fcee3b820f845dc0e348422f61c332b492c791d63007b0b",
+    "Microsoft.System.28.0.0.0.app": "aad9159897db58b8e2e87ff2ee499a272d786c1140071e273dd6bfdd621f6809",
+    "Microsoft.System_Application.28.0.0.0.app": "092ea98e24a234626c39f85fd31fcafeb759dc9bbe656361bf83658c887cc57a",
+    "Microsoft.System_Application_Test_Library.28.5.0.0.app": "2754b44e00709fc52d0cc358d1f7f5d0986b7497096304919923b3fed7ce32ab",
+    "Microsoft.Tests_TestLibraries.1.0.0.0.app": "c258d278d5c8808be8e7839fc1930154265a13ca85e5f46e58ec6f93ceb1d73d",
+    "Microsoft.Test_Runner.1.0.0.0.app": "5cb48d7652f5e695f8d34fd9faa9a26f323117ddef3f7709082882625ebf95aa",
+    "Origo_Bifrost Foundation_28.0.5.569.app": "8e272544945a3a4bc575733dadf95c7c251628a2d6f1ef4189972c80039f7c0e"
+  }
+}
