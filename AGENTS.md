@@ -33,7 +33,7 @@ values:
 | --- | --- | --- |
 | enum `Message Type ori` | `LangModel Message Type ori` | `LLM.Prompt.Complete` |
 | enum `Request Log Type ori` | `LangModel Req Log Type ori` | `Copilot` and `LLM` with their maskers |
-| enum `Chat Provider Type ori` | `LangModel Chat Provider Type` | `LanguageModels` |
+| enum `Chat Provider Type ori` | `LangModel Chat Prov Type ori` | `LanguageModels` |
 | table `User Setup ori` | `User Setup LangModel ori` | field `Bifrost Language Model Code` |
 | page `User Setup Editor ori` | `User Setup Editor LangMdl ori` | the field and the chat FactBox |
 | page `Setup ori` | `Setup LangModel ori` | the one **Bifrost Language Models** action |

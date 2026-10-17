@@ -66,10 +66,10 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
 
 ### Object ids (re-derived 05.10.2026 from `main` and open PRs)
 - App, in use: 10035335, 10035337-10035340, 10035342-10035382, 10035384-10035396, 10035398-10035407,
-  10035409-10035419, 10035421-10035423, **10035425** `LangModel Turn Guard ori` (#40). Enumextension 10035384
-  `LangModel Chat Provider Type` shares its number with codeunit 10035384 (object ids are per type).
+  10035409-10035419, 10035421-10035423, **10035425** `LangModel Turn Guard ori` (#40), **10035426**/**10035427** permissionsetextensions `BIFROST LLM Full ori` / `BIFROST LLM Read ori` (extend Foundation's Full and Read roles). Enumextension 10035384
+  `LangModel Chat Prov Type ori` shares its number with codeunit 10035384 (object ids are per type).
 - App, from #50 (#49): codeunit **10035408** `LangModel Field Restrict ori`.
-- App, free (reusable, codeunits/pages): 10035336, 10035341, 10035383, 10035397, 10035420, 10035424 and 10035426-10035484.
+- App, free (reusable, codeunits/pages): 10035336, 10035341, 10035383, 10035397, 10035420, 10035424 and 10035428-10035484.
   10035336 (table `Chat Gate ori`, moved to Foundation) and 10035420/10035424 (take-over codeunits, #27) stay free
   for their own object type only; never reuse a freed table id.
 - `Bifrost Language Model ori` field numbers in use: 1, 2, 10-12, 20-26 (26 `Context Tokens`, #40). Next free: 27.

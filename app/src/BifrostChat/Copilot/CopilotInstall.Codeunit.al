@@ -81,7 +81,7 @@ codeunit 10035390 "Copilot Install ori"
     procedure RegisterCapability()
     var
         CopilotCapability: Codeunit "Copilot Capability";
-        LearnMoreUrlTok: Label 'https://www.origo.is/', Locked = true;
+        LearnMoreUrlTok: Label 'https://docs.bifrost.origo.is/en-us/language-models/', Locked = true;
     begin
         if not CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori") then
             CopilotCapability.RegisterCapability(

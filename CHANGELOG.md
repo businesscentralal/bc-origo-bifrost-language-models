@@ -8,6 +8,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 - Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.
 
+### Changed (2026-10-14) - AppSource readiness metadata (#66)
+
+- The app links to the documentation, privacy statement and licence terms on docs.bifrost.origo.is. The Copilot capability's Learn more link in codeunit 10035390 `Copilot Install ori` points to the Language Models documentation.
+- Permission set 10035398 `BIFROST LLM Chat ori` now also grants read on the language model table, so a user with that set and Foundation's `BIFROST Chat ori` can run `LLM.Prompt.Complete` without a permission error.
+- The enum extension that registers Language Models as a chat provider is renamed `LangModel Chat Prov Type ori` (id 10035384 unchanged) so every object carries the `ori` affix. It is part of the first release, so nothing that was published is affected.
+- Foundation's `BIFROST Full ori` and `BIFROST Read ori` roles now include the Language Models objects through permission set extensions 10035426 `BIFROST LLM Full ori` and 10035427 `BIFROST LLM Read ori`, so administrators and readers need no second assignment.
+- New test codeunit 96032 `LLM Prompt Compl Perm Tests` covers restricted chat permissions. Changed test codeunit 96001 `Mock Bifrost Chat Provider` supports the permission regression tests.
+
 ### Fixed (2026-10-16) - Locale-independent test assertions (#73)
 
 - Test codeunits 96002, 96004, 96009 and 96018 compare chat errors, endpoint hints, missing-model errors and Copilot confirmation/success messages against translated expected labels in the active session language. The test app includes Icelandic translations for those labels. Codeunit 96019 reads English discovery text under LCID1033 and restores the caller's language before assertions, including when discovery raises an error. Product source and test coverage remain unchanged.
