@@ -136,7 +136,7 @@ user enters their personal key once.
 
 ## Objects
 
-Objects use the `ori` affix convention; the existing enumextension `LangModel Chat Provider Type` (10035384) retains its fixed name within the app namespace. The free ids are listed in `.claude/CLAUDE.md`.
+Objects use the `ori` affix convention; the enumextension is `LangModel Chat Prov Type ori` (10035384). The free ids are listed in `.claude/CLAUDE.md`.
 
 ### Tables
 
@@ -217,7 +217,7 @@ Objects use the `ori` affix convention; the existing enumextension `LangModel Ch
 | ID | Name | Extends | Purpose |
 | --- | --- | --- | --- |
 | 10035340 | `Copilot Capability ori` | `Copilot Capability` (Microsoft) | Registers the Bifrost Chat capability with the Copilot framework. |
-| 10035384 | `LangModel Chat Provider Type` | `Chat Provider Type ori` (Foundation) | Adds `LanguageModels`, implemented by `LangModel Chat Provider ori`. |
+| 10035384 | `LangModel Chat Prov Type ori` | `Chat Provider Type ori` (Foundation) | Adds `LanguageModels`, implemented by `LangModel Chat Provider ori`. |
 | 10035399 | `LangModel Message Type ori` | `Message Type ori` (Foundation) | Adds `LLM.Prompt.Complete`. |
 | 10035400 | `LangModel Req Log Type ori` | `Request Log Type ori` (Foundation) | Adds the `Copilot` and `LLM` request log types with their maskers. |
 
@@ -256,9 +256,11 @@ Objects use the `ori` affix convention; the existing enumextension `LangModel Ch
 
 | ID | Name | Purpose |
 | --- | --- | --- |
-| 10035398 | `BIFROST LLM Chat ori` | Provider execute and secrets. Assign with Foundation's `BIFROST Chat ori`. |
+| 10035398 | `BIFROST LLM Chat ori` | Provider execute, secrets and read on the language model table. Assign with Foundation's `BIFROST Chat ori`. |
 | 10035404 | `BIFROST LLM ori` | Full access to the module. |
 | 10035405 | `BIFROST LLM Rd ori` | Read-only access to language models. |
+| 10035426 | `BIFROST LLM Full ori` (permissionsetextension) | Adds the `BIFROST LLM ori` grants to Foundation's `BIFROST Full ori`. |
+| 10035427 | `BIFROST LLM Read ori` (permissionsetextension) | Adds the `BIFROST LLM Rd ori` grants to Foundation's `BIFROST Read ori`. |
 | 10035407 | `BIFROST ChatSvc ori` | The shared (service) API key gate. |
 
 ---
@@ -317,7 +319,7 @@ translation under `i18n/is-IS/docusaurus-plugin-content-docs-help-language-model
 | `app/src/Providers/Shared/` | `LangModel Prov. Base ori`, `LangModel API Client ori`, `LangModel Chat Proxy ori`, `LangModel Turn Guard ori`, `Chat Svc Gate ori`, `LLM Req Log Masker ori` |
 | `app/src/Providers/OpenAI/`, `AzureOpenAI/`, `CustomLLM/`, `Anthropic/`, `xAI/`, `Gemini/` | The six external chat providers |
 | `app/src/Setup/` | `LangModel Setup ori`, `LangModel Secrets ori`, `LangModel Registration ori` |
-| `app/src/Permission Set/` | `BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST LLM Chat ori`, `BIFROST ChatSvc ori` |
+| `app/src/Permission Set/` | `BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST LLM Chat ori`, `BIFROST ChatSvc ori` and the Full/Read role extensions |
 | `app/Translations/` | Icelandic translation (`Bifrost Language Models.is-IS.xlf`, built by `tools/Update-IcelandicXlf.ps1`) |
 | `test/` | Test app (`Bifrost Language Models - Tests`, object range 96000–96199) |
 | `test/reports/` | Internal test reports, not published |

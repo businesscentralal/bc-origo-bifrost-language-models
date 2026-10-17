@@ -19,7 +19,7 @@ codeunit 96004 "LangModel Field Restrict Tests"
 
     var
         Assert: Codeunit "Library Assert";
-        EndpointHintTxt: Label 'Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.', Locked = true;
+        EndpointHintTxt: Label 'Use the Bifrost Language Model card or the Bifrost Language Models setup page to change the endpoint fields.', Comment = 'is-IS=Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.';
 
     /// <summary>
     /// Verifies that the three endpoint fields are write-restricted.

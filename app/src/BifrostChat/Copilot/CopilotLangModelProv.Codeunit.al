@@ -210,7 +210,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
     local procedure DoTestConnection(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
         CopilotCapability: Codeunit "Copilot Capability";
-        NotRegisteredErr: Label 'The Bifrost Chat capability is not registered. Try reinstalling the extension.', Comment = 'is-IS=Bifröst Chat hæfnin er ekki skráð. Prófaðu að setja viðbótina upp aftur.';
+        NotRegisteredErr: Label 'The Bifrost Chat capability is not registered. Try reinstalling the extension.', Comment = 'is-IS=Bifröst spjallgetan er ekki skráð. Prófaðu að setja viðbótina upp aftur.';
     begin
         if not CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori") then begin
             Argument.SetErrorMessage(NotRegisteredErr);

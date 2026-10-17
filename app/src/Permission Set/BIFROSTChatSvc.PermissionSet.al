@@ -11,7 +11,7 @@ using Origo.Bifrost;
 permissionset 10035407 "BIFROST ChatSvc ori"
 {
     Assignable = true;
-    Caption = 'Chat Service Gate', MaxLength = 30, Comment = 'is-IS=LLM þjónustuhlið';
+    Caption = 'Chat Service Gate', MaxLength = 30, Comment = 'is-IS=Spjallþjónustuhlið';
 
     Permissions =
         table "Chat Svc Gate ori" = X,

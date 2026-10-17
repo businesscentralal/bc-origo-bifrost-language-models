@@ -63,7 +63,7 @@ page 10035344 "Bifrost LangModel List ori"
             {
                 ApplicationArea = All;
                 Caption = 'Init Copilot Defaults', Comment = 'is-IS=Frumstilla Copilot sjálfgildi';
-                ToolTip = 'Registers the Copilot capability with Microsoft billing, creates a default COPILOT language model if needed, and refreshes the default skill content.', Comment = 'is-IS=Skráir Copilot-getu með Microsoft-reikningagerð, býr til sjálfgefið COPILOT-mállíkan ef þarf og uppfærir sjálfgefið hæfniefni.';
+                ToolTip = 'Registers the Copilot capability with Microsoft billing, creates a default COPILOT language model if needed, and refreshes the default skill content.', Comment = 'is-IS=Skráir Copilot-getuna með reikningsgerðina Microsoft Billed, býr til sjálfgefið COPILOT-mállíkan ef þarf og uppfærir sjálfgefið hæfniefni.';
                 Image = Setup;
 
                 trigger OnAction()

@@ -10,9 +10,48 @@ All notable changes to Bifrost Language Models are documented here.
 - The shared safe transport and error contract are in codeunits 10035411/10035410. Completion paths in codeunits 10035413–10035415 and 10035417–10035419 use them; chat and model-list operations retain their existing behavior. English/Icelandic error help and XLF are updated. Both manifests require Foundation 28.0.4.0 for `Retryable`; product/test top-level versions are unchanged.
 - Test codeunits 96034/96033 cover prompt dispatch for six providers, authentication/rate/server/timeout/blocked errors, secret-fragment rejection, debug logging, prompt types, success/files and restricted chat permissions.
 - Issue #65 prompt tests use codeunit 96034 to avoid the independent permission-test codeunit 96032 in PR #66; all existing assertions remain unchanged.
+- After integrating #66, codeunit 96032 verifies coded `Error`/`PermissionDenied` instead of a thrown platform error in both LCIDs 1033/1039. The dispatcher receives each LCID explicitly. The negative cases assert the Foundation chat grant, absent model-read permission, localized refusal, actionable permission-set guidance and no provider call.
 - AC7 tests in codeunit 96034 explicitly name the Foundation API transport baseline and assert that it grants neither the Chat Gate nor language-model read. The positive test adds both chat permission sets; Foundation transport permissions remain unchanged.
 
 - AC8: codeunit 10035396 now gives every errors-chapter string an Icelandic translator comment. Foundation #777 intentionally renders Help chapter prose in English at both LCIDs 1033/1039; runtime error labels remain localized. Codeunit 96034 covers English/Icelandic authentication, retry, blocked HTTP, provider failure and prompt-validation labels and next steps.
+
+### Fixed (2026-10-15) - Missing API key instruction (#70)
+
+- Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.
+
+### Changed (2026-10-14) - AppSource readiness metadata (#66)
+
+- The app links to the documentation, privacy statement and licence terms on docs.bifrost.origo.is. The Copilot capability's Learn more link in codeunit 10035390 `Copilot Install ori` points to the Language Models documentation.
+- Permission set 10035398 `BIFROST LLM Chat ori` now also grants read on the language model table, so a user with that set and Foundation's `BIFROST Chat ori` can run `LLM.Prompt.Complete` without a permission error.
+- The enum extension that registers Language Models as a chat provider is renamed `LangModel Chat Prov Type ori` (id 10035384 unchanged) so every object carries the `ori` affix. It is part of the first release, so nothing that was published is affected.
+- Foundation's `BIFROST Full ori` and `BIFROST Read ori` roles now include the Language Models objects through permission set extensions 10035426 `BIFROST LLM Full ori` and 10035427 `BIFROST LLM Read ori`, so administrators and readers need no second assignment.
+- New test codeunit 96032 `LLM Prompt Compl Perm Tests` covers restricted chat permissions. Changed test codeunit 96001 `Mock Bifrost Chat Provider` supports the permission regression tests.
+
+### Fixed (2026-10-16) - Locale-independent test assertions (#73)
+
+- Test codeunits 96002, 96004, 96009 and 96018 compare chat errors, endpoint hints, missing-model errors and Copilot confirmation/success messages against translated expected labels in the active session language. The test app includes Icelandic translations for those labels. Codeunit 96019 reads English discovery text under LCID1033 and restores the caller's language before assertions, including when discovery raises an error. Product source and test coverage remain unchanged.
+
+- Keep the expected Icelandic labels in test codeunits 96002 and 96018 synchronized with the reviewed product wording from #64 after merging main.
+
+### Fixed (2026-10-15) - Preserve the Bifrost pipeline (PR #57)
+
+- Added `.github/workflows/BifrostPipeline.yaml` and `tools/Test-BifrostPipeline.ps1` to verify sequential Default/Test builds, shared physical container identity, Test production-app republishing, Default internals stripping, signing requests, deferred cleanup, merged settings before secrets, and Test-only upgrade skipping. `AGENTS.md` records these preservation requirements for system updates.
+- `.AL-Go/settings.json` selects a full paired Default/Test build for `.github/workflows/**`, `tools/Test-BifrostPipeline.ps1` and `app/Translations/*.xlf` changes.
+- `LangModel Chat Provider Tests` (codeunit 96002) closes the real customer page, deletes its fixture and restores routing before expected assertion errors can roll back the customer. The wrong-table, wrong-SystemId and wrong-caption checks still reject incorrect context and recheck the original captured values.
+
+### Added (2026-10-15) - AppSource offer texts
+
+- Added English and Icelandic Partner Center listing texts in `appsource/offer/`, including summaries, descriptions, search keywords, links and screenshot descriptions. Refs #67.
+
+### Changed (2026-10-14) - Icelandic translations reviewed for AppSource (#64)
+
+- The Icelandic (is-IS) texts were reviewed for AppSource: the texts in 33 objects now follow the Business Central glossary (core#702), for example heimildasamstæða, viðskiptamaður, kreditreikningur, Sannvottun, skilaboðategund and tákn. The API key actions on the language model card now read "Setja inn persónulegan API-lykil" and "Setja inn sameiginlegan API-lykil", and the missing-key hints use the same wording. English texts, logic and object IDs are unchanged. Changed objects:
+  - Pages: 10035342 `Bifrost Chat Model List ori`; 10035343 `Bifrost LangModel Card ori`; 10035344 `Bifrost LangModel List ori`; 10035421 `LangModel Setup ori`.
+  - Page extensions: 10035347 `Bifrost Chat CustomerList ori`; 10035356 `Bifrost Chat IncomingDocs ori`; 10035359 `Bifrost Chat ItemList ori`; 10035361 `Bifrost Chat PurchCrMemos ori`; 10035364 `Bifrost Chat PurchOrders ori`; 10035366 `Bifrost Chat PurchQuotes ori`; 10035367 `Bifrost Chat PurchInvoices ori`; 10035369 `Bifrost Chat PurchRetOrds ori`; 10035371 `Bifrost Chat SalesCrMemos ori`; 10035374 `Bifrost Chat SalesOrders ori`; 10035376 `Bifrost Chat SalesQuotes ori`; 10035377 `Bifrost Chat SalesInvoices ori`; 10035379 `Bifrost Chat SalesRetOrds ori`; 10035381 `Bifrost Chat VendorList ori`; 10035402 `User Setup Editor LangMdl ori`.
+  - Codeunits: 10035382 `LangModel Chat Provider ori`; 10035385 `Copilot LangModel Prov. ori`; 10035389 `Bifrost LangModel None ori`; 10035390 `Copilot Install ori`; 10035396 `LLM Prompt Compl Impl ori`; 10035412 `LangModel Chat Proxy ori`; 10035414 `Azure OAI LangModel Prov. ori`; 10035422 `LangModel Secrets ori`.
+  - Tables: 10035335 `Bifrost Language Model ori`; 10035337 `Bifrost Chat Argument ori`; 10035406 `Chat Svc Gate ori`.
+  - Enums: 10035338 `Bifrost Chat Proc. Type ori`.
+  - Permission sets: 10035405 `BIFROST LLM Rd ori`; 10035407 `BIFROST ChatSvc ori`.
 
 ### Fixed (2026-10-13) - OpenAI endpoint defaults (#60)
 

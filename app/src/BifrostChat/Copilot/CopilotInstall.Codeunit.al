@@ -64,7 +64,7 @@ codeunit 10035390 "Copilot Install ori"
     /// <returns>True after successful initialization; false when the user declines.</returns>
     internal procedure InitCopilotDefaults(): Boolean
     var
-        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta mun skrá Bifröst Copilot-getu sem Microsoft-reiknuð, búa til eða uppfæra COPILOT-mállíkanið og uppfæra sjálfgefið hæfniefni.\Viltu halda áfram?';
+        ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\Viltu halda áfram?';
         DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
     begin
         if not Confirm(ConfirmQst, false) then
@@ -81,7 +81,7 @@ codeunit 10035390 "Copilot Install ori"
     procedure RegisterCapability()
     var
         CopilotCapability: Codeunit "Copilot Capability";
-        LearnMoreUrlTok: Label 'https://www.origo.is/', Locked = true;
+        LearnMoreUrlTok: Label 'https://docs.bifrost.origo.is/en-us/language-models/', Locked = true;
     begin
         if not CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori") then
             CopilotCapability.RegisterCapability(

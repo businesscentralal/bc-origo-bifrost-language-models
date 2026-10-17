@@ -55,7 +55,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'One-shot LLM completion — send a prompt, get text back. No tools, no chat.', Comment = 'is-IS=Einskots LLM framkvæmd — senda kvaðningu, fá texta til baka. Engin tól, ekkert spjall.';
+        DescriptionLbl: Label 'One-shot LLM completion — send a prompt, get text back. No tools, no chat.', Comment = 'is-IS=Einskots LLM-úrvinnsla — sendu kvaðningu og fáðu texta til baka. Engin verkfæri, ekkert spjall.';
     begin
         exit(DescriptionLbl);
     end;
@@ -65,7 +65,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í áætluðu verki';
+        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni';
     begin
         exit(KeywordsLbl);
     end;
@@ -75,7 +75,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetSelectionDescription(): Text
     var
-        SelectionDescriptionLbl: Label 'Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.', Comment = 'is-IS=Býr til textasvar úr kvaðningu án tóla, færslusamhengis eða samtalsstöðu; notaðu sérstaka boðgerð þegar hún er til.';
+        SelectionDescriptionLbl: Label 'Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.', Comment = 'is-IS=Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; notaðu sérstaka skilaboðategund þegar hún er til.';
     begin
         exit(SelectionDescriptionLbl);
     end;

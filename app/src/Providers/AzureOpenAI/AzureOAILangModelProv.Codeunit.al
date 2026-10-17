@@ -14,7 +14,7 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         AuthHeaderNameTok: Label 'api-key', Locked = true;
         ProviderNameTok: Label 'Azure OpenAI', Locked = true;
         ApiKeyLabelLbl: Label 'API Key', Comment = 'is-IS=API-lykill';
-        ApiKeyInstructionLbl: Label 'Enter your Azure OpenAI deployment API key.', Comment = 'is-IS=Sláðu inn Azure OpenAI API-lykilinn þinn.';
+        ApiKeyInstructionLbl: Label 'Enter your Azure OpenAI deployment API key.', Comment = 'is-IS=Sláðu inn API-lykil Azure OpenAI-uppsetningarinnar þinnar.';
         ApiKeyDocsUrlTok: Label 'https://portal.azure.com', Locked = true;
         ApiKeyDocsLinkTextLbl: Label 'Azure Portal', Comment = 'is-IS=Azure Portal';
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';

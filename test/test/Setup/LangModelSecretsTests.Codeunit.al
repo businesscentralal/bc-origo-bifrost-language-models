@@ -20,6 +20,7 @@ codeunit 96009 "LangModel Secrets Tests"
         Any: Codeunit Any;
         IsInitialized: Boolean;
         TestCodeSequence: Integer;
+        LanguageModelCodeMissingErr: Label 'A language model code must be specified before an API key can be stored.', Comment = 'is-IS=Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.';
         TestCodePrefixTok: Label 'X-SEC-', Locked = true;
         TestCodeFilterTok: Label 'X-SEC-*', Locked = true;
 
@@ -426,7 +427,7 @@ codeunit 96009 "LangModel Secrets Tests"
         asserterror LangModelSecrets.SetServiceKey('', AsSecret('sk-shared'));
 
         // [THEN] The call fails
-        Assert.ExpectedError('A language model code must be specified');
+        Assert.ExpectedError(LanguageModelCodeMissingErr);
     end;
 
     /// <summary>
