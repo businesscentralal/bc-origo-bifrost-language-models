@@ -25,7 +25,7 @@ add-in, FactBox and Focus pages, `Bifrost Chat Mgt ori`, the chat gate, the MCP 
 
 ## Relationship to Bifrost Foundation
 
-The app depends on Foundation **28.0.1.0** or later and uses only its public API (`internalsVisibleTo` in
+The app depends on Foundation **28.0.4.0** or later and uses only its public API (`internalsVisibleTo` in
 Foundation names only Foundation's own test app). Foundation owns the extension points; this app supplies the
 values:
 

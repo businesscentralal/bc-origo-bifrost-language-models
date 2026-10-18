@@ -152,7 +152,6 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         ChatUrl: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         SystemPrompt := GetJsonText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then begin
             SystemMsg.Add('role', 'system');
@@ -166,9 +165,12 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         RequestBody.Add('messages', Messages);
 
         ChatUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok) + '/v1/chat/completions';
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ApiClient.ExtractText(Response));
         ResponseObj.WriteTo(ResultText);
@@ -192,7 +194,6 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         UserPrompt: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         UserPrompt := GetFirstUserMessage(PayloadObject);
         TextBlock.Add('type', 'input_text');
         TextBlock.Add('text', UserPrompt);
@@ -214,9 +215,12 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         RequestBody.Add('max_output_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
 
         ResponsesUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok) + '/v1/responses';
-        Response := ApiClient.SendToEndpoint(ResponsesUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ResponsesUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ExtractResponsesText(Response));
         ResponseObj.WriteTo(ResultText);

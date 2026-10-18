@@ -4,6 +4,17 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-14) - Safe one-shot provider failures (#65)
+
+- `LLM.Prompt.Complete` (codeunit 10035396) rejects non-string prompts with `InvalidParameterFormat`. All six external providers return coded authentication, blocked HTTP and retryable transport errors with next steps; provider error bodies and API-key fragments are never returned or logged by this path. Success `reply`/`text` behavior is preserved, including inline and stored files.
+- The shared safe transport and error contract are in codeunits 10035411/10035410. Completion paths in codeunits 10035413–10035415 and 10035417–10035419 use them; chat and model-list operations retain their existing behavior. English/Icelandic error help and XLF are updated. Both manifests require Foundation 28.0.4.0 for `Retryable`; product/test top-level versions are unchanged.
+- Test codeunits 96034/96033 cover prompt dispatch for six providers, authentication/rate/server/timeout/blocked errors, secret-fragment rejection, debug logging, prompt types, success/files and restricted chat permissions.
+- Issue #65 prompt tests use codeunit 96034 to avoid the independent permission-test codeunit 96032 in PR #66; all existing assertions remain unchanged.
+- After integrating #66, codeunit 96032 verifies coded `Error`/`PermissionDenied` instead of a thrown platform error in both LCIDs 1033/1039. The dispatcher receives each LCID explicitly. The negative cases assert the Foundation chat grant, absent model-read permission, localized refusal, actionable permission-set guidance and no provider call.
+- AC7 tests in codeunit 96034 explicitly name the Foundation API transport baseline and assert that it grants neither the Chat Gate nor language-model read. The positive test adds both chat permission sets; Foundation transport permissions remain unchanged.
+
+- AC8: codeunit 10035396 now gives every errors-chapter string an Icelandic translator comment. Foundation #777 intentionally renders Help chapter prose in English at both LCIDs 1033/1039; runtime error labels remain localized. Codeunit 96034 covers English/Icelandic authentication, retry, blocked HTTP, provider failure and prompt-validation labels and next steps.
+
 ### Fixed (2026-10-15) - Missing API key instruction (#70)
 
 - Page 10035343 `Bifrost LangModel Card ori` places the missing-key instruction in a conditional group so the Web Client renders the localized instruction on saved keyless models. The hint remains hidden when either a personal or shared key is stored, or the provider needs no key. Existing captions and translations are preserved. Test codeunit 96035 `LangModel Hint Tests` covers English/Icelandic, read/edit modes and both key scopes; rendered browser checks cover the client layout.

@@ -138,7 +138,6 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
         ChatUrl: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         if not PayloadObject.ReadFrom(Argument.GetPayload()) then
             exit(BuildErrorJson('Invalid payload JSON.'));
 
@@ -157,9 +156,12 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
 
         SetAzureChatPath(Argument);
         ChatUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, ''), Argument."Chat Path");
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ApiClient.ExtractText(Response));
         ResponseObj.WriteTo(ResultText);

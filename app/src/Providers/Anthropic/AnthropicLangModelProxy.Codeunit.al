@@ -104,6 +104,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
     [NonDebuggable]
     local procedure CallAnthropicDirect(var Messages: JsonArray; Model: Text; SystemPrompt: Text; ApiKey: SecretText; BaseUrl: Text; TimeoutMs: Integer; MaxTokens: Integer): Text
     var
+        ApiClient: Codeunit "LangModel API Client ori";
+        ExtraHeaders: JsonObject;
+        ResponseText: Text;
         Response: JsonObject;
         RequestBody: JsonObject;
         UsageObject: JsonObject;
@@ -116,8 +119,12 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             RequestBody.Add('system', SystemPrompt);
         RequestBody.Add('messages', Messages);
 
-        if not TrySendMessages(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response) then
-            exit(BuildErrorResponse(GetLastErrorText()));
+        ExtraHeaders.Add('anthropic-version', AnthropicVersionTok);
+        Response := ApiClient.SendPromptToEndpoint(StrSubstNo(MessagesPathTok, BaseUrl), 'x-api-key', ApiKey, TimeoutMs, RequestBody, ExtraHeaders);
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResponseText);
+            exit(ResponseText);
+        end;
 
         if Response.Get('usage', UsageToken) then
             if UsageToken.IsObject() then

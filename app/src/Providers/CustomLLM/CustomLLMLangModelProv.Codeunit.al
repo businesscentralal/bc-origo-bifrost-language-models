@@ -131,7 +131,6 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
         ChatUrl: Text;
         ResultText: Text;
     begin
-        ProviderBase.EnsureHttpClientAllowed();
         if not PayloadObject.ReadFrom(Argument.GetPayload()) then
             exit(BuildErrorJson('Invalid payload JSON.'));
 
@@ -149,9 +148,12 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
         RequestBody.Add('messages', Messages);
 
         ChatUrl := ProviderBase.GetBaseUrl(Argument, '') + '/v1/chat/completions';
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
+        Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 300000), RequestBody);
-        ApiClient.LogLastRequest();
+        if Response.Contains('error') then begin
+            Response.WriteTo(ResultText);
+            exit(ResultText);
+        end;
 
         ResponseObj.Add('reply', ApiClient.ExtractText(Response));
         ResponseObj.WriteTo(ResultText);

@@ -39,7 +39,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
     end;
 
     /// <summary>
-    /// Verifies that a session without BIFROST LLM Chat ori cannot read the language model and fails with the permission error, in English.
+    /// Verifies that a session without BIFROST LLM Chat ori cannot read the language model and returns coded PermissionDenied, in English.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
@@ -50,7 +50,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
     end;
 
     /// <summary>
-    /// Verifies that a session without BIFROST LLM Chat ori cannot read the language model and fails with the permission error, in Icelandic.
+    /// Verifies that a session without BIFROST LLM Chat ori cannot read the language model and returns coded PermissionDenied, in Icelandic.
     /// </summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
@@ -81,7 +81,7 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         LibraryLowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
 
         // [WHEN] LLM.Prompt.Complete runs for that language model
-        ResponseJson := Execute(StrSubstNo('{"prompt":"Hello","roleCode":"%1"}', ModelCodeTok));
+        ResponseJson := Execute(StrSubstNo('{"prompt":"Hello","roleCode":"%1"}', ModelCodeTok), LanguageId);
         GlobalLanguage(PreviousLanguage);
 
         // [THEN] it passes the permission check, reads the model and returns the provider's completion
@@ -93,8 +93,11 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
 
     local procedure VerifyWithoutLLMChatFails(LanguageId: Integer)
     var
+        Model: Record "Bifrost Language Model ori";
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
         LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
+        ResponseJson: JsonObject;
         PreviousLanguage: Integer;
     begin
         // [GIVEN] a language model with the mock provider
@@ -108,31 +111,40 @@ codeunit 96032 "LLM Prompt Compl Perm Tests"
         LibraryLowerPermissions.AddPermissionSet('BIFROST API ori'); // the transport every MCP/API caller holds; indirect access to the message tables
         LibraryLowerPermissions.AddPermissionSet('BIFROST Chat ori');
 
+        Assert.IsTrue(BifrostChatMgt.HasChatPermission(), 'Foundation chat must grant the Chat Gate.');
+        Assert.IsFalse(Model.ReadPermission(), 'Foundation chat and API transport must not grant model read.');
+
         // [WHEN] LLM.Prompt.Complete runs for that language model
-        asserterror Execute(StrSubstNo('{"prompt":"Hello","roleCode":"%1"}', ModelCodeTok));
+        ResponseJson := Execute(StrSubstNo('{"prompt":"Hello","roleCode":"%1"}', ModelCodeTok), LanguageId);
         GlobalLanguage(PreviousLanguage);
 
-        // [THEN] the read of the language model fails with a permission error and the provider is not called
-        // The platform message is localized (is-IS: 'Núverandi heimildir ...'), so assert the table id it names, which is language-neutral and specific.
-        Assert.ExpectedError('10035335');
-        if LanguageId = 1033 then
-            Assert.ExpectedError('permission');
+        // [THEN] missing model-read permission produces a coded refusal without calling the provider.
+        Assert.AreEqual('Error', ResponseJson.GetText('status'), 'The response must be a coded failure.');
+        Assert.AreEqual('PermissionDenied', ResponseJson.GetText('code'), 'Missing model read must return PermissionDenied.');
+        Assert.IsTrue(ResponseJson.GetText('nextStep').Contains('BIFROST LLM Chat ori'), 'The next step must name the missing permission set.');
+        if LanguageId = 1039 then
+            Assert.AreEqual('Þú hefur ekki heimild til að vinna kvaðningar með mállíkani.', ResponseJson.GetText('error'), 'The refusal must use Icelandic for LCID 1039.')
+        else
+            Assert.AreEqual('You do not have permission to complete prompts with a language model.', ResponseJson.GetText('error'), 'The refusal must use English for LCID 1033.');
         Assert.IsFalse(MockProvider.WasCompletePromptCalled(), 'the provider must not be called without BIFROST LLM Chat ori');
     end;
 
-    local procedure Execute(RequestBody: Text) ResponseJson: JsonObject
+    local procedure Execute(RequestBody: Text; LanguageId: Integer) ResponseJson: JsonObject
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
         ResponseContent: BigText;
-        MessageVersion: Enum "Message Version ori";
+        EmptyTaskId: Guid;
+        MessageId: Guid;
+        ResponseTime: Duration;
         ResponseContentType: Text[100];
         ResponseText: Text;
     begin
         // Go through the dispatcher: the implementation asserts Argument.AssertIsLicensed(), and only Foundation's message task
         // can mark a call as licensed (SetLicensed is internal). Calling the implementation directly fails every case with the licence error.
         RequestContent.AddText(RequestBody);
-        Dispatcher.Execute("Message Type ori"::"LLM.Prompt.Complete", MessageVersion::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
+        // Execute uses the configured default language; pass the request LCID explicitly.
+        Dispatcher.EnqueueAndProcess("Message Type ori"::"LLM.Prompt.Complete", "Message Version ori"::"1.0", '', '', 'text/json', RequestContent, EmptyTaskId, LanguageId, MessageId, ResponseContent, ResponseContentType, ResponseTime);
         ResponseContent.GetSubText(ResponseText, 1);
         Assert.IsTrue(ResponseJson.ReadFrom(ResponseText), ResponseText);
     end;

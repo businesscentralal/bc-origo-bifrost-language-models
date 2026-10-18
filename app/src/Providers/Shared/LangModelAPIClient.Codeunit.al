@@ -104,6 +104,87 @@ codeunit 10035411 "LangModel API Client ori"
             Error(InvalidResponseErr);
     end;
 
+    /// <summary>Sends a one-shot prompt with safe failure metadata and no provider error text.</summary>
+    [NonDebuggable]
+    procedure SendPromptToEndpoint(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject): JsonObject
+    var
+        ExtraHeaders: JsonObject;
+    begin
+        exit(SendPromptToEndpoint(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders));
+    end;
+
+    /// <summary>Sends a prompt with optional protocol headers, discarding failed response bodies before logging.</summary>
+    [NonDebuggable]
+    procedure SendPromptToEndpoint(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject) Response: JsonObject
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        ResponseText: Text;
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+        Sent: Boolean;
+    begin
+        HasPendingLog := false;
+        if not ProviderBase.CanSendHttpRequests() then
+            exit(ProviderBase.BuildPromptError(0, true));
+        if not TryPostPrompt(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders, Sent, HttpStatus, HttpBlocked, ResponseText) then begin
+            ClearLastError();
+            exit(ProviderBase.BuildPromptError(0, HttpBlocked));
+        end;
+        if HttpBlocked or not Sent then
+            exit(ProviderBase.BuildPromptError(0, HttpBlocked));
+        if (HttpStatus < 200) or (HttpStatus > 299) then
+            exit(ProviderBase.BuildPromptError(HttpStatus, false));
+        if not Response.ReadFrom(ResponseText) then
+            exit(ProviderBase.BuildPromptError(-1, false));
+        if Response.Contains('error') then
+            exit(ProviderBase.BuildPromptError(-1, false));
+        // Prompt calls deliberately do not buffer provider text: even a nominally
+        // successful provider body may contain authentication diagnostics.
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryPostPrompt(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    var
+        HttpClientVar: HttpClient;
+        HttpContent: HttpContent;
+        HttpResponse: HttpResponseMessage;
+        Headers: HttpHeaders;
+        RequestText: Text;
+        HeaderName: Text;
+        Handled: Boolean;
+    begin
+        OnBeforePromptPost(Url, RequestBody, Handled, Sent, HttpStatus, HttpBlocked, ResponseText);
+        if Handled then
+            exit;
+        RequestBody.WriteTo(RequestText);
+        HttpContent.WriteFrom(RequestText);
+        HttpContent.GetHeaders(Headers);
+        Headers.Remove('Content-Type');
+        Headers.Add('Content-Type', 'application/json');
+        Headers := HttpClientVar.DefaultRequestHeaders();
+        if AuthHeaderName = 'Authorization' then
+            Headers.Add(AuthHeaderName, SecretStrSubstNo(BearerTok, ApiKey))
+        else
+            Headers.Add(AuthHeaderName, ApiKey);
+        foreach HeaderName in ExtraHeaders.Keys() do
+            Headers.Add(HeaderName, ExtraHeaders.GetText(HeaderName));
+        HttpClientVar.Timeout(TimeoutMs);
+        Sent := HttpClientVar.Post(Url, HttpContent, HttpResponse);
+        HttpBlocked := HttpResponse.IsBlockedByEnvironment();
+        if not Sent then
+            exit;
+        HttpStatus := HttpResponse.HttpStatusCode();
+        // Do not even read a failed provider body: it can echo fragments of secrets.
+        if HttpResponse.IsSuccessStatusCode() then
+            HttpResponse.Content.ReadAs(ResponseText);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforePromptPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    begin
+    end;
+
     /// <summary>
     /// Lists models from an explicit endpoint URL with the specified auth.
     /// </summary>
