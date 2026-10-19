@@ -27,7 +27,7 @@ Default branch: main
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
 - Permission set object names are at most 20 characters (`BIFROST LLM ori`, `BIFROST LLM Rd ori`, `BIFROST LLM Chat ori`, `BIFROST ChatSvc ori`). `BIFROST Chat ori` is Foundation's chat gate set, not this app's.
-- The brand name "Bifrost" lives in the namespace, the app name and user-facing captions - never as an object-name prefix. Exception: the chat feature is a product name, "Bifrost Chat" (objects `Bifrost Chat ... ori`, folder `app/src/BifrostChat`, Icelandic "Spjalla við Bifröst").
+- The brand name "Bifrost" lives in the namespace, the app name and user-facing captions - never as an object-name prefix. Exception: the chat feature is a product name, "Bifrost Chat" (objects `Bifrost Chat ... ori`, folder `app/src/BifrostChat`, Icelandic action "Spjalla með Bifröst", feature "Bifröst spjall", aligned with Foundation).
 - The chat "role" concept is the **Language Model**: table `Bifrost Language Model ori`, sub-objects `Bifrost LangModel ... ori` (Card, List, Prov., Provider, None, Test Ctx - `LangModel` keeps them within 30 characters), User Setup field `Bifrost Language Model Code`, Icelandic "mállíkan". The JSON request key `roleCode` stays (API contract).
 - "MCP Tool Server" keeps its protocol name (Model Context Protocol).
 - Icelandic captions use "Bifröst".

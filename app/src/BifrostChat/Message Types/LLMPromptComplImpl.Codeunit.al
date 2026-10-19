@@ -15,13 +15,13 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     Access = Internal;
 
     var
-        PromptDeniedWhenTxt: Label 'The caller does not hold Foundation''s BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app''s BIFROST LLM Chat ori.', Comment = 'is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.';
+        PromptDeniedWhenTxt: Label 'The caller does not hold Foundation''s BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app''s BIFROST LLM Chat ori.', Comment = 'is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Ef veitandi mállíkansins er ekki Copilot þarf einnig BIFROST LLM Chat ori úr þessu forriti.';
         MissingPromptWhenTxt: Label 'prompt is missing or empty.', Comment = 'is-IS=prompt vantar eða er tómt.';
         RoleNotFoundWhenTxt: Label 'roleCode is sent but no language model has that code.', Comment = 'is-IS=roleCode er sent en ekkert mállíkan hefur þann kóða.';
         NoProviderWhenTxt: Label 'The selected, the caller''s or the default language model has no usable chat provider or API key.', Comment = 'is-IS=Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.';
         PromptDeniedErr: Label 'You do not have permission to complete prompts with a language model.', Comment = 'is-IS=Þú hefur ekki heimild til að vinna kvaðningar með mállíkani.';
-        PromptDeniedExpectedTxt: Label 'the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot', Comment = 'is-IS=heimildasamstæðan BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda';
-        PromptDeniedNextStepTxt: Label 'Ask your administrator to assign the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot.', Comment = 'is-IS=Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.';
+        PromptDeniedExpectedTxt: Label 'the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot', Comment = 'is-IS=heimildasamstæðan BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot';
+        PromptDeniedNextStepTxt: Label 'Ask your administrator to assign the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot.', Comment = 'is-IS=Biddu kerfisstjóra um að úthluta þér heimildasamstæðunni BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot.';
         MissingPromptErr: Label 'The prompt is missing.', Comment = 'is-IS=Kvaðninguna vantar.';
         PromptExpectedTxt: Label 'a non-empty JSON string', Comment = 'is-IS=JSON-strengur sem er ekki tómur';
         InvalidPromptErr: Label 'The prompt must be a JSON string.', Comment = 'is-IS=Kvaðningin í prompt verður að vera JSON-strengur.';

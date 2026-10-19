@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-10-19) - Icelandic translation review for AppSource
+
+- Icelandic texts corrected in 12 objects: hyphenated compounds with foreign names (`Copilot-líkanið`, `HttpClient-köll`, `MCP-verkfæraþjónn`, `API-endapunktsslóð`), the Business Central field name "Leyfa HttpClient-beiðnir", "Auðkenning" instead of "Sannvottun" on the language model card, "móttekið skjal" for incoming documents (as in Foundation) and readable permission guidance in `LLM.Prompt.Complete` errors. English texts are unchanged. Every one of the 316 translatable texts has an Icelandic translation; the XLF is regenerated. Test codeunit 96034 asserts the new blocked-HTTP wording.
+
 ### Fixed (2026-10-14) - Safe one-shot provider failures (#65)
 
 - `LLM.Prompt.Complete` (codeunit 10035396) rejects non-string prompts with `InvalidParameterFormat`. All six external providers return coded authentication, blocked HTTP and retryable transport errors with next steps; provider error bodies and API-key fragments are never returned or logged by this path. Success `reply`/`text` behavior is preserved, including inline and stored files.

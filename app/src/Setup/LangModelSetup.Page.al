@@ -49,13 +49,13 @@ page 10035421 "LangModel Setup ori"
             }
             group(ToolServer)
             {
-                Caption = 'MCP Tool Server', Comment = 'is-IS=MCP verkfæraþjónn';
-                InstructionalText = 'Chat via Bifrost exposes the Bifrost message types to the language model as Model Context Protocol tools, so the model can read and write Business Central data on your behalf.', Comment = 'is-IS=Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem Model Context Protocol verkfæri, svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.';
+                Caption = 'MCP Tool Server', Comment = 'is-IS=MCP-verkfæraþjónn';
+                InstructionalText = 'Chat via Bifrost exposes the Bifrost message types to the language model as Model Context Protocol tools, so the model can read and write Business Central data on your behalf.', Comment = 'is-IS=Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem verkfæri (Model Context Protocol), svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.';
 
                 field(ToolCount; ToolCount)
                 {
                     Caption = 'Available Tools', Comment = 'is-IS=Tiltæk verkfæri';
-                    ToolTip = 'Specifies how many Model Context Protocol tools the chat can call in this company.', Comment = 'is-IS=Tilgreinir hversu mörg Model Context Protocol verkfæri spjallið getur kallað á í þessu fyrirtæki.';
+                    ToolTip = 'Specifies how many Model Context Protocol tools the chat can call in this company.', Comment = 'is-IS=Tilgreinir hversu mörg verkfæri (Model Context Protocol) spjallið getur kallað á í þessu fyrirtæki.';
                 }
             }
             group(Secrets)
@@ -121,7 +121,7 @@ page 10035421 "LangModel Setup ori"
             {
                 ApplicationArea = All;
                 Caption = 'Setup Wizard', Comment = 'is-IS=Uppsetningarleiðsögn';
-                ToolTip = 'Opens the Bifrost setup wizard, which enables HTTP client requests for all Bifrost apps and walks through the credentials of every app.', Comment = 'is-IS=Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP biðlarabeiðnir fyrir öll Bifröst forrit og fer yfir auðkenni hvers forrits.';
+                ToolTip = 'Opens the Bifrost setup wizard, which enables HTTP client requests for all Bifrost apps and walks through the credentials of every app.', Comment = 'is-IS=Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP-biðlarabeiðnir fyrir öll Bifröst-forrit og fer yfir auðkenni hvers forrits.';
                 Image = Setup;
                 RunObject = page "Setup Wizard ori";
             }

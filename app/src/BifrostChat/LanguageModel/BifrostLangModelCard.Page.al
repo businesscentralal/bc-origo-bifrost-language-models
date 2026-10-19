@@ -61,7 +61,7 @@ page 10035343 "Bifrost LangModel Card ori"
                 field("Base URL"; Rec."Base URL")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the API endpoint URL for this provider.', Comment = 'is-IS=Tilgreinir API endapunktsslóð fyrir þennan veitanda.';
+                    ToolTip = 'Specifies the API endpoint URL for this provider.', Comment = 'is-IS=Tilgreinir API-endapunktsslóð fyrir þennan veitanda.';
                     Enabled = HasExternalEndpoint;
                     ShowMandatory = BaseUrlRequired;
                 }
@@ -140,9 +140,9 @@ page 10035343 "Bifrost LangModel Card ori"
             }
             group(Authentication)
             {
-                Caption = 'Authentication', Comment = 'is-IS=Sannvottun';
+                Caption = 'Authentication', Comment = 'is-IS=Auðkenning';
                 Visible = RequiresApiKeyVisible;
-                InstructionalText = 'API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.', Comment = 'is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.';
+                InstructionalText = 'API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.', Comment = 'is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu aðgerðirnar fyrir API-lykla til að setja inn eða fjarlægja lykil.';
 
                 field(HasPersonalKeyField; HasPersonalKey)
                 {

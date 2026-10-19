@@ -65,7 +65,7 @@ codeunit 10035390 "Copilot Install ori"
     internal procedure InitCopilotDefaults(): Boolean
     var
         ConfirmQst: Label 'This will register the Bifrost Copilot capability as Microsoft Billed, create or update the COPILOT language model, and refresh its default skill content.\Do you want to continue?', Comment = 'is-IS=Þetta skráir Bifröst Copilot-getuna með reikningsgerðina Microsoft Billed, býr til eða uppfærir COPILOT-mállíkanið og uppfærir sjálfgefið hæfniefni.\Viltu halda áfram?';
-        DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot sjálfgildi frumstillt.';
+        DoneMsg: Label 'Copilot defaults initialized successfully.', Comment = 'is-IS=Copilot-sjálfgildi frumstillt.';
     begin
         if not Confirm(ConfirmQst, false) then
             exit(false);

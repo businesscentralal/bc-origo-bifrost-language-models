@@ -299,8 +299,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3284292384 - Method 529142117 - NamedType 3630480926" size-unit="char" translate="yes" xml:space="preserve">
           <source>No Base URL configured for this language model. Set the Azure OpenAI endpoint URL.</source>
-          <target>Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI endapunktsslóðina.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI endapunktsslóðina.</note>
+          <target>Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI-endapunktsslóðina.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI-endapunktsslóðina.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Azure OAI LangModel Prov. ori - Method DoTestConnection - NamedType NoBaseUrlErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 4240728454 - NamedType 3178682067" size-unit="char" translate="yes" xml:space="preserve">
@@ -329,8 +329,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2432805112 - NamedType 2690192217" size-unit="char" translate="yes" xml:space="preserve">
           <source>An unexpected error occurred while calling the Copilot model.</source>
-          <target>Óvænt villa kom upp við kall á Copilot líkanið.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Óvænt villa kom upp við kall á Copilot líkanið.</note>
+          <target>Óvænt villa kom upp við kall á Copilot-líkanið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Óvænt villa kom upp við kall á Copilot-líkanið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Chat Proxy ori - NamedType UnexpectedErrorLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1416886313 - Method 1827473356 - NamedType 750120336" size-unit="char" translate="yes" xml:space="preserve">
@@ -341,8 +341,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1416886313 - Method 1827473356 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copilot defaults initialized successfully.</source>
-          <target>Copilot sjálfgildi frumstillt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálfgildi frumstillt.</note>
+          <target>Copilot-sjálfgildi frumstillt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-sjálfgildi frumstillt.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install ori - Method InitCopilotDefaults - NamedType DoneMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 1416886313 - Method 4084936880 - NamedType 2252135085" size-unit="char" translate="yes" xml:space="preserve">
@@ -359,8 +359,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3872182412 - NamedType 3154972853" size-unit="char" translate="yes" xml:space="preserve">
           <source>The Copilot provider does not support file attachments. Use an external provider (OpenAI, Azure OpenAI, Anthropic) for document processing.</source>
-          <target>Copilot veitandi styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot veitandi styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.</note>
+          <target>Copilot-veitandinn styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-veitandinn styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot LangModel Prov. ori - NamedType FilesNotSupportedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3872182412 - Method 529142117 - NamedType 180896732" size-unit="char" translate="yes" xml:space="preserve">
@@ -371,14 +371,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 3872182412 - Method 4153045249 - NamedType 907600227" size-unit="char" translate="yes" xml:space="preserve">
           <source>The Copilot model returned an error.</source>
-          <target>Copilot líkanið skilaði villu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot líkanið skilaði villu.</note>
+          <target>Copilot-líkanið skilaði villu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-líkanið skilaði villu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot LangModel Prov. ori - Method GetErrorOrFallback - NamedType FallbackErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2691301688 - NamedType 1651073791" size-unit="char" translate="yes" xml:space="preserve">
           <source>Enter the API key for your LLM endpoint.</source>
-          <target>Sláðu inn API-lykilinn fyrir LLM endapunktinn þinn.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sláðu inn API-lykilinn fyrir LLM endapunktinn þinn.</note>
+          <target>Sláðu inn API-lykilinn fyrir LLM-endapunktinn þinn.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sláðu inn API-lykilinn fyrir LLM-endapunktinn þinn.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Custom LLM LangModel Prov. ori - NamedType ApiKeyInstructionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2691301688 - NamedType 2386369997" size-unit="char" translate="yes" xml:space="preserve">
@@ -599,8 +599,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1304087324" size-unit="char" translate="yes" xml:space="preserve">
           <source>HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.</source>
-          <target>HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=HttpClient köll eru lokuð í þessu umhverfi. Stjórnandi þarf að leyfa AL HttpClient beiðnir.</note>
+          <target>HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1776159594" size-unit="char" translate="yes" xml:space="preserve">
@@ -623,14 +623,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 13842555" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask an administrator to enable Allow HttpClient Requests for Bifrost Language Models in Extension Management, then retry.</source>
-          <target>Biddu kerfisstjóra um að leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</note>
+          <target>Biddu kerfisstjóra um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön í viðbótastjórnun og reyndu síðan aftur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptBlockedNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 223295868" size-unit="char" translate="yes" xml:space="preserve">
           <source>Allow HttpClient Requests is disabled for the app.</source>
-          <target>HttpClient-beiðnir eru ekki leyfðar fyrir forritið.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-beiðnir eru ekki leyfðar fyrir forritið.</note>
+          <target>Leyfa HttpClient-beiðnir er óvirkt fyrir forritið.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leyfa HttpClient-beiðnir er óvirkt fyrir forritið.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptBlockedWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 3746628148" size-unit="char" translate="yes" xml:space="preserve">
@@ -755,20 +755,20 @@
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 893984207" size-unit="char" translate="yes" xml:space="preserve">
           <source>the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot</source>
-          <target>heimildasamstæðan BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=heimildasamstæðan BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda</note>
+          <target>heimildasamstæðan BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=heimildasamstæðan BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedExpectedTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 327037442" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask your administrator to assign the BIFROST Chat ori permission set, and BIFROST LLM Chat ori for a language model whose provider is not Copilot.</source>
-          <target>Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um heimildasamstæðuna BIFROST Chat ori, og BIFROST LLM Chat ori fyrir mállíkan sem er ekki með Copilot sem veitanda.</note>
+          <target>Biddu kerfisstjóra um að úthluta þér heimildasamstæðunni BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að úthluta þér heimildasamstæðunni BIFROST Chat ori og einnig BIFROST LLM Chat ori ef veitandi mállíkansins er ekki Copilot.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 3636520545" size-unit="char" translate="yes" xml:space="preserve">
           <source>The caller does not hold Foundation's BIFROST Chat ori permission set. A language model whose provider is not Copilot also needs this app's BIFROST LLM Chat ori.</source>
-          <target>Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Mállíkan sem er ekki með Copilot sem veitanda þarf einnig BIFROST LLM Chat ori úr þessu forriti.</note>
+          <target>Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Ef veitandi mállíkansins er ekki Copilot þarf einnig BIFROST LLM Chat ori úr þessu forriti.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation. Ef veitandi mállíkansins er ekki Copilot þarf einnig BIFROST LLM Chat ori úr þessu forriti.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType PromptDeniedWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 32472158" size-unit="char" translate="yes" xml:space="preserve">
@@ -935,14 +935,14 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 486669812 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>API keys are kept in the Bifrost secret store, not on this record. Use the API Key actions to enter or remove a key.</source>
-          <target>API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu API-lykla aðgerðirnar til að setja inn eða fjarlægja lykil.</note>
+          <target>API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu aðgerðirnar fyrir API-lykla til að setja inn eða fjarlægja lykil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar eru geymdir í leyndarmálageymslu Bifröst, ekki á þessari færslu. Notaðu aðgerðirnar fyrir API-lykla til að setja inn eða fjarlægja lykil.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Authentication - Property InstructionalText</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 486669812 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Authentication</source>
-          <target>Sannvottun</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sannvottun</note>
+          <target>Auðkenning</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Auðkenning</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Authentication - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 2168607649 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1019,8 +1019,8 @@
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 2517242498 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the API endpoint URL for this provider.</source>
-          <target>Tilgreinir API endapunktsslóð fyrir þennan veitanda.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir API endapunktsslóð fyrir þennan veitanda.</note>
+          <target>Tilgreinir API-endapunktsslóð fyrir þennan veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir API-endapunktsslóð fyrir þennan veitanda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control Base URL - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Control 1989412485 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1247,8 +1247,8 @@
         </trans-unit>
         <trans-unit id="Page 1466659766 - Action 1827473356 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Init Copilot Defaults</source>
-          <target>Frumstilla Copilot sjálfgildi</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Frumstilla Copilot sjálfgildi</note>
+          <target>Frumstilla Copilot-sjálfgildi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Frumstilla Copilot-sjálfgildi</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel List ori - Action InitCopilotDefaults - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1466659766 - Action 3383493608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1349,20 +1349,20 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 433915863 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>Chat via Bifrost exposes the Bifrost message types to the language model as Model Context Protocol tools, so the model can read and write Business Central data on your behalf.</source>
-          <target>Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem Model Context Protocol verkfæri, svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem Model Context Protocol verkfæri, svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.</note>
+          <target>Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem verkfæri (Model Context Protocol), svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjall með Bifröst birtir mállíkaninu skilaboðategundir Bifröst sem verkfæri (Model Context Protocol), svo líkanið geti lesið og skrifað gögn í Business Central fyrir þína hönd.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control ToolServer - Property InstructionalText</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 433915863 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>MCP Tool Server</source>
-          <target>MCP verkfæraþjónn</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=MCP verkfæraþjónn</note>
+          <target>MCP-verkfæraþjónn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=MCP-verkfæraþjónn</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control ToolServer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 4258329837 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies how many Model Context Protocol tools the chat can call in this company.</source>
-          <target>Tilgreinir hversu mörg Model Context Protocol verkfæri spjallið getur kallað á í þessu fyrirtæki.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hversu mörg Model Context Protocol verkfæri spjallið getur kallað á í þessu fyrirtæki.</note>
+          <target>Tilgreinir hversu mörg verkfæri (Model Context Protocol) spjallið getur kallað á í þessu fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hversu mörg verkfæri (Model Context Protocol) spjallið getur kallað á í þessu fyrirtæki.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control ToolCount - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 4258329837 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1397,8 +1397,8 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Action 672734192 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Opens the Bifrost setup wizard, which enables HTTP client requests for all Bifrost apps and walks through the credentials of every app.</source>
-          <target>Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP biðlarabeiðnir fyrir öll Bifröst forrit og fer yfir auðkenni hvers forrits.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP biðlarabeiðnir fyrir öll Bifröst forrit og fer yfir auðkenni hvers forrits.</note>
+          <target>Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP-biðlarabeiðnir fyrir öll Bifröst-forrit og fer yfir auðkenni hvers forrits.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP-biðlarabeiðnir fyrir öll Bifröst-forrit og fer yfir auðkenni hvers forrits.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action SetupWizard - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Action 672734192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1427,8 +1427,8 @@
         </trans-unit>
         <trans-unit id="PageExtension 1547003100 - Action 639024038 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1755308350">
           <source>Chat about this incoming document in Business Central.</source>
-          <target>Spjalla um þetta skjal á innleið í Business Central.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Spjalla um þetta skjal á innleið í Business Central.</note>
+          <target>Spjalla um þetta móttekna skjal í Business Central.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjalla um þetta móttekna skjal í Business Central.</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Bifrost Chat IncomingDocs ori - Action ori_BifrostChat - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 1547003100 - Action 639024038 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1755308350">
@@ -1583,8 +1583,8 @@
         </trans-unit>
         <trans-unit id="PageExtension 2188717972 - Action 4150131648 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1243421685">
           <source>Open the setup page of Bifrost Language Models, with the models, the MCP tool server and the provider API keys.</source>
-          <target>Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP verkfæraþjóni og API-lyklum veitenda.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP verkfæraþjóni og API-lyklum veitenda.</note>
+          <target>Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP-verkfæraþjóni og API-lyklum veitenda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP-verkfæraþjóni og API-lyklum veitenda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Setup LangModel ori - Action LangModelSetup - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 2188717972 - Action 4150131648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1243421685">
