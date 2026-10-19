@@ -738,7 +738,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
     [Test]
     procedure AC8_IcelandicBlockedLabels()
     begin
-        VerifyLocalizedProviderError(1039, 0, true, 'PreconditionFailed', 'HttpClient köll eru lokuð', 'leyfa HttpClient-beiðnir');
+        VerifyLocalizedProviderError(1039, 0, true, 'PreconditionFailed', 'HttpClient-köll eru lokuð', 'Leyfa HttpClient-beiðnir');
     end;
 
     /// <summary>English provider errors and next steps use the published resources.</summary>

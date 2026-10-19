@@ -202,7 +202,7 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
     local procedure DoTestConnection(var Argument: Record "Bifrost Chat Argument ori" temporary): Boolean
     var
         NoKeyErr: Label 'No API key configured. Enter a personal or shared API key.', Comment = 'is-IS=Enginn API-lykill stilltur. Sláðu inn persónulegan eða sameiginlegan API-lykil.';
-        NoBaseUrlErr: Label 'No Base URL configured for this language model. Set the Azure OpenAI endpoint URL.', Comment = 'is-IS=Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI endapunktsslóðina.';
+        NoBaseUrlErr: Label 'No Base URL configured for this language model. Set the Azure OpenAI endpoint URL.', Comment = 'is-IS=Engin grunnslóð stillt fyrir þetta mállíkan. Stilltu Azure OpenAI-endapunktsslóðina.';
     begin
         if not Argument.HasApiKey() then begin
             Argument.SetErrorMessage(NoKeyErr);

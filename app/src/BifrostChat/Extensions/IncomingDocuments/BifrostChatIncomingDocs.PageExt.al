@@ -17,7 +17,7 @@ pageextension 10035356 "Bifrost Chat IncomingDocs ori" extends "Incoming Documen
             action(ori_BifrostChat)
             {
                 Caption = 'Chat via Bifrost', Comment = 'is-IS=Spjalla með Bifröst';
-                ToolTip = 'Chat about this incoming document in Business Central.', Comment = 'is-IS=Spjalla um þetta skjal á innleið í Business Central.';
+                ToolTip = 'Chat about this incoming document in Business Central.', Comment = 'is-IS=Spjalla um þetta móttekna skjal í Business Central.';
                 ApplicationArea = All;
                 Visible = ChatBoxVisible;
                 Image = SparkleFilled;

@@ -18,7 +18,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
         RequestLogger: Codeunit "Request Logger ori";
-        UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot líkanið.';
+        UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot-líkanið.';
         MissingMessagesLbl: Label 'Payload must contain a messages array with at least one entry.', Comment = 'is-IS=Inntak verður að innihalda skilaboðalista með að minnsta kosti einu atriði.';
 
     /// <summary>

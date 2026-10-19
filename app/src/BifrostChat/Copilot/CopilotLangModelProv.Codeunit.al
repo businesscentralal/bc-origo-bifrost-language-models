@@ -13,7 +13,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
 
     var
         CopilotNotEnabledLbl: Label 'Copilot is not enabled for Bifrost Chat. Ask your administrator to enable it on the Copilot & agent capabilities page.', Comment = 'is-IS=Copilot er ekki virkjað fyrir Bifröst spjall. Biddu kerfisstjóra um að virkja það á síðunni Copilot og eiginleikar fulltrúa.';
-        FilesNotSupportedErr: Label 'The Copilot provider does not support file attachments. Use an external provider (OpenAI, Azure OpenAI, Anthropic) for document processing.', Comment = 'is-IS=Copilot veitandi styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.';
+        FilesNotSupportedErr: Label 'The Copilot provider does not support file attachments. Use an external provider (OpenAI, Azure OpenAI, Anthropic) for document processing.', Comment = 'is-IS=Copilot-veitandinn styður ekki skráarviðhengi. Notaðu ytri veitanda (OpenAI, Azure OpenAI, Anthropic) til að vinna úr skjölum.';
 
     /// <summary>
     /// Dispatches the requested operation to the Copilot provider and writes results to the temporary argument.
@@ -199,7 +199,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
     local procedure GetErrorOrFallback(var AOAIOperationResponse: Codeunit "AOAI Operation Response"): Text
     var
         ErrorText: Text;
-        FallbackErr: Label 'The Copilot model returned an error.', Comment = 'is-IS=Copilot líkanið skilaði villu.';
+        FallbackErr: Label 'The Copilot model returned an error.', Comment = 'is-IS=Copilot-líkanið skilaði villu.';
     begin
         ErrorText := AOAIOperationResponse.GetError();
         if ErrorText = '' then

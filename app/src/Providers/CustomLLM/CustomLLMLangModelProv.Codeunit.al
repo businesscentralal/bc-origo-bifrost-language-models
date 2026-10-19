@@ -15,7 +15,7 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
         AuthHeaderNameTok: Label 'x-api-key', Locked = true;
         ProviderNameTok: Label 'Custom LLM', Locked = true;
         ApiKeyLabelLbl: Label 'API Key', Comment = 'is-IS=API-lykill';
-        ApiKeyInstructionLbl: Label 'Enter the API key for your LLM endpoint.', Comment = 'is-IS=Sláðu inn API-lykilinn fyrir LLM endapunktinn þinn.';
+        ApiKeyInstructionLbl: Label 'Enter the API key for your LLM endpoint.', Comment = 'is-IS=Sláðu inn API-lykilinn fyrir LLM-endapunktinn þinn.';
         ServiceKeyDescLbl: Label 'Shared keys are used by all users in this company who do not have a personal key.', Comment = 'is-IS=Sameiginlegir lyklar eru notaðir af öllum notendum í þessu fyrirtæki sem hafa ekki persónulegan lykil.';
 
     /// <summary>
