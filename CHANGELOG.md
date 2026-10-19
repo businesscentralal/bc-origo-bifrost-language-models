@@ -4,6 +4,8 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+## [28.0.0.0] - 2026-10-19
+
 ### Changed (2026-10-19) - Icelandic translation review for AppSource
 
 - Icelandic texts corrected in 12 objects: hyphenated compounds with foreign names (`Copilot-líkanið`, `HttpClient-köll`, `MCP-verkfæraþjónn`, `API-endapunktsslóð`), the Business Central field name "Leyfa HttpClient-beiðnir", "Auðkenning" instead of "Sannvottun" on the language model card, "móttekið skjal" for incoming documents (as in Foundation) and readable permission guidance in `LLM.Prompt.Complete` errors. English texts are unchanged. Every one of the 316 translatable texts has an Icelandic translation; the XLF is regenerated. Test codeunit 96034 asserts the new blocked-HTTP wording.
@@ -193,8 +195,6 @@ All notable changes to Bifrost Language Models are documented here.
 - Cause: `.AL-Go/settings.json` `appDependencyProbingPaths` for bc-origo-bifrost-core pinned `version: 1.0.0.102`, which predates `GetRequestDebugMode` (added in core build 1.0.0.124).
 - Fix: probing version raised to `1.0.0.132`, the core build live on the Bifrost sandbox as Foundation 28.0.0.132 (includes core#107 and core#114). App/test app.json unchanged.
 
-## [28.0.0.0] - 2026-09-07
-
 ### Changed (2026-10-12) - Retry eligibility test documentation
 
 - `LangModel Chat Proxy Tests` (codeunit 96029) now documents its four retry-eligibility assertions: matching error with tools, no tools, reasoning effort already set, and an unrelated error. Test behavior is unchanged.
@@ -330,7 +330,6 @@ aggregates the outstanding setup work of all installed Bifröst apps in one plac
   from Foundation's `internalsVisibleTo`, and the test suite compiles and runs against a Foundation
   package that does not grant it. No test code had to change - the suite never touched a Foundation
   internal.
-
 
 First release. The chat module was moved out of **Bifrost Foundation** 28.0.0.0 into this separate AppSource app, installed side by side with Foundation and depending on it.
 
