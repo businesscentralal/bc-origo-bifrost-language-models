@@ -38,6 +38,14 @@
     "app/Translations/*.xlf"
   ],
   "keyVaultCodesignCertificateName": "CodeSigning-2025",
+  "deliverToAppSource": {
+    "productId": "30b2edcf-bfaf-48ef-94d9-4732fb9eabd1",
+    "mainAppFolder": "app",
+    "branches": [
+      "main"
+    ],
+    "continuousDelivery": false
+  },
   "conditionalSettings": [
     {
       "buildModes": [
