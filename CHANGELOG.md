@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-10-20) - AppSource delivery (#67)
+
+- `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer (productId 30b2edcf-bfaf-48ef-94d9-4732fb9eabd1, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver updates.
+
 ### Changed (2026-10-19) - Icelandic translation review for AppSource
 
 - Icelandic texts corrected in 12 objects: hyphenated compounds with foreign names (`Copilot-líkanið`, `HttpClient-köll`, `MCP-verkfæraþjónn`, `API-endapunktsslóð`), the Business Central field name "Leyfa HttpClient-beiðnir", "Auðkenning" instead of "Sannvottun" on the language model card, "móttekið skjal" for incoming documents (as in Foundation) and readable permission guidance in `LLM.Prompt.Complete` errors. English texts are unchanged. Every one of the 316 translatable texts has an Icelandic translation; the XLF is regenerated. Test codeunit 96034 asserts the new blocked-HTTP wording.
