@@ -69,5 +69,6 @@
   "enableCodeCop": true,
   "enableUICop": true,
   "enableCodeAnalyzersOnTestApps": true,
-  "failOn": "warning"
+  "failOn": "warning",
+  "repoVersion": "1.0.1"
 }
