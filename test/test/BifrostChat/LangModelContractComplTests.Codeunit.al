@@ -445,7 +445,7 @@ codeunit 96036 "LangModel Contract Compl Tests"
         FirstNumber: Integer;
         LastNumber: Integer;
         Number: Integer;
-        Run: Text;
+        DigitRun: Text;
         Index: Integer;
     begin
         Evaluate(FirstNumber, AppFirstOrdinalTok);
@@ -453,14 +453,14 @@ codeunit 96036 "LangModel Contract Compl Tests"
         Value += ' ';
         for Index := 1 to StrLen(Value) do
             if Value[Index] in ['0' .. '9'] then
-                Run += CopyStr(Value, Index, 1)
+                DigitRun += CopyStr(Value, Index, 1)
             else begin
-                if StrLen(Run) = 8 then begin
-                    Evaluate(Number, Run);
+                if StrLen(DigitRun) = 8 then begin
+                    Evaluate(Number, DigitRun);
                     if (Number >= FirstNumber) and (Number <= LastNumber) then
                         exit(true);
                 end;
-                Run := '';
+                DigitRun := '';
             end;
         exit(false);
     end;
