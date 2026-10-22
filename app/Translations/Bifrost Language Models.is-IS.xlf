@@ -856,21 +856,21 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - NamedType RoleNotFoundWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
-          <source>One-shot LLM completion — send a prompt, get text back. No tools, no chat.</source>
-          <target>Einskots LLM-úrvinnsla — sendu kvaðningu og fáðu texta til baka. Engin verkfæri, ekkert spjall.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Einskots LLM-úrvinnsla — sendu kvaðningu og fáðu texta til baka. Engin verkfæri, ekkert spjall.</note>
+          <source>Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.</source>
+          <target>Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
-          <source>one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI</source>
-          <target>einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni</note>
+          <source>one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI, language model, LLM, ask AI, read document with AI, read image with AI</source>
+          <target>einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.</source>
-          <target>Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; notaðu sérstaka skilaboðategund þegar hún er til.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; notaðu sérstaka skilaboðategund þegar hún er til.</note>
+          <source>Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data.</source>
+          <target>Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1571639434 - NamedType 1415688405" size-unit="char" translate="yes" xml:space="preserve">
