@@ -55,7 +55,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'One-shot LLM completion — send a prompt, get text back. No tools, no chat.', Comment = 'is-IS=Einskots LLM-úrvinnsla — sendu kvaðningu og fáðu texta til baka. Engin verkfæri, ekkert spjall.';
+        DescriptionLbl: Label 'Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.', Comment = 'is-IS=Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.';
     begin
         exit(DescriptionLbl);
     end;
@@ -65,7 +65,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni';
+        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI, language model, LLM, ask AI, read document with AI, read image with AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind';
     begin
         exit(KeywordsLbl);
     end;
@@ -75,7 +75,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetSelectionDescription(): Text
     var
-        SelectionDescriptionLbl: Label 'Generates a text response from a prompt without tools, record context or conversation state; use a dedicated message type when one exists.', Comment = 'is-IS=Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; notaðu sérstaka skilaboðategund þegar hún er til.';
+        SelectionDescriptionLbl: Label 'Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data.', Comment = 'is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.';
     begin
         exit(SelectionDescriptionLbl);
     end;
@@ -86,11 +86,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     procedure GetEnvelope(var Envelope: JsonObject): Boolean
     var
         Subject: JsonObject;
-        Forms: JsonArray;
+        StrictOption: JsonObject;
     begin
         Subject.Add('use', 'notUsed');
-        Subject.Add('forms', Forms);
-        Subject.Add('description', 'The message type is identified by LLM.Prompt.Complete; no subject record is used.');
+        Subject.Add('description', 'The type addresses no record; a subject that is sent is ignored.');
+        StrictOption.Add('type', 'boolean');
+        StrictOption.Add('required', false);
+        StrictOption.Add('default', false);
+        StrictOption.Add('description', 'Optional root Boolean, default false. When true, unknown data keys are refused before execution with UnknownParameter. Do not place this option inside data.');
+        Envelope.Add('strict', StrictOption);
         Envelope.Add('subject', Subject);
         Envelope.Add('dataRequired', true);
         Envelope.Add('version', '1.0');
@@ -112,12 +116,18 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        FileParameter: JsonObject;
+        AttachmentParameter: JsonObject;
     begin
-        Parameters.Add(ContractMgt.Parameter('prompt', 'string', true, 'The user prompt sent to the language model.'));
-        Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt sent as-is; no Bootstrap or skill is injected.'));
-        Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional Bifrost Language Model code. When omitted, the caller''s configured or default model is used.'));
-        Parameters.Add(ContractMgt.Parameter('file', 'object', false, 'Optional inline file object with data, mimeType and fileName; takes precedence over attachment.'));
-        Parameters.Add(ContractMgt.Parameter('attachment', 'object', false, 'Optional stored attachment reference with table and systemId; ignored when file is supplied or the record cannot be resolved.'));
+        Parameters.Add(ContractMgt.Parameter('prompt', 'string', true, 'The user prompt sent to the language model. A value that is not a JSON string is refused with InvalidParameterFormat; an empty one with MissingParameter.'));
+        Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt sent as-is; no Bootstrap or skill is injected. Left out of the provider request when empty.'));
+        Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
+        FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the prompt; takes precedence over attachment. A value that is not a JSON object is ignored, and attachment is then ignored too.');
+        FileParameter.Add('children', FileChildren());
+        Parameters.Add(FileParameter);
+        AttachmentParameter := ContractMgt.Parameter('attachment', 'object', false, 'Optional reference to a stored attachment whose content is sent with the prompt. Ignored when file is supplied, when table is not one of the allowed names, or when systemId is not a GUID that finds an attachment with content.');
+        AttachmentParameter.Add('children', AttachmentChildren());
+        Parameters.Add(AttachmentParameter);
         exit(true);
     end;
 
@@ -133,6 +143,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success when the provider response was returned.'));
         Fields.Add(ContractMgt.ResponseField('reply', 'string', 'The provider response text, when supplied by the provider.'));
         Fields.Add(ContractMgt.ResponseField('text', 'string', 'A copy of reply, added when the provider did not return text.'));
+        Fields.Add(ContractMgt.ResponseField('type', 'string', 'The value reply. Returned by the Anthropic provider only.'));
+        Fields.Add(ContractMgt.ResponseField('usage', 'object', 'The token usage the provider reported for the call. Returned by the Anthropic provider only, and only when the provider reports usage.'));
         Response.Add('fields', Fields);
         exit(true);
     end;
@@ -152,6 +164,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, NoProviderWhenTxt, NoProviderNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, InvalidPromptErr, InvalidPromptWhenTxt, MissingPromptNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::BusinessCentralError, 'Business Central''s own error text',
+            'An error the type does not catch is raised before the provider is called, for example a message version other than 1.0.',
+            'Read the text and correct the request. Nothing was sent to the provider and nothing was changed.'));
         exit(true);
     end;
 
@@ -159,12 +174,18 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// Describes the completion effect and its external provider call.
     /// </summary>
     procedure GetEffect(var Effect: JsonObject): Boolean
+    var
+        Preconditions: JsonArray;
     begin
+        Preconditions.Add('The caller holds Foundation''s BIFROST Chat ori permission set, and this app''s BIFROST LLM Chat ori when the language model''s provider is not Copilot.');
+        Preconditions.Add('The caller can read the Bifrost Language Models table.');
+        Preconditions.Add('A language model with a usable chat provider is set up: the one in roleCode, otherwise the caller''s own or the default language model, with its API key where the provider needs one.');
+        Preconditions.Add('Outbound HttpClient requests are allowed for the app; otherwise the call is refused with PreconditionFailed.');
         Effect.Add('effect', 'read');
-        Effect.Add('changes', 'Sends the prompt to the selected external language model and returns its response; no Business Central records are changed.');
+        Effect.Add('changes', 'Sends the prompt, the system prompt and any file to the selected external language model provider and returns its answer; the data sent cannot be recalled and the answer can differ between calls. No Business Central business data is changed. The only write is the Last Used On stamp of the language model''s API key, at most once a day, after the provider has answered. The type itself does not commit.');
         Effect.Add('idempotent', false);
         Effect.Add('permissionSet', 'BIFROST Chat ori; BIFROST LLM Chat ori for non-Copilot providers');
-        Effect.Add('preconditions', 'Foundation chat permission is assigned and a usable language model and provider are configured.');
+        Effect.Add('preconditions', Preconditions);
         exit(true);
     end;
 
@@ -189,7 +210,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     end;
 
     /// <summary>
-    /// Returns false because this implementation supplies no workflow chapter.
+    /// Returns false because the related chapter already names the read and write siblings.
     /// </summary>
     procedure GetWorkflow(var Workflow: JsonObject): Boolean
     begin
@@ -203,7 +224,18 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Examples.Add(ContractMgt.Example('Complete a prompt with a selected model', '{"prompt":"Summarize this text.","system":"Return one concise sentence.","roleCode":"CLAUDE"}', '{"status":"Success","reply":"A concise summary.","text":"A concise summary."}'));
+        Examples.Add(ContractMgt.Example('Complete a prompt with the caller''s own or the default model',
+            '{"type":"LLM.Prompt.Complete","data":{"prompt":"Classify the subject \"Invoice 4711 for March\" as invoice, order or other.","system":"Answer with one word."}}',
+            '{"status":"Success","reply":"invoice","text":"invoice"}'));
+        Examples.Add(ContractMgt.Example('Complete a prompt with a selected model',
+            '{"type":"LLM.Prompt.Complete","data":{"prompt":"Summarize this text.","system":"Return one concise sentence.","roleCode":"CLAUDE"}}',
+            '{"status":"Success","reply":"A concise summary.","text":"A concise summary."}'));
+        Examples.Add(ContractMgt.Example('Send an inline file with the prompt',
+            '{"type":"LLM.Prompt.Complete","data":{"prompt":"Extract the invoice number and total.","file":{"data":"JVBERi0xLjQK","mimeType":"application/pdf","fileName":"invoice.pdf"}}}',
+            '{"status":"Success","reply":"Invoice 4711, total 1240 EUR.","text":"Invoice 4711, total 1240 EUR."}'));
+        Examples.Add(ContractMgt.Example('Send a stored incoming document attachment with the prompt',
+            '{"type":"LLM.Prompt.Complete","data":{"prompt":"Who is the vendor on this document?","attachment":{"table":"Incoming Document Attachment","systemId":"<systemId>"}}}',
+            '{"status":"Success","reply":"Contoso Ltd.","text":"Contoso Ltd."}'));
         exit(true);
     end;
 
@@ -212,7 +244,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt to a configured provider without tools, record context or conversation state.';
+        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt, and optionally one file, to a configured provider without tools, record context or conversation state, and returns the answer as text. It reads and writes no Business Central records for you: read the data first and put the values in the prompt.';
         exit(true);
     end;
 
@@ -221,8 +253,31 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. Providers may reject files, and provider response properties other than status, reply and text are passed through.';
+        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. Images (a mimeType that starts with image/) are sent to the provider as images, other types as documents. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. The reply is free text from an external model: validate it before it is used to change anything.';
         exit(true);
+    end;
+
+    local procedure FileChildren() Children: JsonArray
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Children.Add(ContractMgt.Parameter('data', 'string', false, 'The file content, Base64-encoded. Send it together with mimeType.'));
+        Children.Add(ContractMgt.Parameter('mimeType', 'string', false, 'The MIME type, for example application/pdf or image/png. image/* is sent as an image, anything else as a document.'));
+        Children.Add(ContractMgt.Parameter('fileName', 'string', false, 'The file name. Used by the providers that take a file name; the others ignore it.'));
+    end;
+
+    local procedure AttachmentChildren() Children: JsonArray
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        TableParameter: JsonObject;
+        Allowed: JsonArray;
+    begin
+        Allowed.Add('Incoming Document Attachment');
+        Allowed.Add('Document Attachment');
+        TableParameter := ContractMgt.Parameter('table', 'string', true, 'The table that holds the attachment.');
+        TableParameter.Add('allowed', Allowed);
+        Children.Add(TableParameter);
+        Children.Add(ContractMgt.Parameter('systemId', 'string', true, 'The SystemId (GUID) of the attachment record.'));
     end;
 
     /// <summary>
