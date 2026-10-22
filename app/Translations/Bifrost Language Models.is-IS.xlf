@@ -693,6 +693,66 @@
           <note from="Developer" annotates="general" priority="2">%1 = language model code, is-IS=Persónulegur API-lykill fyrir mállíkanið %1.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Secrets ori - NamedType UserKeyDescTok</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 1629884682" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP could not be enabled. Ask an administrator with write permission on NAV App Setting to enable Allow HttpClient Requests for Bifrost Language Models, then choose Verify.</source>
+          <target>Ekki tókst að virkja HTTP. Biddu stjórnanda með skrifheimild á NAV App Setting um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön og veldu síðan Staðfesta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að virkja HTTP. Biddu stjórnanda með skrifheimild á NAV App Setting um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön og veldu síðan Staðfesta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType HttpPermissionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 1528362915" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model could not be saved. Ask a Bifrost administrator to update the language model or user setup.</source>
+          <target>Ekki tókst að vista mállíkanið. Biddu Bifröst stjórnanda um að uppfæra mállíkanið eða notandauppsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að vista mállíkanið. Biddu Bifröst stjórnanda um að uppfæra mállíkanið eða notandauppsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType ModelPermissionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 2464281952" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Setup is not complete. Enable HTTP, configure a language model, or choose Language Models as the chat provider before finishing.</source>
+          <target>Uppsetningu er ekki lokið. Virkjaðu HTTP, stilltu mállíkan eða veldu Mállíkön sem spjallveitanda áður en þú lýkur leiðsögninni.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetningu er ekki lokið. Virkjaðu HTTP, stilltu mállíkan eða veldu Mállíkön sem spjallveitanda áður en þú lýkur leiðsögninni.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType NothingConfiguredErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 2667896220" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Chat access could not be assigned because permission set %1 is unavailable. Ask your administrator to check the installed Bifrost apps.</source>
+          <target>Ekki tókst að úthluta spjallaðgangi því heimildasamstæðan %1 er ekki tiltæk. Biddu stjórnanda um að athuga uppsett Bifröst forrit.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = permission set, is-IS=Ekki tókst að úthluta spjallaðgangi því heimildasamstæðan %1 er ekki tiltæk. Biddu stjórnanda um að athuga uppsett Bifröst forrit.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType PermissionSetMissingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 2763179742" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language model %1 does not exist. Open Language Models and choose an existing code.</source>
+          <target>Mállíkanið %1 er ekki til. Opnaðu Mállíkön og veldu fyrirliggjandi kóða.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = language model code, is-IS=Mállíkanið %1 er ekki til. Opnaðu Mállíkön og veldu fyrirliggjandi kóða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType UnknownModelErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 2420772960" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The selected user is missing or disabled. Refresh the wizard and select an enabled user.</source>
+          <target>Valinn notandi vantar eða er óvirkur. Endurnýjaðu leiðsögnina og veldu virkan notanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Valinn notandi vantar eða er óvirkur. Endurnýjaðu leiðsögnina og veldu virkan notanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType UserDisabledErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2178180846 - NamedType 800073169" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Chat access could not be assigned. Ask an administrator with SUPER or SECURITY to assign BIFROST Chat ori and BIFROST LLM Chat ori in this company.</source>
+          <target>Ekki tókst að úthluta spjallaðgangi. Biddu stjórnanda með SUPER eða SECURITY um að úthluta BIFROST Chat ori og BIFROST LLM Chat ori í þessu fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að úthluta spjallaðgangi. Biddu stjórnanda með SUPER eða SECURITY um að úthluta BIFROST Chat ori og BIFROST LLM Chat ori í þessu fyrirtæki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType UserPermissionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 127212742 - Method 550388558 - NamedType 3683717780" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set up Bifrost Language Models</source>
+          <target>Setja upp Bifröst mállíkön</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja upp Bifröst mállíkön</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Reg. ori - Method RegisterWizard - NamedType TitleTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 127212742 - Method 550388558 - NamedType 957268046" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Language Models</source>
+          <target>Bifröst mállíkön</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst mállíkön</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Reg. ori - Method RegisterWizard - NamedType ShortTitleTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 127212742 - Method 550388558 - NamedType 1427565258" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Enable outbound HTTP, set up Copilot or another language model, make Bifrost Chat use it, and give users chat access.</source>
+          <target>Virkja HTTP út á við, setja upp Copilot eða annað mállíkan, tengja það við Bifröst spjall og veita notendum spjallaðgang.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP út á við, setja upp Copilot eða annað mállíkan, tengja það við Bifröst spjall og veita notendum spjallaðgang.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Reg. ori - Method RegisterWizard - NamedType DescriptionTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 2403977524" size-unit="char" translate="yes" xml:space="preserve">
           <source>The prompt must be a JSON string.</source>
           <target>Kvaðningin í prompt verður að vera JSON-strengur.</target>
@@ -1383,6 +1443,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action AppSecrets - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3027829156 - Action 357902173 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the general Bifrost setup wizard.</source>
+          <target>Opna almenna uppsetningarleiðsögn Bifröst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna almenna uppsetningarleiðsögn Bifröst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action BifrostSetupWizard - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Action 357902173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Setup Wizard</source>
+          <target>Uppsetningarleiðsögn Bifröst</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetningarleiðsögn Bifröst</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action BifrostSetupWizard - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3027829156 - Action 3359815809 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Manage the language models with the skill content injected into Chat via Bifrost.</source>
           <target>Stjórna mállíkönum með hæfniefni sem er sett inn í Spjall með Bifröst.</target>
@@ -1396,9 +1468,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action LanguageModelList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Action 672734192 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Opens the Bifrost setup wizard, which enables HTTP client requests for all Bifrost apps and walks through the credentials of every app.</source>
-          <target>Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP-biðlarabeiðnir fyrir öll Bifröst-forrit og fer yfir auðkenni hvers forrits.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opnar uppsetningarleiðsögn Bifröst, sem virkjar HTTP-biðlarabeiðnir fyrir öll Bifröst-forrit og fer yfir auðkenni hvers forrits.</note>
+          <source>Set up HTTP, a language model, the chat provider, and chat users.</source>
+          <target>Setja upp HTTP, mállíkan, spjallveitanda og spjallnotendur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja upp HTTP, mállíkan, spjallveitanda og spjallnotendur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action SetupWizard - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Action 672734192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1412,6 +1484,546 @@
           <target>Vinnsla</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Vinnsla</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Action Category_Process - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set up Bifrost Language Models</source>
+          <target>Setja upp Bifröst mállíkön</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja upp Bifröst mállíkön</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 2145129701" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Needs an administrator</source>
+          <target>Þarf stjórnanda</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þarf stjórnanda</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType AdministratorTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 797954468" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Done</source>
+          <target>Lokið</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lokið</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType DoneTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 1209490757" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Missing</source>
+          <target>Vantar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Vantar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType KeyMissingTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 2840559053" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not required</source>
+          <target>Ekki krafist</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki krafist</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType KeyNotRequiredTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 2939090615" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set</source>
+          <target>Skráður</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráður</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType KeySetTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 3069508267" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 — %2 — API key: %3</source>
+          <target>%1 — %2 — API-lykill: %3</target>
+          <note from="Developer" annotates="general" priority="2">%1 = model, %2 = provider, %3 = key status, is-IS=%1 — %2 — API-lykill: %3</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType ModelLineTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 3765535036" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Skipped</source>
+          <target>Sleppt</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sleppt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType SkippedTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3146766713 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This wizard never overrides another chat provider. If another app holds it, an administrator can change the provider on Bifrost Setup.</source>
+          <target>Þessi leiðsögn yfirskrifar aldrei annan spjallveitanda. Ef annað forrit er skráð getur stjórnandi breytt veitandanum í Bifröst uppsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þessi leiðsögn yfirskrifar aldrei annan spjallveitanda. Ef annað forrit er skráð getur stjórnandi breytt veitandanum í Bifröst uppsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ChatProvider - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3146766713 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Chat provider</source>
+          <target>Spjallveitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjallveitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ChatProvider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1242426948 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows which provider currently owns Bifrost Chat.</source>
+          <target>Sýnir hvaða veitandi er nú skráður fyrir Bifröst spjall.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvaða veitandi er nú skráður fyrir Bifröst spjall.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CurrentProvider - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1242426948 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Current chat provider</source>
+          <target>Núverandi spjallveitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Núverandi spjallveitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CurrentProvider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2667510389 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open a supported Business Central page, such as Customers, and choose Chat via Bifrost in the FactBox. Chat users need both chat sets and a language model. You can return to this wizard from Bifrost Language Models Setup.</source>
+          <target>Opnaðu studda Business Central síðu, svo sem Viðskiptamenn, og veldu Spjall með Bifröst í upplýsingareitnum. Spjallnotendur þurfa báðar spjallheimildasamstæðurnar og mállíkan. Þú getur opnað þessa leiðsögn aftur í uppsetningu Bifröst mállíkana.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnaðu studda Business Central síðu, svo sem Viðskiptamenn, og veldu Spjall með Bifröst í upplýsingareitnum. Spjallnotendur þurfa báðar spjallheimildasamstæðurnar og mállíkan. Þú getur opnað þessa leiðsögn aftur í uppsetningu Bifröst mállíkana.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Finish - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2667510389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finish setup</source>
+          <target>Ljúka uppsetningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ljúka uppsetningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Finish - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3679675544 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether the step is done, skipped, or needs an administrator.</source>
+          <target>Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control HttpSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3679675544 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP</source>
+          <target>HTTP</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control HttpSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1563231237 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether the step is done, skipped, or needs an administrator.</source>
+          <target>Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ModelSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1563231237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language model</source>
+          <target>Mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mállíkan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ModelSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3096589655 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether the step is done, skipped, or needs an administrator.</source>
+          <target>Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ProviderSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3096589655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Chat provider</source>
+          <target>Spjallveitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjallveitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ProviderSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3415017890 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether the step is done, skipped, or needs an administrator.</source>
+          <target>Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort skrefi sé lokið, sleppt eða þurfi stjórnanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control UsersSummary - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3415017890 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Users</source>
+          <target>Notendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control UsersSummary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1627599036 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot itself does not need this setting. Other language model providers and the MCP tool server need Allow HttpClient Requests for Bifrost Language Models.</source>
+          <target>Copilot sjálft þarf ekki þessa stillingu. Aðrir mállíkanaveitendur og MCP-verkfæraþjónninn þurfa Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálft þarf ekki þessa stillingu. Aðrir mállíkanaveitendur og MCP-verkfæraþjónninn þurfa Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Http - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1627599036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP for this app</source>
+          <target>HTTP fyrir þetta forrit</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP fyrir þetta forrit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Http - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2778804623 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether this app may send HTTP requests.</source>
+          <target>Sýnir hvort þetta forrit megi senda HTTP-beiðnir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort þetta forrit megi senda HTTP-beiðnir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control HttpEnabled - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2778804623 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP enabled</source>
+          <target>HTTP virkt</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=HTTP virkt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control HttpEnabled - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 283970885 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to change extension settings. Ask an administrator with the SUPER permission set (or write permission on table NAV App Setting) to enable Allow HttpClient Requests for the applications listed above.</source>
+          <target>Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir forritin hér að ofan.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að breyta stillingum viðbóta. Biddu kerfisstjóra sem hefur SUPER heimildasamstæðuna (eða skrifheimild á töfluna NAV App Setting) um að virkja Leyfa HttpClient-beiðnir fyrir forritin hér að ofan.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control HttpPermissionNote - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2353983831 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language model</source>
+          <target>Mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mállíkan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control LanguageModel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3019185213 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Copilot &amp; agent capabilities and make sure Bifrost Copilot is active. If the environment requires it, allow data movement to the Azure OpenAI geography. Copilot usage is billed by Microsoft. Choose Initialize Copilot to create or update the COPILOT model and its default skill.</source>
+          <target>Opnaðu Copilot og getu virkja og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnaðu Copilot og getu virkja og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotHelp - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3019185213 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot</source>
+          <target>Copilot</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotHelp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1164413602 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether Bifrost Copilot is active. If not, open the capabilities page.</source>
+          <target>Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna getusíðuna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna getusíðuna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotActive - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1164413602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Capability active</source>
+          <target>Geta virk</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Geta virk</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotActive - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3438637735 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether the COPILOT language model has been initialized.</source>
+          <target>Sýnir hvort COPILOT-mállíkanið hafi verið frumstillt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort COPILOT-mállíkanið hafi verið frumstillt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotModelExists - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3438637735 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>COPILOT model exists</source>
+          <target>COPILOT-mállíkan til</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=COPILOT-mállíkan til</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotModelExists - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 4139637758 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether Bifrost Copilot is registered.</source>
+          <target>Sýnir hvort Bifröst Copilot sé skráð.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé skráð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotRegistered - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 4139637758 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Capability registered</source>
+          <target>Geta skráð</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Geta skráð</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotRegistered - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3956772664 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose the default model for requests without a model. Chat users also need a per-user model.</source>
+          <target>Veldu sjálfgefið mállíkan fyrir beiðnir án mállíkans. Spjallnotendur þurfa einnig eigið mállíkan.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu sjálfgefið mállíkan fyrir beiðnir án mállíkans. Spjallnotendur þurfa einnig eigið mállíkan.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control DefaultModel - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3956772664 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Language Model</source>
+          <target>Sjálfgefið mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefið mállíkan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control DefaultModel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2080927879 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lists each model, its provider, and whether a shared or personal API key is set for you.</source>
+          <target>Sýnir hvert mállíkan, veitanda þess og hvort sameiginlegur eða persónulegur API-lykill hafi verið skráður fyrir þig.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvert mállíkan, veitanda þess og hvort sameiginlegur eða persónulegur API-lykill hafi verið skráður fyrir þig.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control AvailableModels - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2080927879 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Existing models and API keys</source>
+          <target>Fyrirliggjandi mállíkön og API-lyklar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirliggjandi mállíkön og API-lyklar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control AvailableModels - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 4109748878 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose Copilot or configure another provider.</source>
+          <target>Veldu Copilot eða stilltu annan veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu Copilot eða stilltu annan veitanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ProviderChoice - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 4109748878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Provider</source>
+          <target>Veitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ProviderChoice - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 4109748878 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot (recommended),Another provider</source>
+          <target>Copilot (mælt með),Annar veitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot (mælt með),Annar veitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control ProviderChoice - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2183420390 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select enabled users, give them both chat permission sets, and choose their language model. Changes take effect at the next sign-in or session refresh.</source>
+          <target>Veldu virka notendur, veittu þeim báðar spjallheimildasamstæðurnar og veldu mállíkan þeirra. Breytingar taka gildi við næstu innskráningu eða endurnýjun setu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu virka notendur, veittu þeim báðar spjallheimildasamstæðurnar og veldu mállíkan þeirra. Breytingar taka gildi við næstu innskráningu eða endurnýjun setu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Users - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2183420390 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Users</source>
+          <target>Notendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Users - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 274479162 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose the model to assign with Set language model for selected users.</source>
+          <target>Veldu mállíkanið sem á að úthluta með Setja mállíkan fyrir valda notendur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu mállíkanið sem á að úthluta með Setja mállíkan fyrir valda notendur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control SelectedModel - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 274479162 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language model for selected users</source>
+          <target>Mállíkan fyrir valda notendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mállíkan fyrir valda notendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control SelectedModel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 2090230614 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>An administrator with SUPER or SECURITY can give chat access. The BIFROST Chat ori and BIFROST LLM Chat ori sets can also be assigned through an Entra security group.</source>
+          <target>Stjórnandi með SUPER eða SECURITY getur veitt spjallaðgang. Einnig má úthluta BIFROST Chat ori og BIFROST LLM Chat ori með Entra-öryggishópi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stjórnandi með SUPER eða SECURITY getur veitt spjallaðgang. Einnig má úthluta BIFROST Chat ori og BIFROST LLM Chat ori með Entra-öryggishópi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control UserPermissionNote - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3800514526 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Chat lets you work with Business Central through a language model. Enable HTTP, initialize Copilot or another provider, choose the chat provider, and give users access. Every step can be skipped and repeated later from Bifrost Language Models Setup.</source>
+          <target>Bifröst spjall gerir þér kleift að vinna í Business Central með mállíkani. Virkjaðu HTTP, frumstilltu Copilot eða annan veitanda, veldu spjallveitanda og veittu notendum aðgang. Sleppa má hverju skrefi og endurtaka síðar í uppsetningu Bifröst mállíkana.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst spjall gerir þér kleift að vinna í Business Central með mállíkani. Virkjaðu HTTP, frumstilltu Copilot eða annan veitanda, veldu spjallveitanda og veittu notendum aðgang. Sleppa má hverju skrefi og endurtaka síðar í uppsetningu Bifröst mállíkana.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Welcome - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 3800514526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Welcome to Bifrost Chat</source>
+          <target>Velkomin í Bifröst spjall</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Velkomin í Bifröst spjall</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control Welcome - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2985625552 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Keys.</source>
+          <target>API-lyklar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ApiKeys - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2985625552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Keys</source>
+          <target>API-lyklar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=API-lyklar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ApiKeys - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 742034285 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Back.</source>
+          <target>Til baka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Til baka.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Back - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 742034285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Back</source>
+          <target>Til baka</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Til baka</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Back - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1062875340 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Bifrost Setup.</source>
+          <target>Opna Bifröst uppsetningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Bifröst uppsetningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action BifrostSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1062875340 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Bifrost Setup</source>
+          <target>Opna Bifröst uppsetningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Bifröst uppsetningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action BifrostSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2163653181 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Bifrost Language Models for chat.</source>
+          <target>Nota Bifröst mállíkön fyrir spjall.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Nota Bifröst mállíkön fyrir spjall.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ClaimProvider - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2163653181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Bifrost Language Models for chat</source>
+          <target>Nota Bifröst mállíkön fyrir spjall</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Nota Bifröst mállíkön fyrir spjall</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ClaimProvider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1452050608 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Copilot &amp; agent capabilities.</source>
+          <target>Opna Copilot og getu virkja.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og getu virkja.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action CopilotCapabilities - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1452050608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Copilot &amp; agent capabilities</source>
+          <target>Opna Copilot og getu virkja</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og getu virkja</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action CopilotCapabilities - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 3275419427 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Enable HTTP Client Requests.</source>
+          <target>Virkja HTTP-biðlarabeiðnir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP-biðlarabeiðnir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action EnableHttp - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 3275419427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Enable HTTP Client Requests</source>
+          <target>Virkja HTTP-biðlarabeiðnir</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP-biðlarabeiðnir</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action EnableHttp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1151820368 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Extension Settings.</source>
+          <target>Opna stillingar viðbótar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna stillingar viðbótar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ExtensionSettings - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1151820368 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Extension Settings</source>
+          <target>Opna stillingar viðbótar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna stillingar viðbótar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ExtensionSettings - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 210777352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finish.</source>
+          <target>Ljúka.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ljúka.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action FinishSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 210777352 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finish</source>
+          <target>Ljúka</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ljúka</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action FinishSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 955471145 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Give chat access to selected users.</source>
+          <target>Veita völdum notendum spjallaðgang.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veita völdum notendum spjallaðgang.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action GiveChatAccess - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 955471145 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Give chat access to selected users</source>
+          <target>Veita völdum notendum spjallaðgang</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veita völdum notendum spjallaðgang</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action GiveChatAccess - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1575635115 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language Models help.</source>
+          <target>Hjálp fyrir mállíkön.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hjálp fyrir mállíkön.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Help - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1575635115 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language Models help</source>
+          <target>Hjálp fyrir mállíkön</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hjálp fyrir mállíkön</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Help - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2140772006 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Initialize Copilot.</source>
+          <target>Frumstilla Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Frumstilla Copilot.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action InitializeCopilot - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2140772006 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Initialize Copilot</source>
+          <target>Frumstilla Copilot</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Frumstilla Copilot</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action InitializeCopilot - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1873111202 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Language Models.</source>
+          <target>Opna mállíkön.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna mállíkön.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action LanguageModels - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1873111202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Language Models</source>
+          <target>Opna mállíkön</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna mállíkön</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action LanguageModels - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1235620153 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Next.</source>
+          <target>Áfram.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Áfram.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Next - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 1235620153 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Next</source>
+          <target>Áfram</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Áfram</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Next - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 66323880 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set language model for selected users.</source>
+          <target>Setja mállíkan fyrir valda notendur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja mállíkan fyrir valda notendur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action SetUserModel - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 66323880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set language model for selected users</source>
+          <target>Setja mállíkan fyrir valda notendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Setja mállíkan fyrir valda notendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action SetUserModel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2156087049 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verify.</source>
+          <target>Staðfesta.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfesta.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Verify - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Action 2156087049 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verify</source>
+          <target>Staðfesta</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staðfesta</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action Verify - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Chat users</source>
+          <target>Spjallnotendur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjallnotendur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - NamedType 295450351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No enabled users are selected. Select users and try again.</source>
+          <target>Engir virkir notendur eru valdir. Veldu notendur og reyndu aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Engir virkir notendur eru valdir. Veldu notendur og reyndu aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - NamedType SelectionErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 618100865 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether this user has the Foundation chat permission set.</source>
+          <target>Sýnir hvort notandinn hafi spjallheimildasamstæðu Foundation.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Foundation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasFoundationChat - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 618100865 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BIFROST Chat ori</source>
+          <target>BIFROST Chat ori</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST Chat ori</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasFoundationChat - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 1276742534 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether this user has the Language Models chat permission set.</source>
+          <target>Sýnir hvort notandinn hafi spjallheimildasamstæðu Mállíkana.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Mállíkana.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasLanguageModelsChat - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 1276742534 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BIFROST LLM Chat ori</source>
+          <target>BIFROST LLM Chat ori</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST LLM Chat ori</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasLanguageModelsChat - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 4021916506 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows the language model assigned to this user in this company.</source>
+          <target>Sýnir mállíkanið sem notandanum er úthlutað í þessu fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir mállíkanið sem notandanum er úthlutað í þessu fyrirtæki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control UserModel - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 4021916506 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language model</source>
+          <target>Mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mállíkan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control UserModel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 3549826426 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select the enabled users to update in this company.</source>
+          <target>Veldu virka notendur sem á að uppfæra í þessu fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veldu virka notendur sem á að uppfæra í þessu fyrirtæki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control UserName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054151010 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User</source>
+          <target>Notandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control UserName - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 518916197 - Action 639024038 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2901867346">
           <source>Chat about this customer in Business Central.</source>
