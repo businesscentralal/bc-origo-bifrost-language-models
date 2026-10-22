@@ -126,8 +126,9 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         AccessControl: Record "Access Control";
         UserPermissions: Codeunit "User Permissions";
     begin
-        exit(AccessControl.WritePermission() and
-            (UserPermissions.IsSuper(UserSecurityId()) or UserPermissions.CanManageUsersOnTenant(UserSecurityId())));
+        if not AccessControl.WritePermission() then
+            exit(false);
+        exit(UserPermissions.IsSuper(UserSecurityId()) or UserPermissions.CanManageUsersOnTenant(UserSecurityId()));
     end;
 
     /// <summary>Reports the effective assignment, including platform-resolved group assignments.</summary>
