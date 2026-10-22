@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-10-20) - AppSource delivery (#67)
+
+- `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer (productId 30b2edcf-bfaf-48ef-94d9-4732fb9eabd1, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver updates.
+
 ## [28.0.0.0] - 2026-10-19
 
 ### Changed (2026-10-19) - Icelandic translation review for AppSource
