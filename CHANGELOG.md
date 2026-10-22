@@ -9,6 +9,10 @@ All notable changes to Bifrost Language Models are documented here.
 - Language Models assisted setup (#80): page 10035345 `LangModel Setup Wizard ori`, codeunits 10035426–10035427 `LangModel Wizard Reg. ori` / `LangModel Wizard Mgt ori`, and user-selection ListPart page 10035428 `LangModel Wizard Users ori`. The wizard reads this app's HTTP status and opens Foundation's setup wizard to enable HTTP for all registered Bifrost apps, shows Copilot capability status and initialization, preserves existing chat provider ownership, and assigns company-scoped chat permissions and per-user language models. Explicit Finish completes Assisted Setup; an entirely unconfigured setup cannot be completed.
 - Page 10035421 `LangModel Setup ori` opens the app-specific wizard and retains a separate Foundation setup wizard action. Permission set 10035404 grants the new objects without granting security-administration or extension-setting write permission. English/Icelandic texts and XLF are maintained. Test codeunit 96037 `LangModel Setup Wizard Tests` covers registration, commands, invalid input, idempotency, and completion.
 
+### Changed (2026-10-20) - AppSource delivery (#67)
+
+- `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer (productId 30b2edcf-bfaf-48ef-94d9-4732fb9eabd1, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver updates.
+
 ## [28.0.0.0] - 2026-10-19
 
 ### Changed (2026-10-19) - Icelandic translation review for AppSource
