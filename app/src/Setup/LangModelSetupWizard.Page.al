@@ -69,10 +69,10 @@ page 10035345 "LangModel Setup Wizard ori"
                     ToolTip = 'Shows whether Bifrost Copilot is registered.', Comment = 'is-IS=Sýnir hvort Bifröst Copilot sé skráð.';
                     Editable = false;
                 }
-                field(CopilotActive; CopilotActive)
+                field(CopilotStatus; CopilotStatus)
                 {
-                    Caption = 'Capability active', Comment = 'is-IS=Geta virk';
-                    ToolTip = 'Shows whether Bifrost Copilot is active. If not, open the capabilities page.', Comment = 'is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna getusíðuna.';
+                    Caption = 'Capability status', Comment = 'is-IS=Staða getu';
+                    ToolTip = 'Shows whether Bifrost Copilot is active. If not, open Copilot and agent capabilities.', Comment = 'is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.';
                     Editable = false;
                 }
                 field(CopilotModelExists; CopilotModelExists)
@@ -407,6 +407,7 @@ page 10035345 "LangModel Setup Wizard ori"
         CanAssignPermissions: Boolean;
         CopilotRegistered: Boolean;
         CopilotActive: Boolean;
+        CopilotStatus: Text;
         CopilotModelExists: Boolean;
         UsersUpdated: Boolean;
         AvailableModels: Text;
@@ -414,6 +415,9 @@ page 10035345 "LangModel Setup Wizard ori"
         ModelSummary: Text;
         ProviderSummary: Text;
         UsersSummary: Text;
+        CopilotActiveTxt: Label 'Active', Comment = 'is-IS=Virkt';
+        CopilotInactiveTxt: Label 'Not active — open Copilot & agent capabilities to activate Bifrost Copilot.', Comment = 'is-IS=Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.';
+        CopilotUnregisteredTxt: Label 'Not registered — choose Initialize Copilot.', Comment = 'is-IS=Ekki skráð — veldu Frumstilla Copilot.';
         DoneTxt: Label 'Done', Comment = 'is-IS=Lokið';
         SkippedTxt: Label 'Skipped', Comment = 'is-IS=Sleppt';
         AdministratorTxt: Label 'Needs an administrator', Comment = 'is-IS=Þarf stjórnanda';
@@ -436,6 +440,12 @@ page 10035345 "LangModel Setup Wizard ori"
         CanWriteAppSetting := WizardMgt.CanEnableHttp();
         CanAssignPermissions := WizardMgt.CanAssignChatAccess();
         WizardMgt.GetCopilotStatus(CopilotRegistered, CopilotActive);
+        CopilotStatus := CopilotUnregisteredTxt;
+        if CopilotRegistered then
+            if CopilotActive then
+                CopilotStatus := CopilotActiveTxt
+            else
+                CopilotStatus := CopilotInactiveTxt;
         CopilotModelExists := Model.Get('COPILOT');
         CurrentProvider := WizardMgt.GetChatProvider();
         DefaultModel := WizardMgt.GetDefaultModel();
@@ -459,7 +469,9 @@ page 10035345 "LangModel Setup Wizard ori"
     local procedure RefreshModels()
     var
         Model: Record "Bifrost Language Model ori";
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
         Secrets: Codeunit "LangModel Secrets ori";
+        Provider: Interface "Bifrost LangModel Provider ori";
         KeyStatus: Text;
     begin
         AvailableModels := '';
@@ -467,7 +479,12 @@ page 10035345 "LangModel Setup Wizard ori"
         if Model.FindSet() then
             repeat
                 KeyStatus := KeyMissingTxt;
-                if Model."Chat Provider" = Model."Chat Provider"::Copilot then
+                Provider := Model."Chat Provider";
+                TempArgument.Init();
+                TempArgument."Procedure Type" := TempArgument."Procedure Type"::RequiresApiKey;
+                TempArgument."Result Boolean" := false;
+                Provider.Execute(TempArgument);
+                if not TempArgument."Result Boolean" then
                     KeyStatus := KeyNotRequiredTxt
                 else
                     if Secrets.HasServiceKey(Model.Code) or Secrets.HasUserKey(Model.Code) then

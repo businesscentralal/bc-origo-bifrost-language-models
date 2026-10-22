@@ -10,6 +10,7 @@ page 10035428 "LangModel Wizard Users ori"
     SourceTableView = where(State = const(Enabled));
     Extensible = false;
     ApplicationArea = All;
+    ContextSensitiveHelpPage = 'language-models-setup';
     InsertAllowed = false;
     DeleteAllowed = false;
     ModifyAllowed = false;

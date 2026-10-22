@@ -275,9 +275,9 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         OriginalCode: Code[20];
     begin
         // Story #80, AC08 | Time: independent of Today/WorkDate | Risk: None
-        // [GIVEN] A configured default.
-        OriginalCode := CreateModel();
-        WizardMgt.SetDefaultModel(OriginalCode);
+        // [GIVEN] The current committed default (possibly empty). No uncommitted baseline
+        // is created here: an expected error rolls that baseline back as well.
+        OriginalCode := WizardMgt.GetDefaultModel();
         // [WHEN] A missing code is submitted.
         asserterror WizardMgt.SetDefaultModel('');
         // [THEN] The original default is retained.
@@ -371,8 +371,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
     begin
         // Story #80, AC03 | Time: independent of Today/WorkDate | Risk: None
         // [GIVEN] A product user without extension-settings write permission.
-        LowerPermissions.SetO365Basic();
-        LowerPermissions.AddPermissionSet('BIFROST LLM ori');
+        LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
         Assert.IsFalse(WizardMgt.CanEnableHttp(), 'Product set must not grant extension-settings write access.');
         // [WHEN] The command is invoked directly rather than through the hidden action.
         asserterror WizardMgt.EnableHttp();
@@ -386,18 +385,18 @@ codeunit 96037 "LangModel Setup Wizard Tests"
     [TestPermissions(TestPermissions::Restrictive)]
     procedure Scenario_AC07_NonAdmin_AssignmentCommandRefused()
     var
-        SelectedUser: Record User;
         LowerPermissions: Codeunit "Library - Lower Permissions";
+        SecurityId: Guid;
     begin
         // Story #80, AC07 | Time: independent of Today/WorkDate | Risk: None
-        // [GIVEN] A user and a caller without security administration.
-        CreateEnabledUser(SelectedUser);
-        LowerPermissions.SetO365Basic();
-        LowerPermissions.AddPermissionSet('BIFROST LLM ori');
+        // [GIVEN] A caller with the exact product set, without security administration.
+        // No User insert is needed: authorization must be checked before looking up the target.
+        SecurityId := CreateGuid();
+        LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
         Assert.IsFalse(WizardMgt.CanAssignChatAccess(), 'Product set must not grant permission-assignment authority.');
         // [WHEN] The assignment is requested through the command directly.
-        asserterror WizardMgt.GiveChatAccess(SelectedUser."User Security ID");
-        // [THEN] Security administration is required.
+        asserterror WizardMgt.GiveChatAccess(SecurityId);
+        // [THEN] Security administration is required before any user lookup or assignment.
         Assert.ExpectedError('SUPER');
         LowerPermissions.SetOutsideO365Scope();
     end;

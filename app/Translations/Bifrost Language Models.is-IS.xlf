@@ -1497,6 +1497,24 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Þarf stjórnanda</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType AdministratorTxt</note>
         </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 900937202" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Active</source>
+          <target>Virkt</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType CopilotActiveTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 678231131" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not active — open Copilot &amp; agent capabilities to activate Bifrost Copilot.</source>
+          <target>Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType CopilotInactiveTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - NamedType 1364669963" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not registered — choose Initialize Copilot.</source>
+          <target>Ekki skráð — veldu Frumstilla Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki skráð — veldu Frumstilla Copilot.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType CopilotUnregisteredTxt</note>
+        </trans-unit>
         <trans-unit id="Page 2383761693 - NamedType 797954468" size-unit="char" translate="yes" xml:space="preserve">
           <source>Done</source>
           <target>Lokið</target>
@@ -1665,18 +1683,6 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Copilot</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotHelp - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2383761693 - Control 1164413602 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Shows whether Bifrost Copilot is active. If not, open the capabilities page.</source>
-          <target>Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna getusíðuna.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna getusíðuna.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotActive - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2383761693 - Control 1164413602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Capability active</source>
-          <target>Geta virk</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Geta virk</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotActive - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2383761693 - Control 3438637735 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Shows whether the COPILOT language model has been initialized.</source>
           <target>Sýnir hvort COPILOT-mállíkanið hafi verið frumstillt.</target>
@@ -1700,6 +1706,18 @@
           <target>Geta skráð</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Geta skráð</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotRegistered - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1797746282 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows whether Bifrost Copilot is active. If not, open Copilot and agent capabilities.</source>
+          <target>Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotStatus - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2383761693 - Control 1797746282 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Capability status</source>
+          <target>Staða getu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Staða getu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotStatus - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Control 3956772664 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Choose the default model for requests without a model. Chat users also need a per-user model.</source>
