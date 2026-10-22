@@ -330,14 +330,18 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         GuidedExperience: Codeunit "Guided Experience";
     begin
         // Story #80, AC09 | Time: independent of Today/WorkDate | Risk: None
-        // [GIVEN] All optional prerequisite steps are skipped and unconfigured.
+        // [GIVEN] Prepare the fixture with test authority before restricting the caller.
+        LowerPermissions.SetOutsideO365Scope();
+        // All optional prerequisite steps are skipped and unconfigured.
         SetProvider(Enum::"Chat Provider Type ori"::None);
         Model.ModifyAll(Default, false);
         GuidedExperience.ResetAssistedSetup(ObjectType::Page, Page::"LangModel Setup Wizard ori");
         // [WHEN] A caller without platform-setting read access has no configured prerequisites.
         LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
+        LowerPermissions.AddPermissionSet('BIFROST Full ori');
         Assert.IsFalse(WizardMgt.IsHttpEnabled(), 'No readable HTTP prerequisite must be reported as unconfigured.');
         asserterror WizardMgt.Finish();
+        Assert.ExpectedError('Setup is not complete');
         LowerPermissions.SetOutsideO365Scope();
         // [THEN] Completion remains false.
         Assert.IsFalse(GuidedExperience.IsAssistedSetupComplete(ObjectType::Page, Page::"LangModel Setup Wizard ori"), 'Skipped setup must remain incomplete.');
@@ -434,7 +438,9 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         NewUser."User Security ID" := CreateGuid();
         NewUser."User Name" := CopyStr('BIFT-' + DelChr(Format(NewUser."User Security ID"), '=', '{}-'), 1, MaxStrLen(NewUser."User Name"));
         NewUser.State := NewUser.State::Enabled;
-        NewUser.Insert();
+        // Run normal user-insert triggers, then flush the user buffer before native permission APIs.
+        NewUser.Insert(true);
+        NewUser.Get(NewUser."User Security ID");
     end;
 
     local procedure AssertUserSets(SecurityId: Guid)
