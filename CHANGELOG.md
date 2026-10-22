@@ -10,6 +10,10 @@ All notable changes to Bifrost Language Models are documented here.
 - The description now starts with a third-person verb ("Sends one prompt ...", 20 to 200 characters, as Foundation's conformance rules require). The selection description says "Read-only." and names `Data.Records.Get` for prompts that need Business Central data. Five search terms are added in English and Icelandic (mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind). The three labels and `Bifrost Language Models.is-IS.xlf` are updated; the label ids are unchanged.
 - New test codeunit 96036 `LangModel Contract Compl Tests` walks every message type of this app (ordinals 10035335 to 10035484) and fails when a required chapter is missing, an errors entry has no code, condition or next step, an example has no request `type` or response, the effect is not read, write or irreversible or the direction does not match it, the description breaks Foundation's wording rules, the discovery texts are missing, equal to each other or untranslated, or a number of this app's object range appears in public text. Existing tests are unchanged.
 
+### Changed (2026-10-20) - AppSource delivery (#67)
+
+- `.AL-Go/settings.json`: `deliverToAppSource` names the Partner Center offer (productId 30b2edcf-bfaf-48ef-94d9-4732fb9eabd1, main app folder `app`, branch main, no continuous delivery), so the Publish To AppSource workflow can deliver updates.
+
 ## [28.0.0.0] - 2026-10-19
 
 ### Changed (2026-10-19) - Icelandic translation review for AppSource
