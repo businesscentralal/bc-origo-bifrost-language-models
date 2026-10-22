@@ -13,7 +13,6 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
     Access = Internal;
 
     var
-        HttpPermissionErr: Label 'HTTP could not be enabled. Ask an administrator with write permission on NAV App Setting to enable Allow HttpClient Requests for Bifrost Language Models, then choose Verify.', Comment = 'is-IS=Ekki tókst að virkja HTTP. Biddu stjórnanda með skrifheimild á NAV App Setting um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön og veldu síðan Staðfesta.';
         UserPermissionErr: Label 'Chat access could not be assigned. Ask an administrator with SUPER or SECURITY to assign BIFROST Chat ori and BIFROST LLM Chat ori in this company.', Comment = 'is-IS=Ekki tókst að úthluta spjallaðgangi. Biddu stjórnanda með SUPER eða SECURITY um að úthluta BIFROST Chat ori og BIFROST LLM Chat ori í þessu fyrirtæki.';
         UnknownModelErr: Label 'Language model %1 does not exist. Open Language Models and choose an existing code.', Comment = '%1 = language model code, is-IS=Mállíkanið %1 er ekki til. Opnaðu Mállíkön og veldu fyrirliggjandi kóða.';
         UserDisabledErr: Label 'The selected user is missing or disabled. Refresh the wizard and select an enabled user.', Comment = 'is-IS=Valinn notandi vantar eða er óvirkur. Endurnýjaðu leiðsögnina og veldu virkan notanda.';
@@ -39,24 +38,6 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         AppSetting: Record "NAV App Setting";
     begin
         exit(AppSetting.WritePermission());
-    end;
-
-    /// <summary>Enables outbound HTTP only for this app on explicit administrator request.</summary>
-    internal procedure EnableHttp()
-    var
-        AppSetting: Record "NAV App Setting";
-        AppInfo: ModuleInfo;
-    begin
-        if not CanEnableHttp() then
-            Error(ErrorInfo.Create(HttpPermissionErr));
-        NavApp.GetCurrentModuleInfo(AppInfo);
-        if not AppSetting.Get(AppInfo.Id()) then begin
-            AppSetting.Init();
-            AppSetting."App ID" := AppInfo.Id();
-            AppSetting.Insert();
-        end;
-        AppSetting."Allow HttpClient Requests" := true;
-        AppSetting.Modify();
     end;
 
     /// <summary>Reads Copilot registration and activation from the owning module.</summary>

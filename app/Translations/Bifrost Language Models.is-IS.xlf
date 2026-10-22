@@ -693,12 +693,6 @@
           <note from="Developer" annotates="general" priority="2">%1 = language model code, is-IS=Persónulegur API-lykill fyrir mállíkanið %1.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Secrets ori - NamedType UserKeyDescTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2178180846 - NamedType 1629884682" size-unit="char" translate="yes" xml:space="preserve">
-          <source>HTTP could not be enabled. Ask an administrator with write permission on NAV App Setting to enable Allow HttpClient Requests for Bifrost Language Models, then choose Verify.</source>
-          <target>Ekki tókst að virkja HTTP. Biddu stjórnanda með skrifheimild á NAV App Setting um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön og veldu síðan Staðfesta.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki tókst að virkja HTTP. Biddu stjórnanda með skrifheimild á NAV App Setting um að virkja Leyfa HttpClient-beiðnir fyrir Bifröst mállíkön og veldu síðan Staðfesta.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Mgt ori - NamedType HttpPermissionErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 2178180846 - NamedType 1528362915" size-unit="char" translate="yes" xml:space="preserve">
           <source>The language model could not be saved. Ask a Bifrost administrator to update the language model or user setup.</source>
           <target>Ekki tókst að vista mállíkanið. Biddu Bifröst stjórnanda um að uppfæra mállíkanið eða notandauppsetningu.</target>
@@ -1864,28 +1858,16 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action CopilotCapabilities - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 3275419427 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Enable HTTP Client Requests.</source>
-          <target>Virkja HTTP-biðlarabeiðnir.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP-biðlarabeiðnir.</note>
+          <source>Open Bifrost Setup to enable HTTP for all registered Bifrost apps, then refresh this app's status.</source>
+          <target>Opna Bifröst uppsetningu til að virkja HTTP fyrir öll skráð Bifröst forrit og endurnýja síðan stöðu þessa forrits.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Bifröst uppsetningu til að virkja HTTP fyrir öll skráð Bifröst forrit og endurnýja síðan stöðu þessa forrits.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action EnableHttp - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 3275419427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Enable HTTP Client Requests</source>
-          <target>Virkja HTTP-biðlarabeiðnir</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP-biðlarabeiðnir</note>
+          <source>Enable HTTP in Bifrost Setup</source>
+          <target>Virkja HTTP í Bifröst uppsetningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP í Bifröst uppsetningu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action EnableHttp - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2383761693 - Action 1151820368 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Open Extension Settings.</source>
-          <target>Opna stillingar viðbótar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opna stillingar viðbótar.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ExtensionSettings - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2383761693 - Action 1151820368 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Open Extension Settings</source>
-          <target>Opna stillingar viðbótar</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opna stillingar viðbótar</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action ExtensionSettings - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 210777352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Finish.</source>

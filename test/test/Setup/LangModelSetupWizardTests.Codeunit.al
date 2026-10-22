@@ -48,41 +48,41 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         SetupPage.Close();
     end;
 
-    /// <summary>HTTP changes are limited to the owning module.</summary>
+    /// <summary>HTTP status matches the persisted setting without a feature-app write.</summary>
     [Test]
-    procedure Scenario_AC03_EnableHttp_LeavesAnotherAppUnchanged()
+    procedure Scenario_AC03_HttpStatus_ReadsCurrentAppSetting()
     var
         AppSetting: Record "NAV App Setting";
         Secrets: Codeunit "LangModel Secrets ori";
-        OtherId: Guid;
+        BeforeCount: Integer;
+        Expected: Boolean;
     begin
         // Story #80, AC03 | Time: independent of Today/WorkDate | Risk: None
-        // [GIVEN] An unrelated app has explicitly disabled HTTP.
-        OtherId := CreateGuid();
-        AppSetting."App ID" := OtherId;
-        AppSetting."Allow HttpClient Requests" := false;
-        AppSetting.Insert();
-        // [WHEN] This app is explicitly enabled.
-        WizardMgt.EnableHttp();
-        // [THEN] Only this app is enabled.
-        Assert.IsTrue(WizardMgt.IsHttpEnabled(), 'Verification must read the enabled setting.');
-        AppSetting.Get(Secrets.GetAppId());
-        Assert.IsTrue(AppSetting."Allow HttpClient Requests", 'Language Models setting must be enabled.');
-        AppSetting.Get(OtherId);
-        Assert.IsFalse(AppSetting."Allow HttpClient Requests", 'Another app must remain unchanged.');
+        // [GIVEN] The HTTP state maintained by Foundation; no setting is created or changed here.
+        BeforeCount := AppSetting.Count();
+        Expected := AppSetting.Get(Secrets.GetAppId()) and AppSetting."Allow HttpClient Requests";
+        // [WHEN] The wizard reads its HTTP status repeatedly.
+        Assert.AreEqual(Expected, WizardMgt.IsHttpEnabled(), 'Status must match this app, whether enabled, disabled, or absent.');
+        Assert.AreEqual(Expected, WizardMgt.IsHttpEnabled(), 'Verification must leave the persisted setting unchanged.');
+        // [THEN] Reading has neither created nor removed settings.
+        Assert.AreEqual(BeforeCount, AppSetting.Count(), 'HTTP status must be read only.');
     end;
 
-    /// <summary>Enabling an already enabled setting is idempotent.</summary>
+    /// <summary>HTTP verification is available without changing extension settings.</summary>
     [Test]
-    procedure Scenario_AC03_EnableHttpTwice_RemainsEnabled()
+    procedure Scenario_AC03_HttpStep_OffersVerify()
+    var
+        Wizard: TestPage "LangModel Setup Wizard ori";
     begin
         // Story #80, AC03 | Time: independent of Today/WorkDate | Risk: None
-        // [GIVEN] HTTP is already enabled.
-        WizardMgt.EnableHttp();
-        // [WHEN] The command is repeated.
-        WizardMgt.EnableHttp();
-        // [THEN] Verification still succeeds.
-        Assert.IsTrue(WizardMgt.IsHttpEnabled(), 'Repeated enable must be harmless.');
+        // [GIVEN] The Language Models wizard at its HTTP step.
+        Wizard.OpenView();
+        Wizard.Next.Invoke();
+        // [WHEN] Verify refreshes the existing HTTP setting.
+        // [THEN] Verify remains available on the HTTP step.
+        Wizard.Verify.Invoke();
+        Assert.IsTrue(Wizard.Verify.Visible(), 'Verify must remain available on the HTTP step.');
+        Wizard.Close();
     end;
 
     /// <summary>Declining the existing Copilot confirmation leaves models unchanged.</summary>
@@ -322,24 +322,23 @@ codeunit 96037 "LangModel Setup Wizard Tests"
 
     /// <summary>An entirely skipped, unconfigured setup cannot be completed.</summary>
     [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
     procedure Scenario_AC09_NothingConfigured_RefusesCompletion()
     var
         Model: Record "Bifrost Language Model ori";
-        AppSetting: Record "NAV App Setting";
-        Secrets: Codeunit "LangModel Secrets ori";
+        LowerPermissions: Codeunit "Library - Lower Permissions";
         GuidedExperience: Codeunit "Guided Experience";
     begin
         // Story #80, AC09 | Time: independent of Today/WorkDate | Risk: None
         // [GIVEN] All optional prerequisite steps are skipped and unconfigured.
         SetProvider(Enum::"Chat Provider Type ori"::None);
         Model.ModifyAll(Default, false);
-        if AppSetting.Get(Secrets.GetAppId()) then begin
-            AppSetting."Allow HttpClient Requests" := false;
-            AppSetting.Modify();
-        end;
         GuidedExperience.ResetAssistedSetup(ObjectType::Page, Page::"LangModel Setup Wizard ori");
-        // [WHEN] Finish is attempted.
+        // [WHEN] A caller without platform-setting read access has no configured prerequisites.
+        LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
+        Assert.IsFalse(WizardMgt.IsHttpEnabled(), 'No readable HTTP prerequisite must be reported as unconfigured.');
         asserterror WizardMgt.Finish();
+        LowerPermissions.SetOutsideO365Scope();
         // [THEN] Completion remains false.
         Assert.IsFalse(GuidedExperience.IsAssistedSetupComplete(ObjectType::Page, Page::"LangModel Setup Wizard ori"), 'Skipped setup must remain incomplete.');
     end;
@@ -365,7 +364,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
     /// <summary>An ordinary user cannot gain extension-settings administration from this app.</summary>
     [Test]
     [TestPermissions(TestPermissions::Restrictive)]
-    procedure Scenario_AC03_NonAdmin_HttpCommandRefused()
+    procedure Scenario_AC03_NonAdmin_HttpStatusIsReadOnly()
     var
         LowerPermissions: Codeunit "Library - Lower Permissions";
     begin
@@ -373,10 +372,9 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         // [GIVEN] A product user without extension-settings write permission.
         LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
         Assert.IsFalse(WizardMgt.CanEnableHttp(), 'Product set must not grant extension-settings write access.');
-        // [WHEN] The command is invoked directly rather than through the hidden action.
-        asserterror WizardMgt.EnableHttp();
-        // [THEN] It fails with actionable localized guidance.
-        Assert.ExpectedError('NAV App Setting');
+        // [WHEN] Status is read without platform read permission.
+        // [THEN] It safely reports false and grants no extension-settings authority.
+        Assert.IsFalse(WizardMgt.IsHttpEnabled(), 'An unreadable setting must not be reported enabled.');
         LowerPermissions.SetOutsideO365Scope();
     end;
 

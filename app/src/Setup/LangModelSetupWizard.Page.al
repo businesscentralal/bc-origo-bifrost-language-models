@@ -231,29 +231,16 @@ page 10035345 "LangModel Setup Wizard ori"
             }
             action(EnableHttp)
             {
-                Caption = 'Enable HTTP Client Requests', Comment = 'is-IS=Virkja HTTP-biðlarabeiðnir';
-                ToolTip = 'Enable HTTP Client Requests.', Comment = 'is-IS=Virkja HTTP-biðlarabeiðnir.';
+                Caption = 'Enable HTTP in Bifrost Setup', Comment = 'is-IS=Virkja HTTP í Bifröst uppsetningu';
+                ToolTip = 'Open Bifrost Setup to enable HTTP for all registered Bifrost apps, then refresh this app''s status.', Comment = 'is-IS=Opna Bifröst uppsetningu til að virkja HTTP fyrir öll skráð Bifröst forrit og endurnýja síðan stöðu þessa forrits.';
                 Image = Setup;
                 InFooterBar = true;
                 Visible = (CurrentStep = 2) and CanWriteAppSetting and not HttpEnabled;
 
                 trigger OnAction()
                 begin
-                    WizardMgt.EnableHttp();
+                    Page.RunModal(Page::"Setup Wizard ori");
                     RefreshStatus();
-                end;
-            }
-            action(ExtensionSettings)
-            {
-                Caption = 'Open Extension Settings', Comment = 'is-IS=Opna stillingar viðbótar';
-                ToolTip = 'Open Extension Settings.', Comment = 'is-IS=Opna stillingar viðbótar.';
-                Image = Setup;
-                InFooterBar = true;
-                Visible = (CurrentStep = 2) and not CanWriteAppSetting;
-
-                trigger OnAction()
-                begin
-                    Hyperlink(GetUrl(ClientType::Web, CompanyName(), ObjectType::Page, 2500));
                 end;
             }
             action(Verify)
