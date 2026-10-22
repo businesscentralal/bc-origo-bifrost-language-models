@@ -134,14 +134,12 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         // Resolve both before applying either; no direct Access Control writes or implicit commit.
         FindChatSet(PermissionSet, false);
         FindChatSet(PermissionSet, true);
-        if not HasChatSet(SecurityId, false) then begin
-            FindChatSet(PermissionSet, false);
+        FindChatSet(PermissionSet, false);
+        if not HasDirectChatAssignment(SecurityId, PermissionSet) then
             UserPermissions.AssignPermissionSets(SecurityId, CompanyName(), PermissionSet);
-        end;
-        if not HasChatSet(SecurityId, true) then begin
-            FindChatSet(PermissionSet, true);
+        FindChatSet(PermissionSet, true);
+        if not HasDirectChatAssignment(SecurityId, PermissionSet) then
             UserPermissions.AssignPermissionSets(SecurityId, CompanyName(), PermissionSet);
-        end;
     end;
 
     /// <summary>Reads the selected user's current model without creating a setup row.</summary>
@@ -181,6 +179,20 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         then
             Error(ErrorInfo.Create(NothingConfiguredErr));
         GuidedExperience.CompleteAssistedSetup(ObjectType::Page, Page::"LangModel Setup Wizard ori");
+    end;
+
+    local procedure HasDirectChatAssignment(SecurityId: Guid; PermissionSet: Record "Aggregate Permission Set"): Boolean
+    var
+        AccessControl: Record "Access Control";
+    begin
+        // Explicit assignment checks direct rows in this transaction. Effective group membership
+        // remains a display concern in HasChatSet; it need not prevent an explicit company grant.
+        AccessControl.SetRange("User Security ID", SecurityId);
+        AccessControl.SetRange("Role ID", PermissionSet."Role ID");
+        AccessControl.SetRange(Scope, PermissionSet.Scope);
+        AccessControl.SetRange("App ID", PermissionSet."App ID");
+        AccessControl.SetFilter("Company Name", '%1|%2', '', CompanyName());
+        exit(not AccessControl.IsEmpty());
     end;
 
     local procedure CheckModel(ModelCode: Code[20])
