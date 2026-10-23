@@ -124,7 +124,7 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         exit(UserPermissions.HasUserPermissionSetAssigned(SecurityId, CompanyName(), PermissionSet."Role ID", PermissionSet.Scope, PermissionSet."App ID"));
     end;
 
-    /// <summary>Loads company/global chat assignments and company model choices once for the users grid.</summary>
+    /// <summary>Loads direct and inherited company/global chat assignments and company model choices once for the users grid.</summary>
     /// <param name="FoundationUsers">Users assigned the Foundation chat set.</param>
     /// <param name="LanguageModelUsers">Users assigned the Language Models chat set.</param>
     /// <param name="UserModels">Company-scoped model choices, keyed by user security ID.</param>
@@ -151,11 +151,86 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
                 if (AccessControl."Role ID" = LanguageModelSet."Role ID") and (AccessControl."App ID" = LanguageModelSet."App ID") then
                     LanguageModelUsers.Set(AccessControl."User Security ID", true);
             until AccessControl.Next() = 0;
+        LoadInheritedChatAssignments(FoundationUsers, LanguageModelUsers);
         UserSetup.SetLoadFields("User Security ID", "Bifrost Language Model Code");
         if UserSetup.FindSet() then
             repeat
                 UserModels.Set(UserSetup."User Security ID", UserSetup."Bifrost Language Model Code");
             until UserSetup.Next() = 0;
+    end;
+
+    local procedure LoadInheritedChatAssignments(var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean])
+    var
+        SecurityGroups: Record "Security Group Buffer";
+        Members: Record "Security Group Member Buffer";
+        SecurityGroup: Codeunit "Security Group";
+        SkippedGroups: List of [Code[20]];
+        HasChatGroup: Boolean;
+        IncompleteChatGroup: Boolean;
+    begin
+        SecurityGroup.GetGroups(SecurityGroups, false);
+        if SecurityGroups.FindSet() then
+            repeat
+                HasChatGroup := HasChatGroup or FoundationUsers.ContainsKey(SecurityGroups."Group User SID") or
+                    LanguageModelUsers.ContainsKey(SecurityGroups."Group User SID");
+            until SecurityGroups.Next() = 0;
+        if not HasChatGroup then
+            exit;
+
+        SkippedGroups := SecurityGroup.GetMembers(Members);
+        ApplyGroupMemberships(SecurityGroups, Members, FoundationUsers, LanguageModelUsers);
+        // A failed directory lookup must not silently turn an inherited grant into false.
+        if SecurityGroups.FindSet() then
+            repeat
+                if SkippedGroups.Contains(SecurityGroups.Code) then
+                    IncompleteChatGroup := IncompleteChatGroup or FoundationUsers.ContainsKey(SecurityGroups."Group User SID") or
+                        LanguageModelUsers.ContainsKey(SecurityGroups."Group User SID");
+            until SecurityGroups.Next() = 0;
+        if IncompleteChatGroup then
+            LoadEffectiveChatAssignments(FoundationUsers, LanguageModelUsers);
+    end;
+
+    /// <summary>Combines platform membership buffers with the already company/app-filtered assignment snapshot.</summary>
+    /// <param name="SecurityGroups">Platform groups and their permission-assignment user IDs.</param>
+    /// <param name="Members">Platform-resolved group memberships, held in memory.</param>
+    /// <param name="FoundationUsers">Direct and inherited Foundation chat grants.</param>
+    /// <param name="LanguageModelUsers">Direct and inherited Language Models chat grants.</param>
+    internal procedure ApplyGroupMemberships(var SecurityGroups: Record "Security Group Buffer"; var Members: Record "Security Group Member Buffer"; var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean])
+    var
+        FoundationGroups: Dictionary of [Code[20], Boolean];
+        LanguageModelGroups: Dictionary of [Code[20], Boolean];
+    begin
+        if SecurityGroups.FindSet() then
+            repeat
+                if FoundationUsers.ContainsKey(SecurityGroups."Group User SID") then
+                    FoundationGroups.Add(SecurityGroups.Code, true);
+                if LanguageModelUsers.ContainsKey(SecurityGroups."Group User SID") then
+                    LanguageModelGroups.Add(SecurityGroups.Code, true);
+            until SecurityGroups.Next() = 0;
+        if Members.FindSet() then
+            repeat
+                if FoundationGroups.ContainsKey(Members."Security Group Code") then
+                    FoundationUsers.Set(Members."User Security ID", true);
+                if LanguageModelGroups.ContainsKey(Members."Security Group Code") then
+                    LanguageModelUsers.Set(Members."User Security ID", true);
+            until Members.Next() = 0;
+    end;
+
+    local procedure LoadEffectiveChatAssignments(var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean])
+    var
+        EnabledUser: Record User;
+    begin
+        EnabledUser.SetLoadFields("User Security ID", State);
+        EnabledUser.SetRange(State, EnabledUser.State::Enabled);
+        if EnabledUser.FindSet() then
+            repeat
+                if not FoundationUsers.ContainsKey(EnabledUser."User Security ID") then
+                    if HasChatSet(EnabledUser."User Security ID", false) then
+                        FoundationUsers.Set(EnabledUser."User Security ID", true);
+                if not LanguageModelUsers.ContainsKey(EnabledUser."User Security ID") then
+                    if HasChatSet(EnabledUser."User Security ID", true) then
+                        LanguageModelUsers.Set(EnabledUser."User Security ID", true);
+            until EnabledUser.Next() = 0;
     end;
 
     /// <summary>Assigns the two application sets through the platform API, scoped to the current company.</summary>

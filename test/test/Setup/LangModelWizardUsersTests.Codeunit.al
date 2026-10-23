@@ -192,6 +192,108 @@ codeunit 96038 "LangModel Wizard Users Tests"
         DeleteUser(SelectedUser);
     end;
 
+    /// <summary>Group-only grants are combined with direct grants without affecting nonmembers.</summary>
+    [Test]
+    procedure Scenario_AC02_InheritedGroups_PreserveIndependentEffectiveGrants()
+    var
+        FoundationGroupUser: Record User;
+        LanguageModelGroupUser: Record User;
+        Member: Record User;
+        Nonmember: Record User;
+        Groups: Record "Security Group Buffer";
+        Members: Record "Security Group Member Buffer";
+        AccessControl: Record "Access Control";
+        FoundationUsers: Dictionary of [Guid, Boolean];
+        LanguageModelUsers: Dictionary of [Guid, Boolean];
+        UserModels: Dictionary of [Guid, Code[20]];
+    begin
+        // Story #82, Gunnar decision B | Time: independent | Risk: None
+        // [GIVEN] Self-created assignment principals and platform-shaped temporary membership buffers.
+        // No directory/tenant is changed: the external membership boundary is supplied in memory.
+        CreateUser(FoundationGroupUser);
+        CreateUser(LanguageModelGroupUser);
+        CreateUser(Member);
+        CreateUser(Nonmember);
+        AddAssignment(FoundationGroupUser, false, CompanyName(), FoundationAppId());
+        AddAssignment(LanguageModelGroupUser, true, '', LanguageModelsAppId());
+        AddAssignment(Nonmember, true, CompanyName(), LanguageModelsAppId());
+        AddGroup(Groups, 'XFOUNDATION', FoundationGroupUser);
+        AddGroup(Groups, 'XMODEL', LanguageModelGroupUser);
+        AddMember(Members, 'XFOUNDATION', Member);
+        AddMember(Members, 'XMODEL', Member);
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
+        Assert.IsFalse(FoundationUsers.ContainsKey(Member."User Security ID"), 'Fixture must have no direct Foundation grant.');
+        Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Fixture must have no direct Language Models grant.');
+        // [WHEN] The production membership join adds inherited assignments.
+        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        // [THEN] Both inherited flags are true, nonmembership stays false, and direct grants survive.
+        Assert.IsTrue(FoundationUsers.ContainsKey(Member."User Security ID"), 'Current-company group grant must be displayed.');
+        Assert.IsTrue(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Global group grant must be displayed.');
+        Assert.IsFalse(FoundationUsers.ContainsKey(Nonmember."User Security ID"), 'A nonmember must not inherit a grant.');
+        Assert.IsTrue(LanguageModelUsers.ContainsKey(Nonmember."User Security ID"), 'An unrelated direct grant must remain.');
+        AccessControl.SetRange("User Security ID", Member."User Security ID");
+        Assert.IsTrue(AccessControl.IsEmpty(), 'Reading inherited access must not write direct assignments.');
+        // [WHEN] Membership is removed and the snapshot is rebuilt.
+        Members.SetRange("Security Group Code", 'XMODEL');
+        Members.DeleteAll();
+        Members.Reset();
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
+        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        // [THEN] The surviving group remains and the removed inherited grant is cleared.
+        Assert.IsTrue(FoundationUsers.ContainsKey(Member."User Security ID"), 'Remaining membership must still grant Foundation chat.');
+        Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Removed membership must not remain cached.');
+        DeleteUser(FoundationGroupUser);
+        DeleteUser(LanguageModelGroupUser);
+        DeleteUser(Member);
+        DeleteUser(Nonmember);
+    end;
+
+    /// <summary>Inherited grants honor the same company, scope and app identity filters as direct grants.</summary>
+    [Test]
+    procedure Scenario_AC02_InheritedGroups_RejectOtherCompanyAndApp()
+    var
+        GroupUser: Record User;
+        Member: Record User;
+        Groups: Record "Security Group Buffer";
+        Members: Record "Security Group Member Buffer";
+        FoundationUsers: Dictionary of [Guid, Boolean];
+        LanguageModelUsers: Dictionary of [Guid, Boolean];
+        UserModels: Dictionary of [Guid, Code[20]];
+    begin
+        // Story #82, Gunnar decision B | Time: independent | Risk: None
+        // [GIVEN] A member whose group has only an other-company grant and a wrong-app grant.
+        CreateUser(GroupUser);
+        CreateUser(Member);
+        AddGroup(Groups, 'XOTHER', GroupUser);
+        AddMember(Members, 'XOTHER', Member);
+        AddAssignment(GroupUser, false, CopyStr(Format(CreateGuid(), 0, 4), 1, 30), FoundationAppId());
+        AddAssignment(GroupUser, true, CompanyName(), CreateGuid());
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
+        // [WHEN] The production join resolves the member from the filtered snapshot.
+        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        // [THEN] Neither assignment becomes an effective product grant.
+        Assert.IsFalse(FoundationUsers.ContainsKey(Member."User Security ID"), 'Other-company group grants must not apply.');
+        Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Wrong-app group grants must not apply.');
+        DeleteUser(GroupUser);
+        DeleteUser(Member);
+    end;
+
+    local procedure AddGroup(var Groups: Record "Security Group Buffer"; GroupCode: Code[20]; GroupUser: Record User)
+    begin
+        Groups.Init();
+        Groups.Code := GroupCode;
+        Groups."Group User SID" := GroupUser."User Security ID";
+        Groups.Insert();
+    end;
+
+    local procedure AddMember(var Members: Record "Security Group Member Buffer"; GroupCode: Code[20]; Member: Record User)
+    begin
+        Members.Init();
+        Members."Security Group Code" := GroupCode;
+        Members."User Security ID" := Member."User Security ID";
+        Members.Insert();
+    end;
+
     local procedure CreateUser(var NewUser: Record User)
     begin
         NewUser.Init();
