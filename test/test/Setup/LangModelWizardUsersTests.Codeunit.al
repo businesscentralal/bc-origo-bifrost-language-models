@@ -51,6 +51,10 @@ codeunit 96038 "LangModel Wizard Users Tests"
         Users.HasFoundationChat.AssertEquals(false);
         Users.HasLanguageModelsChat.AssertEquals(true);
         Users.Close();
+        DeleteUser(NeitherUser);
+        DeleteUser(FoundationUser);
+        DeleteUser(LanguageModelUser);
+        DeleteUser(BothUser);
     end;
 
     /// <summary>Global grants apply, while grants scoped to another company do not.</summary>
@@ -72,6 +76,7 @@ codeunit 96038 "LangModel Wizard Users Tests"
         Users.HasFoundationChat.AssertEquals(true);
         Users.HasLanguageModelsChat.AssertEquals(false);
         Users.Close();
+        DeleteUser(SelectedUser);
     end;
 
     /// <summary>A matching role name from another app must not count as a chat grant.</summary>
@@ -93,6 +98,7 @@ codeunit 96038 "LangModel Wizard Users Tests"
         Users.HasFoundationChat.AssertEquals(false);
         Users.HasLanguageModelsChat.AssertEquals(false);
         Users.Close();
+        DeleteUser(SelectedUser);
     end;
 
     /// <summary>Model choices are loaded once and absent setup does not inherit the previous row's model.</summary>
@@ -119,6 +125,9 @@ codeunit 96038 "LangModel Wizard Users Tests"
         // [THEN] The model column is empty rather than stale.
         Users.UserModel.AssertEquals('');
         Users.Close();
+        DeleteUser(ConfiguredUser);
+        DeleteUser(UnconfiguredUser);
+        Model.Delete(true);
     end;
 
     /// <summary>Reloading the snapshot drops stale assignments and discovers new grants.</summary>
@@ -145,6 +154,7 @@ codeunit 96038 "LangModel Wizard Users Tests"
         // [THEN] Removed grants are cleared and new grants are visible.
         Assert.IsFalse(FoundationUsers.ContainsKey(SelectedUser."User Security ID"), 'Removed grants must not remain cached.');
         Assert.IsTrue(LanguageModelUsers.ContainsKey(SelectedUser."User Security ID"), 'New grants must be loaded.');
+        DeleteUser(SelectedUser);
     end;
 
     local procedure CreateUser(var NewUser: Record User)
@@ -154,6 +164,18 @@ codeunit 96038 "LangModel Wizard Users Tests"
         NewUser."User Name" := CopyStr('X' + DelChr(Format(NewUser."User Security ID", 0, 4), '=', '-'), 1, MaxStrLen(NewUser."User Name"));
         NewUser.State := NewUser.State::Enabled;
         NewUser.Insert(true);
+    end;
+
+    local procedure DeleteUser(var OwnedUser: Record User)
+    var
+        AccessControl: Record "Access Control";
+        UserSetup: Record "User Setup ori";
+    begin
+        AccessControl.SetRange("User Security ID", OwnedUser."User Security ID");
+        AccessControl.DeleteAll(true);
+        if UserSetup.Get(OwnedUser."User Security ID") then
+            UserSetup.Delete(true);
+        OwnedUser.Delete(true);
     end;
 
     local procedure AddAssignment(SelectedUser: Record User; LanguageModels: Boolean; AssignmentCompany: Text; AppId: Guid)
