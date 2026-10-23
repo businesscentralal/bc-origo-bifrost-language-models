@@ -62,7 +62,7 @@ page 10035345 "LangModel Setup Wizard ori"
                 {
                     Visible = ProviderChoice = ProviderChoice::Copilot;
                     Caption = 'Copilot', Comment = 'is-IS=Copilot';
-                    InstructionalText = 'Open Copilot & agent capabilities and make sure Bifrost Copilot is active. If the environment requires it, allow data movement to the Azure OpenAI geography. Copilot usage is billed by Microsoft. Choose Initialize Copilot to create or update the COPILOT model and its default skill.', Comment = 'is-IS=Opnaðu Copilot og getu virkja og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.';
+                    InstructionalText = 'Open Copilot & agent capabilities and make sure Bifrost Copilot is active. If the environment requires it, allow data movement to the Azure OpenAI geography. Copilot usage is billed by Microsoft. Choose Initialize Copilot to create or update the COPILOT model and its default skill.', Comment = 'is-IS=Opnaðu Copilot og eiginleikar fulltrúa og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.';
                 field(CopilotRegistered; CopilotRegistered)
                 {
                     Caption = 'Capability registered', Comment = 'is-IS=Geta skráð';
@@ -72,7 +72,7 @@ page 10035345 "LangModel Setup Wizard ori"
                 field(CopilotStatus; CopilotStatus)
                 {
                     Caption = 'Capability status', Comment = 'is-IS=Staða getu';
-                    ToolTip = 'Shows whether Bifrost Copilot is active. If not, open Copilot and agent capabilities.', Comment = 'is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.';
+                    ToolTip = 'Shows whether Bifrost Copilot is active. If not, open Copilot and agent capabilities.', Comment = 'is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og eiginleikar fulltrúa.';
                     Editable = false;
                 }
                 field(CopilotModelExists; CopilotModelExists)
@@ -254,6 +254,8 @@ page 10035345 "LangModel Setup Wizard ori"
                 trigger OnAction()
                 begin
                     RefreshStatus();
+                    if CurrentStep = 5 then
+                        CurrPage.ChatUsers.Page.RefreshUsers();
                 end;
             }
             action(InitializeCopilot)
@@ -272,8 +274,8 @@ page 10035345 "LangModel Setup Wizard ori"
             }
             action(CopilotCapabilities)
             {
-                Caption = 'Open Copilot & agent capabilities', Comment = 'is-IS=Opna Copilot og getu virkja';
-                ToolTip = 'Open Copilot & agent capabilities.', Comment = 'is-IS=Opna Copilot og getu virkja.';
+                Caption = 'Open Copilot & agent capabilities', Comment = 'is-IS=Opna Copilot og eiginleikar fulltrúa';
+                ToolTip = 'Open Copilot & agent capabilities.', Comment = 'is-IS=Opna Copilot og eiginleikar fulltrúa.';
                 Image = Setup;
                 InFooterBar = true;
                 Visible = (CurrentStep = 3) and (ProviderChoice = ProviderChoice::Copilot);
@@ -403,7 +405,7 @@ page 10035345 "LangModel Setup Wizard ori"
         ProviderSummary: Text;
         UsersSummary: Text;
         CopilotActiveTxt: Label 'Active', Comment = 'is-IS=Virkt';
-        CopilotInactiveTxt: Label 'Not active — open Copilot & agent capabilities to activate Bifrost Copilot.', Comment = 'is-IS=Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.';
+        CopilotInactiveTxt: Label 'Not active — open Copilot & agent capabilities to activate Bifrost Copilot.', Comment = 'is-IS=Ekki virkt — opnaðu Copilot og eiginleikar fulltrúa til að virkja Bifröst Copilot.';
         CopilotUnregisteredTxt: Label 'Not registered — choose Initialize Copilot.', Comment = 'is-IS=Ekki skráð — veldu Frumstilla Copilot.';
         DoneTxt: Label 'Done', Comment = 'is-IS=Lokið';
         SkippedTxt: Label 'Skipped', Comment = 'is-IS=Sleppt';

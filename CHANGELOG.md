@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
+
+- Page 10035428 `LangModel Wizard Users ori` uses translated permission-column captions and keeps the permission set identifiers in the tooltips. Codeunit 10035427 `LangModel Wizard Mgt ori` loads the two sets' company/global Access Control rows and company user-model choices once, then preserves inherited grants through the platform Security Group membership API. Incomplete directory retrieval falls back to the existing effective-permission helper. Row rendering uses in-memory lookups and explicit commands refresh the snapshot.
+- Page 10035345 `LangModel Setup Wizard ori` consistently uses "Copilot og eiginleikar fulltrúa" in Icelandic actions, help, status and tooltips; the Icelandic XLF is regenerated.
+- Test codeunit 96038 `LangModel Wizard Users Tests` and test permission set 96038 `LM Wizard Read ori` cover independent permission flags, company/global scope, app identity, model display, snapshot refresh, inherited membership and revocation, inherited company/app boundaries, and indirect read access without security-administration authority. Permission set 10035404 `BIFROST LLM ori` permits execution of the platform Security Group reader without granting security-administration writes. Existing public procedures and fields and existing test assertions are retained.
+
 ### Added
 
 - Language Models assisted setup (#80): page 10035345 `LangModel Setup Wizard ori`, codeunits 10035426–10035427 `LangModel Wizard Reg. ori` / `LangModel Wizard Mgt ori`, and user-selection ListPart page 10035428 `LangModel Wizard Users ori`. The wizard reads this app's HTTP status and opens Foundation's setup wizard to enable HTTP for all registered Bifrost apps, shows Copilot capability status and initialization, preserves existing chat provider ownership, and assigns company-scoped chat permissions and per-user language models. Explicit Finish completes Assisted Setup; an entirely unconfigured setup cannot be completed.
