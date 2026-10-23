@@ -7,7 +7,7 @@ All notable changes to Bifrost Language Models are documented here.
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
 - Page 10035428 `LangModel Wizard Users ori` uses translated permission-column captions and keeps the permission set identifiers in the tooltips. Codeunit 10035427 `LangModel Wizard Mgt ori` loads the two sets' company/global Access Control rows and company user-model choices once; row rendering uses in-memory lookups and explicit commands refresh the snapshot.
-- Page 10035426 `LangModel Setup Wizard ori` consistently uses "Copilot og eiginleikar fulltrúa" in Icelandic actions, help, status and tooltips; the Icelandic XLF is regenerated.
+- Page 10035345 `LangModel Setup Wizard ori` consistently uses "Copilot og eiginleikar fulltrúa" in Icelandic actions, help, status and tooltips; the Icelandic XLF is regenerated.
 - Test codeunit 96038 `LangModel Wizard Users Tests` covers independent permission flags, company/global scope, app identity, model display and snapshot refresh. Existing public procedures and fields and existing test assertions are retained.
 
 ### Added
