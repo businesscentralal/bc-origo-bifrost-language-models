@@ -30,14 +30,14 @@ page 10035428 "LangModel Wizard Users ori"
                 }
                 field(HasFoundationChat; HasFoundationChat)
                 {
-                    Caption = 'BIFROST Chat ori', Comment = 'is-IS=BIFROST Chat ori';
-                    ToolTip = 'Shows whether this user has the Foundation chat permission set.', Comment = 'is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Foundation.';
+                    Caption = 'Chat permission', Comment = 'is-IS=Spjallheimild';
+                    ToolTip = 'Shows whether this user is assigned the BIFROST Chat ori permission set for this company or all companies.', Comment = 'is-IS=Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.';
                     Editable = false;
                 }
                 field(HasLanguageModelsChat; HasLanguageModelsChat)
                 {
-                    Caption = 'BIFROST LLM Chat ori', Comment = 'is-IS=BIFROST LLM Chat ori';
-                    ToolTip = 'Shows whether this user has the Language Models chat permission set.', Comment = 'is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Mállíkana.';
+                    Caption = 'Language model chat', Comment = 'is-IS=Spjall við mállíkan';
+                    ToolTip = 'Shows whether this user is assigned the BIFROST LLM Chat ori permission set for this company or all companies.', Comment = 'is-IS=Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST LLM Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.';
                     Editable = false;
                 }
                 field(UserModel; UserModel)
@@ -54,13 +54,24 @@ page 10035428 "LangModel Wizard Users ori"
         HasFoundationChat: Boolean;
         HasLanguageModelsChat: Boolean;
         UserModel: Code[20];
+        FoundationUsers: Dictionary of [Guid, Boolean];
+        LanguageModelUsers: Dictionary of [Guid, Boolean];
+        UserModels: Dictionary of [Guid, Code[20]];
         SelectionErr: Label 'No enabled users are selected. Select users and try again.', Comment = 'is-IS=Engir virkir notendur eru valdir. Veldu notendur og reyndu aftur.';
+
+    trigger OnOpenPage()
+    begin
+        Rec.SetLoadFields("User Security ID", "User Name", State);
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
+    end;
 
     trigger OnAfterGetRecord()
     begin
-        HasFoundationChat := WizardMgt.HasChatSet(Rec."User Security ID", false);
-        HasLanguageModelsChat := WizardMgt.HasChatSet(Rec."User Security ID", true);
-        UserModel := WizardMgt.GetUserModel(Rec."User Security ID");
+        HasFoundationChat := FoundationUsers.ContainsKey(Rec."User Security ID");
+        HasLanguageModelsChat := LanguageModelUsers.ContainsKey(Rec."User Security ID");
+        Clear(UserModel);
+        if UserModels.ContainsKey(Rec."User Security ID") then
+            UserModel := UserModels.Get(Rec."User Security ID");
     end;
 
     /// <summary>Applies an explicit wizard command only to the current enabled-user selection.</summary>
@@ -80,6 +91,13 @@ page 10035428 "LangModel Wizard Users ori"
             else
                 WizardMgt.SetUserModel(SelectedUser."User Security ID", ModelCode);
         until SelectedUser.Next() = 0;
+        RefreshUsers();
+    end;
+
+    /// <summary>Reloads the user status snapshot after an explicit command or verification request.</summary>
+    internal procedure RefreshUsers()
+    begin
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
         CurrPage.Update(false);
     end;
 }

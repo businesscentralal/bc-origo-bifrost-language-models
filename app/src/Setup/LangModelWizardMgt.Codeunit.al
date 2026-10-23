@@ -122,6 +122,40 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
         exit(UserPermissions.HasUserPermissionSetAssigned(SecurityId, CompanyName(), PermissionSet."Role ID", PermissionSet.Scope, PermissionSet."App ID"));
     end;
 
+    /// <summary>Loads company/global chat assignments and company model choices once for the users grid.</summary>
+    /// <param name="FoundationUsers">Users assigned the Foundation chat set.</param>
+    /// <param name="LanguageModelUsers">Users assigned the Language Models chat set.</param>
+    /// <param name="UserModels">Company-scoped model choices, keyed by user security ID.</param>
+    internal procedure LoadUserStatus(var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean]; var UserModels: Dictionary of [Guid, Code[20]])
+    var
+        AccessControl: Record "Access Control";
+        FoundationSet: Record "Aggregate Permission Set";
+        LanguageModelSet: Record "Aggregate Permission Set";
+        UserSetup: Record "User Setup ori";
+    begin
+        Clear(FoundationUsers);
+        Clear(LanguageModelUsers);
+        Clear(UserModels);
+        FindChatSet(FoundationSet, false);
+        FindChatSet(LanguageModelSet, true);
+        AccessControl.SetLoadFields("User Security ID", "Role ID", Scope, "App ID", "Company Name");
+        AccessControl.SetRange(Scope, AccessControl.Scope::System);
+        AccessControl.SetFilter("Role ID", '%1|%2', FoundationSet."Role ID", LanguageModelSet."Role ID");
+        AccessControl.SetFilter("Company Name", '%1|%2', '', CompanyName());
+        if AccessControl.FindSet() then
+            repeat
+                if (AccessControl."Role ID" = FoundationSet."Role ID") and (AccessControl."App ID" = FoundationSet."App ID") then
+                    FoundationUsers.Set(AccessControl."User Security ID", true);
+                if (AccessControl."Role ID" = LanguageModelSet."Role ID") and (AccessControl."App ID" = LanguageModelSet."App ID") then
+                    LanguageModelUsers.Set(AccessControl."User Security ID", true);
+            until AccessControl.Next() = 0;
+        UserSetup.SetLoadFields("User Security ID", "Bifrost Language Model Code");
+        if UserSetup.FindSet() then
+            repeat
+                UserModels.Set(UserSetup."User Security ID", UserSetup."Bifrost Language Model Code");
+            until UserSetup.Next() = 0;
+    end;
+
     /// <summary>Assigns the two application sets through the platform API, scoped to the current company.</summary>
     internal procedure GiveChatAccess(SecurityId: Guid)
     var
