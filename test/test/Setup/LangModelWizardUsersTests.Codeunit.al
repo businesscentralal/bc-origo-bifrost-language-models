@@ -167,6 +167,9 @@ codeunit 96038 "LangModel Wizard Users Tests"
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
         UserModels: Dictionary of [Guid, Code[20]];
+        PlatformGrant: Boolean;
+        BulkGrant: Boolean;
+        CanAssign: Boolean;
     begin
         // Story #82, AC02 | Time: independent of Today/WorkDate | Risk: None
         // [GIVEN] An isolated user with a grant, then a caller with only indirect Access Control read.
@@ -177,12 +180,15 @@ codeunit 96038 "LangModel Wizard Users Tests"
         LowerPermissions.AddPermissionSet('BIFROST Full ori');
         LowerPermissions.AddPermissionSet('LM Wizard Read ori');
         // [WHEN] Both the previous platform helper and new bulk snapshot read the assignment.
-        Assert.IsTrue(WizardMgt.HasChatSet(SelectedUser."User Security ID", false), 'Platform helper must allow the indirect read.');
+        PlatformGrant := WizardMgt.HasChatSet(SelectedUser."User Security ID", false);
         WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
         // [THEN] Display remains available without granting assignment authority.
-        Assert.IsTrue(FoundationUsers.ContainsKey(SelectedUser."User Security ID"), 'Bulk snapshot must preserve indirect read access.');
-        Assert.IsFalse(WizardMgt.CanAssignChatAccess(), 'Read access must not grant security administration.');
+        BulkGrant := FoundationUsers.ContainsKey(SelectedUser."User Security ID");
+        CanAssign := WizardMgt.CanAssignChatAccess();
         LowerPermissions.SetOutsideO365Scope();
+        Assert.IsTrue(PlatformGrant, 'Platform helper must allow the indirect read.');
+        Assert.IsTrue(BulkGrant, 'Bulk snapshot must preserve indirect read access.');
+        Assert.IsFalse(CanAssign, 'Read access must not grant security administration.');
         DeleteUser(SelectedUser);
     end;
 
