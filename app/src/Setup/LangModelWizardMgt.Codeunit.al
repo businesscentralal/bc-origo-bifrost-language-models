@@ -11,6 +11,8 @@ using System.Security.User;
 codeunit 10035427 "LangModel Wizard Mgt ori"
 {
     Access = Internal;
+    // Preserve the indirect read used by the platform User Permissions helper.
+    Permissions = tabledata "Access Control" = r;
 
     var
         UserPermissionErr: Label 'Chat access could not be assigned. Ask an administrator with SUPER or SECURITY to assign BIFROST Chat ori and BIFROST LLM Chat ori in this company.', Comment = 'is-IS=Ekki tókst að úthluta spjallaðgangi. Biddu stjórnanda með SUPER eða SECURITY um að úthluta BIFROST Chat ori og BIFROST LLM Chat ori í þessu fyrirtæki.';

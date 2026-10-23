@@ -157,6 +157,35 @@ codeunit 96038 "LangModel Wizard Users Tests"
         DeleteUser(SelectedUser);
     end;
 
+    /// <summary>Snapshot reads retain the platform helper's indirect access without security administration.</summary>
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure Scenario_AC02_IndirectRead_LoadsWithoutAssignmentAuthority()
+    var
+        SelectedUser: Record User;
+        LowerPermissions: Codeunit "Library - Lower Permissions";
+        FoundationUsers: Dictionary of [Guid, Boolean];
+        LanguageModelUsers: Dictionary of [Guid, Boolean];
+        UserModels: Dictionary of [Guid, Code[20]];
+    begin
+        // Story #82, AC02 | Time: independent of Today/WorkDate | Risk: None
+        // [GIVEN] An isolated user with a grant, then a caller with only indirect Access Control read.
+        LowerPermissions.SetOutsideO365Scope();
+        CreateUser(SelectedUser);
+        AddAssignment(SelectedUser, false, CompanyName(), FoundationAppId());
+        LowerPermissions.SetExactPermissionSet('BIFROST LLM ori');
+        LowerPermissions.AddPermissionSet('BIFROST Full ori');
+        LowerPermissions.AddPermissionSet('LM Wizard Read ori');
+        // [WHEN] Both the previous platform helper and new bulk snapshot read the assignment.
+        Assert.IsTrue(WizardMgt.HasChatSet(SelectedUser."User Security ID", false), 'Platform helper must allow the indirect read.');
+        WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
+        // [THEN] Display remains available without granting assignment authority.
+        Assert.IsTrue(FoundationUsers.ContainsKey(SelectedUser."User Security ID"), 'Bulk snapshot must preserve indirect read access.');
+        Assert.IsFalse(WizardMgt.CanAssignChatAccess(), 'Read access must not grant security administration.');
+        LowerPermissions.SetOutsideO365Scope();
+        DeleteUser(SelectedUser);
+    end;
+
     local procedure CreateUser(var NewUser: Record User)
     begin
         NewUser.Init();
