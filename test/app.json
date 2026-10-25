@@ -2,7 +2,7 @@
   "id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
   "name": "Bifrost Language Models - Tests",
   "publisher": "Origo",
-  "version": "28.0.1.0",
+  "version": "28.0.2.0",
   "brief": "Bifrost Language Models - Tests",
   "description": "Bifrost Language Models - Tests",
   "url": "https://www.origo.is/",
@@ -15,7 +15,7 @@
       "id": "f1722684-0c24-4022-a2e0-0f63154aca76",
       "name": "Bifrost Language Models",
       "publisher": "Origo",
-      "version": "28.0.1.0"
+      "version": "28.0.2.0"
     },
     {
       "id": "7505e808-6e52-4b96-a328-82573391297a",
