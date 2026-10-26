@@ -1499,8 +1499,8 @@
         </trans-unit>
         <trans-unit id="Page 2383761693 - NamedType 678231131" size-unit="char" translate="yes" xml:space="preserve">
           <source>Not active — open Copilot &amp; agent capabilities to activate Bifrost Copilot.</source>
-          <target>Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Ekki virkt — opnaðu Copilot og getu virkja til að virkja Bifröst Copilot.</note>
+          <target>Ekki virkt — opnaðu Copilot og eiginleikar fulltrúa til að virkja Bifröst Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki virkt — opnaðu Copilot og eiginleikar fulltrúa til að virkja Bifröst Copilot.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - NamedType CopilotInactiveTxt</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - NamedType 1364669963" size-unit="char" translate="yes" xml:space="preserve">
@@ -1667,8 +1667,8 @@
         </trans-unit>
         <trans-unit id="Page 2383761693 - Control 3019185213 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open Copilot &amp; agent capabilities and make sure Bifrost Copilot is active. If the environment requires it, allow data movement to the Azure OpenAI geography. Copilot usage is billed by Microsoft. Choose Initialize Copilot to create or update the COPILOT model and its default skill.</source>
-          <target>Opnaðu Copilot og getu virkja og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opnaðu Copilot og getu virkja og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</note>
+          <target>Opnaðu Copilot og eiginleikar fulltrúa og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnaðu Copilot og eiginleikar fulltrúa og gakktu úr skugga um að Bifröst Copilot sé virkt. Ef umhverfið krefst þess skaltu leyfa gagnaflutning á landsvæði Azure OpenAI. Microsoft innheimtir fyrir Copilot-notkun. Veldu Frumstilla Copilot til að búa til eða uppfæra COPILOT-mállíkanið og sjálfgefið hæfniefni þess.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotHelp - Property InstructionalText</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Control 3019185213 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1703,8 +1703,8 @@
         </trans-unit>
         <trans-unit id="Page 2383761693 - Control 1797746282 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Shows whether Bifrost Copilot is active. If not, open Copilot and agent capabilities.</source>
-          <target>Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og getu virkja.</note>
+          <target>Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og eiginleikar fulltrúa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort Bifröst Copilot sé virkt. Ef ekki skaltu opna Copilot og eiginleikar fulltrúa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Control CopilotStatus - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Control 1797746282 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1847,14 +1847,14 @@
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 1452050608 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open Copilot &amp; agent capabilities.</source>
-          <target>Opna Copilot og getu virkja.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og getu virkja.</note>
+          <target>Opna Copilot og eiginleikar fulltrúa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og eiginleikar fulltrúa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action CopilotCapabilities - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 1452050608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open Copilot &amp; agent capabilities</source>
-          <target>Opna Copilot og getu virkja</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og getu virkja</note>
+          <target>Opna Copilot og eiginleikar fulltrúa</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna Copilot og eiginleikar fulltrúa</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup Wizard ori - Action CopilotCapabilities - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2383761693 - Action 3275419427 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -1978,27 +1978,27 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - NamedType SelectionErr</note>
         </trans-unit>
         <trans-unit id="Page 2054151010 - Control 618100865 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Shows whether this user has the Foundation chat permission set.</source>
-          <target>Sýnir hvort notandinn hafi spjallheimildasamstæðu Foundation.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Foundation.</note>
+          <source>Shows whether this user is assigned the BIFROST Chat ori permission set for this company or all companies.</source>
+          <target>Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasFoundationChat - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2054151010 - Control 618100865 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>BIFROST Chat ori</source>
-          <target>BIFROST Chat ori</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST Chat ori</note>
+          <source>Chat permission</source>
+          <target>Spjallheimild</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjallheimild</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasFoundationChat - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2054151010 - Control 1276742534 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Shows whether this user has the Language Models chat permission set.</source>
-          <target>Sýnir hvort notandinn hafi spjallheimildasamstæðu Mállíkana.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandinn hafi spjallheimildasamstæðu Mállíkana.</note>
+          <source>Shows whether this user is assigned the BIFROST LLM Chat ori permission set for this company or all companies.</source>
+          <target>Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST LLM Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir hvort notandanum sé úthlutað heimildasamstæðunni BIFROST LLM Chat ori fyrir þetta fyrirtæki eða öll fyrirtæki.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasLanguageModelsChat - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2054151010 - Control 1276742534 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>BIFROST LLM Chat ori</source>
-          <target>BIFROST LLM Chat ori</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=BIFROST LLM Chat ori</note>
+          <source>Language model chat</source>
+          <target>Spjall við mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spjall við mállíkan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control HasLanguageModelsChat - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2054151010 - Control 4021916506 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">

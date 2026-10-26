@@ -1,5 +1,6 @@
 namespace Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
+using System.Security.AccessControl;
 
 /// <summary>
 /// Full access to Bifrost Language Models: the Bifrost Chat, language models, the Copilot provider,
@@ -30,6 +31,7 @@ permissionset 10035404 "BIFROST LLM ori"
         page "LangModel Wizard Users ori" = X,
         codeunit "LangModel Wizard Reg. ori" = X,
         codeunit "LangModel Wizard Mgt ori" = X,
+        codeunit "Security Group" = X,
         page "Chat Focus ori" = X,
         codeunit "Bifrost Chat Mgt ori" = X,
         codeunit "LangModel Chat Provider ori" = X,
