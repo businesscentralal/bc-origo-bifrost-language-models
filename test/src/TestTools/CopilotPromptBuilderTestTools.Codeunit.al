@@ -3,37 +3,51 @@ namespace Origo.Bifrost.LanguageModels.Test;
 using Origo.Bifrost.LanguageModels;
 
 /// <summary>
-/// Test tool for issue 85: reproduces the Copilot Chat Proxy starting-prompt assembly (Bootstrap, session
-/// time block, record context, skill reference) against a fixed work date and clock, so the prompt text can
-/// be asserted deterministically.
+/// Test tool for issue 85: renders the app's actual SESSION TIME block
+/// (10035393 BuildSessionTimeBlock) from fixed inputs so the starting system
+/// prompt can be asserted deterministically, and assembles the starting
+/// prompt exactly as the app's private BuildSystemPrompt does (Bootstrap,
+/// session time block, record context, skill reference).
 /// </summary>
 codeunit 96040 "Copilot Prompt Builder Test Tools"
 {
     Access = Internal;
 
     /// <summary>
-    /// Builds the starting system prompt exactly as "Copilot Chat Proxy ori".BuildSystemPrompt does, with the
-    /// session time block rendered from the given work date and the current date-time snapped to it.
+    /// Renders the app's real session time block for fixed inputs. The 10035393
+    /// codeunit is Access = Internal, so only this app and its test app can call it.
     /// </summary>
-    procedure BuildSystemPrompt(FixedWorkDate: Date; PayloadObject: JsonObject) SystemPrompt: Text
+    procedure BuildSessionTimeBlock(NowUtc: DateTime; UtcOffset: Duration; TimeZoneName: Text; WorkDate: Date) Block: Text
+    var
+        ChatProxy: Codeunit "Copilot Chat Proxy ori";
+    begin
+        exit(ChatProxy.BuildSessionTimeBlock(NowUtc, UtcOffset, TimeZoneName, WorkDate));
+    end;
+
+    /// <summary>
+    /// Builds the starting system prompt with the same assembly order as
+    /// 10035393 "Copilot Chat Proxy ori".BuildSystemPrompt: Foundation Bootstrap,
+    /// the session time block (skipped when the Bootstrap already carries it),
+    /// the record context and the user skill. The block uses the given fixed
+    /// UTC instant, offset, timezone name and work date, so tests never depend
+    /// on the wall clock (#85).
+    /// </summary>
+    procedure BuildSystemPrompt(NowUtc: DateTime; UtcOffset: Duration; TimeZoneName: Text; WorkDate: Date; PayloadObject: JsonObject) SystemPrompt: Text
     var
         PromptBuilder: TextBuilder;
+        ChatProxy: Codeunit "Copilot Chat Proxy ori";
         ToolServer: Codeunit "MCP Tool Server ori";
-        Timezone: Text;
-        CurrentDateTime: DateTime;
+        BootstrapPrompt: Text;
         RecordContextToken: JsonToken;
         RecordContext: Text;
         UserSkill: Text;
     begin
-        Timezone := GetTimezone();
-        if Timezone = '' then
-            Timezone := 'UTC';
-        CurrentDateTime := CreateDateTime(FixedWorkDate, DT2Time(12, 0, 0, 0));
-
-        PromptBuilder.Append(ToolServer.Bootstrap(''));
-        PromptBuilder.AppendLine();
-        PromptBuilder.AppendLine();
-        PromptBuilder.Append(SessionTimeBlock(FixedWorkDate, CurrentDateTime, Timezone));
+        BootstrapPrompt := ToolServer.Bootstrap('');
+        PromptBuilder.Append(BootstrapPrompt);
+        if StrPos(BootstrapPrompt, 'SESSION TIME') = 0 then begin
+            PromptBuilder.AppendLine();
+            PromptBuilder.Append(ChatProxy.BuildSessionTimeBlock(NowUtc, UtcOffset, TimeZoneName, WorkDate));
+        end;
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);
@@ -41,8 +55,7 @@ codeunit 96040 "Copilot Prompt Builder Test Tools"
                 PromptBuilder.AppendLine();
                 PromptBuilder.AppendLine();
                 PromptBuilder.AppendLine('RECORD CONTEXT:');
-                PromptBuilder.AppendLine(RecordContext);
-                PromptBuilder.AppendLine('When the user refers to the current page record, use its tableId and recordSystemId with get_records to fetch data.');
+                PromptBuilder.Append(RecordContext);
             end;
         end;
 
@@ -55,17 +68,6 @@ codeunit 96040 "Copilot Prompt Builder Test Tools"
         end;
 
         SystemPrompt := PromptBuilder.ToText();
-    end;
-
-    local procedure SessionTimeBlock(FixedWorkDate: Date; CurrentDateTime: DateTime; Timezone: Text) Block: Text
-    begin
-        Block := 'SESSION TIME:'+
-;
-        Block += 'Work date: ' + Format(FixedWorkDate, 0, 0, 0, 0, 0, 0, 9)+
-;
-        Block += 'Current date-time: ' + Format(CurrentDateTime, 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')'+
-;
-        Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
     end;
 
     local procedure GetTextProperty(Source: JsonObject; PropertyName: Text) Value: Text

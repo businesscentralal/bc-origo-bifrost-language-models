@@ -20,6 +20,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         RequestLogger: Codeunit "Request Logger ori";
         UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot-líkanið.';
         MissingMessagesLbl: Label 'Payload must contain a messages array with at least one entry.', Comment = 'is-IS=Inntak verður að innihalda skilaboðalista með að minnsta kosti einu atriði.';
+        SessionTimeMarker: Text const 'SESSION TIME';
 
     /// <summary>
     /// Runs a Copilot chat turn with bounded MCP tool iterations and returns reply or error JSON.
@@ -97,14 +98,20 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     local procedure BuildSystemPrompt(PayloadObject: JsonObject) SystemPrompt: Text
     var
         PromptBuilder: TextBuilder;
+        BootstrapPrompt: Text;
         RecordContextToken: JsonToken;
         RecordContext: Text;
         UserSkill: Text;
     begin
-        PromptBuilder.Append(ToolServer.Bootstrap(''));
-        PromptBuilder.AppendLine();
-        PromptBuilder.AppendLine();
-        PromptBuilder.Append(SessionTimeBlock());
+        BootstrapPrompt := ToolServer.Bootstrap('');
+        PromptBuilder.Append(BootstrapPrompt);
+
+        // The block is rebuilt on every request (#85). It is added only when Foundation's Bootstrap does not
+        // carry it already, so one session never sees two blocks (paired core story adds it to Bootstrap later).
+        if StrPos(BootstrapPrompt, SessionTimeMarker) = 0 then begin
+            PromptBuilder.AppendLine();
+            PromptBuilder.Append(BuildSessionTimeBlock(CurrentDateTime(), UtcOffsetSeconds(), GetTimezone(), WorkDate()));
+        end;
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);
@@ -131,23 +138,110 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     end;
 
     /// <summary>
-    /// Builds the session time block: work date and current date-time plus the instruction to use them for
-    /// relative day/period math and tableView date filters without guessing today (#85).
+    /// Builds the SESSION TIME block from explicit inputs so tests never depend on the wall clock (#85).
+    /// The label text is a model instruction, not user-facing: English only, no XLF entry (story AC11).
     /// </summary>
-    local procedure SessionTimeBlock() Block: Text
+    procedure BuildSessionTimeBlock(NowUtc: DateTime; UtcOffset: Duration; TimeZoneName: Text; WorkDate: Date) Block: Text
     var
-        Timezone: Text;
+        BlockBuilder: TextBuilder;
+        LocalDateTime: DateTime;
+        TodayDate: Date;
+        NowLocal: Text;
     begin
-        Timezone := GetTimezone();
-        if Timezone = '' then
-            Timezone := 'UTC';
-        Block := 'SESSION TIME:' +
-;
-        Block += 'Work date: ' + Format(WorkDate(), 0, 0, 0, 0, 0, 0, 9) +
-;
-        Block += 'Current date-time: ' + Format(CurrentDateTime(), 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')' +
-;
-        Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
+        TodayDate := LocalToday(NowUtc, UtcOffset);
+        BlockBuilder.AppendLine(SessionTimeMarker + ' (as of this request; use it for every relative date, never guess today):');
+        BlockBuilder.AppendLine('- Now UTC: ' + Format(NowUtc, 0, 0, 0, 0, 0, 0, 9) + 'Z');
+        if TimeZoneName <> '' then begin
+            LocalDateTime := NowUtc + UtcOffset;
+            TodayDate := LocalDateOf(LocalDateTime);
+            NowLocal := Format(LocalDateTime, 0, 0, 0, 0, 0, 0, 9);
+            BlockBuilder.AppendLine(Format('- Now user time (%1, %2): %3', [TimeZoneName, IsoUtcOffset(UtcOffset), NowLocal]));
+            BlockBuilder.AppendLine(Format('- Today: %1 %2', [Format(TodayDate, 0, 0, 0, 0, 0, 0, 9), WeekdayName(TodayDate)]));
+        end else
+            BlockBuilder.AppendLine(Format('- Today: %1 %2 (UTC; the user''s time zone is unknown)', [Format(TodayDate, 0, 0, 0, 0, 0, 0, 9), WeekdayName(TodayDate)]));
+        if WorkDate <> TodayDate then
+            BlockBuilder.AppendLine(Format('- Work date: %1 (differs from today; use it for posting dates the user did not specify)', [Format(WorkDate, 0, 0, 0, 0, 0, 0, 9)]));
+        BlockBuilder.AppendLine('- Weeks start on Monday. This week = most recent Monday through today. Last N days = N days ending today, inclusive (today minus N-1 through today). This month = the 1st of the current month through today. Last month = the whole previous calendar month. State the exact dates you used in your answer.');
+        BlockBuilder.AppendLine('- Use ISO dates from this block when you build tableView date filters. Do not call a tool to learn today''s date.');
+        Block := BlockBuilder.ToText();
+    end;
+
+    /// <summary>
+    /// Today's date in the user's local time zone for a UTC instant and offset (#85).
+    /// </summary>
+    local procedure LocalToday(NowUtc: DateTime; UtcOffset: Duration) Today: Date
+    begin
+        exit(LocalDateOf(NowUtc + UtcOffset));
+    end;
+
+    /// <summary>
+    /// The calendar date of a local (non-UTC) date-time value (#85).
+    /// </summary>
+    local procedure LocalDateOf(LocalDateTime: DateTime) Day: Date
+    var
+        LocalYear: Integer;
+        LocalMonth: Integer;
+        LocalDate: Integer;
+    begin
+        Date2DMY(LocalDateTime, LocalYear, LocalMonth, LocalDate);
+        exit(DMY2Date(LocalDate, LocalMonth, LocalYear));
+    end;
+
+    /// <summary>
+    /// English weekday name, fixed list indexed by Date2DWY day-of-week (1 = Sunday); never a culture-dependent
+    /// Format, so the block is identical at lcid 1033 and 1039 (#85).
+    /// </summary>
+    local procedure WeekdayName(Day: Date) Name: Text
+    var
+        WeekdayNo: Integer;
+    begin
+        Date2DWY(Day, 0, WeekdayNo);
+        if WeekdayNo = 1 then
+            exit('Sunday');
+        if WeekdayNo = 2 then
+            exit('Monday');
+        if WeekdayNo = 3 then
+            exit('Tuesday');
+        if WeekdayNo = 4 then
+            exit('Wednesday');
+        if WeekdayNo = 5 then
+            exit('Thursday');
+        if WeekdayNo = 6 then
+            exit('Friday');
+        exit('Saturday');
+    end;
+
+    /// <summary>
+    /// Numeric UTC offset such as +01:00 or -05:00, built from minutes so it is locale-independent (#85).
+    /// </summary>
+    local procedure IsoUtcOffset(UtcOffset: Duration) OffsetText: Text
+    var
+        TotalMinutes: Integer;
+        AbsMinutes: Integer;
+        Sign: Text;
+    begin
+        TotalMinutes := UtcOffset.Minutes;
+        Sign := '+';
+        if TotalMinutes < 0 then begin
+            Sign := '-';
+            AbsMinutes := -TotalMinutes;
+        end else
+            AbsMinutes := TotalMinutes;
+        exit(Format('%1%2%3', [Sign, Format(DivRound(AbsMinutes, 60), 0, 0, 0, 0, 0, 2, 0), Format(AbsMinutes mod 60, 0, 0, 0, 0, 0, 2, 0)]));
+    end;
+
+    /// <summary>
+    /// The UTC offset of the current session time zone in seconds; 0 when the zone is unknown (#85).
+    /// </summary>
+    local procedure UtcOffsetSeconds(): Duration
+    var
+        Zone: Text;
+        Offset: Duration;
+    begin
+        Zone := GetTimezone();
+        if Zone = '' then
+            exit(CreateDuration(0, 0, 0, 0));
+        exit(Offset := CurrentUtcOffset());
     end;
 
     local procedure CopilotHistoryLength(): Integer
