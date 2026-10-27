@@ -4,6 +4,7 @@ using Origo.Bifrost;
 using System.AI;
 using System.Text;
 using System.Security.User;
+using System.DateTime;
 
 /// <summary>
 /// Runs the Copilot agentic tool loop. Calls Azure OpenAI via System.AI,
@@ -21,6 +22,18 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         RequestLogger: Codeunit "Request Logger ori";
         UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot-líkanið.';
         MissingMessagesLbl: Label 'Payload must contain a messages array with at least one entry.', Comment = 'is-IS=Inntak verður að innihalda skilaboðalista með að minnsta kosti einu atriði.';
+        // These English-only labels are model instructions, not user-facing captions.
+        SessionTimeMarkerLbl: Label 'SESSION TIME', Locked = true;
+        SessionTimeHeaderLbl: Label '%1 (as of this request; use it for every relative date, never guess today):', Locked = true;
+        NowUtcLbl: Label '- Now UTC: %1Z', Locked = true;
+        NowUserTimeLbl: Label '- Now user time (%1, UTC%2): %3%2', Locked = true;
+        TodayLbl: Label '- Today: %1 %2', Locked = true;
+        UnknownZoneLbl: Label ' (UTC; the user''s time zone is unknown)', Locked = true;
+        WorkDateLbl: Label '- Work date: %1 (differs from today; use it for posting dates the user did not specify)', Locked = true;
+        PeriodRulesLbl: Label '- Weeks start on Monday. This week = most recent Monday through today. Last N days = N days ending today, inclusive (today minus N-1 through today). This month = the 1st of the current month through today. Last month = the whole previous calendar month. State the exact dates you used in your answer.', Locked = true;
+        DateFiltersLbl: Label '- Use ISO dates from this block when you build tableView date filters. Do not call a tool to learn today''s date.', Locked = true;
+        WeekdaysLbl: Label 'Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday', Locked = true;
+
 
     /// <summary>
     /// Runs a Copilot chat turn with bounded MCP tool iterations and returns reply or error JSON.
@@ -101,11 +114,18 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         RecordContextToken: JsonToken;
         RecordContext: Text;
         UserSkill: Text;
+        BootstrapPrompt: Text;
+        NowUtc: DateTime;
+        UtcOffset: Duration;
+        TimeZoneName: Text;
     begin
-        PromptBuilder.Append(ToolServer.Bootstrap(''));
-        PromptBuilder.AppendLine();
-        PromptBuilder.AppendLine();
-        PromptBuilder.Append(SessionTimeBlock());
+        BootstrapPrompt := ToolServer.Bootstrap('');
+        if StrPos(BootstrapPrompt, SessionTimeMarkerLbl) = 0 then begin
+            NowUtc := CurrentDateTime();
+            GetSessionTimeZone(NowUtc, UtcOffset, TimeZoneName);
+            BootstrapPrompt := AddSessionTimeBlock(BootstrapPrompt, NowUtc, UtcOffset, TimeZoneName, WorkDate());
+        end;
+        PromptBuilder.Append(BootstrapPrompt);
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);
@@ -132,25 +152,98 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     end;
 
     /// <summary>
-    /// Builds the session time block: work date and current date-time plus the instruction to use them for
-    /// relative day/period math and tableView date filters without guessing today (#85).
+    /// Appends request-time instructions only when Foundation has not already supplied the shared marker.
+    /// Explicit inputs keep this production assembly seam independent of the session clock in tests.
     /// </summary>
-    local procedure SessionTimeBlock() Block: Text
+    procedure AddSessionTimeBlock(BootstrapPrompt: Text; NowUtc: DateTime; UtcOffset: Duration; TimeZoneName: Text; CompanyWorkDate: Date): Text
     var
-        Timezone: Text;
-        UserPersonalization: Record "User Personalization";
+        PromptBuilder: TextBuilder;
+    begin
+        if StrPos(BootstrapPrompt, SessionTimeMarkerLbl) > 0 then
+            exit(BootstrapPrompt);
+        PromptBuilder.AppendLine(BootstrapPrompt);
+        PromptBuilder.AppendLine();
+        PromptBuilder.Append(BuildSessionTimeBlock(NowUtc, UtcOffset, TimeZoneName, CompanyWorkDate));
+        exit(PromptBuilder.ToText());
+    end;
+
+    /// <summary>
+    /// Builds English model instructions from explicit clock, zone offset and work-date inputs.
+    /// XML formatting uses UTC independently of the session locale and time zone; shifted UTC values
+    /// are formatted the same way before the supplied numeric offset is appended.
+    /// </summary>
+    procedure BuildSessionTimeBlock(NowUtc: DateTime; UtcOffset: Duration; TimeZoneName: Text; CompanyWorkDate: Date): Text
+    var
         BlockBuilder: TextBuilder;
+        LocalInstant: DateTime;
+        LocalDate: Date;
+        TodayLine: Text;
+    begin
+        LocalInstant := NowUtc;
+        if TimeZoneName <> '' then
+            LocalInstant += UtcOffset;
+        Evaluate(LocalDate, CopyStr(Format(LocalInstant, 0, 9), 1, 10), 9);
+
+        BlockBuilder.AppendLine(StrSubstNo(SessionTimeHeaderLbl, SessionTimeMarkerLbl));
+        BlockBuilder.AppendLine(StrSubstNo(NowUtcLbl, IsoTimestamp(NowUtc)));
+        if TimeZoneName <> '' then
+            BlockBuilder.AppendLine(StrSubstNo(NowUserTimeLbl, TimeZoneName, IsoOffset(UtcOffset), IsoTimestamp(LocalInstant)));
+        TodayLine := StrSubstNo(TodayLbl, Format(LocalDate, 0, 9), SelectStr(Date2DWY(LocalDate, 1), WeekdaysLbl));
+        if TimeZoneName = '' then
+            TodayLine += UnknownZoneLbl;
+        BlockBuilder.AppendLine(TodayLine);
+        if CompanyWorkDate <> LocalDate then
+            BlockBuilder.AppendLine(StrSubstNo(WorkDateLbl, Format(CompanyWorkDate, 0, 9)));
+        BlockBuilder.AppendLine(PeriodRulesLbl);
+        BlockBuilder.AppendLine(DateFiltersLbl);
+        exit(BlockBuilder.ToText());
+    end;
+
+    local procedure GetSessionTimeZone(NowUtc: DateTime; var UtcOffset: Duration; var TimeZoneName: Text)
+    var
+        UserPersonalization: Record "User Personalization";
     begin
         UserPersonalization.SetLoadFields("Time Zone");
         if UserPersonalization.Get(UserSecurityId()) then
-            Timezone := UserPersonalization."Time Zone";
-        if Timezone = '' then
-            Timezone := 'UTC';
-        BlockBuilder.AppendLine('SESSION TIME:');
-        BlockBuilder.AppendLine('Work date: ' + Format(WorkDate(), 0, 9));
-        BlockBuilder.AppendLine('Current date-time: ' + Format(CurrentDateTime(), 0, 9) + ' (' + Timezone + ')');
-        BlockBuilder.Append('Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.');
-        Block := BlockBuilder.ToText();
+            TimeZoneName := UserPersonalization."Time Zone";
+        if TimeZoneName = '' then
+            exit;
+        if not TryGetUtcOffset(NowUtc, TimeZoneName, UtcOffset) then begin
+            Clear(UtcOffset);
+            Clear(TimeZoneName);
+        end;
+    end;
+
+    [TryFunction]
+    local procedure TryGetUtcOffset(NowUtc: DateTime; TimeZoneName: Text; var UtcOffset: Duration)
+    var
+        TimeZone: Codeunit "Time Zone";
+    begin
+        UtcOffset := TimeZone.GetTimezoneOffset(NowUtc, TimeZoneName);
+    end;
+
+    local procedure IsoTimestamp(Instant: DateTime): Text
+    begin
+        exit(CopyStr(Format(Instant, 0, 9), 1, 19));
+    end;
+
+    local procedure IsoOffset(UtcOffset: Duration): Text
+    var
+        TotalMinutes: Integer;
+        Sign: Text;
+    begin
+        Sign := '+';
+        if UtcOffset < 0 then
+            Sign := '-';
+        TotalMinutes := Round(Abs(UtcOffset) / 60000, 1, '=');
+        exit(Sign + TwoDigits(TotalMinutes div 60) + ':' + TwoDigits(TotalMinutes mod 60));
+    end;
+
+    local procedure TwoDigits(Value: Integer): Text
+    begin
+        if Value < 10 then
+            exit('0' + Format(Value, 0, 9));
+        exit(Format(Value, 0, 9));
     end;
 
     local procedure CopilotHistoryLength(): Integer

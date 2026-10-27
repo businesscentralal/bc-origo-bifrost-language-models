@@ -4,14 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
-### Fixed (2026-10-27) - Session prompt compilation (#85)
+### Added (2026-10-27) - Request time in the Copilot system prompt (#85)
 
-- Codeunit 10035393 and test codeunits 96039/96040 use `TextBuilder.AppendLine` for line separators, supported invariant `Format` calls, the user personalization time-zone field, and a valid fixed AL time literal. Test line extraction uses one-based positions and handles CRLF. The new test helper name fits the AL object-name limit.
-
-### Added (2026-10-27) - Session time block in the Copilot starting prompt (#85)
-
-- Codeunit 10035393 `Copilot Chat Proxy ori`: every new Copilot chat session now starts with a `SESSION TIME` block right after Foundation's `Bootstrap` — the work date (`WorkDate()`, ISO `YYYY-MM-DD`), the current date-time at session start (ISO, in the user's BC timezone) and the instruction to use those values for relative day/period math and `tableView` date FILTERs instead of inventing today. The block is assembled in code with no new user-visible labels, so no XLF units are introduced.
-- Test codeunit 96039 `Copilot Chat Prompt Time Tests` with test tool 96040 `Copilot Prompt Builder Test Tools` asserts, against a fixed work date and clock, that the built system prompt carries the ISO work date, a same-day current date-time with timezone, the session header and the do-not-invent-today instruction.
+- Codeunit 10035393 `Copilot Chat Proxy ori` appends a `SESSION TIME` block immediately after Foundation's `Bootstrap`, only if Foundation did not already add that marker. It refreshes on every request and includes UTC, resolved user time and offset, local date and English weekday, a differing work date and explicit relative-period/filter rules. Unknown time zones are explicitly reported as UTC. No extra tool or HTTP call is made. English locked labels are model instructions, with no new captions or XLF changes.
+- Existing test codeunit 96029 `LangModel Chat Proxy Tests` exercises the production builder with fixed inputs, including midnight/month/leap-day boundaries, locale independence, unknown zones, work-date conditions, marker idempotence and data minimization. No new objects or public signature changes to released procedures.
+- Line separators use `TextBuilder.AppendLine`, avoiding the AL0620 error caused by unsupported `#10` literals.
 
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
