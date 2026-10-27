@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-27) - Session prompt compilation (#85)
+
+- Codeunit 10035393 and test codeunits 96039/96040 use `TextBuilder.AppendLine` for line separators, supported invariant `Format` calls, the user personalization time-zone field, and a valid fixed AL time literal. Test line extraction uses one-based positions and handles CRLF. The new test helper name fits the AL object-name limit.
+
 ### Added (2026-10-27) - Session time block in the Copilot starting prompt (#85)
 
 - Codeunit 10035393 `Copilot Chat Proxy ori`: every new Copilot chat session now starts with a `SESSION TIME` block right after Foundation's `Bootstrap` — the work date (`WorkDate()`, ISO `YYYY-MM-DD`), the current date-time at session start (ISO, in the user's BC timezone) and the instruction to use those values for relative day/period math and `tableView` date FILTERs instead of inventing today. The block is assembled in code with no new user-visible labels, so no XLF units are introduced.

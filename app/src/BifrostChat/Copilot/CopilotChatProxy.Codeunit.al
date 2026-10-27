@@ -3,6 +3,7 @@ using Origo.Bifrost;
 
 using System.AI;
 using System.Text;
+using System.Security.User;
 
 /// <summary>
 /// Runs the Copilot agentic tool loop. Calls Azure OpenAI via System.AI,
@@ -137,17 +138,19 @@ codeunit 10035393 "Copilot Chat Proxy ori"
     local procedure SessionTimeBlock() Block: Text
     var
         Timezone: Text;
+        UserPersonalization: Record "User Personalization";
+        BlockBuilder: TextBuilder;
     begin
-        Timezone := GetTimezone();
+        UserPersonalization.SetLoadFields("Time Zone");
+        if UserPersonalization.Get(UserSecurityId()) then
+            Timezone := UserPersonalization."Time Zone";
         if Timezone = '' then
             Timezone := 'UTC';
-        Block := 'SESSION TIME:' +
-;
-        Block += 'Work date: ' + Format(WorkDate(), 0, 0, 0, 0, 0, 0, 9) +
-;
-        Block += 'Current date-time: ' + Format(CurrentDateTime(), 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')' +
-;
-        Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
+        BlockBuilder.AppendLine('SESSION TIME:');
+        BlockBuilder.AppendLine('Work date: ' + Format(WorkDate(), 0, 9));
+        BlockBuilder.AppendLine('Current date-time: ' + Format(CurrentDateTime(), 0, 9) + ' (' + Timezone + ')');
+        BlockBuilder.Append('Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.');
+        Block := BlockBuilder.ToText();
     end;
 
     local procedure CopilotHistoryLength(): Integer

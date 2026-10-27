@@ -15,7 +15,7 @@ codeunit 96039 "Copilot Chat Prompt Time Tests"
 
     var
         Assert: Codeunit "Library Assert";
-        PromptBuilder: Codeunit "Copilot Prompt Builder Test Tools";
+        PromptBuilder: Codeunit "Copilot Prompt Test Tools";
 
     /// <summary>
     /// Verifies that for a fixed work date the built system prompt contains the ISO work date and a current
@@ -32,7 +32,7 @@ codeunit 96039 "Copilot Chat Prompt Time Tests"
 
         SystemPrompt := PromptBuilder.BuildSystemPrompt(WorkDate, CreatePayload());
 
-        Assert.AreEqual(Format(WorkDate, 0, 0, 0, 0, 0, 0, 9), ExtractLine(SystemPrompt, 'Work date: '), 'ISO work date');
+        Assert.AreEqual(Format(WorkDate, 0, 9), ExtractLine(SystemPrompt, 'Work date: '), 'ISO work date');
         Assert.IsTrue(SystemPrompt.Contains('Current date-time: '), 'current date-time line present');
         Assert.IsTrue(SystemPrompt.Contains('(') and SystemPrompt.Contains(')'), 'timezone present');
         Assert.IsTrue(SystemPrompt.Contains('SESSION TIME:'), 'session time header present');
@@ -64,12 +64,19 @@ codeunit 96039 "Copilot Chat Prompt Time Tests"
     var
         Position: Integer;
         Rest: Text;
+        LineFeed: Char;
+        CarriageReturn: Char;
+        LineEndPosition: Integer;
     begin
-        Position := SystemPrompt.IndexOf(Prefix);
+        Position := StrPos(SystemPrompt, Prefix);
         if Position = 0 then
             exit('');
         Rest := CopyStr(SystemPrompt, Position + StrLen(Prefix));
-        exit(CopyStr(Rest, 1, Rest.IndexOf('
-') - 1));
+        LineFeed := 10;
+        CarriageReturn := 13;
+        LineEndPosition := StrPos(Rest, Format(LineFeed));
+        if LineEndPosition = 0 then
+            exit(Rest);
+        exit(DelChr(CopyStr(Rest, 1, LineEndPosition - 1), '>', Format(CarriageReturn)));
     end;
 }

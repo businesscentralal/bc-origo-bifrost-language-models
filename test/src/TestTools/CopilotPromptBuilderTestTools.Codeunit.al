@@ -1,13 +1,14 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 
-using Origo.Bifrost.LanguageModels;
+using Origo.Bifrost;
+using System.Security.User;
 
 /// <summary>
 /// Test tool for issue 85: reproduces the Copilot Chat Proxy starting-prompt assembly (Bootstrap, session
 /// time block, record context, skill reference) against a fixed work date and clock, so the prompt text can
 /// be asserted deterministically.
 /// </summary>
-codeunit 96040 "Copilot Prompt Builder Test Tools"
+codeunit 96040 "Copilot Prompt Test Tools"
 {
     Access = Internal;
 
@@ -24,11 +25,14 @@ codeunit 96040 "Copilot Prompt Builder Test Tools"
         RecordContextToken: JsonToken;
         RecordContext: Text;
         UserSkill: Text;
+        UserPersonalization: Record "User Personalization";
     begin
-        Timezone := GetTimezone();
+        UserPersonalization.SetLoadFields("Time Zone");
+        if UserPersonalization.Get(UserSecurityId()) then
+            Timezone := UserPersonalization."Time Zone";
         if Timezone = '' then
             Timezone := 'UTC';
-        CurrentDateTime := CreateDateTime(FixedWorkDate, DT2Time(12, 0, 0, 0));
+        CurrentDateTime := CreateDateTime(FixedWorkDate, 120000T);
 
         PromptBuilder.Append(ToolServer.Bootstrap(''));
         PromptBuilder.AppendLine();
@@ -58,14 +62,14 @@ codeunit 96040 "Copilot Prompt Builder Test Tools"
     end;
 
     local procedure SessionTimeBlock(FixedWorkDate: Date; CurrentDateTime: DateTime; Timezone: Text) Block: Text
+    var
+        BlockBuilder: TextBuilder;
     begin
-        Block := 'SESSION TIME:'+
-;
-        Block += 'Work date: ' + Format(FixedWorkDate, 0, 0, 0, 0, 0, 0, 9)+
-;
-        Block += 'Current date-time: ' + Format(CurrentDateTime, 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')'+
-;
-        Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
+        BlockBuilder.AppendLine('SESSION TIME:');
+        BlockBuilder.AppendLine('Work date: ' + Format(FixedWorkDate, 0, 9));
+        BlockBuilder.AppendLine('Current date-time: ' + Format(CurrentDateTime, 0, 9) + ' (' + Timezone + ')');
+        BlockBuilder.Append('Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.');
+        Block := BlockBuilder.ToText();
     end;
 
     local procedure GetTextProperty(Source: JsonObject; PropertyName: Text) Value: Text
