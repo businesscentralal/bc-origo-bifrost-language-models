@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-10-27) - Session time block in the Copilot starting prompt (#85)
+
+- Codeunit 10035393 `Copilot Chat Proxy ori`: every new Copilot chat session now starts with a `SESSION TIME` block right after Foundation's `Bootstrap` — the work date (`WorkDate()`, ISO `YYYY-MM-DD`), the current date-time at session start (ISO, in the user's BC timezone) and the instruction to use those values for relative day/period math and `tableView` date FILTERs instead of inventing today. The block is assembled in code with no new user-visible labels, so no XLF units are introduced.
+- Test codeunit 96039 `Copilot Chat Prompt Time Tests` with test tool 96040 `Copilot Prompt Builder Test Tools` asserts, against a fixed work date and clock, that the built system prompt carries the ISO work date, a same-day current date-time with timezone, the session header and the do-not-invent-today instruction.
+
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
 - Page 10035428 `LangModel Wizard Users ori` uses translated permission-column captions and keeps the permission set identifiers in the tooltips. Codeunit 10035427 `LangModel Wizard Mgt ori` loads the two sets' company/global Access Control rows and company user-model choices once, then preserves inherited grants through the platform Security Group membership API. Incomplete directory retrieval falls back to the existing effective-permission helper. Row rendering uses in-memory lookups and explicit commands refresh the snapshot.

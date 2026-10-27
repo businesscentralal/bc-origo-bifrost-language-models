@@ -102,6 +102,9 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         UserSkill: Text;
     begin
         PromptBuilder.Append(ToolServer.Bootstrap(''));
+        PromptBuilder.AppendLine();
+        PromptBuilder.AppendLine();
+        PromptBuilder.Append(SessionTimeBlock());
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);
@@ -125,6 +128,23 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         end;
 
         SystemPrompt := PromptBuilder.ToText();
+    end;
+
+    /// <summary>
+    /// Builds the session time block: work date and current date-time plus the instruction to use them for
+    /// relative day/period math and tableView date filters without guessing today (#85).
+    /// </summary>
+    local procedure SessionTimeBlock() Block: Text
+    var
+        Timezone: Text;
+    begin
+        Timezone := GetTimezone();
+        if Timezone = '' then
+            Timezone := 'UTC';
+        Block := 'SESSION TIME:' + #10;
+        Block += 'Work date: ' + Format(WorkDate(), 0, 0, 0, 0, 0, 0, 9) + #10;
+        Block += 'Current date-time: ' + Format(CurrentDateTime(), 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')' + #10;
+        Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
     end;
 
     local procedure CopilotHistoryLength(): Integer
