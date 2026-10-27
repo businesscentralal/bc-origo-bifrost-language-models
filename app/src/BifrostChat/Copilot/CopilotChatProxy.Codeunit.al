@@ -141,9 +141,12 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         Timezone := GetTimezone();
         if Timezone = '' then
             Timezone := 'UTC';
-        Block := 'SESSION TIME:' + #10;
-        Block += 'Work date: ' + Format(WorkDate(), 0, 0, 0, 0, 0, 0, 9) + #10;
-        Block += 'Current date-time: ' + Format(CurrentDateTime(), 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')' + #10;
+        Block := 'SESSION TIME:' +
+;
+        Block += 'Work date: ' + Format(WorkDate(), 0, 0, 0, 0, 0, 0, 9) +
+;
+        Block += 'Current date-time: ' + Format(CurrentDateTime(), 0, 0, 0, 0, 0, 0, 9) + ' (' + Timezone + ')' +
+;
         Block += 'Use the work date and the current date-time above for all relative day and period math (for example ''last 30 days'', ''this month'' or ''since Monday'') and when building tableView date FILTERs. Never invent today or the current time.';
     end;
 

@@ -69,6 +69,7 @@ codeunit 96039 "Copilot Chat Prompt Time Tests"
         if Position = 0 then
             exit('');
         Rest := CopyStr(SystemPrompt, Position + StrLen(Prefix));
-        exit(CopyStr(Rest, 1, StrPos(#10, Rest + #10) - 1));
+        exit(CopyStr(Rest, 1, Rest.IndexOf('
+') - 1));
     end;
 }
