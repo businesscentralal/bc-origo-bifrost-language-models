@@ -3,7 +3,7 @@ using Origo.Bifrost;
 
 using System.AI;
 using System.Text;
-using System.Security.User;
+using System.Environment.Configuration;
 using System.DateTime;
 
 /// <summary>
