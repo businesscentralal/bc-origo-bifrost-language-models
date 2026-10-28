@@ -13,7 +13,7 @@ using Origo.Bifrost.LanguageModels;
 /// toolCalls: [ { round, name, isError, resultChars } ], usage }. Each tool round is committed first, as each round of
 /// the add-in is its own request; the tools run as the caller. Test app only; refused in SaaS production.
 /// </summary>
-codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori"
+codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg Contract ori"
 {
     Access = Internal;
 
@@ -25,6 +25,137 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori"
         ProviderErrorErr: Label 'The language model answered with an error: %1', Comment = '%1 = provider error', Locked = true;
         UnexpectedAnswerErr: Label 'The language model returned an answer that is neither a reply nor tool calls: %1', Comment = '%1 = answer', Locked = true;
         RoundsExceededErr: Label 'The model still asked for tools after %1 rounds.', Comment = '%1 = rounds', Locked = true;
+
+    /// <summary>
+    /// Declares the JSON request envelope of this test-only type.
+    /// </summary>
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    begin
+        Envelope.Add('version', '1.0');
+        Envelope.Add('contentType', 'text/json');
+        Envelope.Add('dataRequired', true);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Returns false because models are selected by data parameters, not a subject.
+    /// </summary>
+    procedure GetTarget(var Target: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Declares every supported request key and its actual shape.
+    /// </summary>
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('code', 'string', true, 'Code of the language model to chat with.'));
+        Parameters.Add(ContractMgt.Parameter('prompt', 'string', false, 'User prompt; send prompt or messages.'));
+        Parameters.Add(ContractMgt.Parameter('messages', 'array', false, 'Conversation array of role/content objects; takes precedence over prompt.'));
+        Parameters.Add(ContractMgt.Parameter('recordContext', 'object', false, 'Optional record context passed unchanged to the provider.'));
+        Parameters.Add(ContractMgt.Parameter('maxToolRounds', 'integer', false, 'Maximum tool rounds; defaults to 8 and is clamped to 1 through 20.'));
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes successful output without exposing credentials.
+    /// </summary>
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Fields: JsonArray;
+    begin
+        Response.Add('contentType', 'text/json');
+        Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success when a reply is returned.'));
+        Fields.Add(ContractMgt.ResponseField('code', 'string', 'Model code.'));
+        Fields.Add(ContractMgt.ResponseField('chatProvider', 'string', 'Provider name.'));
+        Fields.Add(ContractMgt.ResponseField('reply', 'string', 'Provider reply.'));
+        Fields.Add(ContractMgt.ResponseField('rounds', 'integer', 'Completed tool rounds.'));
+        Fields.Add(ContractMgt.ResponseField('toolCalls', 'array', 'Tool trace with round, name, isError and resultChars.'));
+        Fields.Add(ContractMgt.ResponseField('providerToolTrace', 'array', 'Optional Copilot provider tool trace.'));
+        Fields.Add(ContractMgt.ResponseField('usage', 'object', 'Optional provider usage.'));
+        Response.Add('fields', Fields);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes the coded refusals of the test operation.
+    /// </summary>
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'Test message types do not run in a SaaS production environment.', 'The environment is SaaS production.', 'Use a sandbox or development container.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, 'Send a model code and prompt or messages.', 'code or both prompt and messages are missing.', 'Supply the missing parameter.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, 'The language model was not found.', 'No model with code exists.', 'Create it with Test.LanguageModel.Set.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The provider returned an error or an unexpected answer.', 'The provider cannot return a reply or tool calls.', 'Check the provider, endpoint, model and credentials.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::LimitExceeded, 'The model still asked for tools after the maximum rounds.', 'Tool calls exceed maxToolRounds.', 'Raise maxToolRounds up to 20 or reduce the task.'));
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the actual writes, external effects and commit behavior.
+    /// </summary>
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    begin
+        Effect.Add('effect', 'irreversible');
+        Effect.Add('changes', 'Calls the selected provider and executes its tools as the caller. Tools can change Business Central data. Commits before each tool round; completed changes and externally sent data cannot be recalled. Does not change user setup.');
+        Effect.Add('idempotent', false);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Uses Foundation metering without additional declarations.
+    /// </summary>
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because no related chapter is supplied.
+    /// </summary>
+    procedure GetRelated(var Related: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because this test tool has no workflow chapter.
+    /// </summary>
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because usage examples are in the test tooling.
+    /// </summary>
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Describes this test-only operation.
+    /// </summary>
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := GetDescription();
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the test-only environment and data boundaries.
+    /// </summary>
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := 'Test app only. Refused in SaaS production. Runs with the caller permissions; never use customer fixtures or send real credentials through MCP.';
+        exit(true);
+    end;
 
     /// <summary>
     /// Reports that this test-only message type is enabled.

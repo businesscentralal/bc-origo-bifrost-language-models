@@ -162,6 +162,112 @@ codeunit 96028 "LangModel Test Tools Tests"
         Assert.AreEqual('code', ResponseJson.GetText('parameter'), ResponseText);
     end;
 
+    /// <summary>
+    /// Verifies the enum mappings expose request declarations and honest effects for all three tools.
+    /// </summary>
+    [Test]
+    procedure Contracts_DeclareParametersAndEffects()
+    var
+        Contract: Interface "Msg Contract ori";
+        Parameters: JsonArray;
+        Effect: JsonObject;
+        ModelsParameter: JsonToken;
+        Children: JsonToken;
+    begin
+        // [SCENARIO] Foundation resolves each test enum value to its real contract, including batch model fields.
+        Contract := "Message Type ori"::"Test.LanguageModel.Set";
+        Assert.IsTrue(Contract.GetParameters(Parameters), 'Set has a parameter contract.');
+        Assert.AreEqual(15, Parameters.Count(), 'Set declares 14 model fields and the batch wrapper.');
+        Parameters.Get(14, ModelsParameter);
+        Assert.AreEqual('models', ModelsParameter.AsObject().GetText('name'), 'The batch wrapper is declared.');
+        ModelsParameter.AsObject().Get('children', Children);
+        Assert.AreEqual(14, Children.AsArray().Count(), 'Batch entries declare the same model fields.');
+        Assert.IsTrue(Contract.GetEffect(Effect), 'Set has an effect.');
+        Assert.AreEqual('write', Effect.GetText('effect'), 'Set writes settings and keys.');
+
+        Clear(Parameters);
+        Clear(Effect);
+        Contract := "Message Type ori"::"Test.LanguageModel.Delete";
+        Assert.IsTrue(Contract.GetParameters(Parameters), 'Delete has a parameter contract.');
+        Assert.AreEqual(1, Parameters.Count(), 'Delete declares codes.');
+        Assert.IsTrue(Contract.GetEffect(Effect), 'Delete has an effect.');
+        Assert.AreEqual('write', Effect.GetText('effect'), 'Delete removes models and keys.');
+
+        Clear(Parameters);
+        Clear(Effect);
+        Contract := "Message Type ori"::"Test.LanguageModel.Chat";
+        Assert.IsTrue(Contract.GetParameters(Parameters), 'Chat has a parameter contract.');
+        Assert.AreEqual(5, Parameters.Count(), 'Chat declares code, prompt, messages, recordContext and maxToolRounds.');
+        Assert.IsTrue(Contract.GetEffect(Effect), 'Chat has an effect.');
+        Assert.AreEqual('irreversible', Effect.GetText('effect'), 'Chat commits tool rounds and calls the provider.');
+        Assert.IsFalse(Effect.GetBoolean('idempotent'), 'Chat cannot promise repeatable effects.');
+    end;
+
+    /// <summary>
+    /// Verifies undeclared top-level keys refuse Set before creating a model.
+    /// </summary>
+    [Test]
+    procedure Set_UnknownParameter_DoesNotCreateModel()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] A typo cannot silently change the meaning of a write request.
+        Cleanup();
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock","unrecognized":true}');
+        Assert.AreEqual('UnknownParameter', ResponseJson.GetText('code'), 'The undeclared key is refused.');
+        Assert.IsFalse(ModelExists(), 'Validation runs before creation.');
+    end;
+
+    /// <summary>
+    /// Verifies the batch wrapper also validates model children before writes.
+    /// </summary>
+    [Test]
+    procedure Set_UnknownModelChild_DoesNotCreateModel()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] Nested unknown fields are refused using the batch child contract.
+        Cleanup();
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Set", '{"models":[{"code":"BIFT-MOCK","chatProvider":"Mock","unrecognized":true}]}');
+        Assert.AreEqual('UnknownParameter', ResponseJson.GetText('code'), 'The undeclared child is refused.');
+        Assert.IsFalse(ModelExists(), 'Validation runs before batch creation.');
+    end;
+
+    /// <summary>
+    /// Verifies Delete refuses unknown keys before deleting its target.
+    /// </summary>
+    [Test]
+    procedure Delete_UnknownParameter_PreservesModel()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] An invalid deletion request leaves the seeded model intact.
+        Cleanup();
+        Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock"}');
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Delete", '{"codes":["BIFT-MOCK"],"unrecognized":true}');
+        Assert.AreEqual('UnknownParameter', ResponseJson.GetText('code'), 'The undeclared key is refused.');
+        Assert.IsTrue(ModelExists(), 'Validation runs before deletion.');
+        Cleanup();
+    end;
+
+    /// <summary>
+    /// Verifies Chat refuses unknown keys before calling its mock provider.
+    /// </summary>
+    [Test]
+    procedure Chat_UnknownParameter_DoesNotCallProvider()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] A request with undeclared keys cannot call providers or execute tools.
+        Cleanup();
+        Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock"}');
+        MockProvider.Reset();
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","unrecognized":true}');
+        Assert.AreEqual('UnknownParameter', ResponseJson.GetText('code'), 'The undeclared key is refused.');
+        Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'Validation runs before the provider.');
+        Cleanup();
+    end;
+
     local procedure Execute(MessageType: Enum "Message Type ori"; RequestBody: Text) ResponseJson: JsonObject
     var
         Dispatcher: Codeunit "Dispatcher ori";
