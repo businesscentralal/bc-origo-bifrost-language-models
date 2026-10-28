@@ -11,6 +11,10 @@ using Origo.Bifrost;
 codeunit 10035423 "LangModel Registration ori"
 {
     Access = Internal;
+    // Setup OnOpenPage raises OnRegisterApps under the caller's permissions. A licence
+    // administrator has Execute on Foundation's App Registry, not on this subscriber.
+    InherentPermissions = X;
+    InherentEntitlements = X;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"App Registry ori", OnRegisterApps, '', false, false)]
     local procedure RegisterApp(var Apps: Record "Registered App ori" temporary)
