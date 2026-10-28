@@ -173,21 +173,31 @@ codeunit 96028 "LangModel Test Tools Tests"
         Effect: JsonObject;
         ModelsParameter: JsonToken;
         Children: JsonToken;
+        CodeParameter: JsonToken;
+        MessageImplementation: Interface "Msg Interface ori";
     begin
         // [SCENARIO] Foundation resolves each test enum value to its real contract, including batch model fields.
         Contract := "Message Type ori"::"Test.LanguageModel.Set";
+        MessageImplementation := "Message Type ori"::"Test.LanguageModel.Set";
+        Assert.AreEqual("Msg Direction ori"::Inbound, MessageImplementation.GetMessageDirection(), 'The Set direction matches its effect.');
         Assert.IsTrue(Contract.GetParameters(Parameters), 'Set has a parameter contract.');
         Assert.AreEqual(15, Parameters.Count(), 'Set declares 14 model fields and the batch wrapper.');
+        Parameters.Get(0, CodeParameter);
+        Assert.IsFalse(CodeParameter.AsObject().GetBoolean('required'), 'Top-level code is optional when models is supplied.');
         Parameters.Get(14, ModelsParameter);
         Assert.AreEqual('models', ModelsParameter.AsObject().GetText('name'), 'The batch wrapper is declared.');
         ModelsParameter.AsObject().Get('children', Children);
         Assert.AreEqual(14, Children.AsArray().Count(), 'Batch entries declare the same model fields.');
+        Children.AsArray().Get(0, CodeParameter);
+        Assert.IsTrue(CodeParameter.AsObject().GetBoolean('required'), 'Each batch model requires its own code.');
         Assert.IsTrue(Contract.GetEffect(Effect), 'Set has an effect.');
         Assert.AreEqual('write', Effect.GetText('effect'), 'Set writes settings and keys.');
 
         Clear(Parameters);
         Clear(Effect);
         Contract := "Message Type ori"::"Test.LanguageModel.Delete";
+        MessageImplementation := "Message Type ori"::"Test.LanguageModel.Delete";
+        Assert.AreEqual("Msg Direction ori"::Inbound, MessageImplementation.GetMessageDirection(), 'The Delete direction matches its effect.');
         Assert.IsTrue(Contract.GetParameters(Parameters), 'Delete has a parameter contract.');
         Assert.AreEqual(1, Parameters.Count(), 'Delete declares codes.');
         Assert.IsTrue(Contract.GetEffect(Effect), 'Delete has an effect.');
@@ -196,6 +206,8 @@ codeunit 96028 "LangModel Test Tools Tests"
         Clear(Parameters);
         Clear(Effect);
         Contract := "Message Type ori"::"Test.LanguageModel.Chat";
+        MessageImplementation := "Message Type ori"::"Test.LanguageModel.Chat";
+        Assert.AreEqual("Msg Direction ori"::Inbound, MessageImplementation.GetMessageDirection(), 'The Chat direction matches its effect.');
         Assert.IsTrue(Contract.GetParameters(Parameters), 'Chat has a parameter contract.');
         Assert.AreEqual(5, Parameters.Count(), 'Chat declares code, prompt, messages, recordContext and maxToolRounds.');
         Assert.IsTrue(Contract.GetEffect(Effect), 'Chat has an effect.');

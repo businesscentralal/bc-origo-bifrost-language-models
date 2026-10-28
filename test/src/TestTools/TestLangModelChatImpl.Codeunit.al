@@ -182,11 +182,11 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg C
     end;
 
     /// <summary>
-    /// Returns Outbound for this test-only message type.
+    /// Returns Inbound because chat can execute irreversible tools.
     /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
-        exit(Enum::"Msg Direction ori"::Outbound);
+        exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
     /// <summary>

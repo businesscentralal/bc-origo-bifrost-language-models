@@ -51,9 +51,9 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori", "Msg Co
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         ModelsParameter: JsonObject;
     begin
-        Parameters := ModelParameters();
+        Parameters := ModelParameters(false);
         ModelsParameter := ContractMgt.Parameter('models', 'array', false, 'Array of model objects, or omit it and supply one model at the top level. All entries are validated before writes.');
-        ModelsParameter.Add('children', ModelParameters());
+        ModelsParameter.Add('children', ModelParameters(true));
         Parameters.Add(ModelsParameter);
         exit(true);
     end;
@@ -147,11 +147,11 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori", "Msg Co
         exit(true);
     end;
 
-    local procedure ModelParameters() Parameters: JsonArray
+    local procedure ModelParameters(RequireCode: Boolean) Parameters: JsonArray
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        Parameters.Add(ContractMgt.Parameter('code', 'string', false, 'Language model code, up to 20 characters; required for each model.'));
+        Parameters.Add(ContractMgt.Parameter('code', 'string', RequireCode, 'Language model code, up to 20 characters; required for each model.'));
         Parameters.Add(ContractMgt.Parameter('description', 'string', false, 'Optional description.'));
         Parameters.Add(ContractMgt.Parameter('chatProvider', 'string', false, 'Provider enum name; Gemini is also accepted for Google. Test providers are allowed.'));
         Parameters.Add(ContractMgt.Parameter('baseUrl', 'string', false, 'Provider base URL.'));
