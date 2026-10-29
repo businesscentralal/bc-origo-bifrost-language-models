@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-28) - RegisterApps subscriber InherentPermissions X (#91)
+
+- Codeunit 10035423 `LangModel Registration ori` now declares `InherentPermissions = X` and `InherentEntitlements = X`, matching Foundation's App Registry subscriber pattern, so a restricted licence administrator can open Bifrost Setup when Language Models is installed.
+- Test codeunit 96016 `LangModel Registration Tests` opens Bifrost Setup as `BIFROST LicAdm ori` with test permission set 96039 `LM Setup Base ori` and asserts the page opens non-editable with Language Models still in the registry.
+- Test message types `Test.LanguageModel.Set`, `Test.LanguageModel.Delete` and `Test.LanguageModel.Chat` (codeunits 96024–96026) now implement `Msg Contract ori` with envelope, parameters and a write effect, so Foundation 28.0.10+ can complete strict request validation of these write types.
+
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
 - Page 10035428 `LangModel Wizard Users ori` uses translated permission-column captions and keeps the permission set identifiers in the tooltips. Codeunit 10035427 `LangModel Wizard Mgt ori` loads the two sets' company/global Access Control rows and company user-model choices once, then preserves inherited grants through the platform Security Group membership API. Incomplete directory retrieval falls back to the existing effective-permission helper. Row rendering uses in-memory lookups and explicit commands refresh the snapshot.

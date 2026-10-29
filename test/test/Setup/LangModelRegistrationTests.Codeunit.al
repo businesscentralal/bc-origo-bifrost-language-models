@@ -54,4 +54,40 @@ codeunit 96016 "LangModel Registration Tests"
         Assert.AreEqual(Page::"LangModel Setup ori", TempRegisteredApp."Setup Page Id", 'The registry must point at the Bifrost Language Models setup page.');
         Assert.AreNotEqual('', TempRegisteredApp."App Name", 'The registry must carry the Bifrost Language Models app name.');
     end;
+
+    /// <summary>
+    /// A restricted licence administrator can open Bifrost Setup while Language Models is installed.
+    /// Without InherentPermissions X on LangModel Registration ori, OnRegisterApps aborts the page.
+    /// </summary>
+    [Test]
+    procedure LicAdm_OpensBifrostSetup_WithLanguageModelsInstalled()
+    var
+        BifrostSetup: Record "Setup ori";
+        TempRegisteredApp: Record "Registered App ori" temporary;
+        AppRegistry: Codeunit "App Registry ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        LowerPermissions: Codeunit "Library - Lower Permissions";
+        SetupPage: TestPage "Setup ori";
+        LangModelAppId: Guid;
+    begin
+        // Story #91, AC02/AC03 | Time: independent of Today/WorkDate | Risk: none
+        // [GIVEN] The Bifrost Setup singleton exists and Language Models is installed.
+        BifrostSetup.InsertIfNotExists();
+        LangModelAppId := LangModelSecrets.GetAppId();
+        Commit();
+
+        // [WHEN] A licence administrator opens Bifrost Setup.
+        LowerPermissions.StartLoggingNAVPermissions();
+        LowerPermissions.SetExactPermissionSet('BIFROST LicAdm ori');
+        LowerPermissions.AddPermissionSet('LM Setup Base ori');
+        AppRegistry.GetApps(TempRegisteredApp);
+        SetupPage.OpenView();
+
+        // [THEN] The registration subscriber ran and the page opened non-editable.
+        Assert.IsTrue(TempRegisteredApp.Get(LangModelAppId), 'OnRegisterApps must register Language Models under a licence administrator.');
+        Assert.AreEqual(Page::"LangModel Setup ori", TempRegisteredApp."Setup Page Id", 'The registry must still point at the Language Models setup page.');
+        Assert.IsFalse(SetupPage.Editable(), 'A licence administrator is not a Bifrost administrator.');
+        SetupPage.Close();
+        LowerPermissions.StopLoggingNAVPermissions();
+    end;
 }
