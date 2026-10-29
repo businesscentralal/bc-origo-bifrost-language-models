@@ -11,6 +11,7 @@ All notable changes to Bifrost Language Models are documented here.
 - Codeunit 10035410 `LangModel Prov. Base ori` and codeunit 10035396 `LLM Prompt Compl Impl ori`: a provider HTTP 4xx answer carries the HTTP status and that short code. An unsupported xAI image is `InvalidParameter` and names PNG and JPEG. The prompt notes and the `mimeType` parameter describe this path. The new user-facing labels have Icelandic text.
 - Test codeunits 96033 `LLM 65 HTTP Mock`, 96034 `LLM 65 Prompt Tests` and 96011 `LangModel API Client Tests` cover inline PNG and JPEG, PDF upload and delete, delete after a failed prompt, stored attachments, GIF and `image/jpg` refusal, safe 4xx codes, unchanged text-only xAI and the other providers, and the multipart upload body. The tests use the HTTP double and do not call xAI.
 - Codeunit 10035427 `LangModel Wizard Mgt ori` and test codeunit 96038 `LangModel Wizard Users Tests` declare the in-memory security-group buffers with the `temporary` keyword. The public procedure and its behavior are unchanged.
+- The shared-container publish retry treats HTTP 422 for the same package ID and version as already published. A Test republish whose first request lands and then times out no longer fails the later attempts. A different version still fails.
 
 ### Fixed (2026-10-28) - RegisterApps subscriber InherentPermissions X (#91)
 
