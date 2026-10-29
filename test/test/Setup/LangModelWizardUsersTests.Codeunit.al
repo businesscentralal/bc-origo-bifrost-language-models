@@ -200,8 +200,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
         LanguageModelGroupUser: Record User;
         Member: Record User;
         Nonmember: Record User;
-        TempGroups: Record "Security Group Buffer";
-        TempMembers: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         AccessControl: Record "Access Control";
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
@@ -254,8 +254,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
     var
         GroupUser: Record User;
         Member: Record User;
-        TempGroups: Record "Security Group Buffer";
-        TempMembers: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
         UserModels: Dictionary of [Guid, Code[20]];

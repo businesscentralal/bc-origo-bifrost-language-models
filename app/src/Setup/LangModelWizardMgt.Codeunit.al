@@ -161,8 +161,8 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
 
     local procedure LoadInheritedChatAssignments(var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean])
     var
-        TempSecurityGroups: Record "Security Group Buffer";
-        TempMembers: Record "Security Group Member Buffer";
+        TempSecurityGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         SecurityGroup: Codeunit "Security Group";
         SkippedGroups: List of [Code[20]];
         HasChatGroup: Boolean;
