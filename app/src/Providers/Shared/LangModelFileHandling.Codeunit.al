@@ -1,12 +1,12 @@
 namespace Origo.Bifrost.LanguageModels;
 
 /// <summary>
-/// Shared prompt-file policy for every language-model provider.
-/// PNG and JPEG stay inline. Other image types are refused before HTTP.
-/// A document that cannot be sent inline is uploaded to the named provider's
-/// file store, referenced by file id, and deleted after the call (STE-0002:
-/// customer bytes leave Business Central only for that provider, and only for
-/// the duration of the prompt).
+/// Shared prompt-file policy for every file-accepting language-model provider.
+/// PNG and JPEG stay inline. Other image types and oversize files are refused
+/// before HTTP. A document that cannot be sent inline is uploaded to the named
+/// provider's file store, referenced by file id, and deleted after the call
+/// (STE-0002: customer bytes leave Business Central only for that provider, and
+/// only for the duration of the prompt).
 /// </summary>
 codeunit 10035429 "LangModel File Handling ori"
 {
@@ -41,13 +41,31 @@ codeunit 10035429 "LangModel File Handling ori"
         exit(LowerCase(MimeType).StartsWith('image/') and not IsInlineImageMime(MimeType));
     end;
 
-    /// <summary>True when decoded file bytes exceed the language-model size limit.</summary>
+    /// <summary>True when decoded file bytes exceed the resolved language-model size limit.</summary>
+    [NonDebuggable]
     procedure IsOversize(ContentBase64: Text): Boolean
+    var
+        MaxBytes: Integer;
+        Length: Integer;
+        MinimumDecoded: Integer;
     begin
-        exit(DecodedByteCount(ContentBase64) > ResolvedMaxDecodedFileBytes());
+        MaxBytes := ResolvedMaxDecodedFileBytes();
+        Length := StrLen(ContentBase64);
+        if Length = 0 then
+            exit(false);
+        // Past this length the decoded count cannot fit in an Integer and is over any resolved cap.
+        if Length > 700000000 then
+            exit(true);
+        // Minimum decoded size for this Base64 length, allowing two padding characters.
+        // Compare with the resolved cap so a raised OnResolveMaxDecodedFileBytes override is honoured.
+        MinimumDecoded := (Length * 3) div 4 - 2;
+        if MinimumDecoded > MaxBytes then
+            exit(true);
+        exit(DecodedByteCount(ContentBase64) > MaxBytes);
     end;
 
     /// <summary>Decoded byte count of a Base64 payload, without writing the bytes.</summary>
+    [NonDebuggable]
     procedure DecodedByteCount(ContentBase64: Text): Integer
     var
         Length: Integer;
@@ -56,13 +74,35 @@ codeunit 10035429 "LangModel File Handling ori"
         Length := StrLen(ContentBase64);
         if Length = 0 then
             exit(0);
-        if Length > 28000000 then
-            exit(MaxDecodedFileBytes() + 1);
+        if Length > 700000000 then
+            exit(2147483647);
         if CopyStr(ContentBase64, Length, 1) = '=' then
             Padding += 1;
         if (Length > 1) and (CopyStr(ContentBase64, Length - 1, 1) = '=') then
             Padding += 1;
         exit((Length * 3) div 4 - Padding);
+    end;
+
+    /// <summary>
+    /// Shared pre-HTTP gate for every file-accepting provider.
+    /// Refuses a non-PNG/JPEG image and an oversize file. Does not upload.
+    /// </summary>
+    [NonDebuggable]
+    procedure AcceptFiles(PayloadObject: JsonObject; var ResultText: Text): Boolean
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        UnsupportedMime: Text;
+    begin
+        UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
+        if UnsupportedMime <> '' then begin
+            ProviderBase.BuildUnsupportedImageRefusal(UnsupportedMime).WriteTo(ResultText);
+            exit(false);
+        end;
+        if FindOversizeFile(PayloadObject) then begin
+            ProviderBase.BuildOversizeRefusal().WriteTo(ResultText);
+            exit(false);
+        end;
+        exit(true);
     end;
 
     /// <summary>
@@ -79,22 +119,12 @@ codeunit 10035429 "LangModel File Handling ori"
         FileObj: JsonObject;
         FileBlock: JsonObject;
         UploadResponse: JsonObject;
-        UnsupportedMime: Text;
         MimeType: Text;
         FileId: Text;
         BaseUrl: Text;
-        OversizeFound: Boolean;
     begin
-        UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
-        if UnsupportedMime <> '' then begin
-            ProviderBase.BuildUnsupportedImageRefusal(UnsupportedMime).WriteTo(ResultText);
+        if not AcceptFiles(PayloadObject, ResultText) then
             exit(false);
-        end;
-        OversizeFound := FindOversizeFile(PayloadObject);
-        if OversizeFound then begin
-            ProviderBase.BuildOversizeRefusal().WriteTo(ResultText);
-            exit(false);
-        end;
         if not PayloadObject.Get('files', FilesToken) then
             exit(true);
         if not FilesToken.IsArray() then
@@ -221,6 +251,7 @@ codeunit 10035429 "LangModel File Handling ori"
         exit(ProviderBase.SanitizeProviderErrorCode('{"code":"' + Candidate + '"}'));
     end;
 
+    [NonDebuggable]
     local procedure FindUnsupportedImageMime(PayloadObject: JsonObject): Text
     var
         FilesToken: JsonToken;
@@ -242,6 +273,7 @@ codeunit 10035429 "LangModel File Handling ori"
         end;
     end;
 
+    [NonDebuggable]
     local procedure FindOversizeFile(PayloadObject: JsonObject): Boolean
     var
         FilesToken: JsonToken;

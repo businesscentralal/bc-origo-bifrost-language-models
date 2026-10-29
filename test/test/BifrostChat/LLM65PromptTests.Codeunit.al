@@ -662,25 +662,43 @@ codeunit 96034 "LLM 65 Prompt Tests"
     /// <summary>An oversize document is refused before any provider HTTP call.</summary>
     [Test]
     procedure AC02_Pdf_OversizeRefusesBeforeHttp()
-    var
-        Model: Record "Bifrost Language Model ori";
-        HttpMock: Codeunit "LLM 65 HTTP Mock";
-        Response: JsonObject;
     begin
-        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
-        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
-        HttpMock.ConfigureMaxDecodedBytes(4);
-        BindSubscription(HttpMock);
-        Response := Execute(Request(Model.Code, false, true));
-        UnbindSubscription(HttpMock);
-        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt is sent for an oversize file.');
-        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'No upload is sent for an oversize file.');
-        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'No delete is sent for an oversize file.');
-        AssertCodedError(Response, 'InvalidParameter');
-        Assert.AreEqual('file', Response.GetText('parameter'), 'The refusal names file.');
-        Assert.IsTrue(Response.GetText('error').Contains('file size limit'), 'The error names the size limit.');
-        AssertSecretAbsent(Response);
-        Model.Delete(true);
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::xAI);
+    end;
+
+    /// <summary>OpenAI refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_OpenAI_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::OpenAI);
+    end;
+
+    /// <summary>Azure OpenAI refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_AzureOpenAI_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::"Azure OpenAI");
+    end;
+
+    /// <summary>Custom LLM refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_CustomLLM_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::"Custom LLM");
+    end;
+
+    /// <summary>Anthropic refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_Anthropic_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::Anthropic);
+    end;
+
+    /// <summary>Google refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_Google_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::Google);
     end;
 
     /// <summary>Shared file policy classifies MIME types without a provider name.</summary>
@@ -742,6 +760,41 @@ codeunit 96034 "LLM 65 Prompt Tests"
     procedure AC04_xAI_Gif_RefusesBeforeHttp()
     begin
         VerifyRefusedImage('image/gif', 'image/gif');
+    end;
+
+    /// <summary>OpenAI refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_OpenAI_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::OpenAI, 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Azure OpenAI refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_AzureOpenAI_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::"Azure OpenAI", 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Custom LLM refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_CustomLLM_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::"Custom LLM", 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Anthropic refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_Anthropic_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::Anthropic, 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Google refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_Google_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::Google, 'image/gif', 'image/gif');
     end;
 
     /// <summary>An explicit image/jpg is not treated as image/jpeg.</summary>
@@ -1298,6 +1351,11 @@ codeunit 96034 "LLM 65 Prompt Tests"
     end;
 
     local procedure VerifyRefusedImage(MimeType: Text; ExpectedReceived: Text)
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::xAI, MimeType, ExpectedReceived);
+    end;
+
+    local procedure VerifyProviderRefusedImage(ProviderType: Enum "Bifrost LangModel Prov. ori"; MimeType: Text; ExpectedReceived: Text)
     var
         Model: Record "Bifrost Language Model ori";
         HttpMock: Codeunit "LLM 65 HTTP Mock";
@@ -1306,7 +1364,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Response: JsonObject;
         RequestText: Text;
     begin
-        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        CreateModel(Model, ProviderType);
         RequestJson.Add('prompt', 'Hello from issue 93');
         RequestJson.Add('roleCode', Model.Code);
         FileJson.Add('fileName', 'issue93.bin');
@@ -1314,11 +1372,33 @@ codeunit 96034 "LLM 65 Prompt Tests"
         FileJson.Add('data', 'aGVsbG8=');
         RequestJson.Add('file', FileJson);
         RequestJson.WriteTo(RequestText);
-        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.Configure(200, SuccessBody(ProviderType, true), false, false);
         BindSubscription(HttpMock);
         Response := Execute(RequestText);
         UnbindSubscription(HttpMock);
         AssertRefusedImage(Response, HttpMock, ExpectedReceived);
+        Model.Delete(true);
+    end;
+
+    local procedure VerifyProviderOversize(ProviderType: Enum "Bifrost LangModel Prov. ori")
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, ProviderType);
+        HttpMock.Configure(200, SuccessBody(ProviderType, true), false, false);
+        HttpMock.ConfigureMaxDecodedBytes(4);
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'No upload is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'No delete is sent for an oversize file.');
+        AssertCodedError(Response, 'InvalidParameter');
+        Assert.AreEqual('file', Response.GetText('parameter'), 'The refusal names file.');
+        Assert.IsTrue(Response.GetText('error').Contains('file size limit'), 'The error names the size limit.');
+        AssertSecretAbsent(Response);
         Model.Delete(true);
     end;
 
