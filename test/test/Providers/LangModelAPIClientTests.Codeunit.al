@@ -2,6 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 using Origo.Bifrost.LanguageModels;
 
 using System.TestLibraries.Utilities;
+using System.Utilities;
 
 /// <summary>
 /// Tests for "LangModel API Client ori".ExtractText — parsing the assistant text out
@@ -88,5 +89,32 @@ codeunit 96011 "LangModel API Client Tests"
 
         // [WHEN/THEN]
         Assert.AreEqual('', ApiClient.ExtractText(Response), 'Array content should return empty (not a value).');
+    end;
+
+    /// <summary>The xAI upload body sends purpose before the file and decodes the base64 content.</summary>
+    [Test]
+    procedure UploadBody_PurposeBeforeDecodedFile()
+    var
+        ApiClient: Codeunit "LangModel API Client ori";
+        Body: Codeunit "Temp Blob";
+        Content: BigText;
+        BodyIn: InStream;
+        Boundary: Text;
+        BodyText: Text;
+        CrLf: Text[2];
+    begin
+        ApiClient.WriteProviderFileUpload('my file.pdf', 'application/pdf', 'aGVsbG8=', Boundary, Body);
+        Body.CreateInStream(BodyIn);
+        Content.Read(BodyIn);
+        Content.GetSubText(BodyText, 1);
+        CrLf[1] := 13;
+        CrLf[2] := 10;
+        Assert.IsTrue(StrPos(BodyText, 'name="purpose"') < StrPos(BodyText, 'name="file"'), 'purpose is written before the file.');
+        Assert.IsTrue(BodyText.Contains('assistants'), 'The compatibility purpose is assistants.');
+        Assert.IsTrue(BodyText.Contains('filename="myfile.pdf"'), 'Spaces are removed from the uploaded file name.');
+        Assert.IsTrue(BodyText.Contains('Content-Type: application/pdf'), 'The document MIME type is kept.');
+        Assert.IsTrue(BodyText.Contains('hello'), 'Base64 file bytes are decoded into the body.');
+        Assert.IsTrue(BodyText.Contains(Boundary), 'The body uses the returned boundary.');
+        Assert.IsTrue(StrPos(BodyText, CrLf) > 0, 'Multipart lines use CRLF.');
     end;
 }

@@ -1,5 +1,7 @@
 namespace Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
+using System.Text;
+using System.Utilities;
 
 /// <summary>
 /// Thin HTTP client shared by the OpenAI-compatible chat providers: posts a Chat
@@ -119,6 +121,7 @@ codeunit 10035411 "LangModel API Client ori"
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         ResponseText: Text;
+        ProviderErrorCode: Text;
         HttpStatus: Integer;
         HttpBlocked: Boolean;
         Sent: Boolean;
@@ -126,26 +129,27 @@ codeunit 10035411 "LangModel API Client ori"
         HasPendingLog := false;
         if not ProviderBase.CanSendHttpRequests() then
             exit(ProviderBase.BuildPromptError(0, true));
-        if not TryPostPrompt(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders, Sent, HttpStatus, HttpBlocked, ResponseText) then begin
+        if not TryPostPrompt(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
             ClearLastError();
             exit(ProviderBase.BuildPromptError(0, HttpBlocked));
         end;
         if HttpBlocked or not Sent then
             exit(ProviderBase.BuildPromptError(0, HttpBlocked));
         if (HttpStatus < 200) or (HttpStatus > 299) then
-            exit(ProviderBase.BuildPromptError(HttpStatus, false));
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
         if not Response.ReadFrom(ResponseText) then
             exit(ProviderBase.BuildPromptError(-1, false));
         if Response.Contains('error') then
-            exit(ProviderBase.BuildPromptError(-1, false));
+            exit(ProviderBase.BuildPromptError(-1, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
         // Prompt calls deliberately do not buffer provider text: even a nominally
         // successful provider body may contain authentication diagnostics.
     end;
 
     [TryFunction]
     [NonDebuggable]
-    local procedure TryPostPrompt(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    local procedure TryPostPrompt(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text; var ProviderErrorCode: Text)
     var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
         HttpClientVar: HttpClient;
         HttpContent: HttpContent;
         HttpResponse: HttpResponseMessage;
@@ -153,10 +157,14 @@ codeunit 10035411 "LangModel API Client ori"
         RequestText: Text;
         HeaderName: Text;
         Handled: Boolean;
+        FailureText: Text;
     begin
+        ProviderErrorCode := '';
         OnBeforePromptPost(Url, RequestBody, Handled, Sent, HttpStatus, HttpBlocked, ResponseText);
-        if Handled then
+        if Handled then begin
+            KeepOnlySafeProviderCode(HttpStatus, ResponseText, ProviderErrorCode);
             exit;
+        end;
         RequestBody.WriteTo(RequestText);
         HttpContent.WriteFrom(RequestText);
         HttpContent.GetHeaders(Headers);
@@ -175,13 +183,280 @@ codeunit 10035411 "LangModel API Client ori"
         if not Sent then
             exit;
         HttpStatus := HttpResponse.HttpStatusCode();
-        // Do not even read a failed provider body: it can echo fragments of secrets.
         if HttpResponse.IsSuccessStatusCode() then
-            HttpResponse.Content.ReadAs(ResponseText);
+            HttpResponse.Content.ReadAs(ResponseText)
+        else begin
+            // Read only long enough to keep a sanitised error code. The body itself is discarded.
+            HttpResponse.Content.ReadAs(FailureText);
+            ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(FailureText);
+            ResponseText := '';
+        end;
+    end;
+
+    [NonDebuggable]
+    local procedure KeepOnlySafeProviderCode(HttpStatus: Integer; var ResponseText: Text; var ProviderErrorCode: Text)
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        if (HttpStatus < 200) or (HttpStatus > 299) then begin
+            ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
+            ResponseText := '';
+        end;
     end;
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforePromptPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    begin
+    end;
+
+    /// <summary>Uploads one file to a provider Files endpoint and returns the provider file object or a safe error.</summary>
+    [NonDebuggable]
+    procedure UploadProviderFile(FilesUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; FileName: Text; MimeType: Text; ContentBase64: Text) Response: JsonObject
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        ResponseText: Text;
+        ProviderErrorCode: Text;
+        FileId: Text;
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+        Sent: Boolean;
+    begin
+        if not ProviderBase.CanSendHttpRequests() then
+            exit(ProviderBase.BuildPromptError(0, true));
+        if not TryUploadProviderFile(FilesUrl, AuthHeaderName, ApiKey, TimeoutMs, FileName, MimeType, ContentBase64, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
+            ClearLastError();
+            exit(ProviderBase.BuildPromptError(0, HttpBlocked));
+        end;
+        if HttpBlocked or not Sent then
+            exit(ProviderBase.BuildPromptError(0, HttpBlocked));
+        if (HttpStatus < 200) or (HttpStatus > 299) then
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
+        if not Response.ReadFrom(ResponseText) then
+            exit(StoredWithoutIdError(ProviderBase));
+        if Response.Contains('error') then
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
+        if not TryReadUploadedFileId(Response, FileId) then
+            exit(StoredWithoutIdError(ProviderBase));
+    end;
+
+    /// <summary>Deletes one previously uploaded provider file. The caller records a cleanup failure and keeps the prompt reply.</summary>
+    [NonDebuggable]
+    procedure DeleteProviderFile(FileUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer): JsonObject
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        ResponseText: Text;
+        ProviderErrorCode: Text;
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+        Sent: Boolean;
+    begin
+        if not ProviderBase.CanSendHttpRequests() then
+            exit(ProviderBase.BuildPromptError(0, true));
+        if not TryDeleteProviderFile(FileUrl, AuthHeaderName, ApiKey, TimeoutMs, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
+            ClearLastError();
+            exit(ProviderBase.BuildPromptError(0, false));
+        end;
+        if HttpBlocked or not Sent then
+            exit(ProviderBase.BuildPromptError(0, HttpBlocked));
+        if (HttpStatus < 200) or (HttpStatus > 299) then
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
+    end;
+
+    /// <summary>Writes a multipart file upload body. Purpose is written before the file bytes.</summary>
+    [NonDebuggable]
+    procedure WriteProviderFileUpload(FileName: Text; MimeType: Text; ContentBase64: Text; var Boundary: Text; var Body: Codeunit "Temp Blob")
+    var
+        Base64Convert: Codeunit "Base64 Convert";
+        FileBlob: Codeunit "Temp Blob";
+        OutStream: OutStream;
+        FileOut: OutStream;
+        FileIn: InStream;
+        NewLine: Text[2];
+        Preamble: Text;
+        Ending: Text;
+    begin
+        NewLine[1] := 13;
+        NewLine[2] := 10;
+        Boundary := 'BifrostLM' + DelChr(Format(CreateGuid()), '=', '{}-');
+        FileBlob.CreateOutStream(FileOut);
+        Base64Convert.FromBase64(ContentBase64, FileOut);
+        FileBlob.CreateInStream(FileIn);
+        Preamble :=
+            '--' + Boundary + NewLine +
+            'Content-Disposition: form-data; name="purpose"' + NewLine + NewLine +
+            'assistants' + NewLine +
+            '--' + Boundary + NewLine +
+            'Content-Disposition: form-data; name="file"; filename="' + SanitizeUploadFileName(FileName) + '"' + NewLine +
+            'Content-Type: ' + SanitizeUploadMimeType(MimeType) + NewLine + NewLine;
+        Ending := NewLine + '--' + Boundary + '--' + NewLine;
+        Body.CreateOutStream(OutStream);
+        OutStream.WriteText(Preamble);
+        CopyStream(OutStream, FileIn);
+        OutStream.WriteText(Ending);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryUploadProviderFile(FilesUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; FileName: Text; MimeType: Text; ContentBase64: Text; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text; var ProviderErrorCode: Text)
+    var
+        Body: Codeunit "Temp Blob";
+        HttpClientVar: HttpClient;
+        HttpContent: HttpContent;
+        HttpResponse: HttpResponseMessage;
+        Headers: HttpHeaders;
+        BodyIn: InStream;
+        Boundary: Text;
+        Handled: Boolean;
+    begin
+        ProviderErrorCode := '';
+        OnBeforeFileUpload(FilesUrl, FileName, MimeType, ContentBase64, Handled, Sent, HttpStatus, HttpBlocked, ResponseText);
+        if Handled then begin
+            KeepOnlySafeProviderCode(HttpStatus, ResponseText, ProviderErrorCode);
+            exit;
+        end;
+        WriteProviderFileUpload(FileName, MimeType, ContentBase64, Boundary, Body);
+        Body.CreateInStream(BodyIn);
+        HttpContent.WriteFrom(BodyIn);
+        HttpContent.GetHeaders(Headers);
+        if Headers.Contains('Content-Type') then
+            Headers.Remove('Content-Type');
+        Headers.Add('Content-Type', 'multipart/form-data; boundary=' + Boundary);
+        AddAuthHeader(HttpClientVar, AuthHeaderName, ApiKey);
+        HttpClientVar.Timeout(TimeoutMs);
+        Sent := HttpClientVar.Post(FilesUrl, HttpContent, HttpResponse);
+        HttpBlocked := HttpResponse.IsBlockedByEnvironment();
+        if not Sent then
+            exit;
+        HttpStatus := HttpResponse.HttpStatusCode();
+        ReadProviderResponse(HttpResponse, ResponseText, ProviderErrorCode);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryDeleteProviderFile(FileUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text; var ProviderErrorCode: Text)
+    var
+        HttpClientVar: HttpClient;
+        HttpResponse: HttpResponseMessage;
+        Handled: Boolean;
+    begin
+        ProviderErrorCode := '';
+        OnBeforeFileDelete(FileUrl, Handled, Sent, HttpStatus, HttpBlocked, ResponseText);
+        if Handled then begin
+            KeepOnlySafeProviderCode(HttpStatus, ResponseText, ProviderErrorCode);
+            exit;
+        end;
+        AddAuthHeader(HttpClientVar, AuthHeaderName, ApiKey);
+        HttpClientVar.Timeout(TimeoutMs);
+        Sent := HttpClientVar.Delete(FileUrl, HttpResponse);
+        HttpBlocked := HttpResponse.IsBlockedByEnvironment();
+        if not Sent then
+            exit;
+        HttpStatus := HttpResponse.HttpStatusCode();
+        ReadProviderResponse(HttpResponse, ResponseText, ProviderErrorCode);
+    end;
+
+    [NonDebuggable]
+    local procedure AddAuthHeader(var HttpClientVar: HttpClient; AuthHeaderName: Text; ApiKey: SecretText)
+    var
+        Headers: HttpHeaders;
+    begin
+        Headers := HttpClientVar.DefaultRequestHeaders();
+        if AuthHeaderName = 'Authorization' then
+            Headers.Add(AuthHeaderName, SecretStrSubstNo(BearerTok, ApiKey))
+        else
+            Headers.Add(AuthHeaderName, ApiKey);
+    end;
+
+    [NonDebuggable]
+    local procedure ReadProviderResponse(HttpResponse: HttpResponseMessage; var ResponseText: Text; var ProviderErrorCode: Text)
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        FailureText: Text;
+    begin
+        if HttpResponse.IsSuccessStatusCode() then
+            HttpResponse.Content.ReadAs(ResponseText)
+        else begin
+            HttpResponse.Content.ReadAs(FailureText);
+            ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(FailureText);
+            ResponseText := '';
+        end;
+    end;
+
+    local procedure StoredWithoutIdError(var ProviderBase: Codeunit "LangModel Prov. Base ori") Response: JsonObject
+    begin
+        Response := ProviderBase.BuildPromptError(-1, false);
+        Response.Add('storedWithoutId', true);
+    end;
+
+    [NonDebuggable]
+    local procedure TryReadUploadedFileId(Response: JsonObject; var FileId: Text): Boolean
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        IdToken: JsonToken;
+    begin
+        FileId := '';
+        if not Response.Get('id', IdToken) then
+            exit(false);
+        if not IdToken.IsValue() or IdToken.AsValue().IsNull() then
+            exit(false);
+        FileId := ProviderBase.NormalizeProviderFileId(IdToken.AsValue().AsText());
+        exit(FileId <> '');
+    end;
+
+    local procedure SanitizeUploadFileName(FileName: Text): Text
+    var
+        Index: Integer;
+        Character: Char;
+        Result: Text;
+    begin
+        for Index := 1 to StrLen(FileName) do begin
+            Character := FileName[Index];
+            if IsUploadNameCharacter(Character) then
+                Result += Character;
+            if StrLen(Result) >= 80 then
+                break;
+        end;
+        if (Result = '') or (Result = '.') or (Result = '..') then
+            exit('document.bin');
+        exit(Result);
+    end;
+
+    local procedure IsUploadNameCharacter(Character: Char): Boolean
+    begin
+        exit(((Character >= 'a') and (Character <= 'z')) or ((Character >= 'A') and (Character <= 'Z')) or
+            ((Character >= '0') and (Character <= '9')) or (Character = '.') or (Character = '-') or (Character = '_'));
+    end;
+
+    local procedure SanitizeUploadMimeType(MimeType: Text): Text
+    var
+        Normalized: Text;
+        Index: Integer;
+        Character: Char;
+        SlashCount: Integer;
+    begin
+        Normalized := LowerCase(MimeType);
+        if (StrLen(Normalized) < 3) or (StrLen(Normalized) > 80) then
+            exit('application/octet-stream');
+        for Index := 1 to StrLen(Normalized) do begin
+            Character := Normalized[Index];
+            if Character = '/' then
+                SlashCount += 1
+            else
+                if not (((Character >= 'a') and (Character <= 'z')) or ((Character >= '0') and (Character <= '9')) or (Character = '+') or (Character = '.') or (Character = '-')) then
+                    exit('application/octet-stream');
+        end;
+        if SlashCount <> 1 then
+            exit('application/octet-stream');
+        exit(Normalized);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeFileUpload(Url: Text; FileName: Text; MimeType: Text; ContentBase64: Text; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeFileDelete(Url: Text; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
     begin
     end;
 

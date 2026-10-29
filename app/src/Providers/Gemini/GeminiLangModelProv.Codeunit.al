@@ -191,6 +191,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
     [NonDebuggable]
     local procedure DoCompleteWithGenerateContent(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject): Text
     var
+        FileHandling: Codeunit "LangModel File Handling ori";
         RequestBody: JsonObject;
         Contents: JsonArray;
         ContentObj: JsonObject;
@@ -208,6 +209,9 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ResultText: Text;
         GenerateUrlTok: Label '%1/models/%2:generateContent', Locked = true;
     begin
+        if not FileHandling.AcceptFiles(PayloadObject, ResultText) then
+            exit(ResultText);
+
         UserPrompt := GetFirstUserMessage(PayloadObject);
 
         AddFilesAsInlineData(PayloadObject, Parts);

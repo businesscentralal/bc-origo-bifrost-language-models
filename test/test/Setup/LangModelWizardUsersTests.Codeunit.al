@@ -200,8 +200,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
         LanguageModelGroupUser: Record User;
         Member: Record User;
         Nonmember: Record User;
-        Groups: Record "Security Group Buffer";
-        Members: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         AccessControl: Record "Access Control";
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
@@ -217,15 +217,15 @@ codeunit 96038 "LangModel Wizard Users Tests"
         AddAssignment(FoundationGroupUser, false, CompanyName(), FoundationAppId());
         AddAssignment(LanguageModelGroupUser, true, '', LanguageModelsAppId());
         AddAssignment(Nonmember, true, CompanyName(), LanguageModelsAppId());
-        AddGroup(Groups, 'XFOUNDATION', FoundationGroupUser);
-        AddGroup(Groups, 'XMODEL', LanguageModelGroupUser);
-        AddMember(Members, 'XFOUNDATION', Member);
-        AddMember(Members, 'XMODEL', Member);
+        AddGroup(TempGroups, 'XFOUNDATION', FoundationGroupUser);
+        AddGroup(TempGroups, 'XMODEL', LanguageModelGroupUser);
+        AddMember(TempMembers, 'XFOUNDATION', Member);
+        AddMember(TempMembers, 'XMODEL', Member);
         WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
         Assert.IsFalse(FoundationUsers.ContainsKey(Member."User Security ID"), 'Fixture must have no direct Foundation grant.');
         Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Fixture must have no direct Language Models grant.');
         // [WHEN] The production membership join adds inherited assignments.
-        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        WizardMgt.ApplyGroupMemberships(TempGroups, TempMembers, FoundationUsers, LanguageModelUsers);
         // [THEN] Both inherited flags are true, nonmembership stays false, and direct grants survive.
         Assert.IsTrue(FoundationUsers.ContainsKey(Member."User Security ID"), 'Current-company group grant must be displayed.');
         Assert.IsTrue(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Global group grant must be displayed.');
@@ -234,11 +234,11 @@ codeunit 96038 "LangModel Wizard Users Tests"
         AccessControl.SetRange("User Security ID", Member."User Security ID");
         Assert.IsTrue(AccessControl.IsEmpty(), 'Reading inherited access must not write direct assignments.');
         // [WHEN] Membership is removed and the snapshot is rebuilt.
-        Members.SetRange("Security Group Code", 'XMODEL');
-        Members.DeleteAll();
-        Members.Reset();
+        TempMembers.SetRange("Security Group Code", 'XMODEL');
+        TempMembers.DeleteAll();
+        TempMembers.Reset();
         WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
-        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        WizardMgt.ApplyGroupMemberships(TempGroups, TempMembers, FoundationUsers, LanguageModelUsers);
         // [THEN] The surviving group remains and the removed inherited grant is cleared.
         Assert.IsTrue(FoundationUsers.ContainsKey(Member."User Security ID"), 'Remaining membership must still grant Foundation chat.');
         Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Removed membership must not remain cached.');
@@ -254,8 +254,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
     var
         GroupUser: Record User;
         Member: Record User;
-        Groups: Record "Security Group Buffer";
-        Members: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
         UserModels: Dictionary of [Guid, Code[20]];
@@ -264,13 +264,13 @@ codeunit 96038 "LangModel Wizard Users Tests"
         // [GIVEN] A member whose group has only an other-company grant and a wrong-app grant.
         CreateUser(GroupUser);
         CreateUser(Member);
-        AddGroup(Groups, 'XOTHER', GroupUser);
-        AddMember(Members, 'XOTHER', Member);
+        AddGroup(TempGroups, 'XOTHER', GroupUser);
+        AddMember(TempMembers, 'XOTHER', Member);
         AddAssignment(GroupUser, false, CopyStr(Format(CreateGuid(), 0, 4), 1, 30), FoundationAppId());
         AddAssignment(GroupUser, true, CompanyName(), CreateGuid());
         WizardMgt.LoadUserStatus(FoundationUsers, LanguageModelUsers, UserModels);
         // [WHEN] The production join resolves the member from the filtered snapshot.
-        WizardMgt.ApplyGroupMemberships(Groups, Members, FoundationUsers, LanguageModelUsers);
+        WizardMgt.ApplyGroupMemberships(TempGroups, TempMembers, FoundationUsers, LanguageModelUsers);
         // [THEN] Neither assignment becomes an effective product grant.
         Assert.IsFalse(FoundationUsers.ContainsKey(Member."User Security ID"), 'Other-company group grants must not apply.');
         Assert.IsFalse(LanguageModelUsers.ContainsKey(Member."User Security ID"), 'Wrong-app group grants must not apply.');

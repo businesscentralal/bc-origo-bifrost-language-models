@@ -603,6 +603,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 855164644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file is larger than the language model file size limit.</source>
+          <target>Skráin er stærri en stærðartakmörk mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráin er stærri en stærðartakmörk mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1709724501" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a file within the language model file size limit</source>
+          <target>skrá innan stærðartakmarka mállíkansins</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skrá innan stærðartakmarka mállíkansins</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2975622916" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reduce the file size. No request was sent.</source>
+          <target>Minnkaðu skrána. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Minnkaðu skrána. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1834317859" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The decoded file is larger than the language model file size limit.</source>
+          <target>Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1776159594" size-unit="char" translate="yes" xml:space="preserve">
           <source>an answer from the language model</source>
           <target>svar frá mállíkaninu</target>
@@ -668,6 +692,30 @@
           <target>Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1700563337" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This language model accepts only PNG and JPEG images.</source>
+          <target>Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 289882424" size-unit="char" translate="yes" xml:space="preserve">
+          <source>image/png or image/jpeg</source>
+          <target>image/png eða image/jpeg</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=image/png eða image/jpeg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3628311689" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent.</source>
+          <target>Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2116972362" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file mimeType is an image other than image/png or image/jpeg.</source>
+          <target>mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1319966414 - NamedType 1281857675" size-unit="char" translate="yes" xml:space="preserve">
           <source>A language model code must be specified before an API key can be stored.</source>

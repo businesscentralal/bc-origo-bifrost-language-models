@@ -161,31 +161,31 @@ codeunit 10035427 "LangModel Wizard Mgt ori"
 
     local procedure LoadInheritedChatAssignments(var FoundationUsers: Dictionary of [Guid, Boolean]; var LanguageModelUsers: Dictionary of [Guid, Boolean])
     var
-        SecurityGroups: Record "Security Group Buffer";
-        Members: Record "Security Group Member Buffer";
+        TempSecurityGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         SecurityGroup: Codeunit "Security Group";
         SkippedGroups: List of [Code[20]];
         HasChatGroup: Boolean;
         IncompleteChatGroup: Boolean;
     begin
-        SecurityGroup.GetGroups(SecurityGroups, false);
-        if SecurityGroups.FindSet() then
+        SecurityGroup.GetGroups(TempSecurityGroups, false);
+        if TempSecurityGroups.FindSet() then
             repeat
-                HasChatGroup := HasChatGroup or FoundationUsers.ContainsKey(SecurityGroups."Group User SID") or
-                    LanguageModelUsers.ContainsKey(SecurityGroups."Group User SID");
-            until SecurityGroups.Next() = 0;
+                HasChatGroup := HasChatGroup or FoundationUsers.ContainsKey(TempSecurityGroups."Group User SID") or
+                    LanguageModelUsers.ContainsKey(TempSecurityGroups."Group User SID");
+            until TempSecurityGroups.Next() = 0;
         if not HasChatGroup then
             exit;
 
-        SkippedGroups := SecurityGroup.GetMembers(Members);
-        ApplyGroupMemberships(SecurityGroups, Members, FoundationUsers, LanguageModelUsers);
+        SkippedGroups := SecurityGroup.GetMembers(TempMembers);
+        ApplyGroupMemberships(TempSecurityGroups, TempMembers, FoundationUsers, LanguageModelUsers);
         // A failed directory lookup must not silently turn an inherited grant into false.
-        if SecurityGroups.FindSet() then
+        if TempSecurityGroups.FindSet() then
             repeat
-                if SkippedGroups.Contains(SecurityGroups.Code) then
-                    IncompleteChatGroup := IncompleteChatGroup or FoundationUsers.ContainsKey(SecurityGroups."Group User SID") or
-                        LanguageModelUsers.ContainsKey(SecurityGroups."Group User SID");
-            until SecurityGroups.Next() = 0;
+                if SkippedGroups.Contains(TempSecurityGroups.Code) then
+                    IncompleteChatGroup := IncompleteChatGroup or FoundationUsers.ContainsKey(TempSecurityGroups."Group User SID") or
+                        LanguageModelUsers.ContainsKey(TempSecurityGroups."Group User SID");
+            until TempSecurityGroups.Next() = 0;
         if IncompleteChatGroup then
             LoadEffectiveChatAssignments(FoundationUsers, LanguageModelUsers);
     end;
