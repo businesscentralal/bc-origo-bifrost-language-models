@@ -22,11 +22,18 @@ codeunit 10035410 "LangModel Prov. Base ori"
         PromptBlockedWhenTxt: Label 'Allow HttpClient Requests is disabled for the app.', Comment = 'is-IS=Leyfa HttpClient-beiðnir er óvirkt fyrir forritið.';
         PromptProviderWhenTxt: Label 'The provider refuses the request or returns an invalid response, including an unsupported file.', Comment = 'is-IS=Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.';
         HttpClientBlockedMsg: Label 'HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.', Comment = 'is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.';
-        UnsupportedImageErr: Label 'xAI accepts only PNG and JPEG images.', Comment = 'is-IS=xAI tekur aðeins við PNG- og JPEG-myndum.';
+        UnsupportedImageErr: Label 'This language model accepts only PNG and JPEG images.', Comment = 'is-IS=Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.';
         UnsupportedImageWhenTxt: Label 'The file mimeType is an image other than image/png or image/jpeg.', Comment = 'is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.';
         UnsupportedImageExpectedTxt: Label 'image/png or image/jpeg', Comment = 'is-IS=image/png eða image/jpeg';
         UnsupportedImageNextStepTxt: Label 'Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent.', Comment = 'is-IS=Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.';
+        OversizeFileErr: Label 'The file is larger than the language model file size limit.', Comment = 'is-IS=Skráin er stærri en stærðartakmörk mállíkansins.';
+        OversizeFileWhenTxt: Label 'The decoded file is larger than the language model file size limit.', Comment = 'is-IS=Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.';
+        OversizeFileExpectedTxt: Label 'a file within the language model file size limit', Comment = 'is-IS=skrá innan stærðartakmarka mállíkansins';
+        OversizeFileNextStepTxt: Label 'Reduce the file size. No request was sent.', Comment = 'is-IS=Minnkaðu skrána. Engin beiðni var send.';
         ProviderParameterTok: Label 'provider', Locked = true;
+        FileParameterTok: Label 'file', Locked = true;
+        UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
+        OversizeKindTok: Label 'oversize', Locked = true;
 
     /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
@@ -64,6 +71,10 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ReceivedText: Text;
         ParameterName: Text;
     begin
+        if IsSafeOversizeRefusal(Response) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, FileParameterTok, '', OversizeFileExpectedTxt, OversizeFileNextStepTxt);
+            exit;
+        end;
         if IsSafeImageRefusal(Response, ReceivedMime) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, 'mimeType', ReceivedMime, UnsupportedImageExpectedTxt, UnsupportedImageNextStepTxt);
             exit;
@@ -95,14 +106,24 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HttpClientBlockedMsg, PromptBlockedWhenTxt, PromptBlockedNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptProviderErr, PromptProviderWhenTxt, PromptSetupNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, UnsupportedImageWhenTxt, UnsupportedImageNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, OversizeFileWhenTxt, OversizeFileNextStepTxt));
     end;
 
-    /// <summary>Builds the local xAI image refusal. No provider call is made for this answer.</summary>
+    /// <summary>Builds the local unsupported-image refusal. No provider call is made for this answer.</summary>
     procedure BuildUnsupportedImageRefusal(MimeType: Text) Response: JsonObject
     begin
         Response.Add('error', UnsupportedImageErr);
         Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', UnsupportedImageKindTok);
         Response.Add('received', SanitizeMimeType(MimeType));
+    end;
+
+    /// <summary>Builds the local oversize-file refusal. No provider call is made for this answer.</summary>
+    procedure BuildOversizeRefusal() Response: JsonObject
+    begin
+        Response.Add('error', OversizeFileErr);
+        Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', OversizeKindTok);
     end;
 
     /// <summary>
@@ -166,13 +187,27 @@ codeunit 10035410 "LangModel Prov. Base ori"
     local procedure IsSafeImageRefusal(Response: JsonObject; var ReceivedMime: Text): Boolean
     begin
         ReceivedMime := '';
-        if not Response.Contains('safeRefusal') then
-            exit(false);
-        if not Response.GetBoolean('safeRefusal') then
+        if not IsSafeRefusalKind(Response, UnsupportedImageKindTok) then
             exit(false);
         if Response.Contains('received') then
             ReceivedMime := SanitizeMimeType(Response.GetText('received'));
         exit(true);
+    end;
+
+    local procedure IsSafeOversizeRefusal(Response: JsonObject): Boolean
+    begin
+        exit(IsSafeRefusalKind(Response, OversizeKindTok));
+    end;
+
+    local procedure IsSafeRefusalKind(Response: JsonObject; Kind: Text): Boolean
+    begin
+        if not Response.Contains('safeRefusal') then
+            exit(false);
+        if not Response.GetBoolean('safeRefusal') then
+            exit(false);
+        if not Response.Contains('refusalKind') then
+            exit(Kind = UnsupportedImageKindTok);
+        exit(Response.GetText('refusalKind') = Kind);
     end;
 
     local procedure SanitizeMimeType(MimeType: Text): Text

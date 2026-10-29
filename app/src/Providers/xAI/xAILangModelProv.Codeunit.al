@@ -3,8 +3,8 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// xAI (Grok) provider. Text uses Chat Completions. PNG and JPEG stay inline on the
-/// Responses API; other documents are uploaded and then referenced by file id.
+/// xAI (Grok) provider. Text uses Chat Completions. Files use the shared
+/// language-model file policy on the Responses API.
 /// </summary>
 codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provider ori"
 {
@@ -12,12 +12,11 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        FileHandling: Codeunit "LangModel File Handling ori";
         AuthHeaderNameTok: Label 'Authorization', Locked = true;
         DefaultBaseUrlTok: Label 'https://api.x.ai', Locked = true;
         DefaultModelTok: Label 'grok-3', Locked = true;
         ProviderNameTok: Label 'xAI', Locked = true;
-        ProviderFileDeleteFailedTok: Label 'ORI-LM-0093', Locked = true;
-        ProviderFileDeleteFailedMsg: Label 'xAI provider file delete failed.', Locked = true;
         ApiKeyLabelLbl: Label 'API Key', Comment = 'is-IS=API-lykill';
         ApiKeyInstructionLbl: Label 'Enter your xAI API key.', Comment = 'is-IS=Sláðu inn xAI API-lykilinn þinn.';
         ApiKeyPlaceholderTok: Label 'xai-...', Locked = true;
@@ -179,7 +178,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         exit(ResultText);
     end;
 
-    // Files present: xAI Responses API. PNG and JPEG stay inline; other documents are uploaded.
+    // Files present: Responses API. Shared file policy: PNG/JPEG inline, documents uploaded.
     [NonDebuggable]
     local procedure DoCompleteWithResponsesApi(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject): Text
     var
@@ -191,7 +190,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
             if ResultText = '' then
                 ResultText := WriteTransportError();
         end;
-        DeleteUploadedFiles(Argument, UploadedFileIds);
+        FileHandling.DeleteUploadedFiles(Argument, UploadedFileIds, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok);
         exit(ResultText);
     end;
 
@@ -216,7 +215,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         TextBlock.Add('text', UserPrompt);
         ContentArray.Add(TextBlock);
 
-        if not AddResponseFiles(Argument, PayloadObject, ContentArray, UploadedFileIds, ResultText) then
+        if not FileHandling.AddResponseFiles(Argument, PayloadObject, ContentArray, UploadedFileIds, ResultText, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok) then
             exit;
 
         InputMessage.Add('role', 'user');
@@ -243,180 +242,6 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         ResponseObj.Add('reply', ExtractResponsesText(Response));
         ResponseObj.WriteTo(ResultText);
-    end;
-
-    [NonDebuggable]
-    local procedure AddResponseFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject; var ContentArray: JsonArray; var UploadedFileIds: JsonArray; var ResultText: Text): Boolean
-    var
-        ApiClient: Codeunit "LangModel API Client ori";
-        DataUriTok: Label 'data:%1;base64,%2', Locked = true;
-        FilesToken: JsonToken;
-        FileToken: JsonToken;
-        FileObj: JsonObject;
-        FileBlock: JsonObject;
-        UploadResponse: JsonObject;
-        UnsupportedMime: Text;
-        MimeType: Text;
-        FileId: Text;
-        BaseUrl: Text;
-    begin
-        UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
-        if UnsupportedMime <> '' then begin
-            ProviderBase.BuildUnsupportedImageRefusal(UnsupportedMime).WriteTo(ResultText);
-            exit(false);
-        end;
-        if not PayloadObject.Get('files', FilesToken) then
-            exit(true);
-        if not FilesToken.IsArray() then
-            exit(true);
-
-        BaseUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok);
-        foreach FileToken in FilesToken.AsArray() do begin
-            if not FileToken.IsObject() then
-                continue;
-            FileObj := FileToken.AsObject();
-            MimeType := GetJsonText(FileObj, 'mimeType');
-            Clear(FileBlock);
-            if IsInlineImageMime(MimeType) then begin
-                FileBlock.Add('type', 'input_image');
-                FileBlock.Add('image_url', StrSubstNo(DataUriTok, LowerCase(MimeType), GetJsonText(FileObj, 'data')));
-            end else begin
-                UploadResponse := ApiClient.UploadProviderFile(
-                    ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files'),
-                    AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000),
-                    GetJsonText(FileObj, 'fileName'), MimeType, GetJsonText(FileObj, 'data'));
-                if UploadResponse.Contains('error') then begin
-                    UploadResponse.WriteTo(ResultText);
-                    exit(false);
-                end;
-                FileId := ProviderBase.NormalizeProviderFileId(GetJsonText(UploadResponse, 'id'));
-                if FileId = '' then begin
-                    ProviderBase.BuildPromptError(-1, false).WriteTo(ResultText);
-                    exit(false);
-                end;
-                UploadedFileIds.Add(FileId);
-                FileBlock.Add('type', 'input_file');
-                FileBlock.Add('file_id', FileId);
-            end;
-            ContentArray.Add(FileBlock);
-        end;
-        exit(true);
-    end;
-
-    [NonDebuggable]
-    local procedure DeleteUploadedFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; UploadedFileIds: JsonArray)
-    var
-        ApiClient: Codeunit "LangModel API Client ori";
-        DeleteResponse: JsonObject;
-        IdToken: JsonToken;
-        FileId: Text;
-        BaseUrl: Text;
-    begin
-        if UploadedFileIds.Count() = 0 then
-            exit;
-        BaseUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok);
-        foreach IdToken in UploadedFileIds do begin
-            if not IdToken.IsValue() then
-                continue;
-            FileId := ProviderBase.NormalizeProviderFileId(IdToken.AsValue().AsText());
-            if FileId = '' then
-                continue;
-            DeleteResponse := ApiClient.DeleteProviderFile(
-                ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files/' + FileId),
-                AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000));
-            if DeleteResponse.Contains('error') then
-                LogProviderFileDeleteFailure(FileId, DeleteResponse);
-        end;
-    end;
-
-    /// <summary>
-    /// Records a failed provider-file delete without the file name, MIME type, prompt or provider body.
-    /// The prompt reply is left unchanged.
-    /// </summary>
-    [NonDebuggable]
-    local procedure LogProviderFileDeleteFailure(FileId: Text; DeleteResponse: JsonObject)
-    var
-        CustomDimensions: Dictionary of [Text, Text];
-        HttpOutcome: Text;
-        ProviderErrorCode: Text;
-    begin
-        HttpOutcome := ProviderFileDeleteOutcome(DeleteResponse);
-        ProviderErrorCode := SafeLoggedProviderErrorCode(DeleteResponse);
-        CustomDimensions.Add('provider', ProviderNameTok);
-        CustomDimensions.Add('httpOutcome', HttpOutcome);
-        CustomDimensions.Add('providerErrorCode', ProviderErrorCode);
-        CustomDimensions.Add('fileId', FileId);
-        Session.LogMessage(ProviderFileDeleteFailedTok, ProviderFileDeleteFailedMsg, Verbosity::Warning, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
-        OnProviderFileDeleteFailed(ProviderNameTok, HttpOutcome, ProviderErrorCode, FileId);
-    end;
-
-    local procedure ProviderFileDeleteOutcome(DeleteResponse: JsonObject): Text
-    var
-        HttpStatus: Integer;
-        HttpBlocked: Boolean;
-    begin
-        HttpBlocked := false;
-        HttpStatus := 0;
-        if DeleteResponse.Contains('httpBlocked') then
-            HttpBlocked := DeleteResponse.GetBoolean('httpBlocked');
-        if HttpBlocked then
-            exit('blocked');
-        if DeleteResponse.Contains('providerStatus') then
-            HttpStatus := DeleteResponse.GetInteger('providerStatus');
-        if (HttpStatus >= 100) and (HttpStatus <= 599) then
-            exit(Format(HttpStatus, 0, 9));
-        exit('not sent');
-    end;
-
-    local procedure SafeLoggedProviderErrorCode(DeleteResponse: JsonObject): Text
-    var
-        Candidate: Text;
-    begin
-        if not DeleteResponse.Contains('providerErrorCode') then
-            exit('');
-        Candidate := DeleteResponse.GetText('providerErrorCode');
-        if Candidate.Contains('"') or Candidate.Contains('\') then
-            exit('');
-        exit(ProviderBase.SanitizeProviderErrorCode('{"code":"' + Candidate + '"}'));
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnProviderFileDeleteFailed(Provider: Text; HttpOutcome: Text; ProviderErrorCode: Text; FileId: Text)
-    begin
-    end;
-
-    local procedure FindUnsupportedImageMime(PayloadObject: JsonObject): Text
-    var
-        FilesToken: JsonToken;
-        FileToken: JsonToken;
-        FileObj: JsonObject;
-        MimeType: Text;
-    begin
-        if not PayloadObject.Get('files', FilesToken) then
-            exit('');
-        if not FilesToken.IsArray() then
-            exit('');
-        foreach FileToken in FilesToken.AsArray() do begin
-            if not FileToken.IsObject() then
-                continue;
-            FileObj := FileToken.AsObject();
-            MimeType := GetJsonText(FileObj, 'mimeType');
-            if IsUnsupportedImageMime(MimeType) then
-                exit(MimeType);
-        end;
-    end;
-
-    local procedure IsInlineImageMime(MimeType: Text): Boolean
-    var
-        Normalized: Text;
-    begin
-        Normalized := LowerCase(MimeType);
-        exit((Normalized = 'image/png') or (Normalized = 'image/jpeg'));
-    end;
-
-    local procedure IsUnsupportedImageMime(MimeType: Text): Boolean
-    begin
-        exit(LowerCase(MimeType).StartsWith('image/') and not IsInlineImageMime(MimeType));
     end;
 
     local procedure WriteTransportError() ResultText: Text

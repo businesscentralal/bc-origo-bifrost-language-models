@@ -633,7 +633,74 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Model.Delete(true);
     end;
 
-    /// <summary>A stored PNG follows the same inline xAI image path.</summary>
+    /// <summary>A 2xx upload without a readable file id is recorded and does not send the prompt.</summary>
+    [Test]
+    procedure AC02_Pdf_UploadIdUnreadLogsRetention()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.ConfigureUpload(200, '{"object":"file"}');
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt follows an unreadable upload id.');
+        Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The upload was attempted.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'There is no id to delete.');
+        Assert.AreEqual(1, HttpMock.GetDeleteFailureCount(), 'The unread id is signalled.');
+        Assert.AreEqual('xAI', HttpMock.GetDeleteFailureProvider(), 'The signal names the provider.');
+        Assert.AreEqual('id unread', HttpMock.GetDeleteFailureOutcome(), 'The signal names the unread-id outcome.');
+        Assert.AreEqual('', HttpMock.GetDeleteFailureFileId(), 'No file id is logged.');
+        AssertCodedError(Response, 'PreconditionFailed');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>An oversize document is refused before any provider HTTP call.</summary>
+    [Test]
+    procedure AC02_Pdf_OversizeRefusesBeforeHttp()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.ConfigureMaxDecodedBytes(4);
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'No upload is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'No delete is sent for an oversize file.');
+        AssertCodedError(Response, 'InvalidParameter');
+        Assert.AreEqual('file', Response.GetText('parameter'), 'The refusal names file.');
+        Assert.IsTrue(Response.GetText('error').Contains('file size limit'), 'The error names the size limit.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>Shared file policy classifies MIME types without a provider name.</summary>
+    [Test]
+    procedure FileHandling_ClassifiesMimeWithoutProviderName()
+    var
+        FileHandling: Codeunit "LangModel File Handling ori";
+    begin
+        Assert.IsTrue(FileHandling.IsInlineImageMime('image/png'), 'PNG stays inline.');
+        Assert.IsTrue(FileHandling.IsInlineImageMime('IMAGE/JPEG'), 'JPEG stays inline.');
+        Assert.IsTrue(FileHandling.IsRefusedImageMime('image/gif'), 'GIF is refused.');
+        Assert.IsTrue(FileHandling.IsRefusedImageMime('image/jpg'), 'image/jpg is refused.');
+        Assert.IsFalse(FileHandling.IsInlineImageMime('application/pdf'), 'PDF is not an inline image.');
+        Assert.IsFalse(FileHandling.IsRefusedImageMime('application/pdf'), 'PDF is not a refused image.');
+        Assert.AreEqual(5, FileHandling.DecodedByteCount('aGVsbG8='), 'hello is 5 decoded bytes.');
+        Assert.IsFalse(FileHandling.IsOversize('aGVsbG8='), 'A small PDF is within the default cap.');
+        Assert.AreEqual(20971520, FileHandling.MaxDecodedFileBytes(), 'The shared cap is 20 MB.');
+    end;
+
+    /// <summary>A stored PNG follows the same inline image path.</summary>
     [Test]
     procedure AC03_xAI_StoredPng_UsesImagePath()
     var
@@ -1164,8 +1231,8 @@ codeunit 96034 "LLM 65 Prompt Tests"
             AssertXaiDocumentUpload(HttpMock)
         else begin
             Assert.AreEqual(WithFile, HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Optional file content.');
-            Assert.AreEqual(0, HttpMock.GetUploadCount(), 'This provider does not upload xAI files.');
-            Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'This provider does not delete xAI files.');
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), 'This provider keeps the file inline.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'This provider does not upload then delete.');
         end;
         if WithFile and (ProviderType = "Bifrost LangModel Prov. ori"::Google) then
             Assert.IsTrue(HttpMock.GetRequestUrl().Contains(':generateContent'), 'Gemini native file endpoint');

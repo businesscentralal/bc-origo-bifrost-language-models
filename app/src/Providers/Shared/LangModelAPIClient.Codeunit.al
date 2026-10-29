@@ -198,10 +198,10 @@ codeunit 10035411 "LangModel API Client ori"
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
     begin
-        if (HttpStatus >= 400) and (HttpStatus <= 499) then
+        if (HttpStatus < 200) or (HttpStatus > 299) then begin
             ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
-        if (HttpStatus < 200) or (HttpStatus > 299) then
             ResponseText := '';
+        end;
     end;
 
     [IntegrationEvent(false, false)]
@@ -232,11 +232,11 @@ codeunit 10035411 "LangModel API Client ori"
         if (HttpStatus < 200) or (HttpStatus > 299) then
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
         if not Response.ReadFrom(ResponseText) then
-            exit(ProviderBase.BuildPromptError(-1, false));
+            exit(StoredWithoutIdError(ProviderBase));
         if Response.Contains('error') then
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
         if not TryReadUploadedFileId(Response, FileId) then
-            exit(ProviderBase.BuildPromptError(-1, false));
+            exit(StoredWithoutIdError(ProviderBase));
     end;
 
     /// <summary>Deletes one previously uploaded provider file. The caller records a cleanup failure and keeps the prompt reply.</summary>
@@ -263,6 +263,7 @@ codeunit 10035411 "LangModel API Client ori"
     end;
 
     /// <summary>Writes a multipart file upload body. Purpose is written before the file bytes.</summary>
+    [NonDebuggable]
     procedure WriteProviderFileUpload(FileName: Text; MimeType: Text; ContentBase64: Text; var Boundary: Text; var Body: Codeunit "Temp Blob")
     var
         Base64Convert: Codeunit "Base64 Convert";
@@ -381,6 +382,13 @@ codeunit 10035411 "LangModel API Client ori"
         end;
     end;
 
+    local procedure StoredWithoutIdError(var ProviderBase: Codeunit "LangModel Prov. Base ori") Response: JsonObject
+    begin
+        Response := ProviderBase.BuildPromptError(-1, false);
+        Response.Add('storedWithoutId', true);
+    end;
+
+    [NonDebuggable]
     local procedure TryReadUploadedFileId(Response: JsonObject; var FileId: Text): Boolean
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";

@@ -603,6 +603,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 855164644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file is larger than the language model file size limit.</source>
+          <target>Skráin er stærri en stærðartakmörk mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skráin er stærri en stærðartakmörk mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1709724501" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a file within the language model file size limit</source>
+          <target>skrá innan stærðartakmarka mállíkansins</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skrá innan stærðartakmarka mállíkansins</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2975622916" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reduce the file size. No request was sent.</source>
+          <target>Minnkaðu skrána. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Minnkaðu skrána. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1834317859" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The decoded file is larger than the language model file size limit.</source>
+          <target>Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType OversizeFileWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1776159594" size-unit="char" translate="yes" xml:space="preserve">
           <source>an answer from the language model</source>
           <target>svar frá mállíkaninu</target>
@@ -670,9 +694,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1700563337" size-unit="char" translate="yes" xml:space="preserve">
-          <source>xAI accepts only PNG and JPEG images.</source>
-          <target>xAI tekur aðeins við PNG- og JPEG-myndum.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=xAI tekur aðeins við PNG- og JPEG-myndum.</note>
+          <source>This language model accepts only PNG and JPEG images.</source>
+          <target>Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 289882424" size-unit="char" translate="yes" xml:space="preserve">

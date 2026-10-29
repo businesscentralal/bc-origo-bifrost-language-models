@@ -33,6 +33,7 @@ codeunit 96033 "LLM 65 HTTP Mock"
         LastDeleteFailureOutcome: Text;
         LastDeleteFailureCode: Text;
         LastDeleteFailureFileId: Text;
+        MaxDecodedBytesOverride: Integer;
 
     /// <summary>Configures one synthetic prompt result and resets file-transport observations.</summary>
     procedure Configure(NewStatus: Integer; NewBody: Text; NewBlocked: Boolean; NewThrow: Boolean)
@@ -61,6 +62,13 @@ codeunit 96033 "LLM 65 HTTP Mock"
         LastDeleteFailureOutcome := '';
         LastDeleteFailureCode := '';
         LastDeleteFailureFileId := '';
+        MaxDecodedBytesOverride := 0;
+    end;
+
+    /// <summary>Overrides the shared decoded file-size cap for one bound test. Zero restores the default.</summary>
+    procedure ConfigureMaxDecodedBytes(NewMaxBytes: Integer)
+    begin
+        MaxDecodedBytesOverride := NewMaxBytes;
     end;
 
     /// <summary>Configures the next synthetic file-upload result.</summary>
@@ -218,13 +226,20 @@ codeunit 96033 "LLM 65 HTTP Mock"
         ResponseText := DeleteBody;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"xAI LangModel Prov. ori", 'OnProviderFileDeleteFailed', '', false, false)]
-    local procedure OnProviderFileDeleteFailed(Provider: Text; HttpOutcome: Text; ProviderErrorCode: Text; FileId: Text)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel File Handling ori", 'OnProviderFileCleanupIssue', '', false, false)]
+    local procedure OnProviderFileCleanupIssue(Provider: Text; HttpOutcome: Text; ProviderErrorCode: Text; FileId: Text)
     begin
         DeleteFailureCount += 1;
         LastDeleteFailureProvider := Provider;
         LastDeleteFailureOutcome := HttpOutcome;
         LastDeleteFailureCode := ProviderErrorCode;
         LastDeleteFailureFileId := FileId;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel File Handling ori", 'OnResolveMaxDecodedFileBytes', '', false, false)]
+    local procedure OnResolveMaxDecodedFileBytes(var MaxBytes: Integer)
+    begin
+        if MaxDecodedBytesOverride > 0 then
+            MaxBytes := MaxDecodedBytesOverride;
     end;
 }
