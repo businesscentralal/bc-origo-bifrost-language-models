@@ -13,7 +13,7 @@ using Origo.Bifrost.LanguageModels;
 /// toolCalls: [ { round, name, isError, resultChars } ], usage }. Each tool round is committed first, as each round of
 /// the add-in is its own request; the tools run as the caller. Test app only; refused in SaaS production.
 /// </summary>
-codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori"
+codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg Contract ori"
 {
     Access = Internal;
 
@@ -98,6 +98,83 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori"
         TestCtx.SetLanguageModel(LanguageModel.Code);
         RunTurn(Argument, LanguageModel, BuildPayload(RequestJson), MaxRounds);
         TestCtx.ClearLanguageModel();
+    end;
+
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    begin
+        exit(Tools.TestEnvelope(Envelope));
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        MessagesParameter: JsonObject;
+        MessageFields: JsonArray;
+        RecordContextParameter: JsonObject;
+    begin
+        Parameters.Add(ContractMgt.Parameter('code', 'string', true, 'Language model code to chat with.'));
+        Parameters.Add(ContractMgt.Parameter('prompt', 'string', false, 'User prompt for a single turn. Required when messages is omitted.'));
+        MessageFields.Add(ContractMgt.Parameter('role', 'string', false, 'Conversation role, for example user or assistant.'));
+        MessageFields.Add(ContractMgt.Parameter('content', 'string', false, 'Message content.'));
+        MessagesParameter := ContractMgt.Parameter('messages', 'array', false, 'Conversation messages. Required when prompt is omitted.');
+        MessagesParameter.Add('children', MessageFields);
+        Parameters.Add(MessagesParameter);
+        RecordContextParameter := ContractMgt.Parameter('recordContext', 'object', false, 'Optional record context object passed through to the chat provider.');
+        Parameters.Add(RecordContextParameter);
+        Parameters.Add(ContractMgt.Parameter('maxToolRounds', 'integer', false, 'Maximum tool-call rounds, default 8, at most 20.'));
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    begin
+        exit(Tools.WriteEffect('Runs one Bifrost Chat turn against the named language model, including MCP tool calls as the caller.', Effect));
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := '';
+        exit(false);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
     end;
 
     local procedure RunTurn(var Argument: Record "Message Argument ori"; var LanguageModel: Record "Bifrost Language Model ori"; PayloadJson: Text; MaxRounds: Integer)
