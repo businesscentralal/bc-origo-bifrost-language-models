@@ -193,6 +193,7 @@ codeunit 10035411 "LangModel API Client ori"
         end;
     end;
 
+    [NonDebuggable]
     local procedure KeepOnlySafeProviderCode(HttpStatus: Integer; var ResponseText: Text; var ProviderErrorCode: Text)
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
@@ -238,7 +239,7 @@ codeunit 10035411 "LangModel API Client ori"
             exit(ProviderBase.BuildPromptError(-1, false));
     end;
 
-    /// <summary>Deletes one previously uploaded provider file. The caller ignores a cleanup failure.</summary>
+    /// <summary>Deletes one previously uploaded provider file. The caller records a cleanup failure and keeps the prompt reply.</summary>
     [NonDebuggable]
     procedure DeleteProviderFile(FileUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer): JsonObject
     var
@@ -365,6 +366,7 @@ codeunit 10035411 "LangModel API Client ori"
             Headers.Add(AuthHeaderName, ApiKey);
     end;
 
+    [NonDebuggable]
     local procedure ReadProviderResponse(HttpResponse: HttpResponseMessage; var ResponseText: Text; var ProviderErrorCode: Text)
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";

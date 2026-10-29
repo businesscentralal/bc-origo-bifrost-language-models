@@ -570,6 +570,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.AreEqual(1, HttpMock.GetCallCount(), 'The prompt was still sent.');
         Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The PDF was uploaded.');
         Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'The uploaded PDF is deleted when the prompt fails.');
+        Assert.AreEqual(0, HttpMock.GetDeleteFailureCount(), 'A successful delete is not signalled as retained.');
         Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Delete follows the failed prompt.');
         Assert.IsTrue(HttpMock.GetDeleteUrl().EndsWith('/v1/files/file_llm65'), 'Delete targets the uploaded id.');
         AssertCodedError(Response, 'PreconditionFailed');
@@ -590,13 +591,20 @@ codeunit 96034 "LLM 65 Prompt Tests"
     begin
         CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
         HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
-        HttpMock.ConfigureDelete(500, '{"error":{"message":"cleanup failed Z9Q7"}}');
+        HttpMock.ConfigureDelete(500, '{"error":{"code":"server_error","message":"cleanup failed Z9Q7"}}');
         BindSubscription(HttpMock);
         Response := Execute(Request(Model.Code, false, true));
         UnbindSubscription(HttpMock);
         Assert.AreEqual('Success', Response.GetText('status'), 'Delete failure stays internal.');
         Assert.AreEqual('A safe answer', Response.GetText('reply'), 'The reply is unchanged.');
         Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'Delete was still attempted.');
+        Assert.AreEqual(1, HttpMock.GetDeleteFailureCount(), 'The failed delete is signalled.');
+        Assert.AreEqual('xAI', HttpMock.GetDeleteFailureProvider(), 'The signal names the provider.');
+        Assert.AreEqual('500', HttpMock.GetDeleteFailureOutcome(), 'The signal names the HTTP status.');
+        Assert.AreEqual('server_error', HttpMock.GetDeleteFailureCode(), 'The signal keeps only the sanitised code.');
+        Assert.AreEqual('file_llm65', HttpMock.GetDeleteFailureFileId(), 'The signal names the provider file id.');
+        Assert.IsFalse(HttpMock.GetDeleteFailureCode().Contains('Z9Q7'), 'The provider message is not signalled.');
+        Assert.IsFalse(HttpMock.GetDeleteFailureFileId().Contains('ZZTEST'), 'The file name is not signalled.');
         AssertSecretAbsent(Response);
         Model.Delete(true);
     end;

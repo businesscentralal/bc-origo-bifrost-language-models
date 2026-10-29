@@ -16,6 +16,8 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         DefaultBaseUrlTok: Label 'https://api.x.ai', Locked = true;
         DefaultModelTok: Label 'grok-3', Locked = true;
         ProviderNameTok: Label 'xAI', Locked = true;
+        ProviderFileDeleteFailedTok: Label 'ORI-LM-0093', Locked = true;
+        ProviderFileDeleteFailedMsg: Label 'xAI provider file delete failed.', Locked = true;
         ApiKeyLabelLbl: Label 'API Key', Comment = 'is-IS=API-lykill';
         ApiKeyInstructionLbl: Label 'Enter your xAI API key.', Comment = 'is-IS=Sláðu inn xAI API-lykilinn þinn.';
         ApiKeyPlaceholderTok: Label 'xai-...', Locked = true;
@@ -305,6 +307,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
     local procedure DeleteUploadedFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; UploadedFileIds: JsonArray)
     var
         ApiClient: Codeunit "LangModel API Client ori";
+        DeleteResponse: JsonObject;
         IdToken: JsonToken;
         FileId: Text;
         BaseUrl: Text;
@@ -316,11 +319,70 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
             if not IdToken.IsValue() then
                 continue;
             FileId := ProviderBase.NormalizeProviderFileId(IdToken.AsValue().AsText());
-            if FileId <> '' then
-                ApiClient.DeleteProviderFile(
-                    ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files/' + FileId),
-                    AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000));
+            if FileId = '' then
+                continue;
+            DeleteResponse := ApiClient.DeleteProviderFile(
+                ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files/' + FileId),
+                AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000));
+            if DeleteResponse.Contains('error') then
+                LogProviderFileDeleteFailure(FileId, DeleteResponse);
         end;
+    end;
+
+    /// <summary>
+    /// Records a failed provider-file delete without the file name, MIME type, prompt or provider body.
+    /// The prompt reply is left unchanged.
+    /// </summary>
+    [NonDebuggable]
+    local procedure LogProviderFileDeleteFailure(FileId: Text; DeleteResponse: JsonObject)
+    var
+        CustomDimensions: Dictionary of [Text, Text];
+        HttpOutcome: Text;
+        ProviderErrorCode: Text;
+    begin
+        HttpOutcome := ProviderFileDeleteOutcome(DeleteResponse);
+        ProviderErrorCode := SafeLoggedProviderErrorCode(DeleteResponse);
+        CustomDimensions.Add('provider', ProviderNameTok);
+        CustomDimensions.Add('httpOutcome', HttpOutcome);
+        CustomDimensions.Add('providerErrorCode', ProviderErrorCode);
+        CustomDimensions.Add('fileId', FileId);
+        Session.LogMessage(ProviderFileDeleteFailedTok, ProviderFileDeleteFailedMsg, Verbosity::Warning, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
+        OnProviderFileDeleteFailed(ProviderNameTok, HttpOutcome, ProviderErrorCode, FileId);
+    end;
+
+    local procedure ProviderFileDeleteOutcome(DeleteResponse: JsonObject): Text
+    var
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+    begin
+        HttpBlocked := false;
+        HttpStatus := 0;
+        if DeleteResponse.Contains('httpBlocked') then
+            HttpBlocked := DeleteResponse.GetBoolean('httpBlocked');
+        if HttpBlocked then
+            exit('blocked');
+        if DeleteResponse.Contains('providerStatus') then
+            HttpStatus := DeleteResponse.GetInteger('providerStatus');
+        if (HttpStatus >= 100) and (HttpStatus <= 599) then
+            exit(Format(HttpStatus, 0, 9));
+        exit('not sent');
+    end;
+
+    local procedure SafeLoggedProviderErrorCode(DeleteResponse: JsonObject): Text
+    var
+        Candidate: Text;
+    begin
+        if not DeleteResponse.Contains('providerErrorCode') then
+            exit('');
+        Candidate := DeleteResponse.GetText('providerErrorCode');
+        if Candidate.Contains('"') or Candidate.Contains('\') then
+            exit('');
+        exit(ProviderBase.SanitizeProviderErrorCode('{"code":"' + Candidate + '"}'));
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnProviderFileDeleteFailed(Provider: Text; HttpOutcome: Text; ProviderErrorCode: Text; FileId: Text)
+    begin
     end;
 
     local procedure FindUnsupportedImageMime(PayloadObject: JsonObject): Text

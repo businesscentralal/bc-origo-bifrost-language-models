@@ -12,6 +12,8 @@ All notable changes to Bifrost Language Models are documented here.
 - Test codeunits 96033 `LLM 65 HTTP Mock`, 96034 `LLM 65 Prompt Tests` and 96011 `LangModel API Client Tests` cover inline PNG and JPEG, PDF upload and delete, delete after a failed prompt, stored attachments, GIF and `image/jpg` refusal, safe 4xx codes, unchanged text-only xAI and the other providers, and the multipart upload body. The tests use the HTTP double and do not call xAI.
 - Codeunit 10035427 `LangModel Wizard Mgt ori` and test codeunit 96038 `LangModel Wizard Users Tests` declare the in-memory security-group buffers with the `temporary` keyword. The public procedure and its behavior are unchanged.
 - The shared-container publish retry treats HTTP 422 for the same package ID and version as already published. A Test republish whose first request lands and then times out no longer fails the later attempts. A different version still fails.
+- Codeunit 10035418 `xAI LangModel Prov. ori` records a failed provider-file delete as telemetry event `ORI-LM-0093`. The event carries the provider, the HTTP outcome (`blocked`, `not sent`, or the status), the sanitised provider error code and the provider file id. It does not carry the file name, MIME type, prompt or provider message. The prompt reply stays successful.
+- Codeunit 10035411 `LangModel API Client ori` procedures `KeepOnlySafeProviderCode` and `ReadProviderResponse`, and codeunit 10035410 `LangModel Prov. Base ori` procedure `SanitizeProviderErrorCode`, are non-debuggable. They read a failed provider body only to keep the sanitised code.
 
 ### Fixed (2026-10-28) - RegisterApps subscriber InherentPermissions X (#91)
 

@@ -28,6 +28,11 @@ codeunit 96033 "LLM 65 HTTP Mock"
         DeleteCount: Integer;
         LastDeleteUrl: Text;
         OperationSequence: Text;
+        DeleteFailureCount: Integer;
+        LastDeleteFailureProvider: Text;
+        LastDeleteFailureOutcome: Text;
+        LastDeleteFailureCode: Text;
+        LastDeleteFailureFileId: Text;
 
     /// <summary>Configures one synthetic prompt result and resets file-transport observations.</summary>
     procedure Configure(NewStatus: Integer; NewBody: Text; NewBlocked: Boolean; NewThrow: Boolean)
@@ -51,6 +56,11 @@ codeunit 96033 "LLM 65 HTTP Mock"
         DeleteCount := 0;
         LastDeleteUrl := '';
         OperationSequence := '';
+        DeleteFailureCount := 0;
+        LastDeleteFailureProvider := '';
+        LastDeleteFailureOutcome := '';
+        LastDeleteFailureCode := '';
+        LastDeleteFailureFileId := '';
     end;
 
     /// <summary>Configures the next synthetic file-upload result.</summary>
@@ -133,6 +143,36 @@ codeunit 96033 "LLM 65 HTTP Mock"
         exit(OperationSequence);
     end;
 
+    /// <summary>Returns how many failed provider-file deletes were signalled.</summary>
+    procedure GetDeleteFailureCount(): Integer
+    begin
+        exit(DeleteFailureCount);
+    end;
+
+    /// <summary>Returns the provider named on the delete-failure signal.</summary>
+    procedure GetDeleteFailureProvider(): Text
+    begin
+        exit(LastDeleteFailureProvider);
+    end;
+
+    /// <summary>Returns the HTTP outcome named on the delete-failure signal.</summary>
+    procedure GetDeleteFailureOutcome(): Text
+    begin
+        exit(LastDeleteFailureOutcome);
+    end;
+
+    /// <summary>Returns the sanitised provider error code named on the delete-failure signal.</summary>
+    procedure GetDeleteFailureCode(): Text
+    begin
+        exit(LastDeleteFailureCode);
+    end;
+
+    /// <summary>Returns the provider file id named on the delete-failure signal.</summary>
+    procedure GetDeleteFailureFileId(): Text
+    begin
+        exit(LastDeleteFailureFileId);
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel API Client ori", 'OnBeforePromptPost', '', false, false)]
     local procedure OnBeforePromptPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
     begin
@@ -176,5 +216,15 @@ codeunit 96033 "LLM 65 HTTP Mock"
         HttpStatus := DeleteStatus;
         HttpBlocked := false;
         ResponseText := DeleteBody;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"xAI LangModel Prov. ori", 'OnProviderFileDeleteFailed', '', false, false)]
+    local procedure OnProviderFileDeleteFailed(Provider: Text; HttpOutcome: Text; ProviderErrorCode: Text; FileId: Text)
+    begin
+        DeleteFailureCount += 1;
+        LastDeleteFailureProvider := Provider;
+        LastDeleteFailureOutcome := HttpOutcome;
+        LastDeleteFailureCode := ProviderErrorCode;
+        LastDeleteFailureFileId := FileId;
     end;
 }

@@ -109,6 +109,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
     /// Returns a provider error code or type when it is a lowercase identifier.
     /// Provider messages, secrets and prompt text are never copied.
     /// </summary>
+    [NonDebuggable]
     procedure SanitizeProviderErrorCode(ResponseText: Text): Text
     var
         Root: JsonObject;
