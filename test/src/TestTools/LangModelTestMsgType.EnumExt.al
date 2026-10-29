@@ -12,31 +12,19 @@ enumextension 96023 "LangModel Test MsgType" extends "Message Type ori"
     value(96023; "Test.LanguageModel.Set")
     {
         Caption = 'Test.LanguageModel.Set', Locked = true;
-<<<<<<< HEAD
         Implementation = "Msg Interface ori" = "Test LangModel Set Impl",
                          "Msg Contract ori" = "Test LangModel Set Impl";
-=======
-        Implementation = "Msg Interface ori" = "Test LangModel Set Impl", "Msg Contract ori" = "Test LangModel Set Impl";
->>>>>>> origin/main
     }
     value(96024; "Test.LanguageModel.Delete")
     {
         Caption = 'Test.LanguageModel.Delete', Locked = true;
-<<<<<<< HEAD
         Implementation = "Msg Interface ori" = "Test LangModel Delete Impl",
                          "Msg Contract ori" = "Test LangModel Delete Impl";
-=======
-        Implementation = "Msg Interface ori" = "Test LangModel Delete Impl", "Msg Contract ori" = "Test LangModel Delete Impl";
->>>>>>> origin/main
     }
     value(96025; "Test.LanguageModel.Chat")
     {
         Caption = 'Test.LanguageModel.Chat', Locked = true;
-<<<<<<< HEAD
         Implementation = "Msg Interface ori" = "Test LangModel Chat Impl",
                          "Msg Contract ori" = "Test LangModel Chat Impl";
-=======
-        Implementation = "Msg Interface ori" = "Test LangModel Chat Impl", "Msg Contract ori" = "Test LangModel Chat Impl";
->>>>>>> origin/main
     }
 }
