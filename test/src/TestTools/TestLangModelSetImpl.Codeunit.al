@@ -245,6 +245,77 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori", "Msg Co
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
 
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    begin
+        exit(Tools.TestEnvelope(Envelope));
+    end;
+
+    procedure GetTarget(var Target: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ModelsParameter: JsonObject;
+        ModelFields: JsonArray;
+    begin
+        Tools.AddModelFieldParameters(Parameters);
+        Tools.AddModelFieldParameters(ModelFields);
+        ModelsParameter := ContractMgt.Parameter('models', 'array', false, 'Array of language models to create or update. When omitted, one model object may be sent at the root.');
+        ModelsParameter.Add('children', ModelFields);
+        Parameters.Add(ModelsParameter);
+        exit(true);
+    end;
+
+    procedure GetResponse(var Response: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    begin
+        exit(Tools.WriteEffect('Creates or updates Bifrost Language Model records and stores supplied API keys without answering the key values.', Effect));
+    end;
+
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetRelated(var Related: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := '';
+        exit(false);
+    end;
+
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := '';
+        exit(false);
+    end;
+
     local procedure RequestCarriesKey(Models: JsonArray): Boolean
     var
         ModelToken: JsonToken;
