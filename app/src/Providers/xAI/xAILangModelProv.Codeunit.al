@@ -3,8 +3,8 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// xAI (Grok) provider. Uses Chat Completions for text and the
-/// Responses API (/v1/responses) for file/document processing.
+/// xAI (Grok) provider. Text uses Chat Completions. PNG and JPEG stay inline on the
+/// Responses API; other documents are uploaded and then referenced by file id.
 /// </summary>
 codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provider ori"
 {
@@ -177,9 +177,25 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         exit(ResultText);
     end;
 
-    // Files present: xAI Responses API (/v1/responses)
+    // Files present: xAI Responses API. PNG and JPEG stay inline; other documents are uploaded.
     [NonDebuggable]
     local procedure DoCompleteWithResponsesApi(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject): Text
+    var
+        UploadedFileIds: JsonArray;
+        ResultText: Text;
+    begin
+        if not TryCompleteResponses(Argument, PayloadObject, UploadedFileIds, ResultText) then begin
+            ClearLastError();
+            if ResultText = '' then
+                ResultText := WriteTransportError();
+        end;
+        DeleteUploadedFiles(Argument, UploadedFileIds);
+        exit(ResultText);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryCompleteResponses(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject; var UploadedFileIds: JsonArray; var ResultText: Text)
     var
         ApiClient: Codeunit "LangModel API Client ori";
         RequestBody: JsonObject;
@@ -192,14 +208,14 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         SystemPrompt: Text;
         ResponsesUrl: Text;
         UserPrompt: Text;
-        ResultText: Text;
     begin
         UserPrompt := GetFirstUserMessage(PayloadObject);
         TextBlock.Add('type', 'input_text');
         TextBlock.Add('text', UserPrompt);
         ContentArray.Add(TextBlock);
 
-        AddFilesToResponsesContent(PayloadObject, ContentArray);
+        if not AddResponseFiles(Argument, PayloadObject, ContentArray, UploadedFileIds, ResultText) then
+            exit;
 
         InputMessage.Add('role', 'user');
         InputMessage.Add('content', ContentArray);
@@ -207,6 +223,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         RequestBody.Add('model', ProviderBase.GetModel(Argument, DefaultModelTok));
         RequestBody.Add('input', InputArray);
+        RequestBody.Add('store', false);
 
         SystemPrompt := GetJsonText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then
@@ -214,48 +231,138 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         RequestBody.Add('max_output_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
 
-        ResponsesUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok) + '/v1/responses';
+        ResponsesUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/responses');
         Response := ApiClient.SendPromptToEndpoint(ResponsesUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         if Response.Contains('error') then begin
             Response.WriteTo(ResultText);
-            exit(ResultText);
+            exit;
         end;
 
         ResponseObj.Add('reply', ExtractResponsesText(Response));
         ResponseObj.WriteTo(ResultText);
-        exit(ResultText);
     end;
 
-    local procedure AddFilesToResponsesContent(PayloadObject: JsonObject; var ContentArray: JsonArray)
+    [NonDebuggable]
+    local procedure AddResponseFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject; var ContentArray: JsonArray; var UploadedFileIds: JsonArray; var ResultText: Text): Boolean
     var
+        ApiClient: Codeunit "LangModel API Client ori";
         DataUriTok: Label 'data:%1;base64,%2', Locked = true;
         FilesToken: JsonToken;
         FileToken: JsonToken;
         FileObj: JsonObject;
         FileBlock: JsonObject;
+        UploadResponse: JsonObject;
+        UnsupportedMime: Text;
         MimeType: Text;
-        DataUri: Text;
+        FileId: Text;
+        BaseUrl: Text;
     begin
+        UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
+        if UnsupportedMime <> '' then begin
+            ProviderBase.BuildUnsupportedImageRefusal(UnsupportedMime).WriteTo(ResultText);
+            exit(false);
+        end;
         if not PayloadObject.Get('files', FilesToken) then
-            exit;
+            exit(true);
+        if not FilesToken.IsArray() then
+            exit(true);
+
+        BaseUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok);
         foreach FileToken in FilesToken.AsArray() do begin
             if not FileToken.IsObject() then
                 continue;
             FileObj := FileToken.AsObject();
             MimeType := GetJsonText(FileObj, 'mimeType');
-            DataUri := StrSubstNo(DataUriTok, MimeType, GetJsonText(FileObj, 'data'));
             Clear(FileBlock);
-            if MimeType.StartsWith('image/') then begin
+            if IsInlineImageMime(MimeType) then begin
                 FileBlock.Add('type', 'input_image');
-                FileBlock.Add('image_url', DataUri);
+                FileBlock.Add('image_url', StrSubstNo(DataUriTok, LowerCase(MimeType), GetJsonText(FileObj, 'data')));
             end else begin
+                UploadResponse := ApiClient.UploadProviderFile(
+                    ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files'),
+                    AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000),
+                    GetJsonText(FileObj, 'fileName'), MimeType, GetJsonText(FileObj, 'data'));
+                if UploadResponse.Contains('error') then begin
+                    UploadResponse.WriteTo(ResultText);
+                    exit(false);
+                end;
+                FileId := ProviderBase.NormalizeProviderFileId(GetJsonText(UploadResponse, 'id'));
+                if FileId = '' then begin
+                    ProviderBase.BuildPromptError(-1, false).WriteTo(ResultText);
+                    exit(false);
+                end;
+                UploadedFileIds.Add(FileId);
                 FileBlock.Add('type', 'input_file');
-                FileBlock.Add('file_data', DataUri);
-                FileBlock.Add('filename', GetJsonText(FileObj, 'fileName'));
+                FileBlock.Add('file_id', FileId);
             end;
             ContentArray.Add(FileBlock);
         end;
+        exit(true);
+    end;
+
+    [NonDebuggable]
+    local procedure DeleteUploadedFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; UploadedFileIds: JsonArray)
+    var
+        ApiClient: Codeunit "LangModel API Client ori";
+        IdToken: JsonToken;
+        FileId: Text;
+        BaseUrl: Text;
+    begin
+        if UploadedFileIds.Count() = 0 then
+            exit;
+        BaseUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok);
+        foreach IdToken in UploadedFileIds do begin
+            if not IdToken.IsValue() then
+                continue;
+            FileId := ProviderBase.NormalizeProviderFileId(IdToken.AsValue().AsText());
+            if FileId <> '' then
+                ApiClient.DeleteProviderFile(
+                    ProviderBase.JoinEndpointUrl(BaseUrl, '/v1/files/' + FileId),
+                    AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000));
+        end;
+    end;
+
+    local procedure FindUnsupportedImageMime(PayloadObject: JsonObject): Text
+    var
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        FileObj: JsonObject;
+        MimeType: Text;
+    begin
+        if not PayloadObject.Get('files', FilesToken) then
+            exit('');
+        if not FilesToken.IsArray() then
+            exit('');
+        foreach FileToken in FilesToken.AsArray() do begin
+            if not FileToken.IsObject() then
+                continue;
+            FileObj := FileToken.AsObject();
+            MimeType := GetJsonText(FileObj, 'mimeType');
+            if IsUnsupportedImageMime(MimeType) then
+                exit(MimeType);
+        end;
+    end;
+
+    local procedure IsInlineImageMime(MimeType: Text): Boolean
+    var
+        Normalized: Text;
+    begin
+        Normalized := LowerCase(MimeType);
+        exit((Normalized = 'image/png') or (Normalized = 'image/jpeg'));
+    end;
+
+    local procedure IsUnsupportedImageMime(MimeType: Text): Boolean
+    begin
+        exit(LowerCase(MimeType).StartsWith('image/') and not IsInlineImageMime(MimeType));
+    end;
+
+    local procedure WriteTransportError() ResultText: Text
+    var
+        ErrorObj: JsonObject;
+    begin
+        ErrorObj := ProviderBase.BuildPromptError(0, false);
+        ErrorObj.WriteTo(ResultText);
     end;
 
     local procedure ExtractResponsesText(Response: JsonObject): Text

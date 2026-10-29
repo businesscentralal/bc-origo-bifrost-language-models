@@ -669,6 +669,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1700563337" size-unit="char" translate="yes" xml:space="preserve">
+          <source>xAI accepts only PNG and JPEG images.</source>
+          <target>xAI tekur aðeins við PNG- og JPEG-myndum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=xAI tekur aðeins við PNG- og JPEG-myndum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 289882424" size-unit="char" translate="yes" xml:space="preserve">
+          <source>image/png or image/jpeg</source>
+          <target>image/png eða image/jpeg</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=image/png eða image/jpeg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3628311689" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent.</source>
+          <target>Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2116972362" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file mimeType is an image other than image/png or image/jpeg.</source>
+          <target>mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1319966414 - NamedType 1281857675" size-unit="char" translate="yes" xml:space="preserve">
           <source>A language model code must be specified before an API key can be stored.</source>
           <target>Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</target>

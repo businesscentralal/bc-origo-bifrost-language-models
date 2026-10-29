@@ -253,7 +253,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. Images (a mimeType that starts with image/) are sent to the provider as images, other types as documents. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. The reply is free text from an external model: validate it before it is used to change anything.';
+        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. For providers other than xAI, a mimeType that starts with image/ is sent as an image and any other type is sent as a document. xAI keeps image/png and image/jpeg inline, uploads a PDF or any other document and then references that upload, and refuses any other image type before a request is sent. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. A provider HTTP client error includes the HTTP status and, when the provider sends one, a short error code. Provider error text, secrets and the prompt are not returned. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. The reply is free text from an external model: validate it before it is used to change anything.';
         exit(true);
     end;
 
@@ -262,7 +262,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Children.Add(ContractMgt.Parameter('data', 'string', false, 'The file content, Base64-encoded. Send it together with mimeType.'));
-        Children.Add(ContractMgt.Parameter('mimeType', 'string', false, 'The MIME type, for example application/pdf or image/png. image/* is sent as an image, anything else as a document.'));
+        Children.Add(ContractMgt.Parameter('mimeType', 'string', false, 'The MIME type, for example application/pdf or image/png. For providers other than xAI, image/* is sent as an image and anything else as a document. xAI keeps image/png and image/jpeg inline, uploads other documents, and refuses any other image type before sending.'));
         Children.Add(ContractMgt.Parameter('fileName', 'string', false, 'The file name. Used by the providers that take a file name; the others ignore it.'));
     end;
 

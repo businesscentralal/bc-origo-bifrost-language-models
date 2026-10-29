@@ -22,18 +22,33 @@ codeunit 10035410 "LangModel Prov. Base ori"
         PromptBlockedWhenTxt: Label 'Allow HttpClient Requests is disabled for the app.', Comment = 'is-IS=Leyfa HttpClient-beiðnir er óvirkt fyrir forritið.';
         PromptProviderWhenTxt: Label 'The provider refuses the request or returns an invalid response, including an unsupported file.', Comment = 'is-IS=Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.';
         HttpClientBlockedMsg: Label 'HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.', Comment = 'is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.';
+        UnsupportedImageErr: Label 'xAI accepts only PNG and JPEG images.', Comment = 'is-IS=xAI tekur aðeins við PNG- og JPEG-myndum.';
+        UnsupportedImageWhenTxt: Label 'The file mimeType is an image other than image/png or image/jpeg.', Comment = 'is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.';
+        UnsupportedImageExpectedTxt: Label 'image/png or image/jpeg', Comment = 'is-IS=image/png eða image/jpeg';
+        UnsupportedImageNextStepTxt: Label 'Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent.', Comment = 'is-IS=Sendu PNG- eða JPEG-mynd, eða sendu PDF eða annað skjal í stað þessarar myndgerðar. Engin beiðni var send.';
+        ProviderParameterTok: Label 'provider', Locked = true;
 
     /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
+    begin
+        Response := BuildPromptError(HttpStatus, HttpBlocked, '');
+    end;
+
+    /// <summary>Builds a safe prompt failure and keeps only a sanitised provider error code.</summary>
+    procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean; ProviderErrorCode: Text) Response: JsonObject
     var
         ErrorCode: Enum "Bifrost Error Code ori";
         MessageText: Text;
         NextStep: Text;
+        SafeCode: Text;
     begin
         GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
         Response.Add('error', MessageText);
         Response.Add('providerStatus', HttpStatus);
         Response.Add('httpBlocked', HttpBlocked);
+        SafeCode := AcceptProviderCodeToken(ProviderErrorCode);
+        if SafeCode <> '' then
+            Response.Add('providerErrorCode', SafeCode);
     end;
 
     /// <summary>Returns a coded, localized prompt failure without reflecting provider-controlled text.</summary>
@@ -44,15 +59,30 @@ codeunit 10035410 "LangModel Prov. Base ori"
         NextStep: Text;
         HttpStatus: Integer;
         HttpBlocked: Boolean;
+        ProviderErrorCode: Text;
+        ReceivedMime: Text;
+        ReceivedText: Text;
+        ParameterName: Text;
     begin
+        if IsSafeImageRefusal(Response, ReceivedMime) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, 'mimeType', ReceivedMime, UnsupportedImageExpectedTxt, UnsupportedImageNextStepTxt);
+            exit;
+        end;
         HttpStatus := -1;
-        if not TryReadPromptFailure(Response, HttpStatus, HttpBlocked) then begin
+        if not TryReadPromptFailure(Response, HttpStatus, HttpBlocked, ProviderErrorCode) then begin
             ClearLastError();
             HttpStatus := -1;
             HttpBlocked := false;
+            ProviderErrorCode := '';
         end;
         GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
-        Argument.RespondWithError(ErrorCode, MessageText, '', '', PromptAnswerExpectedTxt, NextStep);
+        if (HttpStatus >= 100) and (HttpStatus <= 599) then begin
+            ParameterName := ProviderParameterTok;
+            ReceivedText := Format(HttpStatus, 0, 9);
+            if ProviderErrorCode <> '' then
+                ReceivedText += ' ' + ProviderErrorCode;
+        end;
+        Argument.RespondWithError(ErrorCode, MessageText, ParameterName, ReceivedText, PromptAnswerExpectedTxt, NextStep);
     end;
 
     /// <summary>Adds the same safe error labels used by prompt execution to its public contract.</summary>
@@ -64,15 +94,147 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::Retryable, PromptRetryErr, PromptRetryWhenTxt, PromptRetryNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HttpClientBlockedMsg, PromptBlockedWhenTxt, PromptBlockedNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptProviderErr, PromptProviderWhenTxt, PromptSetupNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, UnsupportedImageWhenTxt, UnsupportedImageNextStepTxt));
+    end;
+
+    /// <summary>Builds the local xAI image refusal. No provider call is made for this answer.</summary>
+    procedure BuildUnsupportedImageRefusal(MimeType: Text) Response: JsonObject
+    begin
+        Response.Add('error', UnsupportedImageErr);
+        Response.Add('safeRefusal', true);
+        Response.Add('received', SanitizeMimeType(MimeType));
+    end;
+
+    /// <summary>
+    /// Returns a provider error code or type when it is a lowercase identifier.
+    /// Provider messages, secrets and prompt text are never copied.
+    /// </summary>
+    procedure SanitizeProviderErrorCode(ResponseText: Text): Text
+    var
+        Root: JsonObject;
+        ErrorToken: JsonToken;
+        CodeToken: JsonToken;
+        Candidate: Text;
+    begin
+        if not Root.ReadFrom(ResponseText) then
+            exit('');
+        if Root.Get('error', ErrorToken) and ErrorToken.IsObject() then begin
+            if ErrorToken.AsObject().Get('code', CodeToken) then
+                Candidate := JsonValueText(CodeToken);
+            if Candidate = '' then
+                if ErrorToken.AsObject().Get('type', CodeToken) then
+                    Candidate := JsonValueText(CodeToken);
+        end;
+        if Candidate = '' then
+            if Root.Get('code', CodeToken) then
+                Candidate := JsonValueText(CodeToken);
+        if Candidate = '' then
+            if Root.Get('type', CodeToken) then
+                Candidate := JsonValueText(CodeToken);
+        exit(AcceptProviderCodeToken(Candidate));
+    end;
+
+    /// <summary>Returns the file id when it can be placed in a URL path, otherwise empty.</summary>
+    procedure NormalizeProviderFileId(FileId: Text): Text
+    var
+        Index: Integer;
+        Character: Char;
+    begin
+        if (StrLen(FileId) < 1) or (StrLen(FileId) > 128) then
+            exit('');
+        for Index := 1 to StrLen(FileId) do begin
+            Character := FileId[Index];
+            if not (IsLatinLetter(Character) or IsDigit(Character) or (Character = '_') or (Character = '-')) then
+                exit('');
+        end;
+        exit(FileId);
     end;
 
     [TryFunction]
-    local procedure TryReadPromptFailure(Response: JsonObject; var HttpStatus: Integer; var HttpBlocked: Boolean)
+    local procedure TryReadPromptFailure(Response: JsonObject; var HttpStatus: Integer; var HttpBlocked: Boolean; var ProviderErrorCode: Text)
     begin
+        ProviderErrorCode := '';
         if Response.Contains('providerStatus') then
             HttpStatus := Response.GetInteger('providerStatus');
         if Response.Contains('httpBlocked') then
             HttpBlocked := Response.GetBoolean('httpBlocked');
+        if Response.Contains('providerErrorCode') then
+            ProviderErrorCode := AcceptProviderCodeToken(Response.GetText('providerErrorCode'));
+    end;
+
+    local procedure IsSafeImageRefusal(Response: JsonObject; var ReceivedMime: Text): Boolean
+    begin
+        ReceivedMime := '';
+        if not Response.Contains('safeRefusal') then
+            exit(false);
+        if not Response.GetBoolean('safeRefusal') then
+            exit(false);
+        if Response.Contains('received') then
+            ReceivedMime := SanitizeMimeType(Response.GetText('received'));
+        exit(true);
+    end;
+
+    local procedure SanitizeMimeType(MimeType: Text): Text
+    var
+        Normalized: Text;
+        Index: Integer;
+        Character: Char;
+        Result: Text;
+    begin
+        Normalized := LowerCase(MimeType);
+        for Index := 1 to StrLen(Normalized) do begin
+            Character := Normalized[Index];
+            if not (IsLatinLetter(Character) or IsDigit(Character) or (Character = '/') or (Character = '+') or (Character = '.') or (Character = '-')) then
+                exit('image/unsupported');
+            Result += Character;
+            if StrLen(Result) >= 80 then
+                exit(Result);
+        end;
+        if Result = '' then
+            exit('image/unsupported');
+        exit(Result);
+    end;
+
+    local procedure AcceptProviderCodeToken(Value: Text): Text
+    var
+        Index: Integer;
+        Character: Char;
+    begin
+        if (StrLen(Value) < 3) or (StrLen(Value) > 64) or (StrPos(Value, '_') = 0) then
+            exit('');
+        if Value.StartsWith('sk_') or Value.StartsWith('xai') or Value.Contains('bearer') then
+            exit('');
+        for Index := 1 to StrLen(Value) do begin
+            Character := Value[Index];
+            if Index = 1 then begin
+                if (Character < 'a') or (Character > 'z') then
+                    exit('');
+            end else
+                if not (IsLatinLetter(Character) or IsDigit(Character) or (Character = '_')) then
+                    exit('');
+            if (Character >= 'A') and (Character <= 'Z') then
+                exit('');
+        end;
+        exit(Value);
+    end;
+
+    local procedure JsonValueText(Token: JsonToken): Text
+    begin
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
+    end;
+
+    local procedure IsLatinLetter(Character: Char): Boolean
+    begin
+        exit(((Character >= 'a') and (Character <= 'z')) or ((Character >= 'A') and (Character <= 'Z')));
+    end;
+
+    local procedure IsDigit(Character: Char): Boolean
+    begin
+        exit((Character >= '0') and (Character <= '9'));
     end;
 
     local procedure GetPromptFailure(HttpStatus: Integer; HttpBlocked: Boolean; var ErrorCode: Enum "Bifrost Error Code ori"; var MessageText: Text; var NextStep: Text)

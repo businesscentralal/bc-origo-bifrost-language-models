@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-29) - xAI PNG and PDF prompt files (#93)
+
+- Codeunit 10035418 `xAI LangModel Prov. ori`: text-only `LLM.Prompt.Complete` still uses `/v1/chat/completions`. With a file, `image/png` and `image/jpeg` stay inline as `input_image` data URIs and the Responses request sets `store` to false. A PDF or any other non-image document is uploaded with `POST /v1/files` and sent as `input_file` `file_id`, with no inline `file_data`. The uploaded file is deleted after the call, including when the prompt fails. Any other `image/*` type is refused before HTTP, including before a sibling document is uploaded.
+- Codeunit 10035411 `LangModel API Client ori` uploads and deletes those provider files. A failed provider body is still discarded; only a sanitised error code is kept.
+- Codeunit 10035410 `LangModel Prov. Base ori` and codeunit 10035396 `LLM Prompt Compl Impl ori`: a provider HTTP 4xx answer carries the HTTP status and that short code. An unsupported xAI image is `InvalidParameter` and names PNG and JPEG. The prompt notes and the `mimeType` parameter describe this path. The new user-facing labels have Icelandic text.
+- Test codeunits 96033 `LLM 65 HTTP Mock`, 96034 `LLM 65 Prompt Tests` and 96011 `LangModel API Client Tests` cover inline PNG and JPEG, PDF upload and delete, delete after a failed prompt, stored attachments, GIF and `image/jpg` refusal, safe 4xx codes, unchanged text-only xAI and the other providers, and the multipart upload body. The tests use the HTTP double and do not call xAI.
+- Codeunit 10035427 `LangModel Wizard Mgt ori` prefixes two in-memory security-group buffers with Temp so the app compiles with no CodeCop warnings. The public procedure and its behavior are unchanged.
+
 ### Fixed (2026-10-28) - RegisterApps subscriber InherentPermissions X (#91)
 
 - Codeunit 10035423 `LangModel Registration ori` now declares `InherentPermissions = X` and `InherentEntitlements = X`, matching Foundation's App Registry subscriber pattern, so a restricted licence administrator can open Bifrost Setup when Language Models is installed.
