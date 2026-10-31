@@ -13,6 +13,12 @@ All notable changes to Bifrost Language Models are documented here.
 - Codeunit 10035423 `LangModel Registration ori` now declares `InherentPermissions = X` and `InherentEntitlements = X`, matching Foundation's App Registry subscriber pattern, so a restricted licence administrator can open Bifrost Setup when Language Models is installed.
 - Test codeunit 96016 `LangModel Registration Tests` opens Bifrost Setup as `BIFROST LicAdm ori` with test permission set 96039 `LM Setup Base ori` and asserts the page opens non-editable with Language Models still in the registry.
 
+### Added (2026-10-27) - Request time in the Copilot system prompt (#85)
+
+- Codeunit 10035393 `Copilot Chat Proxy ori` appends a `SESSION TIME` block immediately after Foundation's `Bootstrap`, only if Foundation did not already add that marker. It refreshes on every request and includes UTC, resolved user time and offset, local date and English weekday, a differing work date and explicit relative-period/filter rules. Unknown time zones are explicitly reported as UTC. No extra tool or HTTP call is made. English locked labels are model instructions, with no new captions or XLF changes.
+- Existing test codeunit 96029 `LangModel Chat Proxy Tests` exercises the production builder with fixed inputs, including midnight/month/leap-day boundaries, locale independence, unknown zones, work-date conditions, marker idempotence and data minimization. No new objects or public signature changes to released procedures.
+- Line separators use `TextBuilder.AppendLine`, avoiding the AL0620 error caused by unsupported `#10` literals.
+
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
 - Page 10035428 `LangModel Wizard Users ori` uses translated permission-column captions and keeps the permission set identifiers in the tooltips. Codeunit 10035427 `LangModel Wizard Mgt ori` loads the two sets' company/global Access Control rows and company user-model choices once, then preserves inherited grants through the platform Security Group membership API. Incomplete directory retrieval falls back to the existing effective-permission helper. Row rendering uses in-memory lookups and explicit commands refresh the snapshot.
