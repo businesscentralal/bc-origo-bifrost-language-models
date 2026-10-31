@@ -15,11 +15,20 @@ All notable changes to Bifrost Language Models are documented here.
 - The shared-container publish retry treats HTTP 422 for the same package ID and version as already published. A Test republish whose first request lands and then times out no longer fails the later attempts. A different version still fails.
 - Codeunit 10035411 `LangModel API Client ori` procedures `KeepOnlySafeProviderCode` and `ReadProviderResponse`, and codeunit 10035410 `LangModel Prov. Base ori` procedure `SanitizeProviderErrorCode`, are non-debuggable. They read a failed provider body only to keep the sanitised code.
 
+### Fixed (2026-10-28) - Test tool request contracts (#89)
+
+- Test-only message types `Test.LanguageModel.Set`, `.Delete` and `.Chat` (#89; enum extension 96023 and codeunits 96024–96026) now declare their request parameters and real effects through Foundation's `Msg Contract ori`. This restores dispatch on Foundation 28.0.10+; Set covers both top-level models and batch entries, Delete declares its writes, and Chat declares committed tool/provider effects with the matching inbound direction. Codeunit 96028 covers contract mappings and rejection of undeclared request keys. Shipped app code is unchanged.
+
 ### Fixed (2026-10-28) - RegisterApps subscriber InherentPermissions X (#91)
 
 - Codeunit 10035423 `LangModel Registration ori` now declares `InherentPermissions = X` and `InherentEntitlements = X`, matching Foundation's App Registry subscriber pattern, so a restricted licence administrator can open Bifrost Setup when Language Models is installed.
 - Test codeunit 96016 `LangModel Registration Tests` opens Bifrost Setup as `BIFROST LicAdm ori` with test permission set 96039 `LM Setup Base ori` and asserts the page opens non-editable with Language Models still in the registry.
-- Test message types `Test.LanguageModel.Set`, `Test.LanguageModel.Delete` and `Test.LanguageModel.Chat` (codeunits 96024–96026) now implement `Msg Contract ori` with envelope, parameters and a write effect, so Foundation 28.0.10+ can complete strict request validation of these write types.
+
+### Added (2026-10-27) - Request time in the Copilot system prompt (#85)
+
+- Codeunit 10035393 `Copilot Chat Proxy ori` appends a `SESSION TIME` block immediately after Foundation's `Bootstrap`, only if Foundation did not already add that marker. It refreshes on every request and includes UTC, resolved user time and offset, local date and English weekday, a differing work date and explicit relative-period/filter rules. Unknown time zones are explicitly reported as UTC. No extra tool or HTTP call is made. English locked labels are model instructions, with no new captions or XLF changes.
+- Existing test codeunit 96029 `LangModel Chat Proxy Tests` exercises the production builder with fixed inputs, including midnight/month/leap-day boundaries, locale independence, unknown zones, work-date conditions, marker idempotence and data minimization. No new objects or public signature changes to released procedures.
+- Line separators use `TextBuilder.AppendLine`, avoiding the AL0620 error caused by unsupported `#10` literals.
 
 ### Fixed (2026-10-23) - Setup wizard user grid and Icelandic captions (#82)
 
