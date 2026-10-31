@@ -3,8 +3,8 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// xAI (Grok) provider. Uses Chat Completions for text and the
-/// Responses API (/v1/responses) for file/document processing.
+/// xAI (Grok) provider. Text uses Chat Completions. Files use the shared
+/// language-model file policy on the Responses API.
 /// </summary>
 codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provider ori"
 {
@@ -12,6 +12,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        FileHandling: Codeunit "LangModel File Handling ori";
         AuthHeaderNameTok: Label 'Authorization', Locked = true;
         DefaultBaseUrlTok: Label 'https://api.x.ai', Locked = true;
         DefaultModelTok: Label 'grok-3', Locked = true;
@@ -177,9 +178,25 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         exit(ResultText);
     end;
 
-    // Files present: xAI Responses API (/v1/responses)
+    // Files present: Responses API. Shared file policy: PNG/JPEG inline, documents uploaded.
     [NonDebuggable]
     local procedure DoCompleteWithResponsesApi(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject): Text
+    var
+        UploadedFileIds: JsonArray;
+        ResultText: Text;
+    begin
+        if not TryCompleteResponses(Argument, PayloadObject, UploadedFileIds, ResultText) then begin
+            ClearLastError();
+            if ResultText = '' then
+                ResultText := WriteTransportError();
+        end;
+        FileHandling.DeleteUploadedFiles(Argument, UploadedFileIds, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok);
+        exit(ResultText);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryCompleteResponses(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject; var UploadedFileIds: JsonArray; var ResultText: Text)
     var
         ApiClient: Codeunit "LangModel API Client ori";
         RequestBody: JsonObject;
@@ -192,14 +209,14 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         SystemPrompt: Text;
         ResponsesUrl: Text;
         UserPrompt: Text;
-        ResultText: Text;
     begin
         UserPrompt := GetFirstUserMessage(PayloadObject);
         TextBlock.Add('type', 'input_text');
         TextBlock.Add('text', UserPrompt);
         ContentArray.Add(TextBlock);
 
-        AddFilesToResponsesContent(PayloadObject, ContentArray);
+        if not FileHandling.AddResponseFiles(Argument, PayloadObject, ContentArray, UploadedFileIds, ResultText, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok) then
+            exit;
 
         InputMessage.Add('role', 'user');
         InputMessage.Add('content', ContentArray);
@@ -207,6 +224,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         RequestBody.Add('model', ProviderBase.GetModel(Argument, DefaultModelTok));
         RequestBody.Add('input', InputArray);
+        RequestBody.Add('store', false);
 
         SystemPrompt := GetJsonText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then
@@ -214,48 +232,24 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         RequestBody.Add('max_output_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
 
-        ResponsesUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok) + '/v1/responses';
+        ResponsesUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/responses');
         Response := ApiClient.SendPromptToEndpoint(ResponsesUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         if Response.Contains('error') then begin
             Response.WriteTo(ResultText);
-            exit(ResultText);
+            exit;
         end;
 
         ResponseObj.Add('reply', ExtractResponsesText(Response));
         ResponseObj.WriteTo(ResultText);
-        exit(ResultText);
     end;
 
-    local procedure AddFilesToResponsesContent(PayloadObject: JsonObject; var ContentArray: JsonArray)
+    local procedure WriteTransportError() ResultText: Text
     var
-        DataUriTok: Label 'data:%1;base64,%2', Locked = true;
-        FilesToken: JsonToken;
-        FileToken: JsonToken;
-        FileObj: JsonObject;
-        FileBlock: JsonObject;
-        MimeType: Text;
-        DataUri: Text;
+        ErrorObj: JsonObject;
     begin
-        if not PayloadObject.Get('files', FilesToken) then
-            exit;
-        foreach FileToken in FilesToken.AsArray() do begin
-            if not FileToken.IsObject() then
-                continue;
-            FileObj := FileToken.AsObject();
-            MimeType := GetJsonText(FileObj, 'mimeType');
-            DataUri := StrSubstNo(DataUriTok, MimeType, GetJsonText(FileObj, 'data'));
-            Clear(FileBlock);
-            if MimeType.StartsWith('image/') then begin
-                FileBlock.Add('type', 'input_image');
-                FileBlock.Add('image_url', DataUri);
-            end else begin
-                FileBlock.Add('type', 'input_file');
-                FileBlock.Add('file_data', DataUri);
-                FileBlock.Add('filename', GetJsonText(FileObj, 'fileName'));
-            end;
-            ContentArray.Add(FileBlock);
-        end;
+        ErrorObj := ProviderBase.BuildPromptError(0, false);
+        ErrorObj.WriteTo(ResultText);
     end;
 
     local procedure ExtractResponsesText(Response: JsonObject): Text

@@ -121,6 +121,7 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
     local procedure DoCompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         ApiClient: Codeunit "LangModel API Client ori";
+        FileHandling: Codeunit "LangModel File Handling ori";
         RequestBody: JsonObject;
         PayloadObject: JsonObject;
         Messages: JsonArray;
@@ -133,6 +134,9 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
     begin
         if not PayloadObject.ReadFrom(Argument.GetPayload()) then
             exit(BuildErrorJson('Invalid payload JSON.'));
+
+        if not FileHandling.AcceptFiles(PayloadObject, ResultText) then
+            exit(ResultText);
 
         SystemPrompt := GetJsonText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then begin
