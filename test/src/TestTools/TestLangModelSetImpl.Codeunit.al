@@ -25,6 +25,149 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori", "Msg Co
         ProviderExpectedTxt: Label 'Copilot, OpenAI, Azure OpenAI, Custom LLM, Anthropic, xAI or Google', Locked = true;
 
     /// <summary>
+    /// Declares the JSON request envelope of this test-only type.
+    /// </summary>
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    begin
+        Envelope.Add('version', '1.0');
+        Envelope.Add('contentType', 'text/json');
+        Envelope.Add('dataRequired', true);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Returns false because models are selected by data parameters, not a subject.
+    /// </summary>
+    procedure GetTarget(var Target: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Declares every supported request key and its actual shape.
+    /// </summary>
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        ModelsParameter: JsonObject;
+    begin
+        Parameters := ModelParameters(false);
+        ModelsParameter := ContractMgt.Parameter('models', 'array', false, 'Array of model objects, or omit it and supply one model at the top level. All entries are validated before writes.');
+        ModelsParameter.Add('children', ModelParameters(true));
+        Parameters.Add(ModelsParameter);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes successful output without exposing credentials.
+    /// </summary>
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Fields: JsonArray;
+    begin
+        Response.Add('contentType', 'text/json');
+        Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success when all models have been applied.'));
+        Fields.Add(ContractMgt.ResponseField('models', 'array', 'Model summaries with stored-key flags, never key values.'));
+        Response.Add('fields', Fields);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes the coded refusals of the test operation.
+    /// </summary>
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'Test message types do not run in a SaaS production environment.', 'The environment is SaaS production.', 'Use a sandbox or development container.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, 'The request has no models or code.', 'Neither a models array nor a model code is supplied.', 'Supply models or one top-level model.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MultipleErrors, 'The request has problems; see errors.', 'A model has no code, an overlong code, an invalid object or an unknown provider.', 'Correct every reported model before retrying.'));
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the actual writes, external effects and commit behavior.
+    /// </summary>
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    begin
+        Effect.Add('effect', 'write');
+        Effect.Add('changes', 'Creates or updates model settings, registers secret definitions and stores supplied keys. Setting default clears other defaults. The stored request is redacted when it carries keys. No provider is called; no explicit commit.');
+        Effect.Add('idempotent', true);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Uses Foundation metering without additional declarations.
+    /// </summary>
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because no related chapter is supplied.
+    /// </summary>
+    procedure GetRelated(var Related: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because this test tool has no workflow chapter.
+    /// </summary>
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because usage examples are in the test tooling.
+    /// </summary>
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Describes this test-only operation.
+    /// </summary>
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := GetDescription();
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the test-only environment and data boundaries.
+    /// </summary>
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := 'Test app only. Refused in SaaS production. Runs with the caller permissions; never use customer fixtures or send real credentials through MCP.';
+        exit(true);
+    end;
+
+    local procedure ModelParameters(RequireCode: Boolean) Parameters: JsonArray
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('code', 'string', RequireCode, 'Language model code, up to 20 characters; required for each model.'));
+        Parameters.Add(ContractMgt.Parameter('description', 'string', false, 'Optional description.'));
+        Parameters.Add(ContractMgt.Parameter('chatProvider', 'string', false, 'Provider enum name; Gemini is also accepted for Google. Test providers are allowed.'));
+        Parameters.Add(ContractMgt.Parameter('baseUrl', 'string', false, 'Provider base URL.'));
+        Parameters.Add(ContractMgt.Parameter('model', 'string', false, 'Provider model name.'));
+        Parameters.Add(ContractMgt.Parameter('chatPath', 'string', false, 'Chat endpoint path.'));
+        Parameters.Add(ContractMgt.Parameter('modelsPath', 'string', false, 'Models endpoint path.'));
+        Parameters.Add(ContractMgt.Parameter('timeoutSeconds', 'integer', false, 'Request timeout in seconds.'));
+        Parameters.Add(ContractMgt.Parameter('maxTokens', 'integer', false, 'Maximum response tokens.'));
+        Parameters.Add(ContractMgt.Parameter('contextTokens', 'integer', false, 'Context budget; zero uses the provider default.'));
+        Parameters.Add(ContractMgt.Parameter('default', 'boolean', false, 'Whether this is the default; true clears other defaults.'));
+        Parameters.Add(ContractMgt.Parameter('skill', 'string', false, 'Model skill text.'));
+        Parameters.Add(ContractMgt.Parameter('sharedApiKey', 'string', false, 'Optional shared key; stored without returning its value. Never send real credentials through MCP.'));
+        Parameters.Add(ContractMgt.Parameter('personalApiKey', 'string', false, 'Optional personal key; stored without returning its value. Never send real credentials through MCP.'));
+    end;
+
+    /// <summary>
     /// Reports that this test-only message type is enabled.
     /// </summary>
     procedure IsEnabled(): Boolean
@@ -100,77 +243,6 @@ codeunit 96024 "Test LangModel Set Impl" implements "Msg Interface ori", "Msg Co
         ResponseJson.Add('models', Results);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
-    end;
-
-    procedure GetEnvelope(var Envelope: JsonObject): Boolean
-    begin
-        exit(Tools.TestEnvelope(Envelope));
-    end;
-
-    procedure GetTarget(var Target: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetParameters(var Parameters: JsonArray): Boolean
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
-        ModelsParameter: JsonObject;
-        ModelFields: JsonArray;
-    begin
-        Tools.AddModelFieldParameters(Parameters);
-        Tools.AddModelFieldParameters(ModelFields);
-        ModelsParameter := ContractMgt.Parameter('models', 'array', false, 'Array of language models to create or update. When omitted, one model object may be sent at the root.');
-        ModelsParameter.Add('children', ModelFields);
-        Parameters.Add(ModelsParameter);
-        exit(true);
-    end;
-
-    procedure GetResponse(var Response: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetErrors(var Errors: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetEffect(var Effect: JsonObject): Boolean
-    begin
-        exit(Tools.WriteEffect('Creates or updates Bifrost Language Model records and stores supplied API keys without answering the key values.', Effect));
-    end;
-
-    procedure GetMetering(var Metering: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetRelated(var Related: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetWorkflow(var Workflow: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetExamples(var Examples: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetOverview(var Overview: Text): Boolean
-    begin
-        Overview := '';
-        exit(false);
-    end;
-
-    procedure GetNotes(var Notes: Text): Boolean
-    begin
-        Notes := '';
-        exit(false);
     end;
 
     local procedure RequestCarriesKey(Models: JsonArray): Boolean
