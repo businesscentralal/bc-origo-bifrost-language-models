@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-31) - confirm irreversible test chat (#93)
+
+- Test codeunit 96028 `LangModel Test Tools Tests` resends `Test.LanguageModel.Chat` with `expectedCount` 1 when Foundation returns `ConfirmationRequired`. The default counter for an empty subject is 1. An unknown parameter is still refused on the first call and is not confirmed. Product objects are unchanged.
+
 ### Fixed (2026-10-29) - provider-agnostic prompt files (#93)
 
 - Codeunit 10035429 `LangModel File Handling ori` is the shared file policy. PNG and JPEG stay inline. Any other `image/*` type is refused before HTTP. A decoded file larger than the resolved size cap (20 MB unless a test override raises it) is refused before HTTP. The length check uses that resolved cap, not a fixed 20 MB sentinel. A PDF or other document that the provider cannot accept inline is uploaded to that provider's file store, referenced by `file_id`, and deleted after the call, including when the prompt fails (STE-0002: the prompt and file leave Business Central only for the named provider, and an uploaded document exists there only for the duration of the call). A 2xx upload without a readable file id is logged as `ORI-LM-0093` with HTTP outcome `id unread`. That file can remain at the provider until the provider expires it, because there is no id to delete. A failed cleanup is the same telemetry event with provider, HTTP outcome (`blocked`, `not sent`, status, or `id unread`), sanitised error code and file id. No file name, MIME type, prompt or provider message is logged.
