@@ -106,7 +106,7 @@ codeunit 96028 "LangModel Test Tools Tests"
         MockProvider.SetContinueResponse('{"type":"reply","reply":"Done."}');
 
         // [WHEN] a chat turn runs against the mock model
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":1}');
 
         // [THEN] the tool was called, its result went back to the provider and the reply is answered
         ResponseJson.WriteTo(ResponseText);
@@ -136,7 +136,7 @@ codeunit 96028 "LangModel Test Tools Tests"
         MockProvider.Reset();
         MockProvider.SetSendResponse('{"error":"BIFT bad key"}');
 
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":1}');
 
         ResponseJson.WriteTo(ResponseText);
         Assert.AreEqual('Error', ResponseJson.GetText('status'), ResponseText);
@@ -156,10 +156,36 @@ codeunit 96028 "LangModel Test Tools Tests"
     begin
         // [SCENARIO] an unknown code is RecordNotFound on code
         Cleanup();
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":1}');
         ResponseJson.WriteTo(ResponseText);
         Assert.AreEqual('RecordNotFound', ResponseJson.GetText('code'), ResponseText);
         Assert.AreEqual('code', ResponseJson.GetText('parameter'), ResponseText);
+    end;
+
+    /// <summary>
+    /// Verifies a mismatched chat confirmation refuses execution before the provider is called.
+    /// </summary>
+    [Test]
+    procedure Chat_WrongExpectedCount_DoesNotCallProvider()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] #103 AC1: an explicit stale count cannot run an irreversible chat turn.
+        // [GIVEN] A self-created mock model and a provider that would otherwise return a reply.
+        Cleanup();
+        Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock"}');
+        MockProvider.Reset();
+        MockProvider.SetSendResponse('{"type":"reply","reply":"Must not run."}');
+
+        // [WHEN] The caller confirms two operations instead of this single chat turn.
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":2}');
+
+        // [THEN] Foundation refuses the stale count without calling the provider.
+        Assert.AreEqual('ConfirmationMismatch', ResponseJson.GetText('code'), 'The explicit count must match the chat operation.');
+        Assert.AreEqual('expectedCount', ResponseJson.GetText('parameter'), 'The refusal names the confirmation key.');
+        Assert.AreEqual('1', ResponseJson.GetText('expected'), 'One chat turn is counted.');
+        Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'Confirmation runs before the provider.');
+        Cleanup();
     end;
 
     /// <summary>
