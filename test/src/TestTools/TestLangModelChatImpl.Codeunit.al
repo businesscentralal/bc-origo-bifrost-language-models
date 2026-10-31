@@ -27,6 +27,137 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg C
         RoundsExceededErr: Label 'The model still asked for tools after %1 rounds.', Comment = '%1 = rounds', Locked = true;
 
     /// <summary>
+    /// Declares the JSON request envelope of this test-only type.
+    /// </summary>
+    procedure GetEnvelope(var Envelope: JsonObject): Boolean
+    begin
+        Envelope.Add('version', '1.0');
+        Envelope.Add('contentType', 'text/json');
+        Envelope.Add('dataRequired', true);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Returns false because models are selected by data parameters, not a subject.
+    /// </summary>
+    procedure GetTarget(var Target: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Declares every supported request key and its actual shape.
+    /// </summary>
+    procedure GetParameters(var Parameters: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Parameters.Add(ContractMgt.Parameter('code', 'string', true, 'Code of the language model to chat with.'));
+        Parameters.Add(ContractMgt.Parameter('prompt', 'string', false, 'User prompt; send prompt or messages.'));
+        Parameters.Add(ContractMgt.Parameter('messages', 'array', false, 'Conversation array of role/content objects; takes precedence over prompt.'));
+        Parameters.Add(ContractMgt.Parameter('recordContext', 'object', false, 'Optional record context passed unchanged to the provider.'));
+        Parameters.Add(ContractMgt.Parameter('maxToolRounds', 'integer', false, 'Maximum tool rounds; defaults to 8 and is clamped to 1 through 20.'));
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes successful output without exposing credentials.
+    /// </summary>
+    procedure GetResponse(var Response: JsonObject): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+        Fields: JsonArray;
+    begin
+        Response.Add('contentType', 'text/json');
+        Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success when a reply is returned.'));
+        Fields.Add(ContractMgt.ResponseField('code', 'string', 'Model code.'));
+        Fields.Add(ContractMgt.ResponseField('chatProvider', 'string', 'Provider name.'));
+        Fields.Add(ContractMgt.ResponseField('reply', 'string', 'Provider reply.'));
+        Fields.Add(ContractMgt.ResponseField('rounds', 'integer', 'Completed tool rounds.'));
+        Fields.Add(ContractMgt.ResponseField('toolCalls', 'array', 'Tool trace with round, name, isError and resultChars.'));
+        Fields.Add(ContractMgt.ResponseField('providerToolTrace', 'array', 'Optional Copilot provider tool trace.'));
+        Fields.Add(ContractMgt.ResponseField('usage', 'object', 'Optional provider usage.'));
+        Response.Add('fields', Fields);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Describes the coded refusals of the test operation.
+    /// </summary>
+    procedure GetErrors(var Errors: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, 'Test message types do not run in a SaaS production environment.', 'The environment is SaaS production.', 'Use a sandbox or development container.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, 'Send a model code and prompt or messages.', 'code or both prompt and messages are missing.', 'Supply the missing parameter.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, 'The language model was not found.', 'No model with code exists.', 'Create it with Test.LanguageModel.Set.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, 'The provider returned an error or an unexpected answer.', 'The provider cannot return a reply or tool calls.', 'Check the provider, endpoint, model and credentials.'));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::LimitExceeded, 'The model still asked for tools after the maximum rounds.', 'Tool calls exceed maxToolRounds.', 'Raise maxToolRounds up to 20 or reduce the task.'));
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the actual writes, external effects and commit behavior.
+    /// </summary>
+    procedure GetEffect(var Effect: JsonObject): Boolean
+    begin
+        Effect.Add('effect', 'irreversible');
+        Effect.Add('changes', 'Calls the selected provider and executes its tools as the caller. Tools can change Business Central data. Commits before each tool round; completed changes and externally sent data cannot be recalled. Does not change user setup.');
+        Effect.Add('idempotent', false);
+        exit(true);
+    end;
+
+    /// <summary>
+    /// Uses Foundation metering without additional declarations.
+    /// </summary>
+    procedure GetMetering(var Metering: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because no related chapter is supplied.
+    /// </summary>
+    procedure GetRelated(var Related: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because this test tool has no workflow chapter.
+    /// </summary>
+    procedure GetWorkflow(var Workflow: JsonObject): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Returns false because usage examples are in the test tooling.
+    /// </summary>
+    procedure GetExamples(var Examples: JsonArray): Boolean
+    begin
+        exit(false);
+    end;
+
+    /// <summary>
+    /// Describes this test-only operation.
+    /// </summary>
+    procedure GetOverview(var Overview: Text): Boolean
+    begin
+        Overview := GetDescription();
+        exit(true);
+    end;
+
+    /// <summary>
+    /// States the test-only environment and data boundaries.
+    /// </summary>
+    procedure GetNotes(var Notes: Text): Boolean
+    begin
+        Notes := 'Test app only. Refused in SaaS production. Runs with the caller permissions; never use customer fixtures or send real credentials through MCP.';
+        exit(true);
+    end;
+
+    /// <summary>
     /// Reports that this test-only message type is enabled.
     /// </summary>
     procedure IsEnabled(): Boolean
@@ -51,11 +182,11 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg C
     end;
 
     /// <summary>
-    /// Returns Outbound for this test-only message type.
+    /// Returns Inbound because chat can execute irreversible tools.
     /// </summary>
     procedure GetMessageDirection(): Enum "Msg Direction ori"
     begin
-        exit(Enum::"Msg Direction ori"::Outbound);
+        exit(Enum::"Msg Direction ori"::Inbound);
     end;
 
     /// <summary>
@@ -98,83 +229,6 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg C
         TestCtx.SetLanguageModel(LanguageModel.Code);
         RunTurn(Argument, LanguageModel, BuildPayload(RequestJson), MaxRounds);
         TestCtx.ClearLanguageModel();
-    end;
-
-    procedure GetEnvelope(var Envelope: JsonObject): Boolean
-    begin
-        exit(Tools.TestEnvelope(Envelope));
-    end;
-
-    procedure GetTarget(var Target: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetParameters(var Parameters: JsonArray): Boolean
-    var
-        ContractMgt: Codeunit "Msg Contract Mgt ori";
-        MessagesParameter: JsonObject;
-        MessageFields: JsonArray;
-        RecordContextParameter: JsonObject;
-    begin
-        Parameters.Add(ContractMgt.Parameter('code', 'string', true, 'Language model code to chat with.'));
-        Parameters.Add(ContractMgt.Parameter('prompt', 'string', false, 'User prompt for a single turn. Required when messages is omitted.'));
-        MessageFields.Add(ContractMgt.Parameter('role', 'string', false, 'Conversation role, for example user or assistant.'));
-        MessageFields.Add(ContractMgt.Parameter('content', 'string', false, 'Message content.'));
-        MessagesParameter := ContractMgt.Parameter('messages', 'array', false, 'Conversation messages. Required when prompt is omitted.');
-        MessagesParameter.Add('children', MessageFields);
-        Parameters.Add(MessagesParameter);
-        RecordContextParameter := ContractMgt.Parameter('recordContext', 'object', false, 'Optional record context object passed through to the chat provider.');
-        Parameters.Add(RecordContextParameter);
-        Parameters.Add(ContractMgt.Parameter('maxToolRounds', 'integer', false, 'Maximum tool-call rounds, default 8, at most 20.'));
-        exit(true);
-    end;
-
-    procedure GetResponse(var Response: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetErrors(var Errors: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetEffect(var Effect: JsonObject): Boolean
-    begin
-        exit(Tools.WriteEffect('Runs one Bifrost Chat turn against the named language model, including MCP tool calls as the caller.', Effect));
-    end;
-
-    procedure GetMetering(var Metering: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetRelated(var Related: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetWorkflow(var Workflow: JsonObject): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetExamples(var Examples: JsonArray): Boolean
-    begin
-        exit(false);
-    end;
-
-    procedure GetOverview(var Overview: Text): Boolean
-    begin
-        Overview := '';
-        exit(false);
-    end;
-
-    procedure GetNotes(var Notes: Text): Boolean
-    begin
-        Notes := '';
-        exit(false);
     end;
 
     local procedure RunTurn(var Argument: Record "Message Argument ori"; var LanguageModel: Record "Bifrost Language Model ori"; PayloadJson: Text; MaxRounds: Integer)
