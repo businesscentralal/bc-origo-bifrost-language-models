@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Nonshipping spike (2026-11-01) - Headless split-loop feasibility (#98)
+
+- Verification branch only, never merge or release: test message `Test.LanguageModel.AskProbe` (enum extension 96050, codeunits 96050–96052) observes nested dispatcher transactions, cached session-time replacement, scoped blob cleanup, actual outgoing tool names and exact permission combinations.
+- A separate OnPrem native harness under `tools/lm98-live` (table 96050 and codeunits 96053–96057) creates isolated synthetic posting fixtures, runs fresh-session R1 cells and bounds the authorized OpenAI/Anthropic trial to 40 actual HTTP attempts. It retains sanitized measurements and fixture identities; runtime outcomes and the final GO/NO-GO remain independent verification work. Product and normal test targets and CI configuration are unchanged.
+- Rename temporary security-group buffer locals in codeunit 10035427 and test codeunit 96038 to satisfy existing AA0073 analyzer requirements without changing wizard behavior or public signatures. No shipping provider/interface or Foundation change is included.
+
 ### Fixed (2026-10-28) - Test tool request contracts (#89)
 
 - Test-only message types `Test.LanguageModel.Set`, `.Delete` and `.Chat` (#89; enum extension 96023 and codeunits 96024–96026) now declare their request parameters and real effects through Foundation's `Msg Contract ori`. This restores dispatch on Foundation 28.0.10+; Set covers both top-level models and batch entries, Delete declares its writes, and Chat declares committed tool/provider effects with the matching inbound direction. Codeunit 96028 covers contract mappings and rejection of undeclared request keys. Shipped app code is unchanged.

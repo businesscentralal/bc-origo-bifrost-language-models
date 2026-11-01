@@ -1,0 +1,162 @@
+LM98 NONSHIPPING PROBE — NOT A RELEASE, NOT A PR, NOT A GO RECEIPT
+
+Repository: businesscentralal/bc-origo-bifrost-language-models, issue 98.
+Retained source owner: Þráinn (worker-8).
+Authority: Architect 1793571463.521199, 2026-11-01; issue comment 6564260567,
+Decision d-20261101-lm98-trial-keys. The newer instruction assigns Codex the
+candidate, Bifrost Coder the keyed OpenAI + Anthropic trial, and Claude Code
+all nonlive verification, serialized on bc29-w1/f0355b23ddc3. It supersedes the
+older Claude-only live hold. Never recreate/delete that shared container.
+
+BUILD AND PROVENANCE
+Commit first. Run from a clean checkout with the compiler and the exact
+installed dependency packages, using an OWNED writable symbol cache:
+  python tools/lm98-live/build_probe.py --compiler <alc-and-analyzer-folder>
+    --dotnet <dotnet-executable> --symbols <owned-package-cache>
+    --output <private-evidence-directory-outside-checkout>
+The app and test app stay Cloud-targeted and run CodeCop/UICop/AppSourceCop.
+The additional app in tools/lm98-live is explicitly OnPrem because the native
+HttpClientHandler API is OnPrem-only. It runs CodeCop/UICop, not AppSourceCop
+(which requires Cloud and is inappropriate for this unshipped harness).
+No analyzer is disabled or suppressed in either normal project. No workflow,
+CI configuration or configured test-suite membership is changed.
+All three compilations must have zero errors and warnings. The output has
+exact SourceCommit and SHA256 digests. A dirty-tree compile is NOT tip proof.
+No API key input, reads, downloads or deployment occurs in this build script.
+
+Publish the verification branch and verify its full SHA with the canonical
+verify-github-candidate.cjs wrapper before requesting independent checks.
+Record installed product/test/harness versions, package hashes, exact source
+SHA, Foundation version/source, BC version/locale, company and permissions.
+Local compilation used BC28.5 symbols; it does NOT prove compatibility or
+runtime behavior on BC29. The verifiers must compile/deploy the SAME SHA on
+the target and retain that provenance. Do not silently upgrade dependencies.
+The Cloud app's two temporary-variable renames and the matching existing
+wizard test locals repair baseline AA0073 warnings only; no wizard behavior
+or public signature changed. The probe lives entirely in test/harness code.
+
+SAFETY AND SCHEDULING
+Coordinate exclusive use with Architect before either verifier deploys or
+runs anything. No licence/EULA/trial/permission/user/backend writes, HTTP
+permission changes, key reads, key logging or model reconfiguration are part
+of the probe. Only the authorized key holder uses existing setup tooling.
+The native live test requires existing BIFT-OPENAI and BIFT-CLAUDE model
+records. It never reads a key directly. Preserve existing model resources;
+their authorized creator must list their ownership/cleanup disposition.
+All provider operations use the production split interface; no commit is
+inserted between send, tool execution and continuation. Commits separate
+fixture setup, individual measurement runs, and cleanup/evidence.
+No test is skipped or suppressed. Run the full configured Cloud test suite
+and retain real executed/passed/failed/skipped counts. The extra native live
+app is outside .AL-Go/testFolders and is run explicitly by its assigned
+verifier, never as an accidental CI or nonlive-suite side effect.
+Native tests using commits/background sessions require a TestRunner with
+TestIsolation=Disabled. Do not use rollback isolation for these diagnostics.
+Use LCIDs1033 and1039 for applicable nonlive/UI checks. Forty live HTTP calls
+is the TOTAL allowance, not forty per language/provider/run.
+
+NONLIVE CHECKS — CLAUDE CODE
+1. Native codeunit96057 R1FreshSessionMatrix runs the eight combinations of
+   debug off/on, normal/OmitCommit, cold/cached Bootstrap. Each cell starts
+   its OWN background session, so cold is actually cold. Only the probe's
+   background session may be stopped on its bounded timeout. It uses the
+   real Setup page to toggle debug and restores the original value. A native
+   orchestration pass is NOT proof that a transaction cell worked. Read all
+   eight receipts and inspect the dispatcher response/error, not just
+   dispatcherReturned. Existing receipts prohibit blindly replaying cells.
+   Capture/verify the original and restored debug state. A process crash can
+   interrupt restoration; inspect actual state and restore only this change.
+2. Invoke Test.LanguageModel.AskProbe operation=time in an isolated session.
+   Record before/after counts, cached fact, clock timestamp, header and Now
+   UTC only. Never copy the Bootstrap body. Four native tests in96052 check
+   replacement boundaries; these alone are not the live cached-prompt proof.
+3. operation=blobs requires an initially empty isolated blob store. It warms
+   Bootstrap before seeding a synthetic open-chat sentinel and a run blob.
+   It observes list_blobs, deletes only the run ref, confirms chat content,
+   and tests wildcard only when the sole remaining ref is its own chat ref.
+   Require ownedRefsAbsent=true. Never run wildcard in an occupied session.
+4. Native codeunit96052 contains three exact permission probes (API, Read,
+   Full, each plus Chat and LLM Chat) using the existing Mock provider. Setup
+   and cleanup temporarily use the test administrator in memory, then the
+   measured path resets to the exact role sets. There are NO Access Control
+   or user writes. Record actual missing-execute errors per combination,
+   distinguishing a harness failure from a product grant. Do not add grants
+   to manufacture a pass. Verify BIFT-LM98-MOCK is absent after every case.
+5. Record BC Web Client observations and each applicable message operation
+   using self-created data. TestPage/native invocation is not a browser UI
+   pass. No live credentials or model HTTP calls belong in these steps.
+
+LIVE CHECKS — BIFROST CODER ONLY, AFTER EXACT-SHA ARCHITECT HANDOFF
+Run native codeunit96055 LivePostingSetupBatch ONCE, in an isolated fresh
+session and the approved company, with TestIsolation=Disabled. It reserves
+the entire issue allowance in the global LM98-LIVE receipt BEFORE any call.
+If the receipt already exists, STOP and inspect it; never delete/reset it to
+retry or change companies to acquire another allowance. The native handler
+admits at most40 actual HTTP requests INCLUDING provider retries and figure
+follow-ups. Only chat completions, Responses and Messages paths are allowed.
+There is no live message operation. The public test helper refuses live
+providers without this active native guard.
+A crash leaves the reservation consumed, even if the recorded call count is
+incomplete. Architect must reconcile actual logs before any further trial.
+
+The batch preflights all fixture keys, creates entirely new synthetic posting
+setup/account/payment terms and BIFT-A/B/C, and records exact TableNo/SystemId
+and modified timestamp before committing. A collision is a refusal, never
+permission to overwrite. BIFT-B has no Gen. Bus. Posting Group; BIFT-C uses
+BIFT-NOREC with no Receivables Account. All other account relations in these
+posting groups use the synthetic account. Data tools are limited to these
+records, with caller filters intersected with the fixture restriction.
+Writes, arbitrary message invocation, blob input references and other tools
+are denied. Both providers run each customer twice, max15 tool calls and
+10 provider operations per run, also subject to the shared40-HTTP cap.
+The cap can leave measurements incomplete; report that truthfully.
+
+The payload attempts allowedToolNames through the existing interface. This
+is a PROBE INPUT, not an assertion the production builders honor it. The
+current code read indicates they rebuild the full registry. Read each actual
+outgoing request via operation=requestTools and its creator-owned logEntryNo:
+only the tool names are returned. Cover first and continuation requests for
+each builder actually reached; list the other builders/providers as not
+tried. No raw request, response, prompt or tool content may be exported.
+A differing tool list means that builder needs a different route; do not
+modify the production provider interface in this spike.
+
+Read operation=receipt, receipt=LM98-LIVE for sanitized measurements:
+provider enum/model, observed API category, actual HTTP count, scenario/run,
+provider operations, tool calls/errors/denials, duration, numeric token usage
+when available, verdict, largest result, owned fixture manifest and cleanup.
+Free-text replies and tool results are deliberately not returned. The
+history-compaction fact-loss field is explicitly NOT ASSESSED: compare the
+actual history privately and record only the conclusion, no customer values.
+Native verdict assertions happen AFTER the receipt and cleanup are committed;
+a failed test must not erase its evidence. Verify actual counts and cleanup,
+not just the native test exit status. No GO is inferred by this harness.
+
+RECEIPT REQUESTS
+Use the existing authorized transport and normal test envelope. This message
+is write-classified for local diagnostic/session state and has no external
+provider operation; it does not misclassify a live call to bypass confirmation.
+Example data for Test.LanguageModel.AskProbe:
+  {"operation":"receipt","receipt":"R1-0-0-0"}
+  {"operation":"receipt","receipt":"LM98-LIVE"}
+  {"operation":"requestTools","logEntryNo":<owned-request-log-entry>}
+R1 key components are debug-omitCommit-cached, each0or1. Use all eight.
+Other data operations are time, blobs, tools; tools lists only the registry
+and explicitly does not prove the outgoing request.
+
+CLEANUP AND ACCEPTANCE
+Verify exact fixture SystemIds are absent. Cleanup runs in reverse order and
+refuses a record changed since creation. On a crash, preserve the receipt and
+use its manifest for scoped recovery; never delete by prefix alone. Verify
+session blobs and BIFT-LM98-MOCK cleanup. Keep the allowance reservation until
+the issue's live trial is finally closed; its presence prevents duplicate
+spend. Then export sanitized evidence and have the authorized verifier remove
+only this probe's receipts/harness/test resources, retaining normal deployed
+apps and all foreign resources. Never delete/recreate the shared container.
+
+The final issue comment must fill AC01-09, name every unexecuted/failed check,
+list actual counts and cleanup, and end with GO/NO-GO plus Core-1 yes/no and
+the observed reason. A compile, a model exit or a completed matrix driver is
+not acceptance. No PR, merge, UAT, release or AppSource publication is created
+by this spike. Worker-8 retains repairs and acceptance tracking; Architect
+routes shared-environment work. Any changed SHA invalidates prior evidence.
