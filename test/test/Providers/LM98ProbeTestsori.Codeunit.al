@@ -93,13 +93,15 @@ codeunit 96052 "LM98 Probe Tests ori"
     local procedure VerifyPermissionCombination(BaseRole: Code[20])
     var
         Model: Record "Bifrost Language Model ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Mock: Codeunit "Mock Bifrost Chat Provider";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         TestContext: Codeunit "Bifrost LangModel Test Ctx ori";
         Result: JsonObject;
         Request: JsonObject;
-        BootstrapResult: JsonObject;
         ResultText: Text;
+        FailureText: Text;
+        Succeeded: Boolean;
         OwnedId: Guid;
     begin
         // Test role changes are in-memory test permissions, never Access Control writes.
@@ -124,21 +126,23 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.SetContinueResponse('{"type":"reply","reply":"{\"verdict\":\"pass\"}"}');
         Request.Add('code', Model.Code);
         Request.Add('customer', 'BIFT-A');
+        TempArgument.SetRequestJson(Request);
         LowerPermissions.SetExactPermissionSet(BaseRole);
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
-        // Direct call. A TryFunction strips inherent permissions on "Setup ori" and refuses INSERT,
-        // so it cannot host this loop (#110).
-        BootstrapResult := Probe.NestedTool();
-        if BootstrapResult.GetBoolean('nestedToolError') then
-            Error(BootstrapResult.GetText('bcError'));
-        Result := Probe.Live(Request);
+        ClearLastError();
+        // Codeunit.Run returns a native permission failure without the TryFunction write ban.
+        // The mock loop itself is also outside TryLive, so inherent Setup permissions stay in force (#110).
+        Succeeded := Codeunit.Run(Codeunit::"LM98 Permission Run ori", TempArgument);
+        FailureText := GetLastErrorText();
         LowerPermissions.SetOutsideO365Scope();
         TestContext.ClearLanguageModel();
         if Model.GetBySystemId(OwnedId) then
             Model.Delete(false);
         Mock.Reset();
-        Commit();
+        Commit(); // Retain cleanup even when the measured permission assertion fails.
+        Assert.IsTrue(Succeeded, 'Exact role combination ' + BaseRole + ': ' + FailureText);
+        Result := TempArgument.GetResponseJson();
         Result.WriteTo(ResultText);
         Assert.AreEqual('reply', Result.GetText('stopReason'), ResultText);
         Assert.AreEqual(1, Result.GetInteger('toolCalls'), ResultText);
