@@ -540,6 +540,335 @@ codeunit 96034 "LLM 65 Prompt Tests"
         VerifyFailure("Bifrost LangModel Prov. ori"::Anthropic, 429, false, false, 'Retryable', true);
     end;
 
+    /// <summary>xAI inline PNG uses input_image, disables store, and does not upload.</summary>
+    [Test]
+    procedure AC01_xAI_Png_InlineImageDisablesStore()
+    begin
+        VerifyInlineImage('image/png', 'iVBORw0KGgo=', 'data:image/png;base64,iVBORw0KGgo=');
+    end;
+
+    /// <summary>xAI inline JPEG uses the same image path as PNG.</summary>
+    [Test]
+    procedure AC01_xAI_Jpeg_InlineImageDisablesStore()
+    begin
+        VerifyInlineImage('image/jpeg', '/9j/4AAQ=', 'data:image/jpeg;base64,/9j/4AAQ=');
+    end;
+
+    /// <summary>xAI deletes an uploaded PDF even when the prompt returns a provider error.</summary>
+    [Test]
+    procedure AC02_xAI_Pdf_DeletesWhenPromptFails()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(400, '{"error":{"code":"invalid_request_error","message":"Invalid key Z9Q7"}}', false, false);
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(1, HttpMock.GetCallCount(), 'The prompt was still sent.');
+        Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The PDF was uploaded.');
+        Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'The uploaded PDF is deleted when the prompt fails.');
+        Assert.AreEqual(0, HttpMock.GetDeleteFailureCount(), 'A successful delete is not signalled as retained.');
+        Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Delete follows the failed prompt.');
+        Assert.IsTrue(HttpMock.GetDeleteUrl().EndsWith('/v1/files/file_llm65'), 'Delete targets the uploaded id.');
+        AssertCodedError(Response, 'PreconditionFailed');
+        Assert.AreEqual('provider', Response.GetText('parameter'), 'The provider parameter names the transport.');
+        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The safe code follows the HTTP status.');
+        Assert.IsTrue(Response.GetText('error').Contains('could not complete the prompt'), 'The public error stays generic.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>A failed xAI file delete does not hide a successful reply.</summary>
+    [Test]
+    procedure AC02_xAI_Pdf_DeleteFailureKeepsReply()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.ConfigureDelete(500, '{"error":{"code":"server_error","message":"cleanup failed Z9Q7"}}');
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual('Success', Response.GetText('status'), 'Delete failure stays internal.');
+        Assert.AreEqual('A safe answer', Response.GetText('reply'), 'The reply is unchanged.');
+        Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'Delete was still attempted.');
+        Assert.AreEqual(1, HttpMock.GetDeleteFailureCount(), 'The failed delete is signalled.');
+        Assert.AreEqual('xAI', HttpMock.GetDeleteFailureProvider(), 'The signal names the provider.');
+        Assert.AreEqual('500', HttpMock.GetDeleteFailureOutcome(), 'The signal names the HTTP status.');
+        Assert.AreEqual('server_error', HttpMock.GetDeleteFailureCode(), 'The signal keeps only the sanitised code.');
+        Assert.AreEqual('file_llm65', HttpMock.GetDeleteFailureFileId(), 'The signal names the provider file id.');
+        Assert.IsFalse(HttpMock.GetDeleteFailureCode().Contains('Z9Q7'), 'The provider message is not signalled.');
+        Assert.IsFalse(HttpMock.GetDeleteFailureFileId().Contains('ZZTEST'), 'The file name is not signalled.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>An xAI upload failure is returned and does not send the prompt.</summary>
+    [Test]
+    procedure AC02_xAI_Pdf_UploadFailureSkipsPrompt()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.ConfigureUpload(400, '{"error":{"code":"invalid_request_error","message":"bad file Z9Q7"}}');
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt follows a failed upload.');
+        Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The upload was attempted.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'Nothing was uploaded to delete.');
+        Assert.AreEqual('upload;', HttpMock.GetOperationSequence(), 'Only the upload ran.');
+        AssertCodedError(Response, 'PreconditionFailed');
+        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The upload status and code are returned.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>A 2xx upload without a readable file id is recorded and does not send the prompt.</summary>
+    [Test]
+    procedure AC02_Pdf_UploadIdUnreadLogsRetention()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        HttpMock.ConfigureUpload(200, '{"object":"file"}');
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt follows an unreadable upload id.');
+        Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The upload was attempted.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'There is no id to delete.');
+        Assert.AreEqual(1, HttpMock.GetDeleteFailureCount(), 'The unread id is signalled.');
+        Assert.AreEqual('xAI', HttpMock.GetDeleteFailureProvider(), 'The signal names the provider.');
+        Assert.AreEqual('id unread', HttpMock.GetDeleteFailureOutcome(), 'The signal names the unread-id outcome.');
+        Assert.AreEqual('', HttpMock.GetDeleteFailureFileId(), 'No file id is logged.');
+        AssertCodedError(Response, 'PreconditionFailed');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    /// <summary>An oversize document is refused before any provider HTTP call.</summary>
+    [Test]
+    procedure AC02_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::xAI);
+    end;
+
+    /// <summary>OpenAI refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_OpenAI_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::OpenAI);
+    end;
+
+    /// <summary>Azure OpenAI refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_AzureOpenAI_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::"Azure OpenAI");
+    end;
+
+    /// <summary>Custom LLM refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_CustomLLM_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::"Custom LLM");
+    end;
+
+    /// <summary>Anthropic refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_Anthropic_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::Anthropic);
+    end;
+
+    /// <summary>Google refuses an oversize document before HTTP, using the shared size cap.</summary>
+    [Test]
+    procedure AC02_Google_Pdf_OversizeRefusesBeforeHttp()
+    begin
+        VerifyProviderOversize("Bifrost LangModel Prov. ori"::Google);
+    end;
+
+    /// <summary>Shared file policy classifies MIME types without a provider name.</summary>
+    [Test]
+    procedure FileHandling_ClassifiesMimeWithoutProviderName()
+    var
+        FileHandling: Codeunit "LangModel File Handling ori";
+    begin
+        Assert.IsTrue(FileHandling.IsInlineImageMime('image/png'), 'PNG stays inline.');
+        Assert.IsTrue(FileHandling.IsInlineImageMime('IMAGE/JPEG'), 'JPEG stays inline.');
+        Assert.IsTrue(FileHandling.IsRefusedImageMime('image/gif'), 'GIF is refused.');
+        Assert.IsTrue(FileHandling.IsRefusedImageMime('image/jpg'), 'image/jpg is refused.');
+        Assert.IsFalse(FileHandling.IsInlineImageMime('application/pdf'), 'PDF is not an inline image.');
+        Assert.IsFalse(FileHandling.IsRefusedImageMime('application/pdf'), 'PDF is not a refused image.');
+        Assert.AreEqual(5, FileHandling.DecodedByteCount('aGVsbG8='), 'hello is 5 decoded bytes.');
+        Assert.IsFalse(FileHandling.IsOversize('aGVsbG8='), 'A small PDF is within the default cap.');
+        Assert.AreEqual(20971520, FileHandling.MaxDecodedFileBytes(), 'The shared cap is 20 MB.');
+    end;
+
+    /// <summary>A stored PNG follows the same inline image path.</summary>
+    [Test]
+    procedure AC03_xAI_StoredPng_UsesImagePath()
+    var
+        Attachment: Record "Incoming Document Attachment";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        Response := ExecuteStored('png', 930001, HttpMock, Attachment, true);
+        Assert.AreEqual('Success', Response.GetText('status'), 'Stored PNG completion');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('input_image'), 'Stored PNG is an image.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('data:image/png;base64,aGVsbG8='), 'Stored PNG bytes are inline.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'PNG is not uploaded.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'PNG has nothing to delete.');
+        Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'Stored PNG uses the Responses API.');
+        Attachment.Delete(false);
+    end;
+
+    /// <summary>A stored PDF is uploaded and deleted, same as an inline PDF.</summary>
+    [Test]
+    procedure AC03_xAI_StoredPdf_Uploads()
+    var
+        Attachment: Record "Incoming Document Attachment";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        Response := ExecuteStored('pdf', 930002, HttpMock, Attachment, true);
+        Assert.AreEqual('Success', Response.GetText('status'), 'Stored PDF completion');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Stored PDF bytes stay out of the prompt.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('file_llm65'), 'The prompt references the uploaded id.');
+        Assert.AreEqual('ZZTEST93.pdf', HttpMock.GetUploadFileName(), 'The stored file name is uploaded.');
+        Assert.AreEqual('application/pdf', HttpMock.GetUploadMime(), 'The stored MIME type is uploaded.');
+        Assert.IsTrue(HttpMock.GetUploadContent().Contains('aGVsbG8='), 'Stored PDF bytes are uploaded.');
+        Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Stored PDF is deleted afterwards.');
+        Attachment.Delete(false);
+    end;
+
+    /// <summary>xAI refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_xAI_Gif_RefusesBeforeHttp()
+    begin
+        VerifyRefusedImage('image/gif', 'image/gif');
+    end;
+
+    /// <summary>OpenAI refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_OpenAI_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::OpenAI, 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Azure OpenAI refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_AzureOpenAI_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::"Azure OpenAI", 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Custom LLM refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_CustomLLM_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::"Custom LLM", 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Anthropic refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_Anthropic_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::Anthropic, 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>Google refuses an inline GIF before any HTTP call.</summary>
+    [Test]
+    procedure AC04_Google_Gif_RefusesBeforeHttp()
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::Google, 'image/gif', 'image/gif');
+    end;
+
+    /// <summary>An explicit image/jpg is not treated as image/jpeg.</summary>
+    [Test]
+    procedure AC04_xAI_JpgMime_RefusesBeforeHttp()
+    begin
+        VerifyRefusedImage('image/jpg', 'image/jpg');
+    end;
+
+    /// <summary>A stored GIF is refused on the same path, before HTTP.</summary>
+    [Test]
+    procedure AC04_xAI_StoredGif_RefusesBeforeHttp()
+    var
+        Attachment: Record "Incoming Document Attachment";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        Response := ExecuteStored('gif', 930003, HttpMock, Attachment, false);
+        AssertRefusedImage(Response, HttpMock, 'image/gif');
+        Attachment.Delete(false);
+    end;
+
+    /// <summary>A GIF beside a PDF refuses the whole call before the PDF is uploaded.</summary>
+    [Test]
+    procedure AC04_xAI_GifBesidePdf_RefusesBeforeUpload()
+    var
+        TempArg: Record "Bifrost Chat Argument ori" temporary;
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Provider: Interface "Bifrost LangModel Provider ori";
+        Result: JsonObject;
+        KeyValue: SecretText;
+    begin
+        TempArg.Init();
+        TempArg."Base URL" := 'https://llm65.invalid';
+        TempArg.Model := 'test-model';
+        KeyValue := Format(FakeKeyTok);
+        TempArg.SetApiKey(KeyValue);
+        TempArg.SetPayload('{"messages":[{"role":"user","content":"Describe both"}],"files":[{"fileName":"a.gif","mimeType":"image/gif","data":"R0lG"},{"fileName":"a.pdf","mimeType":"application/pdf","data":"aGVsbG8="}]}');
+        TempArg."Procedure Type" := TempArg."Procedure Type"::CompletePrompt;
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        BindSubscription(HttpMock);
+        Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
+        Provider.Execute(TempArg);
+        UnbindSubscription(HttpMock);
+        Assert.IsTrue(Result.ReadFrom(TempArg.GetResultText()), 'The local refusal is JSON.');
+        Assert.IsTrue(Result.GetBoolean('safeRefusal'), 'The refusal is marked safe.');
+        Assert.AreEqual('image/gif', Result.GetText('received'), 'The GIF mime is the refusal.');
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt was sent.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'The sibling PDF was not uploaded.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'Nothing was uploaded to delete.');
+        AssertSecretAbsent(Result);
+    end;
+
+    /// <summary>A text-only xAI 4xx carries the HTTP status and a sanitised provider code.</summary>
+    [Test]
+    procedure AC05_xAI_Text400_CarriesSafeCode()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        HttpMock.Configure(400, '{"error":{"type":"invalid_request_error","message":"Invalid key Z9Q7"}}', false, false);
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, false));
+        UnbindSubscription(HttpMock);
+        Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/v1/chat/completions'), 'Text-only xAI stays on chat completions.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'Text-only xAI does not upload.');
+        AssertCodedError(Response, 'PreconditionFailed');
+        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The type is used when no code is present.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
     /// <summary>A number prompt is refused before provider dispatch.</summary>
     [Test]
     procedure AC5_PromptNumber()
@@ -914,6 +1243,14 @@ codeunit 96034 "LLM 65 Prompt Tests"
         UnbindSubscription(HttpMock);
         // [THEN] Stable code and next step; no full key or provider fragment.
         Assert.AreEqual(1, HttpMock.GetCallCount(), 'The real provider must reach the intercepted transport exactly once.');
+        if (ProviderType = "Bifrost LangModel Prov. ori"::xAI) and WithFile then begin
+            Assert.AreEqual(1, HttpMock.GetUploadCount(), 'A failed xAI document prompt still uploaded the file.');
+            Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'A failed xAI document prompt still deletes the file.');
+            Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Delete runs after the failed prompt.');
+        end else begin
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), 'This failure does not upload an xAI file.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'This failure does not delete an xAI file.');
+        end;
         AssertCodedError(Response, ExpectedCode);
         AssertSecretAbsent(Response);
         if Status in [401, 403] then begin
@@ -943,14 +1280,177 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.AreEqual('A safe answer', Response.GetText('text'), 'text alias');
         Assert.IsTrue(HttpMock.GetRequestBody().Contains('Hello from issue 65'), 'User prompt was sent.');
         Assert.AreEqual(WithSystem, HttpMock.GetRequestBody().Contains('Be concise'), 'Optional system prompt.');
-        Assert.AreEqual(WithFile, HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Optional file content.');
-        if WithFile then
-            case ProviderType of
-                "Bifrost LangModel Prov. ori"::Google:
-                    Assert.IsTrue(HttpMock.GetRequestUrl().Contains(':generateContent'), 'Gemini native file endpoint');
-                "Bifrost LangModel Prov. ori"::xAI:
-                    Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'xAI file endpoint');
-            end;
+        if (ProviderType = "Bifrost LangModel Prov. ori"::xAI) and WithFile then
+            AssertXaiDocumentUpload(HttpMock)
+        else begin
+            Assert.AreEqual(WithFile, HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Optional file content.');
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), 'This provider keeps the file inline.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'This provider does not upload then delete.');
+        end;
+        if WithFile and (ProviderType = "Bifrost LangModel Prov. ori"::Google) then
+            Assert.IsTrue(HttpMock.GetRequestUrl().Contains(':generateContent'), 'Gemini native file endpoint');
+        if (ProviderType = "Bifrost LangModel Prov. ori"::xAI) and (not WithFile) then
+            Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/v1/chat/completions'), 'Text-only xAI stays on chat completions.');
+        Model.Delete(true);
+    end;
+
+    local procedure AssertXaiDocumentUpload(var HttpMock: Codeunit "LLM 65 HTTP Mock")
+    var
+        RequestBody: JsonObject;
+    begin
+        Assert.IsTrue(RequestBody.ReadFrom(HttpMock.GetRequestBody()), 'The xAI prompt body is JSON.');
+        Assert.IsFalse(RequestBody.GetBoolean('store'), 'xAI file calls set store to false.');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('file_data'), 'xAI documents are not inline file_data.');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('aGVsbG8='), 'PDF bytes stay out of the prompt body.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('file_llm65'), 'The prompt references the uploaded file id.');
+        Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'xAI file endpoint');
+        Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The PDF is uploaded once.');
+        Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'The uploaded PDF is deleted.');
+        Assert.AreEqual('issue65.pdf', HttpMock.GetUploadFileName(), 'The upload keeps the file name.');
+        Assert.AreEqual('application/pdf', HttpMock.GetUploadMime(), 'The upload keeps the PDF MIME type.');
+        Assert.IsTrue(HttpMock.GetUploadContent().Contains('aGVsbG8='), 'The uploaded bytes match the file.');
+        Assert.IsTrue(HttpMock.GetUploadUrl().EndsWith('/v1/files'), 'The upload uses the Files endpoint.');
+        Assert.IsTrue(HttpMock.GetDeleteUrl().EndsWith('/v1/files/file_llm65'), 'Delete uses the uploaded id.');
+        Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Upload, then prompt, then delete.');
+    end;
+
+    local procedure VerifyInlineImage(MimeType: Text; ImageData: Text; ExpectedDataUri: Text)
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        RequestJson: JsonObject;
+        FileJson: JsonObject;
+        RequestBody: JsonObject;
+        Response: JsonObject;
+        RequestText: Text;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        RequestJson.Add('prompt', 'Hello from issue 93');
+        RequestJson.Add('roleCode', Model.Code);
+        FileJson.Add('fileName', 'issue93.img');
+        FileJson.Add('mimeType', MimeType);
+        FileJson.Add('data', ImageData);
+        RequestJson.Add('file', FileJson);
+        RequestJson.WriteTo(RequestText);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        BindSubscription(HttpMock);
+        Response := Execute(RequestText);
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual('Success', Response.GetText('status'), 'Inline image completion');
+        Assert.AreEqual(1, HttpMock.GetCallCount(), 'One prompt and no file API call.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'An allowed image is not uploaded.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'An allowed image has nothing to delete.');
+        Assert.IsTrue(RequestBody.ReadFrom(HttpMock.GetRequestBody()), 'The image prompt body is JSON.');
+        Assert.IsFalse(RequestBody.GetBoolean('store'), 'Inline images disable store.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('input_image'), 'The image uses input_image.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains(ExpectedDataUri), 'The image is a data URI.');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('file_data'), 'Images are not sent as file_data.');
+        Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'Images use the Responses API.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('Hello from issue 93'), 'The prompt text is sent.');
+        Model.Delete(true);
+    end;
+
+    local procedure VerifyRefusedImage(MimeType: Text; ExpectedReceived: Text)
+    begin
+        VerifyProviderRefusedImage("Bifrost LangModel Prov. ori"::xAI, MimeType, ExpectedReceived);
+    end;
+
+    local procedure VerifyProviderRefusedImage(ProviderType: Enum "Bifrost LangModel Prov. ori"; MimeType: Text; ExpectedReceived: Text)
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        RequestJson: JsonObject;
+        FileJson: JsonObject;
+        Response: JsonObject;
+        RequestText: Text;
+    begin
+        CreateModel(Model, ProviderType);
+        RequestJson.Add('prompt', 'Hello from issue 93');
+        RequestJson.Add('roleCode', Model.Code);
+        FileJson.Add('fileName', 'issue93.bin');
+        FileJson.Add('mimeType', MimeType);
+        FileJson.Add('data', 'aGVsbG8=');
+        RequestJson.Add('file', FileJson);
+        RequestJson.WriteTo(RequestText);
+        HttpMock.Configure(200, SuccessBody(ProviderType, true), false, false);
+        BindSubscription(HttpMock);
+        Response := Execute(RequestText);
+        UnbindSubscription(HttpMock);
+        AssertRefusedImage(Response, HttpMock, ExpectedReceived);
+        Model.Delete(true);
+    end;
+
+    local procedure VerifyProviderOversize(ProviderType: Enum "Bifrost LangModel Prov. ori")
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+    begin
+        CreateModel(Model, ProviderType);
+        HttpMock.Configure(200, SuccessBody(ProviderType, true), false, false);
+        HttpMock.ConfigureMaxDecodedBytes(4);
+        BindSubscription(HttpMock);
+        Response := Execute(Request(Model.Code, false, true));
+        UnbindSubscription(HttpMock);
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'No upload is sent for an oversize file.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'No delete is sent for an oversize file.');
+        AssertCodedError(Response, 'InvalidParameter');
+        Assert.AreEqual('file', Response.GetText('parameter'), 'The refusal names file.');
+        Assert.IsTrue(Response.GetText('error').Contains('file size limit'), 'The error names the size limit.');
+        AssertSecretAbsent(Response);
+        Model.Delete(true);
+    end;
+
+    local procedure AssertRefusedImage(Response: JsonObject; var HttpMock: Codeunit "LLM 65 HTTP Mock"; ExpectedReceived: Text)
+    begin
+        Assert.AreEqual(0, HttpMock.GetCallCount(), 'No prompt is sent for an unsupported image.');
+        Assert.AreEqual(0, HttpMock.GetUploadCount(), 'No upload is sent for an unsupported image.');
+        Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'No delete is sent for an unsupported image.');
+        Assert.AreEqual('', HttpMock.GetOperationSequence(), 'Unsupported images make no HTTP call.');
+        AssertCodedError(Response, 'InvalidParameter');
+        Assert.AreEqual('mimeType', Response.GetText('parameter'), 'The refusal names mimeType.');
+        Assert.AreEqual(ExpectedReceived, Response.GetText('received'), 'The refused MIME type is returned.');
+        Assert.IsTrue(Response.GetText('expected').Contains('image/png'), 'PNG is named as accepted.');
+        Assert.IsTrue(Response.GetText('expected').Contains('image/jpeg'), 'JPEG is named as accepted.');
+        Assert.IsTrue(Response.GetText('error').Contains('PNG'), 'The error names PNG.');
+        Assert.IsTrue(Response.GetText('error').Contains('JPEG'), 'The error names JPEG.');
+        AssertSecretAbsent(Response);
+    end;
+
+    local procedure ExecuteStored(FileExtension: Text; EntryNo: Integer; var HttpMock: Codeunit "LLM 65 HTTP Mock"; var Attachment: Record "Incoming Document Attachment"; ExpectSuccess: Boolean) Response: JsonObject
+    var
+        Model: Record "Bifrost Language Model ori";
+        RequestJson: JsonObject;
+        AttachmentJson: JsonObject;
+        ContentStream: OutStream;
+        RequestText: Text;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
+        Attachment.SetRange("Incoming Document Entry No.", EntryNo);
+        Attachment.SetRange("Line No.", 10000);
+        if Attachment.FindFirst() then
+            Attachment.Delete(false);
+        Attachment.Init();
+        Attachment."Incoming Document Entry No." := EntryNo;
+        Attachment."Line No." := 10000;
+        Attachment.Name := 'ZZTEST93';
+        Attachment."File Extension" := CopyStr(FileExtension, 1, MaxStrLen(Attachment."File Extension"));
+        Attachment.Content.CreateOutStream(ContentStream);
+        ContentStream.WriteText('hello');
+        Attachment.Insert(false);
+        RequestJson.Add('prompt', 'Hello from issue 93');
+        RequestJson.Add('roleCode', Model.Code);
+        AttachmentJson.Add('table', 'Incoming Document Attachment');
+        AttachmentJson.Add('systemId', Format(Attachment.SystemId, 0, 4));
+        RequestJson.Add('attachment', AttachmentJson);
+        RequestJson.WriteTo(RequestText);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::xAI, true), false, false);
+        BindSubscription(HttpMock);
+        Response := Execute(RequestText);
+        UnbindSubscription(HttpMock);
+        if ExpectSuccess then
+            Assert.AreEqual('Success', Response.GetText('status'), 'Stored file reached the provider.');
         Model.Delete(true);
     end;
 

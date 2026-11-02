@@ -106,7 +106,7 @@ codeunit 96028 "LangModel Test Tools Tests"
         MockProvider.SetContinueResponse('{"type":"reply","reply":"Done."}');
 
         // [WHEN] a chat turn runs against the mock model
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := ExecuteChat('{"code":"BIFT-MOCK","prompt":"Hello"}');
 
         // [THEN] the tool was called, its result went back to the provider and the reply is answered
         ResponseJson.WriteTo(ResponseText);
@@ -136,7 +136,7 @@ codeunit 96028 "LangModel Test Tools Tests"
         MockProvider.Reset();
         MockProvider.SetSendResponse('{"error":"BIFT bad key"}');
 
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := ExecuteChat('{"code":"BIFT-MOCK","prompt":"Hello"}');
 
         ResponseJson.WriteTo(ResponseText);
         Assert.AreEqual('Error', ResponseJson.GetText('status'), ResponseText);
@@ -156,7 +156,7 @@ codeunit 96028 "LangModel Test Tools Tests"
     begin
         // [SCENARIO] an unknown code is RecordNotFound on code
         Cleanup();
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello"}');
+        ResponseJson := ExecuteChat('{"code":"BIFT-MOCK","prompt":"Hello"}');
         ResponseJson.WriteTo(ResponseText);
         Assert.AreEqual('RecordNotFound', ResponseJson.GetText('code'), ResponseText);
         Assert.AreEqual('code', ResponseJson.GetText('parameter'), ResponseText);
@@ -278,6 +278,33 @@ codeunit 96028 "LangModel Test Tools Tests"
         Assert.AreEqual('UnknownParameter', ResponseJson.GetText('code'), 'The undeclared key is refused.');
         Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'Validation runs before the provider.');
         Cleanup();
+    end;
+
+    local procedure ExecuteChat(RequestBody: Text) ResponseJson: JsonObject
+    var
+        CodeToken: JsonToken;
+    begin
+        // Current Foundation returns ConfirmationRequired for irreversible Chat until expectedCount
+        // matches the default count of 1. Older Foundation has no gate, so the first response stands.
+        // Unknown-parameter refusals stay on the first call and are not confirmed.
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", RequestBody);
+        if not ResponseJson.Get('code', CodeToken) then
+            exit;
+        if not CodeToken.IsValue() then
+            exit;
+        if CodeToken.AsValue().AsText() <> 'ConfirmationRequired' then
+            exit;
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", WithExpectedCount(RequestBody));
+    end;
+
+    local procedure WithExpectedCount(RequestBody: Text) ConfirmedBody: Text
+    var
+        Request: JsonObject;
+    begin
+        Assert.IsTrue(Request.ReadFrom(RequestBody), RequestBody);
+        if not Request.Contains('expectedCount') then
+            Request.Add('expectedCount', 1);
+        Request.WriteTo(ConfirmedBody);
     end;
 
     local procedure Execute(MessageType: Enum "Message Type ori"; RequestBody: Text) ResponseJson: JsonObject
