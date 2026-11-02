@@ -200,8 +200,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
         LanguageModelGroupUser: Record User;
         Member: Record User;
         Nonmember: Record User;
-        TempGroups: Record "Security Group Buffer";
-        TempMembers: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         AccessControl: Record "Access Control";
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
@@ -254,8 +254,8 @@ codeunit 96038 "LangModel Wizard Users Tests"
     var
         GroupUser: Record User;
         Member: Record User;
-        TempGroups: Record "Security Group Buffer";
-        TempMembers: Record "Security Group Member Buffer";
+        TempGroups: Record "Security Group Buffer" temporary;
+        TempMembers: Record "Security Group Member Buffer" temporary;
         FoundationUsers: Dictionary of [Guid, Boolean];
         LanguageModelUsers: Dictionary of [Guid, Boolean];
         UserModels: Dictionary of [Guid, Code[20]];
@@ -278,20 +278,20 @@ codeunit 96038 "LangModel Wizard Users Tests"
         DeleteUser(Member);
     end;
 
-    local procedure AddGroup(var TempGroups: Record "Security Group Buffer"; GroupCode: Code[20]; GroupUser: Record User)
+    local procedure AddGroup(var Groups: Record "Security Group Buffer"; GroupCode: Code[20]; GroupUser: Record User)
     begin
-        TempGroups.Init();
-        TempGroups.Code := GroupCode;
-        TempGroups."Group User SID" := GroupUser."User Security ID";
-        TempGroups.Insert();
+        Groups.Init();
+        Groups.Code := GroupCode;
+        Groups."Group User SID" := GroupUser."User Security ID";
+        Groups.Insert();
     end;
 
-    local procedure AddMember(var TempMembers: Record "Security Group Member Buffer"; GroupCode: Code[20]; Member: Record User)
+    local procedure AddMember(var Members: Record "Security Group Member Buffer"; GroupCode: Code[20]; Member: Record User)
     begin
-        TempMembers.Init();
-        TempMembers."Security Group Code" := GroupCode;
-        TempMembers."User Security ID" := Member."User Security ID";
-        TempMembers.Insert();
+        Members.Init();
+        Members."Security Group Code" := GroupCode;
+        Members."User Security ID" := Member."User Security ID";
+        Members.Insert();
     end;
 
     local procedure CreateUser(var NewUser: Record User)

@@ -19,6 +19,7 @@ permissionset 10035398 "BIFROST LLM Chat ori"
         codeunit "Secret Store ori" = X,
         codeunit "LangModel Prov. Base ori" = X,
         codeunit "LangModel API Client ori" = X,
+        codeunit "LangModel File Handling ori" = X,
         codeunit "LangModel Chat Proxy ori" = X,
         codeunit "LangModel Turn Guard ori" = X,
         codeunit "Anthropic LangModel Proxy ori" = X,

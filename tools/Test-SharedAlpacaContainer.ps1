@@ -35,6 +35,36 @@ try {
     function Get-AlpacaContainer { param($Project,$Token,$BuildMode) Assert ($BuildMode -eq 'Default') 'Wrong lookup mode'; @([pscustomobject]@{Id='shared-123'}) }
     $override = Join-Path $temp 'PipelineInitialize.ps1'
     '$buildMode = $env:_buildMode' | Set-Content $override
+    $publishDir = Join-Path $temp 'Modules'
+    New-Item -ItemType Directory -Path $publishDir | Out-Null
+    $publishModule = Join-Path $publishDir 'Publish-AlpacaBcApp.psm1'
+    @'
+function Publish-AlpacaBcApp {
+    param($AppFile, $ContainerName)
+    $tries = 0
+    $maxTries = 5
+    $success = $false
+    while (!$success) {
+        try {
+            throw 'replace-me'
+        }
+        catch {
+            $errorMessage = "Error Publishing App '$appName'`n$_"
+
+            $tries = $tries + 1
+            if ($tries -ge $maxTries) {
+                Write-AlpacaError $errorMessage
+                throw "Error Publishing App '$appName'"
+            }
+            else {
+                Write-AlpacaError $errorMessage -WithoutGitHubAnnotation
+                Write-AlpacaOutput "Failed to publish app, retry after 15 sec"
+                Start-Sleep 15
+            }
+        }
+    }
+}
+'@ | Set-Content -LiteralPath $publishModule -Encoding utf8
     $env:_buildMode = 'Test'; $env:BIFROST_EXPECTED_CONTAINER_ID = 'shared-123'
     Initialize-BifrostSharedContainer -OverridePath $override -ScriptsPath $temp -BackendUrl 'https://example.invalid/'
     Assert ($env:_buildMode -eq 'Test') 'Test compilation/dependency mode was changed.'
@@ -74,7 +104,27 @@ try {
     $env:_buildMode = 'Default'
     Invoke-BifrostSharedPublish -Parameters @{appFile=@($mainAppPath)} -Publisher $publisher
     Assert ($calls.Count -eq 1) 'Default publishing was changed.'
-    Write-Host 'Shared Alpaca pipeline checks passed: plan validation, mode preservation, physical identity, compatibility guard, republish ordering, missing grant, and Default passthrough.'
+    $sameVersion = @"
+Error Publishing App 'Origo_Bifrost Language Models_28.0.2147483647.190.app'
+Status Code UnprocessableEntity : Unprocessable Entity
+A duplicate package ID is detected. Cannot publish an extension with packageId: '7b97dbdb-b7d4-432c-a16b-1fdc3a2c1ad7', appId: 'f1722684-0c24-4022-a2e0-0f63154aca76', name: 'Bifrost Language Models', publisher: 'Origo' and version: '28.0.2147483647.190', because the same package ID already exists in a published extension with packageId: '7b97dbdb-b7d4-432c-a16b-1fdc3a2c1ad7', appId: 'f1722684-0c24-4022-a2e0-0f63154aca76', name: 'Bifrost Language Models', publisher: 'Origo' and version: '28.0.2147483647.190'.
+"@
+    $differentVersion = $sameVersion.Replace("version: '28.0.2147483647.190', because", "version: '28.0.3.0', because")
+    $connection = @"
+Error Publishing App 'Origo_Bifrost Language Models_28.0.2147483647.190.app'
+Exception calling "GetResult" with "0" argument(s): "An error occurred while sending the request."
+"@
+    Assert ((Get-BifrostPublishRetryDecision -ErrorMessage $sameVersion -Tries 1 -MaxTries 5) -eq 'Success') 'A same-version 422 duplicate was not treated as already published.'
+    Assert ((Get-BifrostPublishRetryDecision -ErrorMessage $connection -Tries 0 -MaxTries 5) -eq 'Retry') 'A lost publish request was not retried.'
+    Assert ((Get-BifrostPublishRetryDecision -ErrorMessage $connection -Tries 4 -MaxTries 5) -eq 'Fail') 'A lost request on the last attempt was retried forever.'
+    Assert ((Get-BifrostPublishRetryDecision -ErrorMessage $differentVersion -Tries 0 -MaxTries 5) -eq 'Retry') 'A different-version duplicate was accepted immediately.'
+    Assert ((Get-BifrostPublishRetryDecision -ErrorMessage $differentVersion -Tries 4 -MaxTries 5) -eq 'Fail') 'A different-version duplicate was treated as success.'
+    $patched = [IO.File]::ReadAllText($publishModule)
+    Assert ($patched.Contains('Already published: 422 duplicate package ID for the same version. Stopping retries.')) 'The publish retry does not stop for a same-version duplicate.'
+    Assert (([regex]::Matches($patched, 'Get-BifrostPublishRetryDecision')).Count -eq 1) 'The publish retry adaptation was not applied once.'
+    Update-BifrostAlpacaPublishRetry -ScriptsPath $temp
+    Assert (([regex]::Matches([IO.File]::ReadAllText($publishModule), 'Get-BifrostPublishRetryDecision')).Count -eq 1) 'Adapting the publish retry twice duplicated it.'
+    Write-Host 'Shared Alpaca pipeline checks passed: plan validation, mode preservation, physical identity, compatibility guard, republish ordering, missing grant, Default passthrough, and same-version duplicate publish.'
 } finally {
     foreach ($name in $saved.Keys) { [Environment]::SetEnvironmentVariable($name,$saved[$name]) }
     $resolved = (Resolve-Path -LiteralPath $temp).Path
