@@ -115,7 +115,7 @@ codeunit 96040 "LangModel Wizard Reg Tests"
     local procedure InitializeRestrictedCaller()
     begin
         // Standard supported BC sign-in/enumeration baseline, including platform event subscribers.
-        // It grants neither this subscriber nor any Language Models business codeunit/page.
+        // No Language Models or Bifrost business role is added to that platform baseline.
         LowerPermissions.SetExactPermissionSet('D365 BASIC');
     end;
 
@@ -148,8 +148,11 @@ codeunit 96040 "LangModel Wizard Reg Tests"
         AssistedSetup.OpenView();
         if AssistedSetup.First() then
             repeat
-                ObservedTitles.AppendLine(AssistedSetup.Name.Value);
-                if AssistedSetup.Name.Value = ExpectedTitle then
+                // Group rows start collapsed; expand them to enumerate actual wizard metadata.
+                if AssistedSetup.TranslatedName.Value = '' then
+                    AssistedSetup.Expand(true);
+                ObservedTitles.AppendLine(AssistedSetup.TranslatedName.Value);
+                if AssistedSetup.TranslatedName.Value = ExpectedTitle then
                     MatchingEntries += 1;
             until not AssistedSetup.Next();
         AssistedSetup.Close();
