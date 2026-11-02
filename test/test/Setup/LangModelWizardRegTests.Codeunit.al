@@ -112,9 +112,9 @@ codeunit 96040 "LangModel Wizard Reg Tests"
 
     local procedure InitializeRestrictedCaller()
     begin
-        // This fixture includes Microsoft Guided Experience - View and indirect NAV App Setting read.
+        // Standard supported BC sign-in/enumeration baseline, including platform event subscribers.
         // It grants neither this subscriber nor any Language Models business codeunit/page.
-        LowerPermissions.SetExactPermissionSet('LM Setup Base ori');
+        LowerPermissions.SetExactPermissionSet('D365 BASIC');
     end;
 
     local procedure VerifyRegistration(LanguageId: Integer; ExpectedTitle: Text)
