@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-02) - normalise file MIME types (#96)
+
+- Codeunit 10035429 `LangModel File Handling ori` trims the file MIME type, ignores letter case, and drops parameters after `;` before the shared image check and the size checks. ` image/PNG ` and `image/jpeg; charset=binary` stay inline. ` image/GIF ` and `IMAGE/WEBP` stay refused on OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. The normalized type is written back onto the file and is what those providers send. `image/jpg` stays refused. GIF and WebP are not newly accepted. `AcceptFiles` keeps the by-value payload signature.
+- Codeunit 10035396 `LLM Prompt Compl Impl ori` describes that normalisation in the prompt notes and on the `mimeType` parameter, and keeps the 100 MB total from main. No new image type is accepted.
+- Test codeunit 96041 `LM 96 MIME Tests` covers padded, upper-case and parameterised accepted and refused types, and the type sent on each file-accepting provider. Main already uses 96040 for `LangModel Wizard Reg Tests`.
+
 ### Fixed (2026-11-02) - Assisted Setup metadata permissions (#105)
 
 - Codeunit 10035426 `LangModel Wizard Reg. ori` grants inherent Execute permissions and entitlements only to its metadata registration callback. Assisted Setup can enumerate the Language Models wizard without granting wizard execution or business administration. Both event skip flags remain false.
