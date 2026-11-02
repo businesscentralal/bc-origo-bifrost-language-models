@@ -83,7 +83,7 @@ codeunit 96040 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::Anthropic, 'Image/JPEG; charset=binary', '"media_type":"image/jpeg"', '/9j/4AAQ=', false);
+        AssertSentMime("Bifrost LangModel Prov. ori"::Anthropic, 'Image/JPEG; charset=binary', 'image/jpeg', '/9j/4AAQ=', false);
     end;
 
     [Test]
@@ -91,7 +91,7 @@ codeunit 96040 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::Google, ' IMAGE/PNG ', '"mime_type":"image/png"', 'iVBORw0KGgo=', false);
+        AssertSentMime("Bifrost LangModel Prov. ori"::Google, ' IMAGE/PNG ', 'image/png', 'iVBORw0KGgo=', false);
     end;
 
     [Test]
@@ -143,7 +143,7 @@ codeunit 96040 "LM 96 MIME Tests"
         Assert.AreEqual('Success', Response.GetText('status'), 'Normalised file is accepted.');
         RequestBody := HttpMock.GetRequestBody();
         Assert.IsFalse(RequestBody.Contains('charset=binary'), 'MIME parameters are not sent.');
-        Assert.IsFalse(RequestBody.Contains(MimeType), 'The raw MIME type is not sent.');
+        Assert.AreEqual(0, StrPos(RequestBody, MimeType), 'The raw MIME type is not sent.');
         if ExpectUpload then begin
             Assert.AreEqual(ExpectedFragment, HttpMock.GetUploadMime(), 'The upload uses the normalized MIME type.');
             Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The document is uploaded once.');
@@ -151,6 +151,10 @@ codeunit 96040 "LM 96 MIME Tests"
             Assert.IsFalse(RequestBody.Contains(FileData), 'Document bytes stay out of the prompt.');
         end else begin
             Assert.IsTrue(RequestBody.Contains(ExpectedFragment), 'The normalized MIME type is sent.');
+            if ProviderType = "Bifrost LangModel Prov. ori"::Anthropic then
+                Assert.IsTrue(RequestBody.Contains('media_type'), 'Anthropic sends media_type.');
+            if ProviderType = "Bifrost LangModel Prov. ori"::Google then
+                Assert.IsTrue(RequestBody.Contains('mime_type'), 'Google sends mime_type.');
             Assert.AreEqual(0, HttpMock.GetUploadCount(), 'An inline image is not uploaded.');
         end;
         Model.Delete(true);
