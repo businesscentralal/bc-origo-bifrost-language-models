@@ -98,16 +98,19 @@ codeunit 96052 "LM98 Probe Tests ori"
         TestContext: Codeunit "Bifrost LangModel Test Ctx ori";
         Result: JsonObject;
         Request: JsonObject;
+        BootstrapResult: JsonObject;
         ResultText: Text;
-        FailureText: Text;
-        Succeeded: Boolean;
         OwnedId: Guid;
     begin
         // Test role changes are in-memory test permissions, never Access Control writes.
         // Fixture creation/cleanup use the test administrator; the measured path resets to the exact three sets.
         LowerPermissions.SetOutsideO365Scope();
-        if Model.Get('BIFT-LM98-MOCK') then
-            Error('LM98 mock fixture collision; retain the existing record.');
+        TestContext.ClearLanguageModel();
+        if Model.Get('BIFT-LM98-MOCK') then begin
+            if (Model."Chat Provider" <> Model."Chat Provider"::Mock) or (Model.Model <> 'lm98-native-mock') then
+                Error('LM98 mock fixture collision; retain the existing record.');
+            Model.Delete(false);
+        end;
         Model.Init();
         Model.Code := 'BIFT-LM98-MOCK';
         Model."Chat Provider" := Model."Chat Provider"::Mock;
@@ -124,30 +127,21 @@ codeunit 96052 "LM98 Probe Tests ori"
         LowerPermissions.SetExactPermissionSet(BaseRole);
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
-        ClearLastError();
-        Succeeded := TryPermissionLoop(Request, Result);
-        FailureText := GetLastErrorText();
+        // Direct call. A TryFunction strips inherent permissions on "Setup ori" and refuses INSERT,
+        // so it cannot host this loop (#110).
+        BootstrapResult := Probe.NestedTool();
+        if BootstrapResult.GetBoolean('nestedToolError') then
+            Error(BootstrapResult.GetText('bcError'));
+        Result := Probe.Live(Request);
         LowerPermissions.SetOutsideO365Scope();
         TestContext.ClearLanguageModel();
         if Model.GetBySystemId(OwnedId) then
             Model.Delete(false);
         Mock.Reset();
-        Commit(); // Retain cleanup even when the measured permission assertion fails.
-        Assert.IsTrue(Succeeded, 'Exact role combination ' + BaseRole + ': ' + FailureText);
+        Commit();
         Result.WriteTo(ResultText);
         Assert.AreEqual('reply', Result.GetText('stopReason'), ResultText);
         Assert.AreEqual(1, Result.GetInteger('toolCalls'), ResultText);
         Assert.AreEqual(0, Result.GetInteger('toolErrors'), ResultText);
-    end;
-
-    [TryFunction]
-    local procedure TryPermissionLoop(Request: JsonObject; var Result: JsonObject)
-    var
-        BootstrapResult: JsonObject;
-    begin
-        BootstrapResult := Probe.NestedTool();
-        if BootstrapResult.GetBoolean('nestedToolError') then
-            Error(BootstrapResult.GetText('bcError'));
-        Result := Probe.Live(Request);
     end;
 }
