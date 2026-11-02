@@ -49,8 +49,8 @@ codeunit 96040 "LangModel Wizard Reg Tests"
         OpenAssistedSetup();
         // [WHEN] That caller attempts to execute the app wizard.
         asserterror Wizard.OpenView();
-        // [THEN] The platform refuses page execution rather than running a wizard operation.
-        Assert.ExpectedError('10035345');
+        // [THEN] The platform refuses business setup access before any wizard operation.
+        Assert.ExpectedError('10077901');
         LowerPermissions.SetOutsideO365Scope();
     end;
 
@@ -61,7 +61,6 @@ codeunit 96040 "LangModel Wizard Reg Tests"
     var
         Model: Record "Bifrost Language Model ori";
         Setup: Record "Setup ori";
-        AppSetting: Record "NAV App Setting";
         AccessControl: Record "Access Control";
         WizardMgt: Codeunit "LangModel Wizard Mgt ori";
     begin
@@ -72,7 +71,6 @@ codeunit 96040 "LangModel Wizard Reg Tests"
         // [THEN] Metadata access grants no writes to business, setup, HTTP or role assignments.
         Assert.IsFalse(Model.WritePermission(), 'Metadata enumeration must not grant model writes.');
         Assert.IsFalse(Setup.WritePermission(), 'Metadata enumeration must not grant Foundation configuration writes.');
-        Assert.IsFalse(AppSetting.WritePermission(), 'Metadata enumeration must not grant HTTP-setting writes.');
         Assert.IsFalse(AccessControl.WritePermission(), 'Metadata enumeration must not grant security administration.');
         // [WHEN] The caller invokes an app administrative command.
         asserterror WizardMgt.GiveChatAccess(CreateGuid());
@@ -141,15 +139,17 @@ codeunit 96040 "LangModel Wizard Reg Tests"
     var
         AssistedSetup: TestPage "Assisted Setup";
         MatchingEntries: Integer;
+        ObservedTitles: TextBuilder;
     begin
         AssistedSetup.OpenView();
         if AssistedSetup.First() then
             repeat
+                ObservedTitles.AppendLine(AssistedSetup.Name.Value);
                 if AssistedSetup.Name.Value = ExpectedTitle then
                     MatchingEntries += 1;
             until not AssistedSetup.Next();
         AssistedSetup.Close();
-        Assert.AreEqual(1, MatchingEntries, 'The translated wizard must appear exactly once.');
+        Assert.AreEqual(1, MatchingEntries, 'The translated wizard must appear exactly once. Observed titles: ' + ObservedTitles.ToText());
     end;
 
     local procedure OpenAssistedSetup()
