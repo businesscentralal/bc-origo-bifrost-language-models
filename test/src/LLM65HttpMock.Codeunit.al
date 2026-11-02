@@ -34,6 +34,7 @@ codeunit 96033 "LLM 65 HTTP Mock"
         LastDeleteFailureCode: Text;
         LastDeleteFailureFileId: Text;
         MaxDecodedBytesOverride: Integer;
+        MaxTotalDecodedBytesOverride: Integer;
 
     /// <summary>Configures one synthetic prompt result and resets file-transport observations.</summary>
     procedure Configure(NewStatus: Integer; NewBody: Text; NewBlocked: Boolean; NewThrow: Boolean)
@@ -63,12 +64,19 @@ codeunit 96033 "LLM 65 HTTP Mock"
         LastDeleteFailureCode := '';
         LastDeleteFailureFileId := '';
         MaxDecodedBytesOverride := 0;
+        MaxTotalDecodedBytesOverride := 0;
     end;
 
     /// <summary>Overrides the shared decoded file-size cap for one bound test. Zero restores the default.</summary>
     procedure ConfigureMaxDecodedBytes(NewMaxBytes: Integer)
     begin
         MaxDecodedBytesOverride := NewMaxBytes;
+    end;
+
+    /// <summary>Overrides the shared total decoded size cap for one bound test. Zero restores the 100 MB default.</summary>
+    procedure ConfigureMaxTotalDecodedBytes(NewMaxBytes: Integer)
+    begin
+        MaxTotalDecodedBytesOverride := NewMaxBytes;
     end;
 
     /// <summary>Configures the next synthetic file-upload result.</summary>
@@ -241,5 +249,12 @@ codeunit 96033 "LLM 65 HTTP Mock"
     begin
         if MaxDecodedBytesOverride > 0 then
             MaxBytes := MaxDecodedBytesOverride;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel File Handling ori", 'OnResolveMaxTotalDecodedFileBytes', '', false, false)]
+    local procedure OnResolveMaxTotalDecodedFileBytes(var MaxBytes: Integer)
+    begin
+        if MaxTotalDecodedBytesOverride > 0 then
+            MaxBytes := MaxTotalDecodedBytesOverride;
     end;
 }

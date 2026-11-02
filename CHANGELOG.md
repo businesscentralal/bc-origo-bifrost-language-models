@@ -10,6 +10,12 @@ All notable changes to Bifrost Language Models are documented here.
 - A separate OnPrem native harness under `tools/lm98-live` (table 96050 and codeunits 96053–96057) creates isolated synthetic posting fixtures, runs fresh-session R1 cells and bounds the authorized OpenAI/Anthropic trial to 40 actual HTTP attempts. It retains sanitized measurements and fixture identities; runtime outcomes and the final GO/NO-GO remain independent verification work. Product and normal test targets and CI configuration are unchanged.
 - Rename temporary security-group buffer locals in codeunit 10035427 and test codeunit 96038 to satisfy existing AA0073 analyzer requirements without changing wizard behavior or public signatures. No shipping provider/interface or Foundation change is included.
 
+### Added (2026-11-02) - total size cap for attached prompt files (#95)
+
+- Codeunit 10035429 `LangModel File Handling ori` refuses a prompt before any upload or provider call when the decoded size of all attached files together exceeds 104857600 bytes (100 MB). That total is five times the unchanged 20 MB single-file limit. A single file over 20 MB still uses the existing per-file refusal. The measured total and the cap are both named on the error.
+- Codeunit 10035410 `LangModel Prov. Base ori` returns that refusal as `InvalidParameter` on `files`. Codeunit 10035396 `LLM Prompt Compl Impl ori` accepts an optional `files` array when `file` is absent, and the prompt notes, file help and errors chapter describe the 100 MB total. English and Icelandic labels are kept together.
+- Test codeunits 96033 `LLM 65 HTTP Mock` and 96034 `LLM 65 Prompt Tests` cover a total under the cap, exactly at the cap and over the cap for OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. Over the cap makes no provider call and no upload. The tests resolve a small cap through the existing file-policy event so they do not allocate 100 MB; they also assert the published 100 MB default.
+
 ### Fixed (2026-10-31) - confirm irreversible test chat (#93)
 
 - Test codeunit 96028 `LangModel Test Tools Tests` resends `Test.LanguageModel.Chat` with `expectedCount` 1 when Foundation returns `ConfirmationRequired`. The default counter for an empty subject is 1. An unknown parameter is still refused on the first call and is not confirmed. Product objects are unchanged.
