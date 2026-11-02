@@ -716,6 +716,29 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.AreEqual(5, FileHandling.DecodedByteCount('aGVsbG8='), 'hello is 5 decoded bytes.');
         Assert.IsFalse(FileHandling.IsOversize('aGVsbG8='), 'A small PDF is within the default cap.');
         Assert.AreEqual(20971520, FileHandling.MaxDecodedFileBytes(), 'The shared cap is 20 MB.');
+        Assert.AreEqual(104857600, FileHandling.MaxTotalDecodedFileBytes(), 'The shared total cap is 100 MB.');
+        Assert.IsTrue(FileHandling.MaxTotalDecodedFileBytes() >= FileHandling.MaxDecodedFileBytes(), 'The total cap is not below the single-file cap.');
+    end;
+
+    /// <summary>Several files under the resolved total cap reach every file-accepting provider.</summary>
+    [Test]
+    procedure AC95_UnderTotalCap_ReachesProvider()
+    begin
+        VerifyFilesTotalForEveryProvider(1);
+    end;
+
+    /// <summary>Several files exactly at the resolved total cap reach every file-accepting provider.</summary>
+    [Test]
+    procedure AC95_ExactTotalCap_ReachesProvider()
+    begin
+        VerifyFilesTotalForEveryProvider(2);
+    end;
+
+    /// <summary>Several files over the resolved total cap are refused before upload or a provider call.</summary>
+    [Test]
+    procedure AC95_OverTotalCap_RefusesBeforeHttp()
+    begin
+        VerifyFilesTotalForEveryProvider(3);
     end;
 
     /// <summary>A stored PNG follows the same inline image path.</summary>
@@ -1467,6 +1490,89 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Model.Insert(true);
         KeyValue := Format(FakeKeyTok);
         Secrets.SetUserKey(Model.Code, KeyValue);
+    end;
+
+    local procedure VerifyFilesTotalForEveryProvider(CaseKind: Integer)
+    begin
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::OpenAI, CaseKind);
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::"Azure OpenAI", CaseKind);
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::"Custom LLM", CaseKind);
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::Anthropic, CaseKind);
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::Google, CaseKind);
+        VerifyFilesTotal("Bifrost LangModel Prov. ori"::xAI, CaseKind);
+    end;
+
+    local procedure VerifyFilesTotal(ProviderType: Enum "Bifrost LangModel Prov. ori"; CaseKind: Integer)
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        RequestJson: JsonObject;
+        Files: JsonArray;
+        Response: JsonObject;
+        RequestText: Text;
+        FirstData: Text;
+        SecondData: Text;
+        ExpectSuccess: Boolean;
+    begin
+        FirstData := 'aGVsbG8=';
+        case CaseKind of
+            1:
+                begin
+                    SecondData := 'YQ==';
+                    ExpectSuccess := true;
+                end;
+            2:
+                begin
+                    SecondData := 'YWJj';
+                    ExpectSuccess := true;
+                end;
+            else begin
+                SecondData := 'aGVsbG8=';
+                ExpectSuccess := false;
+            end;
+        end;
+        CreateModel(Model, ProviderType);
+        RequestJson.Add('prompt', 'Hello from issue 95');
+        RequestJson.Add('roleCode', Model.Code);
+        Files.Add(FileObject('issue95-a.pdf', FirstData));
+        Files.Add(FileObject('issue95-b.pdf', SecondData));
+        RequestJson.Add('files', Files);
+        RequestJson.WriteTo(RequestText);
+        HttpMock.Configure(200, SuccessBody(ProviderType, true), false, false);
+        HttpMock.ConfigureMaxTotalDecodedBytes(8);
+        BindSubscription(HttpMock);
+        Response := Execute(RequestText);
+        UnbindSubscription(HttpMock);
+        if ExpectSuccess then begin
+            Assert.AreEqual('Success', Response.GetText('status'), Format(ProviderType) + ' accepts a total within the cap.');
+            Assert.AreEqual(1, HttpMock.GetCallCount(), Format(ProviderType) + ' sends one prompt.');
+            if ProviderType = "Bifrost LangModel Prov. ori"::xAI then begin
+                Assert.AreEqual(2, HttpMock.GetUploadCount(), 'xAI uploads each document.');
+                Assert.AreEqual(2, HttpMock.GetDeleteCount(), 'xAI deletes each uploaded document.');
+            end else begin
+                Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' keeps the files inline.');
+                Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' has nothing to delete.');
+            end;
+        end else begin
+            Assert.AreEqual(0, HttpMock.GetCallCount(), Format(ProviderType) + ' sends no prompt over the total cap.');
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' uploads nothing over the total cap.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' deletes nothing over the total cap.');
+            Assert.AreEqual('', HttpMock.GetOperationSequence(), Format(ProviderType) + ' makes no HTTP call.');
+            AssertCodedError(Response, 'InvalidParameter');
+            Assert.AreEqual('files', Response.GetText('parameter'), Format(ProviderType) + ' names files.');
+            Assert.IsTrue(Response.GetText('error').Contains('total 10 bytes'), Format(ProviderType) + ' names the total.');
+            Assert.IsTrue(Response.GetText('error').Contains('8 byte cap'), Format(ProviderType) + ' names the cap.');
+            Assert.AreEqual('10', Response.GetText('received'), Format(ProviderType) + ' returns the measured total.');
+            AssertSecretAbsent(Response);
+        end;
+        Model.Delete(true);
+    end;
+
+    local procedure FileObject(FileName: Text; FileData: Text) FileJson: JsonObject
+    begin
+        FileJson.Add('fileName', FileName);
+        FileJson.Add('mimeType', 'application/pdf');
+        FileJson.Add('data', FileData);
     end;
 
     local procedure Request(ModelCode: Code[20]; WithSystem: Boolean; WithFile: Boolean) RequestText: Text
