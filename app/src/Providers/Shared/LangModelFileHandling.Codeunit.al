@@ -2,9 +2,11 @@ namespace Origo.Bifrost.LanguageModels;
 
 /// <summary>
 /// Shared prompt-file policy for every file-accepting language-model provider.
-/// PNG and JPEG stay inline. Other image types and oversize files are refused
-/// before HTTP. A document that cannot be sent inline is uploaded to the named
-/// provider's file store, referenced by file id, and deleted after the call
+/// The MIME type is trimmed, compared without letter case, and parameters after
+/// a semicolon are ignored. PNG and JPEG stay inline. Other image types and
+/// oversize files are refused before HTTP. The normalized type is what is sent.
+/// A document that cannot be sent inline is uploaded to the named provider's
+/// file store, referenced by file id, and deleted after the call
 /// (STE-0002: customer bytes leave Business Central only for that provider, and
 /// only for the duration of the prompt).
 /// </summary>
@@ -36,19 +38,39 @@ codeunit 10035429 "LangModel File Handling ori"
         exit(104857600);
     end;
 
+    /// <summary>
+    /// Trims the MIME type, drops parameters after the first semicolon, and lowercases the type.
+    /// </summary>
+    /// <param name="MimeType">The MIME type as supplied on the file.</param>
+    /// <returns>The type sent to the provider, without spaces or parameters.</returns>
+    procedure NormalizeMimeType(MimeType: Text): Text
+    var
+        Trimmed: Text;
+        ParameterAt: Integer;
+    begin
+        Trimmed := TrimMimeToken(MimeType);
+        ParameterAt := StrPos(Trimmed, ';');
+        if ParameterAt > 0 then
+            Trimmed := TrimMimeToken(CopyStr(Trimmed, 1, ParameterAt - 1));
+        exit(LowerCase(Trimmed));
+    end;
+
     /// <summary>True when the MIME type is sent inline as an image under the shared policy.</summary>
     procedure IsInlineImageMime(MimeType: Text): Boolean
     var
         Normalized: Text;
     begin
-        Normalized := LowerCase(MimeType);
+        Normalized := NormalizeMimeType(MimeType);
         exit((Normalized = 'image/png') or (Normalized = 'image/jpeg'));
     end;
 
     /// <summary>True when the MIME type is an image the shared policy refuses before HTTP.</summary>
     procedure IsRefusedImageMime(MimeType: Text): Boolean
+    var
+        Normalized: Text;
     begin
-        exit(LowerCase(MimeType).StartsWith('image/') and not IsInlineImageMime(MimeType));
+        Normalized := NormalizeMimeType(MimeType);
+        exit(Normalized.StartsWith('image/') and not IsInlineImageMime(Normalized));
     end;
 
     /// <summary>True when decoded file bytes exceed the resolved language-model size limit.</summary>
@@ -95,7 +117,7 @@ codeunit 10035429 "LangModel File Handling ori"
 
     /// <summary>
     /// Shared pre-HTTP gate for every file-accepting provider.
-    /// Refuses a non-PNG/JPEG image and an oversize file. Does not upload.
+    /// Normalizes each file MIME type first, then refuses a non-PNG/JPEG image, a single oversize file, and a total over the resolved cap. Does not upload.
     /// </summary>
     [NonDebuggable]
     procedure AcceptFiles(PayloadObject: JsonObject; var ResultText: Text): Boolean
@@ -105,6 +127,7 @@ codeunit 10035429 "LangModel File Handling ori"
         TotalBytes: BigInteger;
         CapBytes: BigInteger;
     begin
+        ApplyNormalizedMimeTypes(PayloadObject);
         UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
         if UnsupportedMime <> '' then begin
             ProviderBase.BuildUnsupportedImageRefusal(UnsupportedMime).WriteTo(ResultText);
@@ -155,7 +178,7 @@ codeunit 10035429 "LangModel File Handling ori"
             Clear(FileBlock);
             if IsInlineImageMime(MimeType) then begin
                 FileBlock.Add('type', 'input_image');
-                FileBlock.Add('image_url', StrSubstNo(DataUriTok, LowerCase(MimeType), GetJsonText(FileObj, 'data')));
+                FileBlock.Add('image_url', StrSubstNo(DataUriTok, NormalizeMimeType(MimeType), GetJsonText(FileObj, 'data')));
             end else begin
                 UploadResponse := ApiClient.UploadProviderFile(
                     ProviderBase.JoinEndpointUrl(BaseUrl, FilesPathTok),
@@ -359,6 +382,50 @@ codeunit 10035429 "LangModel File Handling ori"
         if MaxBytes < 1 then
             exit(MaxDecodedFileBytes());
         exit(MaxBytes);
+    end;
+
+    local procedure ApplyNormalizedMimeTypes(PayloadObject: JsonObject)
+    var
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        MimeToken: JsonToken;
+        FileObj: JsonObject;
+        NormalizedFiles: JsonArray;
+        NormalizedMime: Text;
+    begin
+        if not PayloadObject.Get('files', FilesToken) then
+            exit;
+        if not FilesToken.IsArray() then
+            exit;
+        foreach FileToken in FilesToken.AsArray() do
+            if FileToken.IsObject() then begin
+                FileObj := FileToken.AsObject();
+                if FileObj.Get('mimeType', MimeToken) then
+                    if MimeToken.IsValue() then begin
+                        NormalizedMime := NormalizeMimeType(MimeToken.AsValue().AsText());
+                        FileObj.Replace('mimeType', NormalizedMime);
+                    end;
+                NormalizedFiles.Add(FileObj);
+            end else
+                NormalizedFiles.Add(FileToken);
+        PayloadObject.Replace('files', NormalizedFiles);
+    end;
+
+    local procedure TrimMimeToken(Value: Text): Text
+    var
+        Whitespace: Text;
+        TabChar: Char;
+        LineFeed: Char;
+        CarriageReturn: Char;
+    begin
+        TabChar := 9;
+        LineFeed := 10;
+        CarriageReturn := 13;
+        Whitespace := ' ';
+        Whitespace += TabChar;
+        Whitespace += LineFeed;
+        Whitespace += CarriageReturn;
+        exit(DelChr(Value, '<>', Whitespace));
     end;
 
     local procedure GetJsonText(JObject: JsonObject; PropertyName: Text): Text

@@ -9,6 +9,12 @@ All notable changes to Bifrost Language Models are documented here.
 - Codeunit 10035382 `LangModel Chat Provider ori` promotes the caller's existing indirect read on Foundation `User Setup ori` while the codeunit runs, so `BIFROST API ori` and `BIFROST Read ori` can resolve the assigned language model and system prompt. No permission set or permission-set extension gains tabledata on `Setup ori` or `User Setup ori`. Request Debug Mode is still read through `Setup ori`.GetRequestDebugMode.
 - The mock loop in codeunit 96051 `LM98 Probe ori` is no longer inside `TryLive`. A TryFunction would strip inherent Setup permissions and refuse the pipeline's inserts. Codeunit 96052 still measures the three role combinations through codeunit 96058, so a native permission failure is returned and the fixture is still cleaned up. The failure text includes the call stack. The live-provider path still swallows provider errors without copying the response body. No message contract change.
 
+### Fixed (2026-11-02) - normalise file MIME types (#96)
+
+- Codeunit 10035429 `LangModel File Handling ori` trims the file MIME type, ignores letter case, and drops parameters after `;` before the shared image check and the size checks. ` image/PNG ` and `image/jpeg; charset=binary` stay inline. ` image/GIF ` and `IMAGE/WEBP` stay refused on OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. The normalized type is written back onto the file and is what those providers send. `image/jpg` stays refused. GIF and WebP are not newly accepted. `AcceptFiles` keeps the by-value payload signature.
+- Codeunit 10035396 `LLM Prompt Compl Impl ori` describes that normalisation in the prompt notes and on the `mimeType` parameter, and keeps the 100 MB total from main. No new image type is accepted.
+- Test codeunit 96041 `LM 96 MIME Tests` covers padded, upper-case and parameterised accepted and refused types, and the type sent on each file-accepting provider. Main already uses 96040 for `LangModel Wizard Reg Tests`.
+
 ### Fixed (2026-11-02) - Assisted Setup metadata permissions (#105)
 
 - Codeunit 10035426 `LangModel Wizard Reg. ori` grants inherent Execute permissions and entitlements only to its metadata registration callback. Assisted Setup can enumerate the Language Models wizard without granting wizard execution or business administration. Both event skip flags remain false.
