@@ -7,6 +7,8 @@ using System.Media;
 codeunit 10035426 "LangModel Wizard Reg. ori"
 {
     Access = Internal;
+    InherentPermissions = X;
+    InherentEntitlements = X;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Guided Experience", OnRegisterAssistedSetup, '', false, false)]
     local procedure RegisterWizard()
