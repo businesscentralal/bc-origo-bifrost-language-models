@@ -10,6 +10,11 @@ All notable changes to Bifrost Language Models are documented here.
 - Codeunit 10035396 `LLM Prompt Compl Impl ori` describes that normalisation in the prompt notes and on the `mimeType` parameter, and keeps the 100 MB total from main. No new image type is accepted.
 - Test codeunit 96040 `LM 96 MIME Tests` covers padded, upper-case and parameterised accepted and refused types, and the type sent on each file-accepting provider.
 
+### Fixed (2026-11-02) - Assisted Setup metadata permissions (#105)
+
+- Codeunit 10035426 `LangModel Wizard Reg. ori` grants inherent Execute permissions and entitlements only to its metadata registration callback. Assisted Setup can enumerate the Language Models wizard without granting wizard execution or business administration. Both event skip flags remain false.
+- Test codeunit 96040 `LangModel Wizard Reg Tests` exercises the real Assisted Setup page and publisher with a restricted platform-only caller, checks English/Icelandic metadata and repeated registration, and verifies configuration preservation and business/admin refusals.
+
 ### Added (2026-11-02) - total size cap for attached prompt files (#95)
 
 - Codeunit 10035429 `LangModel File Handling ori` refuses a prompt before any upload or provider call when the decoded size of all attached files together exceeds 104857600 bytes (100 MB). That total is five times the unchanged 20 MB single-file limit. A single file over 20 MB still uses the existing per-file refusal. The measured total and the cap are both named on the error.
