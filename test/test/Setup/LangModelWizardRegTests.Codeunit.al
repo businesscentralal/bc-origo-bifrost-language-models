@@ -62,20 +62,24 @@ codeunit 96040 "LangModel Wizard Reg Tests"
         Model: Record "Bifrost Language Model ori";
         Setup: Record "Setup ori";
         AccessControl: Record "Access Control";
+        AppSetting: Record "NAV App Setting";
         WizardMgt: Codeunit "LangModel Wizard Mgt ori";
+        HadHttpWritePermission: Boolean;
     begin
         // Story #105, AC05 | Time: independent | Risk: refused operations only
         // [GIVEN] No SUPER, Bifrost or Language Models role is assigned to the caller.
         InitializeRestrictedCaller();
+        HadHttpWritePermission := AppSetting.WritePermission();
         OpenAssistedSetup();
         // [THEN] Metadata access grants no writes to business, setup, HTTP or role assignments.
         Assert.IsFalse(Model.WritePermission(), 'Metadata enumeration must not grant model writes.');
         Assert.IsFalse(Setup.WritePermission(), 'Metadata enumeration must not grant Foundation configuration writes.');
         Assert.IsFalse(AccessControl.WritePermission(), 'Metadata enumeration must not grant security administration.');
+        Assert.AreEqual(HadHttpWritePermission, AppSetting.WritePermission(), 'Registration must not increase the caller''s platform HTTP-setting permissions.');
         // [WHEN] The caller invokes an app administrative command.
         asserterror WizardMgt.GiveChatAccess(CreateGuid());
-        // [THEN] Execute permission is refused before any target user or assignment is touched.
-        Assert.ExpectedError('10035427');
+        // [THEN] Security administration is refused before any target user or assignment is touched.
+        Assert.ExpectedError('SUPER');
         LowerPermissions.SetOutsideO365Scope();
     end;
 
