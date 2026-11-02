@@ -693,6 +693,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3800681336" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The attached files total %1 bytes, which is over the %2 byte cap.</source>
+          <target>Viðhengdu skrárnar eru samtals %1 bæti, sem er yfir hámarkinu %2 bæti.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Viðhengdu skrárnar eru samtals %1 bæti, sem er yfir hámarkinu %2 bæti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType TotalOversizeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3887163657" size-unit="char" translate="yes" xml:space="preserve">
+          <source>at most %1 bytes in total</source>
+          <target>í mesta lagi %1 bæti samtals</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=í mesta lagi %1 bæti samtals</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType TotalOversizeExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 276398792" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove or reduce files so the total decoded size is within the cap. No request was sent.</source>
+          <target>Fjarlægðu eða minnkaðu skrár svo heildarstærðin sé innan hámarksins. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjarlægðu eða minnkaðu skrár svo heildarstærðin sé innan hámarksins. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType TotalOversizeNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3895128071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The decoded size of all attached files together is larger than the total file size cap.</source>
+          <target>Afkóðuð stærð allra viðhengdra skráa saman er stærri en heildarstærðartakmörkin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Afkóðuð stærð allra viðhengdra skráa saman er stærri en heildarstærðartakmörkin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType TotalOversizeWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1700563337" size-unit="char" translate="yes" xml:space="preserve">
           <source>This language model accepts only PNG and JPEG images.</source>
           <target>Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</target>
