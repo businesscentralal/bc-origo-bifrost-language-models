@@ -110,7 +110,7 @@ codeunit 10035429 "LangModel File Handling ori"
     /// Normalizes each file MIME type, then refuses a non-PNG/JPEG image and an oversize file. Does not upload.
     /// </summary>
     [NonDebuggable]
-    procedure AcceptFiles(var PayloadObject: JsonObject; var ResultText: Text): Boolean
+    procedure AcceptFiles(PayloadObject: JsonObject; var ResultText: Text): Boolean
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         UnsupportedMime: Text;
@@ -327,7 +327,7 @@ codeunit 10035429 "LangModel File Handling ori"
         exit(MaxBytes);
     end;
 
-    local procedure ApplyNormalizedMimeTypes(var PayloadObject: JsonObject)
+    local procedure ApplyNormalizedMimeTypes(PayloadObject: JsonObject)
     var
         FilesToken: JsonToken;
         FileToken: JsonToken;
