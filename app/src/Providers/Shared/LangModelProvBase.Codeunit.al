@@ -30,10 +30,16 @@ codeunit 10035410 "LangModel Prov. Base ori"
         OversizeFileWhenTxt: Label 'The decoded file is larger than the language model file size limit.', Comment = 'is-IS=Afkóðuð skrá er stærri en stærðartakmörk mállíkansins.';
         OversizeFileExpectedTxt: Label 'a file within the language model file size limit', Comment = 'is-IS=skrá innan stærðartakmarka mállíkansins';
         OversizeFileNextStepTxt: Label 'Reduce the file size. No request was sent.', Comment = 'is-IS=Minnkaðu skrána. Engin beiðni var send.';
+        TotalOversizeErr: Label 'The attached files total %1 bytes, which is over the %2 byte cap.', Comment = 'is-IS=Viðhengdu skrárnar eru samtals %1 bæti, sem er yfir hámarkinu %2 bæti.';
+        TotalOversizeWhenTxt: Label 'The decoded size of all attached files together is larger than the total file size cap.', Comment = 'is-IS=Afkóðuð stærð allra viðhengdra skráa saman er stærri en heildarstærðartakmörkin.';
+        TotalOversizeExpectedTxt: Label 'at most %1 bytes in total', Comment = 'is-IS=í mesta lagi %1 bæti samtals';
+        TotalOversizeNextStepTxt: Label 'Remove or reduce files so the total decoded size is within the cap. No request was sent.', Comment = 'is-IS=Fjarlægðu eða minnkaðu skrár svo heildarstærðin sé innan hámarksins. Engin beiðni var send.';
         ProviderParameterTok: Label 'provider', Locked = true;
         FileParameterTok: Label 'file', Locked = true;
+        FilesParameterTok: Label 'files', Locked = true;
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
         OversizeKindTok: Label 'oversize', Locked = true;
+        TotalOversizeKindTok: Label 'totalOversize', Locked = true;
 
     /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
@@ -71,6 +77,10 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ReceivedText: Text;
         ParameterName: Text;
     begin
+        if IsSafeTotalOversizeRefusal(Response, ReceivedText) then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TotalOversizeErr, ReceivedText, Response.GetText('capBytes')), FilesParameterTok, ReceivedText, StrSubstNo(TotalOversizeExpectedTxt, Response.GetText('capBytes')), TotalOversizeNextStepTxt);
+            exit;
+        end;
         if IsSafeOversizeRefusal(Response) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, FileParameterTok, '', OversizeFileExpectedTxt, OversizeFileNextStepTxt);
             exit;
@@ -107,6 +117,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptProviderErr, PromptProviderWhenTxt, PromptSetupNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, UnsupportedImageWhenTxt, UnsupportedImageNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, OversizeFileWhenTxt, OversizeFileNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, TotalOversizeErr, TotalOversizeWhenTxt, TotalOversizeNextStepTxt));
     end;
 
     /// <summary>Builds the local unsupported-image refusal. No provider call is made for this answer.</summary>
@@ -124,6 +135,21 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Response.Add('error', OversizeFileErr);
         Response.Add('safeRefusal', true);
         Response.Add('refusalKind', OversizeKindTok);
+    end;
+
+    /// <summary>Builds the local total-size refusal. The error names the measured total and the cap. No provider call is made.</summary>
+    procedure BuildTotalOversizeRefusal(TotalBytes: BigInteger; CapBytes: BigInteger) Response: JsonObject
+    var
+        TotalText: Text;
+        CapText: Text;
+    begin
+        TotalText := Format(TotalBytes, 0, 9);
+        CapText := Format(CapBytes, 0, 9);
+        Response.Add('error', StrSubstNo(TotalOversizeErr, TotalText, CapText));
+        Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', TotalOversizeKindTok);
+        Response.Add('totalBytes', TotalText);
+        Response.Add('capBytes', CapText);
     end;
 
     /// <summary>
@@ -197,6 +223,29 @@ codeunit 10035410 "LangModel Prov. Base ori"
     local procedure IsSafeOversizeRefusal(Response: JsonObject): Boolean
     begin
         exit(IsSafeRefusalKind(Response, OversizeKindTok));
+    end;
+
+    local procedure IsSafeTotalOversizeRefusal(Response: JsonObject; var TotalText: Text): Boolean
+    var
+        CapText: Text;
+    begin
+        TotalText := '';
+        if not IsSafeRefusalKind(Response, TotalOversizeKindTok) then
+            exit(false);
+        if not Response.Contains('totalBytes') or not Response.Contains('capBytes') then
+            exit(false);
+        TotalText := Response.GetText('totalBytes');
+        CapText := Response.GetText('capBytes');
+        if not IsDecimalDigitText(TotalText) or not IsDecimalDigitText(CapText) then
+            exit(false);
+        exit(true);
+    end;
+
+    local procedure IsDecimalDigitText(Value: Text): Boolean
+    begin
+        if Value = '' then
+            exit(false);
+        exit(DelChr(Value, '=', '0123456789') = '');
     end;
 
     local procedure IsSafeRefusalKind(Response: JsonObject; Kind: Text): Boolean

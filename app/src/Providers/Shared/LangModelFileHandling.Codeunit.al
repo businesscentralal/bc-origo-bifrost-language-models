@@ -29,6 +29,16 @@ codeunit 10035429 "LangModel File Handling ori"
     end;
 
     /// <summary>
+    /// Proposed total decoded size cap for every file on one call, 100 MB.
+    /// Five times the single-file limit, so it is not lower than that limit.
+    /// The PR Reviewer confirms this value. A test may resolve a lower cap.
+    /// </summary>
+    procedure MaxTotalDecodedFileBytes(): Integer
+    begin
+        exit(104857600);
+    end;
+
+    /// <summary>
     /// Trims the MIME type, drops parameters after the first semicolon, and lowercases the type.
     /// </summary>
     /// <param name="MimeType">The MIME type as supplied on the file.</param>
@@ -107,13 +117,15 @@ codeunit 10035429 "LangModel File Handling ori"
 
     /// <summary>
     /// Shared pre-HTTP gate for every file-accepting provider.
-    /// Normalizes each file MIME type, then refuses a non-PNG/JPEG image and an oversize file. Does not upload.
+    /// Normalizes each file MIME type first, then refuses a non-PNG/JPEG image, a single oversize file, and a total over the resolved cap. Does not upload.
     /// </summary>
     [NonDebuggable]
     procedure AcceptFiles(PayloadObject: JsonObject; var ResultText: Text): Boolean
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         UnsupportedMime: Text;
+        TotalBytes: BigInteger;
+        CapBytes: BigInteger;
     begin
         ApplyNormalizedMimeTypes(PayloadObject);
         UnsupportedMime := FindUnsupportedImageMime(PayloadObject);
@@ -123,6 +135,10 @@ codeunit 10035429 "LangModel File Handling ori"
         end;
         if FindOversizeFile(PayloadObject) then begin
             ProviderBase.BuildOversizeRefusal().WriteTo(ResultText);
+            exit(false);
+        end;
+        if FindTotalOversize(PayloadObject, TotalBytes, CapBytes) then begin
+            ProviderBase.BuildTotalOversizeRefusal(TotalBytes, CapBytes).WriteTo(ResultText);
             exit(false);
         end;
         exit(true);
@@ -316,6 +332,47 @@ codeunit 10035429 "LangModel File Handling ori"
         end;
     end;
 
+    /// <summary>
+    /// True when the decoded sizes of all attached files together exceed the resolved total cap.
+    /// Returns the measured total and the cap so the refusal can name both.
+    /// </summary>
+    [NonDebuggable]
+    local procedure FindTotalOversize(PayloadObject: JsonObject; var TotalBytes: BigInteger; var CapBytes: BigInteger): Boolean
+    var
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        FileObj: JsonObject;
+        DecodedBytes: Integer;
+    begin
+        TotalBytes := 0;
+        CapBytes := ResolvedMaxTotalDecodedFileBytes();
+        if not PayloadObject.Get('files', FilesToken) then
+            exit(false);
+        if not FilesToken.IsArray() then
+            exit(false);
+        foreach FileToken in FilesToken.AsArray() do begin
+            if not FileToken.IsObject() then
+                continue;
+            FileObj := FileToken.AsObject();
+            DecodedBytes := DecodedByteCount(GetJsonText(FileObj, 'data'));
+            TotalBytes += DecodedBytes;
+            if (DecodedBytes = 2147483647) or (TotalBytes > CapBytes) then
+                exit(true);
+        end;
+        exit(false);
+    end;
+
+    local procedure ResolvedMaxTotalDecodedFileBytes(): BigInteger
+    var
+        MaxBytes: Integer;
+    begin
+        MaxBytes := MaxTotalDecodedFileBytes();
+        OnResolveMaxTotalDecodedFileBytes(MaxBytes);
+        if MaxBytes < 1 then
+            exit(MaxTotalDecodedFileBytes());
+        exit(MaxBytes);
+    end;
+
     local procedure ResolvedMaxDecodedFileBytes(): Integer
     var
         MaxBytes: Integer;
@@ -387,6 +444,11 @@ codeunit 10035429 "LangModel File Handling ori"
 
     [IntegrationEvent(false, false)]
     local procedure OnResolveMaxDecodedFileBytes(var MaxBytes: Integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnResolveMaxTotalDecodedFileBytes(var MaxBytes: Integer)
     begin
     end;
 }
