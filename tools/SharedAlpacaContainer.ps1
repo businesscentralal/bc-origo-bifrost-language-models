@@ -1,9 +1,97 @@
-# Adapt only container selection. _buildMode/BuildMode, settings, dependency downloads,
-# compilation and artifact names remain mode-specific. Called after downloading Alpaca v2.11.
+# Alpaca reports HttpStatusCode 422 as "Status Code UnprocessableEntity".
+# Business Central names the incoming version first and the published version second.
+# A lost request can land on the server; the retry then sees the same package ID.
+function global:Get-BifrostPublishRetryDecision {
+    param(
+        [Parameter(Mandatory)][string] $ErrorMessage,
+        [Parameter(Mandatory)][int] $Tries,
+        [Parameter(Mandatory)][int] $MaxTries
+    )
+    $is422 = $ErrorMessage -match '(?i)Status Code\s+(?:422|UnprocessableEntity)\b'
+    $isDuplicate = $ErrorMessage -match 'duplicate package ID'
+    if ($is422 -and $isDuplicate) {
+        $versions = [regex]::Matches($ErrorMessage, "version:\s*'([^']*)'")
+        if ($versions.Count -ge 2) {
+            $incoming = $versions[0].Groups[1].Value
+            $existing = $versions[1].Groups[1].Value
+            if (-not [string]::IsNullOrWhiteSpace($incoming) -and ($incoming -ceq $existing)) {
+                return 'Success'
+            }
+        }
+    }
+    if (($Tries + 1) -ge $MaxTries) { return 'Fail' }
+    return 'Retry'
+}
+
+function Update-BifrostAlpacaPublishRetry {
+    param([string] $ScriptsPath)
+    $publishModule = Join-Path $ScriptsPath 'Modules/Publish-AlpacaBcApp.psm1'
+    if (-not (Test-Path -LiteralPath $publishModule)) {
+        throw 'Alpaca publish module is missing: cannot adapt the publish retry.'
+    }
+    $publishSource = [IO.File]::ReadAllText($publishModule)
+    $newline = if ($publishSource.Contains("`r`n")) { "`r`n" } else { "`n" }
+    $normalized = $publishSource.Replace("`r`n", "`n").Replace("`r", "`n")
+    $marker = 'Get-BifrostPublishRetryDecision'
+    $markerCount = [regex]::Matches($normalized, [regex]::Escape($marker)).Count
+    if ($markerCount -gt 1) { throw 'Alpaca publish retry adaptation is present more than once.' }
+    if ($markerCount -eq 1) { return }
+    $anchor = @'
+        catch {
+            $errorMessage = "Error Publishing App '$appName'`n$_"
+
+            $tries = $tries + 1
+            if ($tries -ge $maxTries) {
+                Write-AlpacaError $errorMessage
+                throw "Error Publishing App '$appName'"
+            }
+            else {
+                Write-AlpacaError $errorMessage -WithoutGitHubAnnotation
+                Write-AlpacaOutput "Failed to publish app, retry after 15 sec"
+                Start-Sleep 15
+            }
+        }
+'@
+    $replacement = @'
+        catch {
+            $errorMessage = "Error Publishing App '$appName'`n$_"
+            $publishRetry = Get-BifrostPublishRetryDecision -ErrorMessage $errorMessage -Tries $tries -MaxTries $maxTries
+            if ($publishRetry -eq 'Success') {
+                Write-AlpacaOutput 'Already published: 422 duplicate package ID for the same version. Stopping retries.'
+                Write-AlpacaOutput $errorMessage
+                $success = $true
+            }
+            elseif ($publishRetry -eq 'Fail') {
+                Write-AlpacaError $errorMessage
+                throw "Error Publishing App '$appName'"
+            }
+            else {
+                $tries = $tries + 1
+                Write-AlpacaError $errorMessage -WithoutGitHubAnnotation
+                Write-AlpacaOutput "Failed to publish app, retry after 15 sec"
+                Start-Sleep 15
+            }
+        }
+'@
+    $anchor = $anchor.Replace("`r`n", "`n").Replace("`r", "`n").TrimEnd("`n")
+    $replacement = $replacement.Replace("`r`n", "`n").Replace("`r", "`n").TrimEnd("`n")
+    if ([regex]::Matches($normalized, [regex]::Escape($anchor)).Count -ne 1) {
+        throw 'Alpaca publish retry changed: cannot safely treat a same-version duplicate package ID as success.'
+    }
+    $updated = $normalized.Replace($anchor, $replacement)
+    if ($newline -eq "`r`n") { $updated = $updated.Replace("`n", "`r`n") }
+    [IO.File]::WriteAllText($publishModule, $updated, [Text.UTF8Encoding]::new($false))
+}
+
+# Adapt container selection and the Alpaca publish retry. _buildMode/BuildMode, settings,
+# dependency downloads, compilation and artifact names remain mode-specific.
+# Called after downloading Alpaca v2.11.
 function Initialize-BifrostSharedContainer {
     param([string] $OverridePath, [string] $ScriptsPath, [string] $BackendUrl)
     if ($env:_buildMode -notin @('Default', 'Test')) { throw 'Unsupported shared-container build mode.' }
     $env:ALPACA_BACKEND_URL = $BackendUrl
+    # Patch the publish module before the first import. Alpaca imports it without -Force.
+    Update-BifrostAlpacaPublishRetry -ScriptsPath $ScriptsPath
     Import-Module (Join-Path $ScriptsPath 'Modules/Alpaca.psd1') -Scope Global -DisableNameChecking
     $containers = @(Get-AlpacaContainer -Project $env:_project -Token $env:_token -BuildMode Default)
     if ($containers.Count -ne 1) { throw "Expected exactly one shared Default container; found $($containers.Count). Rerun all jobs to recreate the pair." }

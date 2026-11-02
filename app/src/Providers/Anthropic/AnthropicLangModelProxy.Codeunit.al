@@ -68,6 +68,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
     [NonDebuggable]
     procedure CompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text): Text
     var
+        FileHandling: Codeunit "LangModel File Handling ori";
         PayloadObject: JsonObject;
         Messages: JsonArray;
         MessagesToken: JsonToken;
@@ -75,9 +76,13 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         Model: Text;
         SystemPrompt: Text;
         ApiKey: SecretText;
+        ResultText: Text;
     begin
         if not PayloadObject.ReadFrom(PayloadJson) then
             exit(BuildErrorResponse('Invalid payload JSON.'));
+
+        if not FileHandling.AcceptFiles(PayloadObject, ResultText) then
+            exit(ResultText);
 
         ApiKey := Argument.GetApiKey();
         if ApiKey.IsEmpty() then
