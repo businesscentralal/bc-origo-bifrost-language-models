@@ -93,6 +93,7 @@ codeunit 96052 "LM98 Probe Tests ori"
     local procedure VerifyPermissionCombination(BaseRole: Code[20])
     var
         Model: Record "Bifrost Language Model ori";
+        TempArgument: Record "Message Argument ori" temporary;
         Mock: Codeunit "Mock Bifrost Chat Provider";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         TestContext: Codeunit "Bifrost LangModel Test Ctx ori";
@@ -121,11 +122,14 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.SetContinueResponse('{"type":"reply","reply":"{\"verdict\":\"pass\"}"}');
         Request.Add('code', Model.Code);
         Request.Add('customer', 'BIFT-A');
+        TempArgument.SetRequestJson(Request);
         LowerPermissions.SetExactPermissionSet(BaseRole);
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
         ClearLastError();
-        Succeeded := TryPermissionLoop(Request, Result);
+        // A Boolean Codeunit.Run catches and rolls back native failures without prohibiting writes.
+        // The fixture was committed above; the exact roles remain active throughout the measured path.
+        Succeeded := Codeunit.Run(Codeunit::"LM98 Permission Run ori", TempArgument);
         FailureText := GetLastErrorText();
         LowerPermissions.SetOutsideO365Scope();
         TestContext.ClearLanguageModel();
@@ -134,20 +138,11 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.Reset();
         Commit(); // Retain cleanup even when the measured permission assertion fails.
         Assert.IsTrue(Succeeded, 'Exact role combination ' + BaseRole + ': ' + FailureText);
+        Result := TempArgument.GetResponseJson();
         Result.WriteTo(ResultText);
         Assert.AreEqual('reply', Result.GetText('stopReason'), ResultText);
         Assert.AreEqual(1, Result.GetInteger('toolCalls'), ResultText);
         Assert.AreEqual(0, Result.GetInteger('toolErrors'), ResultText);
     end;
 
-    [TryFunction]
-    local procedure TryPermissionLoop(Request: JsonObject; var Result: JsonObject)
-    var
-        BootstrapResult: JsonObject;
-    begin
-        BootstrapResult := Probe.NestedTool();
-        if BootstrapResult.GetBoolean('nestedToolError') then
-            Error(BootstrapResult.GetText('bcError'));
-        Result := Probe.Live(Request);
-    end;
 }

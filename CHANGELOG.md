@@ -6,6 +6,7 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Nonshipping spike (2026-11-01) - Headless split-loop feasibility (#98)
 
+- Test codeunit 96052 catches native permission failures through nonshipping codeunit 96058 instead of a `TryFunction` that forbids the probed path's writes. Exact role combinations, positive assertions and fixture cleanup remain unchanged; permission denials remain failures pending the spike's actual evidence and disposition.
 - Verification branch only, never merge or release: test message `Test.LanguageModel.AskProbe` (enum extension 96050, codeunits 96050–96052) observes nested dispatcher transactions, cached session-time replacement, scoped blob cleanup, actual outgoing tool names and exact permission combinations.
 - A separate OnPrem native harness under `tools/lm98-live` (table 96050 and codeunits 96053–96057) creates isolated synthetic posting fixtures, runs fresh-session R1 cells and bounds the authorized OpenAI/Anthropic trial to 40 actual HTTP attempts. It retains sanitized measurements and fixture identities; runtime outcomes and the final GO/NO-GO remain independent verification work. Product and normal test targets and CI configuration are unchanged.
 - Rename temporary security-group buffer locals in codeunit 10035427 and test codeunit 96038 to satisfy existing AA0073 analyzer requirements without changing wizard behavior or public signatures. No shipping provider/interface or Foundation change is included.
