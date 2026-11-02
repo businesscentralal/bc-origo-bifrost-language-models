@@ -135,6 +135,8 @@ codeunit 96052 "LM98 Probe Tests ori"
         // The mock loop itself is also outside TryLive, so inherent Setup permissions stay in force (#110).
         Succeeded := Codeunit.Run(Codeunit::"LM98 Permission Run ori", TempArgument);
         FailureText := GetLastErrorText();
+        if not Succeeded then
+            FailureText += ' | ' + GetLastErrorCallStack();
         LowerPermissions.SetOutsideO365Scope();
         TestContext.ClearLanguageModel();
         if Model.GetBySystemId(OwnedId) then

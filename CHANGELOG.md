@@ -7,7 +7,7 @@ All notable changes to Bifrost Language Models are documented here.
 ### Fixed (2026-11-02) - Ask loop reads user setup without a new tabledata grant (#110)
 
 - Codeunit 10035382 `LangModel Chat Provider ori` promotes the caller's existing indirect read on Foundation `User Setup ori` while the codeunit runs, so `BIFROST API ori` and `BIFROST Read ori` can resolve the assigned language model and system prompt. No permission set or permission-set extension gains tabledata on `Setup ori` or `User Setup ori`. Request Debug Mode is still read through `Setup ori`.GetRequestDebugMode.
-- The mock loop in codeunit 96051 `LM98 Probe ori` is no longer inside `TryLive`. A TryFunction would strip inherent Setup permissions and refuse the pipeline's inserts. Codeunit 96052 still measures the three role combinations through codeunit 96058, so a native permission failure is returned and the fixture is still cleaned up. The live-provider path still swallows provider errors without copying the response body. No message contract change.
+- The mock loop in codeunit 96051 `LM98 Probe ori` is no longer inside `TryLive`. A TryFunction would strip inherent Setup permissions and refuse the pipeline's inserts. Codeunit 96052 still measures the three role combinations through codeunit 96058, so a native permission failure is returned and the fixture is still cleaned up. The failure text includes the call stack. The live-provider path still swallows provider errors without copying the response body. No message contract change.
 
 ### Added (2026-11-02) - total size cap for attached prompt files (#95)
 
