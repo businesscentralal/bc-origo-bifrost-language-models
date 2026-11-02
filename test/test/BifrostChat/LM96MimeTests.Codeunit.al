@@ -7,7 +7,7 @@ using System.TestLibraries.Utilities;
 /// <summary>
 /// Issue 96: the shared file check trims a MIME type, ignores letter case and parameters, and sends that type.
 /// </summary>
-codeunit 96040 "LM 96 MIME Tests"
+codeunit 96041 "LM 96 MIME Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
