@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-02) - Assisted Setup metadata permissions (#105)
+
+- Codeunit 10035426 `LangModel Wizard Reg. ori` grants inherent Execute permissions and entitlements only to its metadata registration callback. Assisted Setup can enumerate the Language Models wizard without granting wizard execution or business administration. Both event skip flags remain false.
+- Test codeunit 96040 `LangModel Wizard Reg Tests` exercises the real Assisted Setup page and publisher with a restricted platform-only caller, checks English/Icelandic metadata and repeated registration, and verifies configuration preservation and business/admin refusals.
+
 ### Fixed (2026-10-28) - Test tool request contracts (#89)
 
 - Test-only message types `Test.LanguageModel.Set`, `.Delete` and `.Chat` (#89; enum extension 96023 and codeunits 96024–96026) now declare their request parameters and real effects through Foundation's `Msg Contract ori`. This restores dispatch on Foundation 28.0.10+; Set covers both top-level models and batch entries, Delete declares its writes, and Chat declares committed tool/provider effects with the matching inbound direction. Codeunit 96028 covers contract mappings and rejection of undeclared request keys. Shipped app code is unchanged.
