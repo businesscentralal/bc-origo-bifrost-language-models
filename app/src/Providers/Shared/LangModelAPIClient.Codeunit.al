@@ -68,8 +68,16 @@ codeunit 10035411 "LangModel API Client ori"
         RequestText: Text;
         ResponseText: Text;
         StartTime: DateTime;
+        Handled: Boolean;
     begin
         HasPendingLog := false;
+        // A subscriber (tests) can answer the chat request instead of the provider; nothing leaves the service then.
+        OnBeforeChatPost(ChatUrl, RequestBody, Handled, ResponseText);
+        if Handled then begin
+            if not Response.ReadFrom(ResponseText) then
+                Error(InvalidResponseErr);
+            exit;
+        end;
         RequestBody.WriteTo(RequestText);
         HttpContent.WriteFrom(RequestText);
         HttpContent.GetHeaders(ContentHeaders);
@@ -202,6 +210,11 @@ codeunit 10035411 "LangModel API Client ori"
             ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
             ResponseText := '';
         end;
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeChatPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
+    begin
     end;
 
     [IntegrationEvent(false, false)]
