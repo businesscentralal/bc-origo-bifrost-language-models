@@ -6,7 +6,46 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Fixed (2026-10-31) - Confirm irreversible test chat turns (#103)
 
-- Test codeunit 96028 `LangModel Test Tools Tests` sends `expectedCount: 1` for the single irreversible `Test.LanguageModel.Chat` turn before asserting tool replies, provider errors and missing models. This follows Foundation 28.0.11.643's default counted-confirmation gate without disabling it or changing the tool's irreversible contract. A mismatched-count regression proves the provider is not called.
+- Test codeunit 96028 `LangModel Test Tools Tests` uses main's preview-and-confirm helper for irreversible `Test.LanguageModel.Chat` turns before asserting tool replies, provider errors and missing models. The helper retries only `ConfirmationRequired`, using the returned `expected` count, and leaves requests with an explicit `expectedCount` single-shot. This follows Foundation 28.0.11.643's default counted-confirmation gate without disabling it or changing the tool's irreversible contract. A mismatched-count regression proves the provider is not called.
+
+### Added (2026-11-03) - read-only tool policy for LLM.Prompt.Ask (#100)
+
+- Codeunit 10035430 `LLM Ask Tool Policy ori` (Internal, in permission set `BIFROST LLM Chat ori`) classifies every tool of the MCP tool server as read, session or write and denies unknown tools. `invoke_message_type` is allowed only for a message type that resolves (Evaluate, then the canonical name) and declares effect `read`; `LLM.Prompt.Ask`, `LLM.Prompt.Complete`, `Orchestrator.Playbook.*` and `Data.RequestLog.Get` are always denied, `download_blob` is always denied, memory reads are allowed and `set_*` is denied. Only `get_blob` of a blob created in the same run is allowed. Caller lists `allow`, `deny`, `allowMessageTypes` and `denyMessageTypes` can narrow and never widen.
+- The shared (chat completions and Responses) and Anthropic request builders accept a payload property `allowedTools` (array of tool names), keep it in the conversation state for the later rounds and send only those tool definitions. Without it the tool list is unchanged. The interactive chat is unchanged. Copilot is not changed.
+- Integration events `OnBeforeChatPost` (`LangModel API Client ori`) and `OnBeforeMessagesPost` (`Anthropic LangModel Proxy ori`) let tests answer a request without a provider call.
+- Test codeunits 96042 `LLM Ask Tool Policy Tests`, 96043 `LLM Ask Tool Policy Perm Tests`, 96045 `LLM Ask Tool Defs Tests` and mock 96044 `LLM 100 HTTP Mock`.
+
+### Fixed (2026-11-02) - normalise file MIME types (#96)
+
+- Codeunit 10035429 `LangModel File Handling ori` trims the file MIME type, ignores letter case, and drops parameters after `;` before the shared image check and the size checks. ` image/PNG ` and `image/jpeg; charset=binary` stay inline. ` image/GIF ` and `IMAGE/WEBP` stay refused on OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. The normalized type is written back onto the file and is what those providers send. `image/jpg` stays refused. GIF and WebP are not newly accepted. `AcceptFiles` keeps the by-value payload signature.
+- Codeunit 10035396 `LLM Prompt Compl Impl ori` describes that normalisation in the prompt notes and on the `mimeType` parameter, and keeps the 100 MB total from main. No new image type is accepted.
+- Test codeunit 96041 `LM 96 MIME Tests` covers padded, upper-case and parameterised accepted and refused types, and the type sent on each file-accepting provider. Main already uses 96040 for `LangModel Wizard Reg Tests`.
+
+### Fixed (2026-11-02) - Assisted Setup metadata permissions (#105)
+
+- Codeunit 10035426 `LangModel Wizard Reg. ori` grants inherent Execute permissions and entitlements only to its metadata registration callback. Assisted Setup can enumerate the Language Models wizard without granting wizard execution or business administration. Both event skip flags remain false.
+- Test codeunit 96040 `LangModel Wizard Reg Tests` exercises the real Assisted Setup page and publisher with a restricted platform-only caller, checks English/Icelandic metadata and repeated registration, and verifies configuration preservation and business/admin refusals.
+
+### Added (2026-11-02) - total size cap for attached prompt files (#95)
+
+- Codeunit 10035429 `LangModel File Handling ori` refuses a prompt before any upload or provider call when the decoded size of all attached files together exceeds 104857600 bytes (100 MB). That total is five times the unchanged 20 MB single-file limit. A single file over 20 MB still uses the existing per-file refusal. The measured total and the cap are both named on the error.
+- Codeunit 10035410 `LangModel Prov. Base ori` returns that refusal as `InvalidParameter` on `files`. Codeunit 10035396 `LLM Prompt Compl Impl ori` accepts an optional `files` array when `file` is absent, and the prompt notes, file help and errors chapter describe the 100 MB total. English and Icelandic labels are kept together.
+- Test codeunits 96033 `LLM 65 HTTP Mock` and 96034 `LLM 65 Prompt Tests` cover a total under the cap, exactly at the cap and over the cap for OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. Over the cap makes no provider call and no upload. The tests resolve a small cap through the existing file-policy event so they do not allocate 100 MB; they also assert the published 100 MB default.
+
+### Fixed (2026-10-31) - confirm irreversible test chat (#93)
+
+- Test codeunit 96028 `LangModel Test Tools Tests` resends `Test.LanguageModel.Chat` with `expectedCount` 1 when Foundation returns `ConfirmationRequired`. The default counter for an empty subject is 1. An unknown parameter is still refused on the first call and is not confirmed. Product objects are unchanged.
+
+### Fixed (2026-10-29) - provider-agnostic prompt files (#93)
+
+- Codeunit 10035429 `LangModel File Handling ori` is the shared file policy. PNG and JPEG stay inline. Any other `image/*` type is refused before HTTP. A decoded file larger than the resolved size cap (20 MB unless a test override raises it) is refused before HTTP. The length check uses that resolved cap, not a fixed 20 MB sentinel. A PDF or other document that the provider cannot accept inline is uploaded to that provider's file store, referenced by `file_id`, and deleted after the call, including when the prompt fails (STE-0002: the prompt and file leave Business Central only for the named provider, and an uploaded document exists there only for the duration of the call). A 2xx upload without a readable file id is logged as `ORI-LM-0093` with HTTP outcome `id unread`. That file can remain at the provider until the provider expires it, because there is no id to delete. A failed cleanup is the same telemetry event with provider, HTTP outcome (`blocked`, `not sent`, status, or `id unread`), sanitised error code and file id. No file name, MIME type, prompt or provider message is logged.
+- OpenAI, Azure OpenAI, Custom LLM, Anthropic and Google call `AcceptFiles` before any provider HTTP call, so a GIF and an oversize file are refused on those providers the same way as on xAI. Files the policy accepts keep each provider's existing inline wire format. Codeunit 10035418 `xAI LangModel Prov. ori` uses the same gate and, for a document, the upload and delete path on the Responses API (`store` false). Text-only calls still use `/v1/chat/completions`. Copilot still refuses every file.
+- Codeunit 10035411 `LangModel API Client ori` uploads and deletes provider files. `KeepOnlySafeProviderCode` keeps a sanitised error code for every non-2xx status, matching the live HTTP readers. `WriteProviderFileUpload` is non-debuggable. A 2xx upload without a readable file id is returned as `storedWithoutId` so the shared handler can log it.
+- Codeunit 10035410 `LangModel Prov. Base ori` and codeunit 10035396 `LLM Prompt Compl Impl ori`: a provider HTTP 4xx answer carries the HTTP status and that short code. An unsupported image is `InvalidParameter` and names PNG and JPEG. An oversize file is `InvalidParameter` on `file`. The prompt notes and the `mimeType` parameter describe the shared path, including temporary provider storage. The new user-facing labels have Icelandic text.
+- Test codeunits 96033 `LLM 65 HTTP Mock`, 96034 `LLM 65 Prompt Tests` and 96011 `LangModel API Client Tests` cover the shared MIME policy, inline PNG and JPEG, PDF upload and delete, delete after a failed prompt, unread upload id, oversize refusal, stored attachments, GIF and `image/jpg` refusal, safe 4xx and 5xx codes, unchanged text-only xAI and the other providers, and the multipart upload body. The tests use the HTTP double and do not call a live provider.
+- Codeunit 10035427 `LangModel Wizard Mgt ori` and test codeunit 96038 `LangModel Wizard Users Tests` declare the in-memory security-group buffers with the `temporary` keyword. The public procedure and its behavior are unchanged.
+- The shared-container publish retry treats HTTP 422 for the same package ID and version as already published. A Test republish whose first request lands and then times out no longer fails the later attempts. A different version still fails.
+- Codeunit 10035411 `LangModel API Client ori` procedures `KeepOnlySafeProviderCode` and `ReadProviderResponse`, and codeunit 10035410 `LangModel Prov. Base ori` procedure `SanitizeProviderErrorCode`, are non-debuggable. They read a failed provider body only to keep the sanitised code.
 
 ### Fixed (2026-10-28) - Test tool request contracts (#89)
 

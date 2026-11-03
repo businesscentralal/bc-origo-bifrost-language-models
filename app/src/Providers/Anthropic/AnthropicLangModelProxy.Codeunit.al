@@ -17,6 +17,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
+        AskPolicy: Codeunit "LLM Ask Tool Policy ori";
+        AllowedTools: List of [Text];
+        HasAllowedTools: Boolean;
         AnthropicVersionTok: Label '2023-06-01', Locked = true;
         MessagesPathTok: Label '%1/v1/messages', Locked = true;
         ModelsPathTok: Label '%1/v1/models?limit=100', Locked = true;
@@ -52,6 +55,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
         SystemPrompt := BuildSystemPrompt(PayloadObject, Argument);
         ParseMessages(PayloadObject, Messages);
+        HasAllowedTools := AskPolicy.ReadAllowedTools(PayloadObject, AllowedTools);
         BuildToolDefinitions(AnthropicTools);
 
         exit(CallAnthropicOnce(
@@ -68,6 +72,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
     [NonDebuggable]
     procedure CompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadJson: Text): Text
     var
+        FileHandling: Codeunit "LangModel File Handling ori";
         PayloadObject: JsonObject;
         Messages: JsonArray;
         MessagesToken: JsonToken;
@@ -75,9 +80,13 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         Model: Text;
         SystemPrompt: Text;
         ApiKey: SecretText;
+        ResultText: Text;
     begin
         if not PayloadObject.ReadFrom(PayloadJson) then
             exit(BuildErrorResponse('Invalid payload JSON.'));
+
+        if not FileHandling.AcceptFiles(PayloadObject, ResultText) then
+            exit(ResultText);
 
         ApiKey := Argument.GetApiKey();
         if ApiKey.IsEmpty() then
@@ -222,6 +231,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         SystemPrompt := GetText(StateObject, 'systemPrompt');
         if StateObject.Get('messages', MessagesToken) then
             Messages := MessagesToken.AsArray();
+        HasAllowedTools := AskPolicy.ReadAllowedTools(StateObject, AllowedTools);
         BuildToolDefinitions(AnthropicTools);
 
         ConvertToolResults(ToolResultsJson, AnthropicResults);
@@ -292,6 +302,11 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         exit(BuildSuccessResponse(Reply, UsageObject));
     end;
 
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeMessagesPost(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
+    begin
+    end;
+
     [TryFunction]
     [NonDebuggable]
     local procedure TrySendMessages(BaseUrl: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject)
@@ -311,7 +326,15 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         RequestText: Text;
         ResponseText: Text;
         StartTime: DateTime;
+        Handled: Boolean;
     begin
+        // A subscriber (tests) can answer the request instead of the provider; nothing leaves the service then.
+        OnBeforeMessagesPost(BaseUrl, RequestBody, Handled, ResponseText);
+        if Handled then begin
+            if not Response.ReadFrom(ResponseText) then
+                Error(InvalidResponseErr);
+            exit;
+        end;
         RequestBody.WriteTo(RequestText);
         HttpContent.WriteFrom(RequestText);
         HttpContent.GetHeaders(ContentHeaders);
@@ -426,12 +449,17 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
     local procedure BuildToolDefinitions(var AnthropicTools: JsonArray)
     var
         ServerTools: JsonArray;
+        FilteredTools: JsonArray;
         ToolToken: JsonToken;
         ToolObject: JsonObject;
         AnthropicTool: JsonObject;
         SchemaToken: JsonToken;
     begin
         ToolServer.ListTools(ServerTools);
+        if HasAllowedTools then begin
+            AskPolicy.FilterToolDefinitions(ServerTools, AllowedTools, FilteredTools);
+            ServerTools := FilteredTools;
+        end;
         foreach ToolToken in ServerTools do begin
             ToolObject := ToolToken.AsObject();
             Clear(AnthropicTool);
@@ -505,6 +533,8 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         StateObject.Add('messages', Messages);
         StateObject.Add('model', Model);
         StateObject.Add('systemPrompt', SystemPrompt);
+        if HasAllowedTools then
+            AskPolicy.WriteAllowedTools(AllowedTools, StateObject);
         StateObject.WriteTo(StateText);
 
         ResponseObject.Add('type', 'tool_calls');

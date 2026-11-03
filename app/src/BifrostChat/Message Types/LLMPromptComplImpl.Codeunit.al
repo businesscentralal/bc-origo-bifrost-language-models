@@ -117,14 +117,18 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         FileParameter: JsonObject;
+        FilesParameter: JsonObject;
         AttachmentParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('prompt', 'string', true, 'The user prompt sent to the language model. A value that is not a JSON string is refused with InvalidParameterFormat; an empty one with MissingParameter.'));
         Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt sent as-is; no Bootstrap or skill is injected. Left out of the provider request when empty.'));
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
-        FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the prompt; takes precedence over attachment. A value that is not a JSON object is ignored, and attachment is then ignored too.');
+        FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the prompt; takes precedence over files and attachment. A value that is not a JSON object is ignored, and files and attachment are then ignored too.');
         FileParameter.Add('children', FileChildren());
         Parameters.Add(FileParameter);
+        FilesParameter := ContractMgt.Parameter('files', 'array', false, 'Optional inline files sent with the prompt when file is absent. Each entry is an object with data, mimeType and fileName. A non-array value is ignored and the stored attachment is not used. The total decoded size cannot exceed 104857600 bytes (100 MB).');
+        FilesParameter.Add('children', FileChildren());
+        Parameters.Add(FilesParameter);
         AttachmentParameter := ContractMgt.Parameter('attachment', 'object', false, 'Optional reference to a stored attachment whose content is sent with the prompt. Ignored when file is supplied, when table is not one of the allowed names, or when systemId is not a GUID that finds an attachment with content.');
         AttachmentParameter.Add('children', AttachmentChildren());
         Parameters.Add(AttachmentParameter);
@@ -244,7 +248,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt, and optionally one file, to a configured provider without tools, record context or conversation state, and returns the answer as text. It reads and writes no Business Central records for you: read the data first and put the values in the prompt.';
+        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt, and optionally one or more files, to a configured provider without tools, record context or conversation state, and returns the answer as text. It reads and writes no Business Central records for you: read the data first and put the values in the prompt.';
         exit(true);
     end;
 
@@ -253,7 +257,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. Images (a mimeType that starts with image/) are sent to the provider as images, other types as documents. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. The reply is free text from an external model: validate it before it is used to change anything.';
+        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI use one file policy: the MIME type is trimmed, compared without letter case, and parameters after a semicolon are ignored, and that normalized type is sent; image/png and image/jpeg stay inline; any other image type is refused before a request is sent; a decoded file larger than the language model file size limit is refused before a request is sent; the decoded size of all files on the call cannot exceed 104857600 bytes (100 MB), and a larger total is refused before any upload or provider request with an error that names the total and the cap; a PDF or other document is sent inline when the provider accepts inline documents, otherwise it is uploaded to that provider''s file store, referenced by file id, and deleted after the call, including when the prompt fails. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. A provider HTTP client error includes the HTTP status and, when the provider sends one, a short error code. Provider error text, secrets and the prompt are not returned. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. A document that cannot be sent inline is stored at that provider only for the duration of the call and is then deleted. The reply is free text from an external model: validate it before it is used to change anything.';
         exit(true);
     end;
 
@@ -262,7 +266,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
         Children.Add(ContractMgt.Parameter('data', 'string', false, 'The file content, Base64-encoded. Send it together with mimeType.'));
-        Children.Add(ContractMgt.Parameter('mimeType', 'string', false, 'The MIME type, for example application/pdf or image/png. image/* is sent as an image, anything else as a document.'));
+        Children.Add(ContractMgt.Parameter('mimeType', 'string', false, 'The MIME type, for example application/pdf or image/png. Leading and trailing spaces, letter case and parameters after a semicolon are ignored, and the normalized type is sent. For OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI, image/png and image/jpeg stay inline. Any other image type is refused before sending. A decoded file larger than the language model file size limit is refused before sending. The decoded size of all files on the call cannot exceed 104857600 bytes (100 MB); a larger total is refused before sending and the error names the total and the cap. Other documents are sent inline or uploaded to that provider''s file store for the duration of the call and then deleted.'));
         Children.Add(ContractMgt.Parameter('fileName', 'string', false, 'The file name. Used by the providers that take a file name; the others ignore it.'));
     end;
 
@@ -464,6 +468,16 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
                 FilesArray.Add(FileToken);
                 PayloadJson.Add('files', FilesArray);
             end;
+            exit;
+        end;
+
+        if RequestJson.Get('files', FileToken) then begin
+            if FileToken.IsArray() then
+                foreach AttachmentToken in FileToken.AsArray() do
+                    if AttachmentToken.IsObject() then
+                        FilesArray.Add(AttachmentToken);
+            if FilesArray.Count() > 0 then
+                PayloadJson.Add('files', FilesArray);
             exit;
         end;
 
