@@ -95,6 +95,7 @@ codeunit 96052 "LM98 Probe Tests ori"
         Model: Record "Bifrost Language Model ori";
         TempArgument: Record "Message Argument ori" temporary;
         Mock: Codeunit "Mock Bifrost Chat Provider";
+        ProbeRun: Codeunit "LM98 Permission Run ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         TestContext: Codeunit "Bifrost LangModel Test Ctx ori";
         Result: JsonObject;
@@ -126,7 +127,8 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.SetContinueResponse('{"type":"reply","reply":"{\"verdict\":\"pass\"}"}');
         Request.Add('code', Model.Code);
         Request.Add('customer', 'BIFT-A');
-        TempArgument.SetRequestJson(Request);
+        // The argument blob does not survive Codeunit.Run. 96058 keeps the JSON itself (#110).
+        ProbeRun.SetProbeRequest(Request);
         LowerPermissions.SetExactPermissionSet(BaseRole);
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
@@ -144,7 +146,8 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.Reset();
         Commit(); // Retain cleanup even when the measured permission assertion fails.
         Assert.IsTrue(Succeeded, 'Exact role combination ' + BaseRole + ': ' + FailureText);
-        Result := TempArgument.GetResponseJson();
+        Result := ProbeRun.GetProbeResponse();
+        ProbeRun.ClearProbe();
         Result.WriteTo(ResultText);
         Assert.AreEqual('reply', Result.GetText('stopReason'), ResultText);
         Assert.AreEqual(1, Result.GetInteger('toolCalls'), ResultText);
