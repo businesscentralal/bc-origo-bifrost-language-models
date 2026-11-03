@@ -22,7 +22,7 @@ codeunit 10035430 "LLM Ask Tool Policy ori"
         TypeDeniedTxt: Label 'Message type "%1" is not available in this session.', Comment = '%1 = message type', Locked = true;
         TypeNotReadTxt: Label 'Message type "%1" is not available: only read-only message types run in this session.', Comment = '%1 = message type', Locked = true;
         BlobDeniedTxt: Label 'Blob "%1" was not created in this session and cannot be read.', Comment = '%1 = blob reference', Locked = true;
-        ReadOnlyHintTxt: Label ' Only read-only message types run in this session.', Locked = true;
+        ReadOnlyTypesSentenceTxt: Label ' Only read-only message types run in this session.', Locked = true;
         AlwaysDeniedTypePrefixTxt: Label 'Orchestrator.Playbook.', Locked = true;
 
     /// <summary>
@@ -449,7 +449,7 @@ codeunit 10035430 "LLM Ask Tool Policy ori"
         if Tool.Get('description', DescriptionToken) then
             if DescriptionToken.IsValue() then
                 Description := DescriptionToken.AsValue().AsText();
-        Tool.Replace('description', Description + ReadOnlyHintTxt);
+        Tool.Replace('description', Description + ReadOnlyTypesSentenceTxt);
     end;
 
     local procedure ExtractBlobId(BlobRef: Text): Text
