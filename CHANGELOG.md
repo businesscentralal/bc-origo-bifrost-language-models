@@ -4,6 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-03) - read-only tool policy for LLM.Prompt.Ask (#100)
+
+- Codeunit 10035430 `LLM Ask Tool Policy ori` (Internal, in permission set `BIFROST LLM Chat ori`) classifies every tool of the MCP tool server as read, session or write and denies unknown tools. `invoke_message_type` is allowed only for a message type that resolves (Evaluate, then the canonical name) and declares effect `read`; `LLM.Prompt.Ask`, `LLM.Prompt.Complete`, `Orchestrator.Playbook.*` and `Data.RequestLog.Get` are always denied, `download_blob` is always denied, memory reads are allowed and `set_*` is denied. Only `get_blob` of a blob created in the same run is allowed. Caller lists `allow`, `deny`, `allowMessageTypes` and `denyMessageTypes` can narrow and never widen.
+- The shared (chat completions and Responses) and Anthropic request builders accept a payload property `allowedTools` (array of tool names), keep it in the conversation state for the later rounds and send only those tool definitions. Without it the tool list is unchanged. The interactive chat is unchanged. Copilot is not changed.
+- Integration events `OnBeforeChatPost` (`LangModel API Client ori`) and `OnBeforeMessagesPost` (`Anthropic LangModel Proxy ori`) let tests answer a request without a provider call.
+- Test codeunits 96042 `LLM Ask Tool Policy Tests`, 96043 `LLM Ask Tool Policy Perm Tests`, 96045 `LLM Ask Tool Defs Tests` and mock 96044 `LLM 100 HTTP Mock`.
+
 ### Fixed (2026-11-02) - normalise file MIME types (#96)
 
 - Codeunit 10035429 `LangModel File Handling ori` trims the file MIME type, ignores letter case, and drops parameters after `;` before the shared image check and the size checks. ` image/PNG ` and `image/jpeg; charset=binary` stay inline. ` image/GIF ` and `IMAGE/WEBP` stay refused on OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI. The normalized type is written back onto the file and is what those providers send. `image/jpg` stays refused. GIF and WebP are not newly accepted. `AcceptFiles` keeps the by-value payload signature.
