@@ -17,6 +17,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ToolServer: Codeunit "MCP Tool Server ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
+        AskPolicy: Codeunit "LLM Ask Tool Policy ori";
+        AllowedTools: List of [Text];
+        HasAllowedTools: Boolean;
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=Gervigreindarlíkanið skilaði vali án "message"-reits. Sýnishorn af svari: %1';
 
     /// <summary>
@@ -63,6 +66,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         if SystemPrompt <> '' then
             AddSystemMessage(Messages, SystemPrompt);
 
+        HasAllowedTools := AskPolicy.ReadAllowedTools(PayloadObject, AllowedTools);
         BuildToolDefinitions(OpenAITools);
         ChatUrl := GetChatUrl(Argument);
 
@@ -112,6 +116,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             Messages := MessagesToken.AsArray();
         // A reasoning model that refused tools earlier in this turn keeps reasoning_effort none for the later rounds.
         CopyRememberedReasoning(StateObject, ExtraRequestFields);
+        HasAllowedTools := AskPolicy.ReadAllowedTools(StateObject, AllowedTools);
         BuildToolDefinitions(OpenAITools);
 
         AppendToolResultMessages(Messages, ToolResultsJson);
@@ -297,6 +302,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     local procedure BuildToolDefinitions(var OpenAITools: JsonArray)
     var
         ServerTools: JsonArray;
+        FilteredTools: JsonArray;
         ToolToken: JsonToken;
         ToolObject: JsonObject;
         OpenAITool: JsonObject;
@@ -304,6 +310,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         SchemaToken: JsonToken;
     begin
         ToolServer.ListTools(ServerTools);
+        if HasAllowedTools then begin
+            AskPolicy.FilterToolDefinitions(ServerTools, AllowedTools, FilteredTools);
+            ServerTools := FilteredTools;
+        end;
         foreach ToolToken in ServerTools do begin
             ToolObject := ToolToken.AsObject();
             Clear(OpenAITool);
@@ -446,6 +456,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         StateObject.Add('messages', Messages);
         StateObject.Add('model', Model);
         StoreReasoningEffort(ExtraRequestFields, StateObject);
+        if HasAllowedTools then
+            AskPolicy.WriteAllowedTools(AllowedTools, StateObject);
         StateObject.WriteTo(StateText);
 
         ResponseObject.Add('type', 'tool_calls');
@@ -568,6 +580,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         foreach MessageToken in Messages do
             AppendChatMessageToResponsesInput(Input, MessageToken);
 
+        HasAllowedTools := AskPolicy.ReadAllowedTools(PayloadObject, AllowedTools);
         BuildResponsesToolDefinitions(ResponsesTools);
         Url := GetResponsesUrl(Argument);
 
@@ -604,6 +617,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         Model := GetTextProperty(StateObject, 'model');
         if StateObject.Get('input', InputToken) then
             Input := InputToken.AsArray();
+        HasAllowedTools := AskPolicy.ReadAllowedTools(StateObject, AllowedTools);
         BuildResponsesToolDefinitions(ResponsesTools);
 
         AppendToolResultsToResponsesInput(Input, ToolResultsJson);
@@ -735,6 +749,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     begin
         StateObject.Add('input', Input);
         StateObject.Add('model', Model);
+        if HasAllowedTools then
+            AskPolicy.WriteAllowedTools(AllowedTools, StateObject);
         StateObject.WriteTo(StateText);
 
         ResponseObject.Add('type', 'tool_calls');
@@ -748,12 +764,17 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     local procedure BuildResponsesToolDefinitions(var ResponsesTools: JsonArray)
     var
         ServerTools: JsonArray;
+        FilteredTools: JsonArray;
         ToolToken: JsonToken;
         ToolObject: JsonObject;
         ResponsesTool: JsonObject;
         SchemaToken: JsonToken;
     begin
         ToolServer.ListTools(ServerTools);
+        if HasAllowedTools then begin
+            AskPolicy.FilterToolDefinitions(ServerTools, AllowedTools, FilteredTools);
+            ServerTools := FilteredTools;
+        end;
         foreach ToolToken in ServerTools do begin
             ToolObject := ToolToken.AsObject();
             Clear(ResponsesTool);
