@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-10-31) - Confirm irreversible test chat turns (#103)
+
+- Test codeunit 96028 `LangModel Test Tools Tests` uses main's preview-and-confirm helper for irreversible `Test.LanguageModel.Chat` turns before asserting tool replies, provider errors and missing models. The helper retries only `ConfirmationRequired`, using the returned `expected` count, and leaves requests with an explicit `expectedCount` single-shot. This follows Foundation 28.0.11.643's default counted-confirmation gate without disabling it or changing the tool's irreversible contract. A mismatched-count regression proves the provider is not called.
+
 ### Added (2026-11-03) - read-only tool policy for LLM.Prompt.Ask (#100)
 
 - Codeunit 10035430 `LLM Ask Tool Policy ori` (Internal, in permission set `BIFROST LLM Chat ori`) classifies every tool of the MCP tool server as read, session or write and denies unknown tools. `invoke_message_type` is allowed only for a message type that resolves (Evaluate, then the canonical name) and declares effect `read`; `LLM.Prompt.Ask`, `LLM.Prompt.Complete`, `Orchestrator.Playbook.*` and `Data.RequestLog.Get` are always denied, `download_blob` is always denied, memory reads are allowed and `set_*` is denied. Only `get_blob` of a blob created in the same run is allowed. Caller lists `allow`, `deny`, `allowMessageTypes` and `denyMessageTypes` can narrow and never widen.
