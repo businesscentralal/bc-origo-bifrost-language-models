@@ -1,0 +1,25 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "containerId": "f0facb34abcd",
+  "apps": [
+    {
+      "name": "Bifrost Language Models",
+      "version": "28.0.2147483647.1104",
+      "source": {
+        "RepositoryUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models",
+        "Commit": "02a09181585f1856cb1f5ff007600d928f3f0ef8"
+      },
+      "sha256": "cb8ae318248596ec66e5041584518775354fce6bed02b3990482ad8f6854d8cd"
+    },
+    {
+      "name": "Bifrost Language Models - Tests",
+      "version": "28.0.2147483647.1104",
+      "source": {
+        "RepositoryUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models",
+        "Commit": "02a09181585f1856cb1f5ff007600d928f3f0ef8"
+      },
+      "sha256": "9471d36f92a0b052e4d4c10227fd4504e23d4fcddb8f354d2c6c3fb9a6571aab"
+    }
+  ],
+  "verified": true
+}

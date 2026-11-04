@@ -1,0 +1,66 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "worktreeDirty": false,
+  "sourceAppVersion": "28.0.3.0",
+  "artifactAppVersion": "28.0.2147483647.1104",
+  "analyzers": [
+    "CodeCop",
+    "UICop",
+    "AppSourceCop"
+  ],
+  "compilerSha256": "b9830b5e1595bc06154a057265fb51b7d24e0ab68116d398e72ab4c7a2927d5b",
+  "baseline": {
+    "version": "28.0.2.70",
+    "source": "released-baseline.json"
+  },
+  "foundation": {
+    "sha": "8afeab7962e13ed31b564b81c02e75452472de3a",
+    "runUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/41753125460",
+    "artifactId": 13287279400,
+    "artifactName": "bc-origo-bifrost-core-main-Apps-1.0.11.668",
+    "digest": "sha256:b21dab05fcbcea77dac68171b0a1ef85d932a3f39b2625b718335d5abff0e84b",
+    "downloadedAt": "2026-11-04T03:50:47.859Z"
+  },
+  "app": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "diagnosticErrors": 0,
+    "diagnosticWarnings": 0,
+    "invocation": [
+      "/workspace/tools/dotnet/dotnet",
+      "/workspace/tools/al-language/extension/bin/alc.dll",
+      "/project:/workspace/evidence/lm110-amend-worker4-20261104/compile-source/app",
+      "/packagecachepath:/workspace/evidence/lm110-amend-worker4-20261104/symbols",
+      "/out:/workspace/evidence/lm110-amend-worker4-20261104/build/LanguageModels.app",
+      "/errorlog:/workspace/evidence/lm110-amend-worker4-20261104/build/app-diagnostics.json",
+      "/SourceCommit:02a09181585f1856cb1f5ff007600d928f3f0ef8",
+      "/SourceRepositoryUrl:https://github.com/businesscentralal/bc-origo-bifrost-language-models",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.CodeCop.dll",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.UICop.dll",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.AppSourceCop.dll"
+    ],
+    "sha256": "cb8ae318248596ec66e5041584518775354fce6bed02b3990482ad8f6854d8cd"
+  },
+  "test": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "diagnosticErrors": 0,
+    "diagnosticWarnings": 0,
+    "invocation": [
+      "/workspace/tools/dotnet/dotnet",
+      "/workspace/tools/al-language/extension/bin/alc.dll",
+      "/project:/workspace/evidence/lm110-amend-worker4-20261104/compile-source/test",
+      "/packagecachepath:/workspace/evidence/lm110-amend-worker4-20261104/symbols",
+      "/out:/workspace/evidence/lm110-amend-worker4-20261104/build/LanguageModelsTests.app",
+      "/errorlog:/workspace/evidence/lm110-amend-worker4-20261104/build/test-diagnostics.json",
+      "/SourceCommit:02a09181585f1856cb1f5ff007600d928f3f0ef8",
+      "/SourceRepositoryUrl:https://github.com/businesscentralal/bc-origo-bifrost-language-models",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.CodeCop.dll",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.UICop.dll",
+      "/analyzer:/workspace/tools/al-language/extension/bin/Microsoft.Dynamics.Nav.AppSourceCop.dll"
+    ],
+    "sha256": "9471d36f92a0b052e4d4c10227fd4504e23d4fcddb8f354d2c6c3fb9a6571aab"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "containerId": "f0facb34abcd",
+  "owner": "worker-4",
+  "startedAt": "2026-11-04T14:53:35.093Z",
+  "modelFixtureReadback": 0,
+  "blobFixturesAbsent": true,
+  "languageRestored1033": true,
+  "probes": [
+    {
+      "at": "2026-11-04T14:53:39.677Z",
+      "statusCode": 404,
+      "state": 404
+    }
+  ],
+  "before": {
+    "id": "f0facb34abcd",
+    "displayName": "alviss-worker4-lm110-20261104",
+    "status": {
+      "state": "Running",
+      "statusMessage": "Running",
+      "imageBuilding": false,
+      "imageBuildError": false
+    }
+  },
+  "deleteStatus": 204,
+  "deleteAt": "2026-11-04T14:53:39.597Z",
+  "deletedVerified": true,
+  "finishedAt": "2026-11-04T14:53:39.677Z",
+  "previousLocalConnectionRestored": true
+}

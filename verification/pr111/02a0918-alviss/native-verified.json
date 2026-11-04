@@ -1,0 +1,49 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "containerId": "f0facb34abcd",
+  "fullSuite": true,
+  "sourceAndCompiledMethodCount": 423,
+  "executed": 423,
+  "passed": 423,
+  "failed": 0,
+  "skipped": 0,
+  "codeunits": 30,
+  "exactMethodSetMatches": true,
+  "probe96052": [
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC04_ReplaceCachedBlockPreservesSuffix",
+      "time": "0.02"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC04_MissingBlockRefused",
+      "time": "0.014"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC04_DuplicateBlocksRefused",
+      "time": "0.013"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC04_QuotedHeaderIsNotABlock",
+      "time": "0.01"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC07_ApiAndChatRoles",
+      "time": "0.533"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC07_ReadAndChatRoles",
+      "time": "0.213"
+    },
+    {
+      "classname": "96052 LM98 Probe Tests ori",
+      "name": "AC07_FullAndChatRoles",
+      "time": "0.177"
+    }
+  ]
+}

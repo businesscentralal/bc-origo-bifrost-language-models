@@ -1,0 +1,49 @@
+{
+  "at": "2026-11-04T14:40:58.373Z",
+  "containerId": "f0facb34abcd",
+  "httpStatus": 200,
+  "apps": [
+    {
+      "id": "7505e808-6e52-4b96-a328-82573391297a",
+      "name": "Bifrost Foundation",
+      "publisher": "Origo",
+      "version": "28.0.11.668",
+      "isInstalled": true
+    },
+    {
+      "id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+      "name": "Bifrost Language Models",
+      "publisher": "Origo",
+      "version": "28.0.2147483647.1104",
+      "isInstalled": true
+    },
+    {
+      "id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+      "name": "Bifrost Language Models - Tests",
+      "publisher": "Origo",
+      "version": "28.0.2147483647.1104",
+      "isInstalled": true
+    },
+    {
+      "id": "dd0be2ea-f733-4d65-bb34-a28f4624fb14",
+      "name": "Library Assert",
+      "publisher": "Microsoft",
+      "version": "28.5.54151.57488",
+      "isInstalled": true
+    },
+    {
+      "id": "5095f467-0a01-4b99-99d1-9ff1237d286f",
+      "name": "Library Variable Storage",
+      "publisher": "Microsoft",
+      "version": "28.5.54151.57488",
+      "isInstalled": true
+    },
+    {
+      "id": "23de40a6-dfe8-4f80-80db-d70f83ce8caf",
+      "name": "Test Runner",
+      "publisher": "Microsoft",
+      "version": "28.5.54151.57488",
+      "isInstalled": true
+    }
+  ]
+}

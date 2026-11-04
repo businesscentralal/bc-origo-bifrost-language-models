@@ -1,0 +1,35 @@
+{
+  "sourceChangedForHarnessRetries": false,
+  "mcp": [
+    {
+      "file": "mcp-attempt1.json",
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "reason": "Harness supplied unsupported expectedCount to AskProbe/Delete and requested SystemId by the wrong field name; one successful own model seed retained/read back, no product failure inferred"
+    }
+  ],
+  "ui": [
+    {
+      "file": "ui-attempt1.json",
+      "passed": 1,
+      "failed": 1,
+      "reason": "Harness Settings locator searched title attribute; native shell exposes accessible button name. English page scenario already passed and is retained."
+    },
+    {
+      "file": "ui-attempt2.json",
+      "passed": 2,
+      "failed": 1,
+      "reason": "Both localized page scenarios passed. Restore selector matched both the native list search and language-lookup search, causing strict locator ambiguity; scope to exact accessible label Leita Tilt\u00e6k tungum\u00e1l. Restore-only retries, no scenario rerun."
+    }
+  ],
+  "uiRestoreFollowups": {
+    "count": 3,
+    "reason": "Unscoped Icelandic search selector matched both main list and language lookup; DOM diagnosis confirmed two inputs; exact accessible label fixed restoration. Localized page scenario assertions were not weakened or rerun.",
+    "evidence": "ui-restore-input-diagnosis.json"
+  },
+  "newSuppressions": 0,
+  "newExclusions": 0,
+  "weakenedAssertions": 0,
+  "repeatedProvedSeeds": 0
+}

@@ -1,0 +1,31 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "target": "main@e5058e9b7600139350442c03df41f63b055ed064",
+  "snapshotCommit": "52ba4754cfd614e4a7c50af87b30149b18b313e3",
+  "snapshotSyncedAt": "2026-11-02T12:14:14.314Z",
+  "snapshotFreshlySyncedByWorker": false,
+  "layer1": {
+    "passed": 19,
+    "total": 23,
+    "filesScanned": 1,
+    "findings": {
+      "xml_doc_comments": "Five existing provider-interface methods have XML param/returns/example attributes the simplistic scan does not recognize; unchanged by this PR.",
+      "one_statement_per_line": "Seven AL parameter separators, not multiple executable statements.",
+      "changelog": "Existing Unreleased versus manifest28.0.3.0 header mismatch; scoped #110 entry now accurate.",
+      "modernization": "Matches custom Foundation User Setup ori as legacy authentication. No legacy auth implementation is added; exact scoped indirect permission is the accepted fix."
+    }
+  },
+  "layer1Retry": "Set USERPROFILE to existing standards parent for config fallback; shared tool unchanged. Refreshed stale local origin/main before final diff scan.",
+  "layer2": {
+    "publicCompatibility": "No public signature, field, or enum removal; AppSourceCop compile against released28.0.2.70 passes.",
+    "roleCoverage": "No permission-set or permission-set-extension diff; only product permission is existing scoped User Setup ori read promotion.",
+    "scope": "Only #110 plus needed test-only probe objects. tools/lm98-live is outside appFolders/testFolders; keyed live trial not executed.",
+    "ids": "10035382 product;96050 enum/codeunit,96051,96052,96058 tests; native optional tooling96050table/96053..57 remains outside configured apps.",
+    "changelog": "One main-relative entry names product fix, caller indirect-read dependency, test-only endpoint/objects and optional tooling. Stale rename and unmerged-branch delta removed.",
+    "messageInventory": "Added test enum extension value Test.LanguageModel.AskProbe is explicitly included in self-seeded origo MCP plan; no production contract changes.",
+    "tests": "Existing native96052 preserves exact role combinations and positive reply/tool success assertions. New changed-tip fullsuite pending.",
+    "i18n": "Changed docs/locked test diagnostic note only; no localized product label/XLF delta. Native UI1033/1039 planned.",
+    "logic": "Current amendment changes docs/XML comments and locked diagnostic notes, not the mock/native algorithm. No assertion weakened, no new exclusion or warning suppression.",
+    "limitations": "Current candidate runtime proof pending; independent reviews invalidate on push."
+  }
+}

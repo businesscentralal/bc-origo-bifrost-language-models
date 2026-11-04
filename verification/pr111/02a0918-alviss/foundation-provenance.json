@@ -1,0 +1,14 @@
+{
+  "sha": "8afeab7962e13ed31b564b81c02e75452472de3a",
+  "runUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core/actions/runs/41753125460",
+  "artifactId": 13287279400,
+  "artifactName": "bc-origo-bifrost-core-main-Apps-1.0.11.668",
+  "digest": "sha256:b21dab05fcbcea77dac68171b0a1ef85d932a3f39b2625b718335d5abff0e84b",
+  "downloadedAt": "2026-11-04T03:50:47.859Z",
+  "appVersion": "28.0.11.668",
+  "appSha256": "46d971f47f990dec3d67cdee11e45c962fe6fa02e52b573097cfe1ecced58017",
+  "sourceMetadata": {
+    "RepositoryUrl": "https://github.com/OrigoSoftwareSolutions/bc-origo-bifrost-core",
+    "Commit": "8afeab7962e13ed31b564b81c02e75452472de3a"
+  }
+}

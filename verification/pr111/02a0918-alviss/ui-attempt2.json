@@ -1,0 +1,40 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "containerId": "f0facb34abcd",
+  "appVersion": "28.0.2147483647.1104",
+  "tool": "Playwright MCP",
+  "startedAt": "2026-11-04T14:49:33.215Z",
+  "attemptHistory": [
+    {
+      "file": "ui-attempt1.json",
+      "passed": 1,
+      "failed": 1,
+      "reason": "Harness Settings locator searched title attribute; native shell exposes accessible button name. English page scenario already passed and is retained."
+    }
+  ],
+  "scenarios": [
+    {
+      "lcid": 1033,
+      "page": 10035344,
+      "scenario": "Native Language Models list with actual localized heading/domain column, no permission refusal",
+      "passed": true,
+      "evidence": "ui-list-1033-mcp.json",
+      "screenshot": "ui-list-1033.png"
+    },
+    {
+      "lcid": 1039,
+      "page": 10035344,
+      "scenario": "Native Language Models list with actual localized heading/domain column, no permission refusal",
+      "passed": true,
+      "evidence": "ui-list-1039-mcp.json",
+      "screenshot": "ui-list-1039.png"
+    }
+  ],
+  "executed": 2,
+  "passed": 2,
+  "failed": 1,
+  "skipped": 0,
+  "languageRestored": false,
+  "error": "Playwright MCP ui-restore-1033 failed: {\"content\":[{\"type\":\"text\",\"text\":\"### Error\\nError: Language lookup search unavailable\"}],\"isError\":true}",
+  "finishedAt": "2026-11-04T14:50:03.918Z"
+}

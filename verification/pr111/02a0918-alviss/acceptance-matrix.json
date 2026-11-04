@@ -1,0 +1,70 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "issueUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/issues/110",
+  "prUrl": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/111",
+  "acceptance": [
+    {
+      "ac": "AC1",
+      "status": "VERIFIED_DEVELOPER",
+      "evidence": "native-verified.json",
+      "detail": "96052API/Read/Full+Chat+LLM Chat positive mockloop reply/tool assertions all pass on Foundation.668; no live provider result claimed."
+    },
+    {
+      "ac": "AC2",
+      "status": "VERIFIED_SOURCE",
+      "evidence": "source-manifest.json",
+      "detail": "No permission-set or extension diff; existing indirect User Setup read promoted only while10035382runs."
+    },
+    {
+      "ac": "AC3",
+      "status": "VERIFIED_DEVELOPER",
+      "evidence": "full-suite.junit.xml",
+      "detail": "96052all7pass;423configured tests exact source/compiled/JUnit set."
+    },
+    {
+      "ac": "AC4",
+      "status": "VERIFIED_SOURCE",
+      "evidence": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/commit/02a09181585f1856cb1f5ff007600d928f3f0ef8",
+      "detail": "One accurate main-relative CHANGELOG entry with objectIDs; no stale rename/unmerged-branch delta/never-merge claims."
+    },
+    {
+      "ac": "Review6632951936 documentation",
+      "status": "FIXED_AWAITING_INDEPENDENT_REVIEW",
+      "detail": "Test-only diagnostic labels/comments now describe packaging correctly; optional live harness stays outside configured app/testfolders."
+    },
+    {
+      "ac": "Review6632951936 AskProbe MCP",
+      "status": "VERIFIED_DEVELOPER",
+      "detail": "6AskProbe cases time/blobs/unknown in1033/1039pass.8additional Complete/Chat expected-negative cases pass. Own model and all own session blob fixtures cleaned/readback0.",
+      "evidence": "mcp-summary.json"
+    },
+    {
+      "ac": "Native UI1033/1039",
+      "status": "VERIFIED_DEVELOPER",
+      "detail": "Native Language Models list actualEnglish/Icelandic title and Chat Provider column;2executed2passed0failed0skipped; English user profile restored and native page rechecked.",
+      "evidence": "ui-summary.json"
+    },
+    {
+      "ac": "Current-tip paired CI",
+      "status": "PENDING",
+      "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/41849229363"
+    },
+    {
+      "ac": "Owned container cleanup",
+      "status": "VERIFIED",
+      "evidence": "owned-cleanup.json",
+      "detail": "DELETE204,GET404,previous local connection restored; own model readback0,own blobs absent."
+    },
+    {
+      "ac": "Independent reviews/approval/Architect merge-deploy/Claude postmerge role check/issue closure",
+      "status": "PENDING_SEPARATE_STAGES"
+    }
+  ],
+  "limitations": [
+    "No keyed live trial run or live-provider reply claimed.",
+    "Native exact-role positive proof is distinct from admin UI and MCP expected-negative checks.",
+    "Previous Claude receipt at9dea8b8 does not verify02a0918.",
+    "First MCP invalid-expectedCount request and UI Settings locator failure retained separately; harness fixes only, no assertion weakening or repeated successful fixture seed."
+  ],
+  "updatedAt": "2026-11-04T14:53:49.474418+00:00"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "lm111-9dea-review6632951936-main-relative-docs-mcp-worker4",
+  "source": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/pull/111#issuecomment-6632951936",
+  "repo": "businesscentralal/bc-origo-bifrost-language-models",
+  "reviewedSha": "9dea8b8780315e9c89f6d31d12fc97245ca8296e",
+  "category": "main-relative documentation and touched test-message coverage",
+  "finding": "Merged spike text incorrectly forbids merge, repeats a main-only rename, and omits AskProbe from touched MCP coverage.",
+  "rootCause": "Earlier branch-relative narrative and production-only message inventory were reused when test objects moved into the PR.",
+  "prevention": "Compare CHANGELOG with main diff and enumerate test enum-extension message values as touched endpoints before handoff.",
+  "status": "Developer fixes and runtime prevention verified; independent current-head review pending",
+  "evidence": "/workspace/evidence/lm110-amend-worker4-20261104/checkpoint.json",
+  "occurrences": 1,
+  "verification": {
+    "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+    "native": {
+      "executed": 423,
+      "passed": 423,
+      "failed": 0,
+      "skipped": 0
+    },
+    "mcpAskProbe": {
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "lcids": [
+        1033,
+        1039
+      ]
+    },
+    "ui": {
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "lcids": [
+        1033,
+        1039
+      ],
+      "languageRestored": true
+    },
+    "evidence": "/workspace/evidence/lm110-amend-worker4-20261104/acceptance-matrix.json"
+  },
+  "runtimePreventionVerified": true
+}

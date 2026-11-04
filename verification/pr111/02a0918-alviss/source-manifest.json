@@ -1,0 +1,26 @@
+{
+  "sourceSha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "repo": "businesscentralal/bc-origo-bifrost-language-models",
+  "branch": "fix/worker14-110-ask-setup-read",
+  "baseSha": "e5058e9b7600139350442c03df41f63b055ed064",
+  "clean": true,
+  "changedFiles": {
+    "CHANGELOG.md": "bf64b6ab4504293259eb6361eb924aa8abf8f3bed10814514efb48158622b531",
+    "app/src/BifrostChat/LangModelChatProvider.Codeunit.al": "0734c7ef2bc1e18364f3768f8e61f795974f090d9e4970b236bb89d1b1d0b252",
+    "test/src/Probe/LM98PermissionRunori.Codeunit.al": "5a5c1e9a640dcb86e195493708f4c4dd0a281e604c59bfd27b7e78f665fe9ff9",
+    "test/src/Probe/LM98ProbeImplori.Codeunit.al": "639370c3db0ec7d195f279d96d54c4222b5f3f20168dfe3c59a0897fad19a031",
+    "test/src/Probe/LM98ProbeMsgTypeori.EnumExt.al": "46e54eb6c66f4266d729879f733895b31c6363d0be012e92e288456c336bcf54",
+    "test/src/Probe/LM98Probeori.Codeunit.al": "3b56c2c7d9df45c2f509591e7f27d137f78d10364293c99470ba4c40824c64ab",
+    "test/test/Providers/LM98ProbeTestsori.Codeunit.al": "26c2e3c2781490aa2f04a2704792438fe8509ccbdcec4ba34cfeaec64a777dc6",
+    "tools/LM98-probe.txt": "a8ad37f6c5ad800e37590cc62635277f198c371df364298cd30710763d78a0af",
+    "tools/lm98-live/LM98Fixturesori.Codeunit.al": "325113a7d783a2399a039aebaa3ee8d6463c91783c50ccc77dd71a82bad386f8",
+    "tools/lm98-live/LM98LiveBudgetori.Codeunit.al": "a2fc9cae24953e448e68d3f7b6e3e5bf76887aba2fe126b701fb2acd38437af8",
+    "tools/lm98-live/LM98LiveTestsori.Codeunit.al": "7dd8bad9383d7590a4e21ac66486a3de5063d3524d5c80f881f1c76f670889b4",
+    "tools/lm98-live/LM98R1Sessionori.Codeunit.al": "901fcf2c7c3eadc2469dafac92adea4c814f61fbd2b2e7b2f66c8082e62c82ea",
+    "tools/lm98-live/LM98R1Testsori.Codeunit.al": "0d1e8122d1532d3c03956a1d295dd48a0bb022a672b21142ff9bb55a8ec705ba",
+    "tools/lm98-live/LM98Receiptori.Table.al": "11c75d3f59f7f4308dff093dd1efb7b86d9a0cdc52b41fa819df420b4eb7f8ab",
+    "tools/lm98-live/app.json": "3326de1932b65b5f44a3f6a1e127772caf7c8c241268c13509aadc956bc2044e",
+    "tools/lm98-live/build_probe.py": "1d9b6b9de35e5dfab2882e52a1064638b4199501eb6925c6c909a577e93a05f4"
+  },
+  "permissionSetDiff": []
+}

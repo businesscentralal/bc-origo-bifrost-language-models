@@ -1,0 +1,183 @@
+{
+  "publisher": "Origo",
+  "total_al_files": 91,
+  "mode": "diff (vs origin/main)",
+  "checks": {
+    "object_naming": {
+      "pass": true,
+      "findings": []
+    },
+    "namespace": {
+      "pass": true,
+      "findings": []
+    },
+    "global_variables": {
+      "pass": true,
+      "findings": []
+    },
+    "xml_doc_comments": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 136,
+          "procedure": "BuildConfigJson",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 198,
+          "procedure": "SaveApiKey",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 217,
+          "procedure": "SaveServiceApiKey",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 236,
+          "procedure": "SendChatMessage",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 258,
+          "procedure": "ContinueWithToolResults",
+          "file": "LangModelChatProvider.Codeunit.al"
+        }
+      ]
+    },
+    "event_subscriber_placement": {
+      "pass": true,
+      "findings": []
+    },
+    "format_guid": {
+      "pass": true,
+      "findings": []
+    },
+    "with_statements": {
+      "pass": true,
+      "findings": []
+    },
+    "one_statement_per_line": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 29,
+          "text": "internal procedure OpenRecordChat(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 46,
+          "text": "local procedure OnAfterSetRecordContext(TableId: Integer; RecordSystemId: Guid; DataCaption: Text)",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 375,
+          "text": "local procedure ExecuteProvider(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\")",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 385,
+          "text": "local procedure GetProviderBool(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\"): Boolean",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 391,
+          "text": "local procedure GetProviderText(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\"): Text",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 397,
+          "text": "local procedure SetJsonProperty(var JObject: JsonObject; PropertyName: Text; Value: Boolean)",
+          "file": "LangModelChatProvider.Codeunit.al"
+        },
+        {
+          "line": 405,
+          "text": "local procedure SetJsonProperty(var JObject: JsonObject; PropertyName: Text; Value: Text)",
+          "file": "LangModelChatProvider.Codeunit.al"
+        }
+      ]
+    },
+    "reserved_var_names": {
+      "pass": true,
+      "findings": []
+    },
+    "confirm_in_page": {
+      "pass": true,
+      "findings": []
+    },
+    "today_vs_workdate": {
+      "pass": true,
+      "findings": []
+    },
+    "data_classification": {
+      "pass": true,
+      "findings": []
+    },
+    "changelog": {
+      "pass": false,
+      "findings": [
+        "No entry for version 28.0.3.0"
+      ]
+    },
+    "hardcoded_values": {
+      "pass": true,
+      "findings": []
+    },
+    "commit_in_loop": {
+      "pass": true,
+      "findings": []
+    },
+    "try_prefix_convention": {
+      "pass": true,
+      "findings": []
+    },
+    "app_json": {
+      "pass": true,
+      "findings": []
+    },
+    "set_load_fields": {
+      "findings": [],
+      "advisory": "Loops without SetLoadFields - consider it only for wide tables; not a gate failure",
+      "pass": true
+    },
+    "format_evaluate_enum": {
+      "pass": true,
+      "findings": []
+    },
+    "read_isolation": {
+      "pass": true,
+      "findings": []
+    },
+    "caption_translation": {
+      "findings": [],
+      "pass": true,
+      "skipped": null
+    },
+    "page_code_minimal": {
+      "pass": true,
+      "findings": []
+    },
+    "modernization": {
+      "pass": false,
+      "findings": [
+        {
+          "modern": "OAuth2 (MSAL), OpenID Connect, Entitlements, SecretText, Security Groups, AL-defined Permission Sets",
+          "transition": "MOD-AUTH-001",
+          "matched": "User Setup",
+          "file": "LangModelChatProvider.Codeunit.al",
+          "severity": "block",
+          "area": "Authentication & Security"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "ready": false,
+    "passed": 19,
+    "failed": 4,
+    "total": 23
+  },
+  "files_scanned": 1,
+  "project": "Bifrost Language Models",
+  "version": "28.0.3.0"
+}

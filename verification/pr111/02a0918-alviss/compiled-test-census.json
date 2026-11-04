@@ -1,0 +1,609 @@
+{
+  "sha": "02a09181585f1856cb1f5ff007600d928f3f0ef8",
+  "testCodeunits": [
+    {
+      "codeunit": 96045,
+      "name": "LLM Ask Tool Defs Tests",
+      "methods": [
+        "ChatCompletions_AllowedToolsFilterRoundOneAndTwo",
+        "ChatCompletions_WithoutAllowedTools_SendsTheFullList_RegistryUntouched",
+        "Responses_AllowedToolsFilterRoundOneAndTwo",
+        "Responses_WithoutAllowedTools_SendsTheFullList",
+        "Anthropic_AllowedToolsFilterRoundOneAndTwo",
+        "Anthropic_WithoutAllowedTools_SendsTheFullList",
+        "EmptyAllowedTools_SendsNoTools"
+      ]
+    },
+    {
+      "codeunit": 96043,
+      "name": "LLM Ask Tool Policy Perm Tests",
+      "methods": [
+        "Policy_RunsWithTheLlmChatBaseline_1033",
+        "Policy_RunsWithTheLlmChatBaseline_1039"
+      ]
+    },
+    {
+      "codeunit": 96042,
+      "name": "LLM Ask Tool Policy Tests",
+      "methods": [
+        "Classification_WriteAndDownloadAreDenied_ReadsAllowed",
+        "Classification_UnknownAndInventedNamesAreDenied",
+        "InvokeMessageType_OnlyReadEffectIsAllowed",
+        "InvokeMessageType_UnknownEmptyMissingTypeAreDenied",
+        "Canonicalization_CaseAndOrdinalAreJudgedLikeTheName",
+        "AlwaysDenied_AskCompletePlaybookAndRequestLog",
+        "CallerLists_NarrowAndNeverWiden",
+        "CallerLists_AllowEmptyOffersNothing_UnknownNamesWarn",
+        "AllCombinations_NeverOfferWriteOrUnclassified",
+        "FailClosed_EveryPublishedToolIsClassified",
+        "FailClosed_ANewToolIsNotOfferedAndNotCallable",
+        "Filter_InvokeMessageTypeDescriptionGetsOneSentence_RegistryUntouched",
+        "Blobs_OnlyGetBlobOfThisRunIsAllowed",
+        "Permission_PolicyCallableWithTheLlmChatBaseline"
+      ]
+    },
+    {
+      "codeunit": 96003,
+      "name": "Bifrost Language Model Tests",
+      "methods": [
+        "SetSkill_GetSkill_ReturnsStoredText",
+        "GetSkill_NoContent_ReturnsEmptyString",
+        "SetSkill_LargeContent_RoundTripsCorrectly",
+        "SetSkill_OverwriteExisting_ReturnsNewContent",
+        "GetContextTokens_ZeroUsesTheProviderDefault",
+        "GetContextTokens_SetValueWins",
+        "GetContextTokens_ProviderDefaults"
+      ]
+    },
+    {
+      "codeunit": 96018,
+      "name": "Copilot Install Tests",
+      "methods": [
+        "ClaimChatProvider_WithoutSetupPermission_Claims",
+        "ClaimChatProvider_WhenAnotherProviderHolds_LeavesItUnchanged",
+        "ClaimChatProvider_WhenNone_ClaimsLanguageModels",
+        "ClaimChatProvider_Twice_IsIdempotent",
+        "ClaimChatProvider_MissingSetupRow_CreatesAndClaims",
+        "InitDefaults_DeclinedAbsent_LeavesModelsUnchanged",
+        "InitDefaults_AcceptedAbsent_CreatesDefault",
+        "InitDefaults_AcceptedOtherDefault_PreservesSelection",
+        "InitDefaults_DeclinedExisting_PreservesModelAndSkill",
+        "InitDefaults_AcceptedExisting_RefreshesOnlySkill",
+        "InitDefaults_ModelWriteFailure_PropagatesWithoutSuccess"
+      ]
+    },
+    {
+      "codeunit": 96017,
+      "name": "Copilot Upgrade Tests",
+      "methods": [
+        "UpgradePerCompany_WithoutSetupPermission_Claims",
+        "UpgradePerCompany_WhenAnotherProviderHolds_LeavesItUnchanged"
+      ]
+    },
+    {
+      "codeunit": 96002,
+      "name": "LangModel Chat Provider Tests",
+      "methods": [
+        "GetLangModelProvider_NoSetup_FallsBackToNone",
+        "GetLangModelProvider_DefaultRole_NoneProvider_ReturnsFalse",
+        "IsConfigured_RoleMock_ConfiguredTrue_ReturnsTrue",
+        "IsConfigured_RoleMock_ConfiguredFalse_ReturnsFalse",
+        "BuildConfigJson_RoleMock_ReturnsMockConfigWithEnrichedFields",
+        "BuildConfigJson_NoneProvider_ReturnsDisabledFlag",
+        "SendChatMessage_RoleMock_RoundTrips",
+        "SendChatMessage_NoneProvider_ReturnsErrorJson",
+        "GetAvailableModels_RoleMock_PopulatesBuffer",
+        "GetAvailableModels_RoleMock_NoModels_ReturnsFalse",
+        "IsConfigured_BlankCode_IgnoresDefaultModel",
+        "IsConfigured_UserCode_UsesThatModelNotDefault",
+        "IsConfigured_MissingModel_ReturnsFalse",
+        "SendChatMessage_BlankCode_ReturnsNotEnabledError",
+        "ContinueWithToolResults_BlankCode_ReturnsNotEnabledError",
+        "TryIt_BlankUserCode_UsesTestContextModel",
+        "GetLangModelProviderWithModel_BlankCode_UsesDefaultModel",
+        "GetLangModelProvider_UserRole_TakesPrecedenceOverDefault",
+        "ContinueWithToolResults_RoleMock_DelegatesToMock",
+        "ContinueWithToolResults_NoneProvider_ReturnsErrorJson",
+        "BuildConfigJson_DebugMode_IncludesDebugTrue",
+        "BuildConfigJson_RoleWithSkill_IncludesContextSkill",
+        "BuildConfigJson_RoleWithoutSkill_NoContextSkill",
+        "BuildConfigJson_NoUserSetup_NoContextSkill",
+        "SendChatMessage_ArgumentFieldsPopulated",
+        "OpenRecordChat_CustomerList_OpensFocus",
+        "OpenRecordChat_IncomingDocuments_OpensFocus",
+        "OpenRecordChat_ItemList_OpensFocus",
+        "OpenRecordChat_PurchaseCreditMemos_OpensFocus",
+        "OpenRecordChat_PurchaseInvoices_OpensFocus",
+        "OpenRecordChat_PurchaseOrders_OpensFocus",
+        "OpenRecordChat_PurchaseQuotes_OpensFocus",
+        "OpenRecordChat_PurchaseReturnOrders_OpensFocus",
+        "OpenRecordChat_SalesCreditMemos_OpensFocus",
+        "OpenRecordChat_SalesInvoiceList_OpensFocus",
+        "OpenRecordChat_SalesOrderList_OpensFocus",
+        "OpenRecordChat_SalesQuotes_OpensFocus",
+        "OpenRecordChat_SalesReturnOrderList_OpensFocus",
+        "OpenRecordChat_VendorList_OpensFocus",
+        "OpenRecordChat_UnassignedUser_HidesAction",
+        "OpenRecordChat_MissingAssignedModel_HidesAction",
+        "OpenRecordChat_EmptyCurrentRecord_OpensFocus",
+        "OpenRecordChat_SequentialCustomers_FreshContext",
+        "OpenRecordChat_NoBoundObserver_OpensFocus",
+        "OpenRecordChat_WrongExpectedContext_IsRejected",
+        "GetLangModelProviderWithModel_NoModels_ReturnsNone"
+      ]
+    },
+    {
+      "codeunit": 96036,
+      "name": "LangModel Contract Compl Tests",
+      "methods": [
+        "Catalogue_EveryType_MeetsContractAndDiscoveryRules",
+        "Catalogue_ContainsLLMPromptComplete",
+        "Rules_MissingChapters_AreReported",
+        "Rules_ErrorWithoutCodeWhenOrFix_IsReported",
+        "Rules_ExampleWithoutRequestOrResponse_IsReported",
+        "Rules_BadEffect_IsReported",
+        "Rules_DirectionMustMatchEffect",
+        "Rules_BadDescription_IsReported",
+        "Rules_ObjectNumberOfThisApp_IsReported"
+      ]
+    },
+    {
+      "codeunit": 96034,
+      "name": "LLM 65 Prompt Tests",
+      "methods": [
+        "AC1_AC4_OpenAI_Auth401",
+        "AC1_AC4_OpenAI_Auth403",
+        "AC2_AC4_OpenAI_Rate429",
+        "AC2_AC4_OpenAI_Server500",
+        "AC2_AC4_OpenAI_Server503",
+        "AC2_AC4_OpenAI_Timeout",
+        "AC2_AC4_OpenAI_TransportThrows",
+        "AC3_AC4_OpenAI_Blocked",
+        "AC2_AC4_OpenAI_InvalidBody",
+        "AC6_OpenAI_Plain",
+        "AC6_OpenAI_System",
+        "AC6_OpenAI_File",
+        "AC1_AC4_Azure_Auth401",
+        "AC1_AC4_Azure_Auth403",
+        "AC2_AC4_Azure_Rate429",
+        "AC2_AC4_Azure_Server500",
+        "AC2_AC4_Azure_Server503",
+        "AC2_AC4_Azure_Timeout",
+        "AC2_AC4_Azure_TransportThrows",
+        "AC3_AC4_Azure_Blocked",
+        "AC2_AC4_Azure_InvalidBody",
+        "AC6_Azure_Plain",
+        "AC6_Azure_System",
+        "AC6_Azure_File",
+        "AC1_AC4_Custom_Auth401",
+        "AC1_AC4_Custom_Auth403",
+        "AC2_AC4_Custom_Rate429",
+        "AC2_AC4_Custom_Server500",
+        "AC2_AC4_Custom_Server503",
+        "AC2_AC4_Custom_Timeout",
+        "AC2_AC4_Custom_TransportThrows",
+        "AC3_AC4_Custom_Blocked",
+        "AC2_AC4_Custom_InvalidBody",
+        "AC6_Custom_Plain",
+        "AC6_Custom_System",
+        "AC6_Custom_File",
+        "AC1_AC4_Anthropic_Auth401",
+        "AC1_AC4_Anthropic_Auth403",
+        "AC2_AC4_Anthropic_Rate429",
+        "AC2_AC4_Anthropic_Server500",
+        "AC2_AC4_Anthropic_Server503",
+        "AC2_AC4_Anthropic_Timeout",
+        "AC2_AC4_Anthropic_TransportThrows",
+        "AC3_AC4_Anthropic_Blocked",
+        "AC2_AC4_Anthropic_InvalidBody",
+        "AC6_Anthropic_Plain",
+        "AC6_Anthropic_System",
+        "AC6_Anthropic_File",
+        "AC1_AC4_Gemini_Auth401",
+        "AC1_AC4_Gemini_Auth403",
+        "AC2_AC4_Gemini_Rate429",
+        "AC2_AC4_Gemini_Server500",
+        "AC2_AC4_Gemini_Server503",
+        "AC2_AC4_Gemini_Timeout",
+        "AC2_AC4_Gemini_TransportThrows",
+        "AC3_AC4_Gemini_Blocked",
+        "AC2_AC4_Gemini_InvalidBody",
+        "AC6_Gemini_Plain",
+        "AC6_Gemini_System",
+        "AC6_Gemini_File",
+        "AC1_AC4_xAI_Auth401",
+        "AC1_AC4_xAI_Auth403",
+        "AC2_AC4_xAI_Rate429",
+        "AC2_AC4_xAI_Server500",
+        "AC2_AC4_xAI_Server503",
+        "AC2_AC4_xAI_Timeout",
+        "AC2_AC4_xAI_TransportThrows",
+        "AC3_AC4_xAI_Blocked",
+        "AC2_AC4_xAI_InvalidBody",
+        "AC6_xAI_Plain",
+        "AC6_xAI_System",
+        "AC6_xAI_File",
+        "AC2_AC4_Gemini_File429",
+        "AC2_AC4_xAI_File429",
+        "AC2_AC4_Anthropic_File429",
+        "AC01_xAI_Png_InlineImageDisablesStore",
+        "AC01_xAI_Jpeg_InlineImageDisablesStore",
+        "AC02_xAI_Pdf_DeletesWhenPromptFails",
+        "AC02_xAI_Pdf_DeleteFailureKeepsReply",
+        "AC02_xAI_Pdf_UploadFailureSkipsPrompt",
+        "AC02_Pdf_UploadIdUnreadLogsRetention",
+        "AC02_Pdf_OversizeRefusesBeforeHttp",
+        "AC02_OpenAI_Pdf_OversizeRefusesBeforeHttp",
+        "AC02_AzureOpenAI_Pdf_OversizeRefusesBeforeHttp",
+        "AC02_CustomLLM_Pdf_OversizeRefusesBeforeHttp",
+        "AC02_Anthropic_Pdf_OversizeRefusesBeforeHttp",
+        "AC02_Google_Pdf_OversizeRefusesBeforeHttp",
+        "FileHandling_ClassifiesMimeWithoutProviderName",
+        "AC95_UnderTotalCap_ReachesProvider",
+        "AC95_ExactTotalCap_ReachesProvider",
+        "AC95_OverTotalCap_RefusesBeforeHttp",
+        "AC03_xAI_StoredPng_UsesImagePath",
+        "AC03_xAI_StoredPdf_Uploads",
+        "AC04_xAI_Gif_RefusesBeforeHttp",
+        "AC04_OpenAI_Gif_RefusesBeforeHttp",
+        "AC04_AzureOpenAI_Gif_RefusesBeforeHttp",
+        "AC04_CustomLLM_Gif_RefusesBeforeHttp",
+        "AC04_Anthropic_Gif_RefusesBeforeHttp",
+        "AC04_Google_Gif_RefusesBeforeHttp",
+        "AC04_xAI_JpgMime_RefusesBeforeHttp",
+        "AC04_xAI_StoredGif_RefusesBeforeHttp",
+        "AC04_xAI_GifBesidePdf_RefusesBeforeUpload",
+        "AC05_xAI_Text400_CarriesSafeCode",
+        "AC5_PromptNumber",
+        "AC5_PromptObject",
+        "AC5_PromptArray",
+        "AC5_PromptBoolean",
+        "AC5_PromptNull",
+        "AC4_SuccessStatusWithErrorBody",
+        "AC7_TransportBaselineDenied",
+        "AC7_TransportAndChatDenied",
+        "AC7_TransportAndChatPairAllow",
+        "AC8_ErrorContract",
+        "AC8_EnglishErrorLabels",
+        "AC8_IcelandicErrorLabels",
+        "AC8_EnglishRetryLabels",
+        "AC8_IcelandicRetryLabels",
+        "AC8_EnglishBlockedLabels",
+        "AC8_IcelandicBlockedLabels",
+        "AC8_EnglishProviderLabels",
+        "AC8_IcelandicProviderLabels",
+        "AC8_EnglishPromptLabels",
+        "AC8_IcelandicPromptLabels",
+        "AC6_StoredAttachment",
+        "AC4_DebugLoggingDoesNotStoreFailure"
+      ]
+    },
+    {
+      "codeunit": 96032,
+      "name": "LLM Prompt Compl Perm Tests",
+      "methods": [
+        "Execute_ChatAndLLMChatOnly_RunsPastPermissionCheck_1033",
+        "Execute_ChatAndLLMChatOnly_RunsPastPermissionCheck_1039",
+        "Execute_ChatOnlyWithoutLLMChat_FailsWithPermissionError_1033",
+        "Execute_ChatOnlyWithoutLLMChat_FailsWithPermissionError_1039"
+      ]
+    },
+    {
+      "codeunit": 96019,
+      "name": "LLM Prompt Contract Tests",
+      "methods": [
+        "Contract_HasRequiredChaptersAndValidContent",
+        "Discovery_HasLanguageModelSpecificText",
+        "Contract_NamesBothPermissionSets",
+        "Execute_MissingPrompt_IsCodedMissingParameter",
+        "Execute_UnknownRoleCode_IsCodedRecordNotFound",
+        "Execute_RoleCodeLongerThanACode_IsRecordNotFoundNotCut"
+      ]
+    },
+    {
+      "codeunit": 96041,
+      "name": "LM 96 MIME Tests",
+      "methods": [
+        "Scenario_AC01_PaddedUpperParameterised_ClassifiesMime",
+        "Scenario_AC02_xAI_PaddedJpeg_SendsDataUri",
+        "Scenario_AC02_OpenAI_UpperPng_SendsDataUri",
+        "Scenario_AC02_Azure_ParameterisedJpeg_SendsDataUri",
+        "Scenario_AC02_Custom_PaddedPng_SendsDataUri",
+        "Scenario_AC02_Anthropic_ParameterisedJpeg_SendsMediaType",
+        "Scenario_AC02_Google_UpperPng_SendsMimeType",
+        "Scenario_AC02_xAI_ParameterisedPdf_UploadsPdf",
+        "Scenario_AC03_SpacedGifAndWebp_RefusedOnEveryProvider"
+      ]
+    },
+    {
+      "codeunit": 96013,
+      "name": "Chat Svc Gate Tests",
+      "methods": [
+        "ChatSvcGate_WritePermission_WithPermissionsDisabled",
+        "ProviderBase_HasServiceKeyPermission_WithPermissionsDisabled",
+        "ChatSvcGate_WritePermission_WithRestrictivePermissions",
+        "ChatSvcGate_WritePermission_WithoutPermissionSet",
+        "ChatSvcGate_Table_IsAccessible"
+      ]
+    },
+    {
+      "codeunit": 96011,
+      "name": "LangModel API Client Tests",
+      "methods": [
+        "ExtractText_StandardResponse",
+        "ExtractText_EmptyChoices_ReturnsEmpty",
+        "ExtractText_NoChoices_ReturnsEmpty",
+        "ExtractText_ContentIsNull_ReturnsEmpty",
+        "ExtractText_ContentArray_ReturnsEmpty",
+        "UploadBody_PurposeBeforeDecodedFile"
+      ]
+    },
+    {
+      "codeunit": 96029,
+      "name": "LangModel Chat Proxy Tests",
+      "methods": [
+        "NeedsReasoningOff_ToolsAndMatchingError_IsTrue",
+        "NeedsReasoningOff_NoTools_IsFalse",
+        "NeedsReasoningOff_AlreadySet_IsFalse",
+        "NeedsReasoningOff_UnrelatedError_IsFalse",
+        "SessionTime_ExactFixedBlock",
+        "SessionTime_UnknownZoneUsesUtc",
+        "SessionTime_WorkDateConditions",
+        "SessionTime_PositiveMidnight",
+        "SessionTime_NegativeMidnight",
+        "SessionTime_MonthEnd",
+        "SessionTime_LeapDay",
+        "SessionTime_FractionalOffset",
+        "SessionTime_LocaleIndependent",
+        "SessionTime_AppendOnceAfterBootstrap",
+        "SessionTime_FoundationMarkerPreserved",
+        "SessionTime_RequestRefreshAndNoIdentity"
+      ]
+    },
+    {
+      "codeunit": 96010,
+      "name": "LangModel Prov Base Tests",
+      "methods": [
+        "IsConfigured_WithKeyAndUrl_ReturnsTrue",
+        "IsConfigured_WithoutKey_ReturnsFalse",
+        "IsConfigured_WithKeyNoUrl_UsesDefault",
+        "GetBaseUrl_ArgumentOverridesDefault",
+        "GetBaseUrl_EmptyArgument_FallsBackToDefault",
+        "GetModel_ArgumentOverridesDefault",
+        "GetTimeoutMs_ArgumentValue_Used",
+        "GetTimeoutMs_Zero_UsesDefault",
+        "GetMaxTokens_ArgumentValue_Used",
+        "GetMaxTokens_Zero_UsesDefault",
+        "ParseTokenUsage_StandardFormat",
+        "ParseTokenUsage_MissingUsage_ReturnsZero",
+        "ParseTokenUsage_InvalidJson_ReturnsZero",
+        "AttachFiles_AddsImageUrlBlock",
+        "AttachFiles_PdfUsesFileBlock",
+        "AttachFiles_NoFiles_LeavesMessageUnchanged",
+        "AttachFiles_PreservesSystemMessage"
+      ]
+    },
+    {
+      "codeunit": 96012,
+      "name": "LangModel Providers Tests",
+      "methods": [
+        "OpenAI_Metadata",
+        "AzureOpenAI_Metadata",
+        "CustomLLM_Metadata",
+        "Anthropic_Metadata",
+        "xAI_Metadata",
+        "Gemini_Metadata",
+        "IsConfigured_WithoutApiKey_ReturnsFalse_ForEveryExternalProvider",
+        "SetAzureChatPath_Blank_UsesDefaultDeploymentPath",
+        "SetAzureChatPath_CustomTemplate_SubstitutesModelAndApiVersion",
+        "SetAzureChatPath_CustomDeploymentTemplate_UsesConfiguredDeployment"
+      ]
+    },
+    {
+      "codeunit": 96022,
+      "name": "LangModel Turn Guard Tests",
+      "methods": [
+        "HistoryBudget_FollowsTheContextSize",
+        "HistoryBudget_ZeroContextUsesTheFallback",
+        "HistoryBudget_ToolDefinitionsAndTinyContextKeepAFloor",
+        "RemoveOrphanedToolMessages_LeadingToolMessageIsRemoved",
+        "RemoveOrphanedToolMessages_PairedCallsAreKept",
+        "RemoveOrphanedToolMessages_CallWithoutResultIsDropped",
+        "RemoveOrphanedResponsesItems_DropsUnpairedItems",
+        "NeedsFigureCheck_FiguresWithoutToolCall_IsTrue",
+        "NeedsFigureCheck_FiguresAfterToolCall_IsFalse",
+        "NeedsFigureCheck_ToolCallInAnEarlierTurn_DoesNotCount",
+        "NeedsFigureCheck_AfterTheFollowUp_IsFalse",
+        "NeedsFigureCheck_AnthropicToolUseBlocksCount",
+        "ContainsFigures_RecognisesAmountsOnly"
+      ]
+    },
+    {
+      "codeunit": 96015,
+      "name": "LLM Req Log Masker Tests",
+      "methods": [
+        "MaskRequestBody_DebugMode_ReturnsBodyUnchanged",
+        "MaskRequestBody_NormalMode_IsRedacted",
+        "MaskResponseBody_DebugMode_ReturnsBodyUnchanged",
+        "MaskResponseBody_NormalMode_IsRedacted",
+        "MaskResponseBody_EmptyBody_StaysEmptyInDebugMode",
+        "MaskErrorText_IsNeverRedacted",
+        "GetBaseUrl_StripsPathAndQuery",
+        "GetBaseUrl_HostOnly_ReturnsHost",
+        "GetBaseUrl_NoScheme_ReturnsInput",
+        "GetBaseUrl_Empty_ReturnsEmpty"
+      ]
+    },
+    {
+      "codeunit": 96052,
+      "name": "LM98 Probe Tests ori",
+      "methods": [
+        "AC04_ReplaceCachedBlockPreservesSuffix",
+        "AC04_MissingBlockRefused",
+        "AC04_DuplicateBlocksRefused",
+        "AC04_QuotedHeaderIsNotABlock",
+        "AC07_ApiAndChatRoles",
+        "AC07_ReadAndChatRoles",
+        "AC07_FullAndChatRoles"
+      ]
+    },
+    {
+      "codeunit": 96031,
+      "name": "LangModel 60 Defaults Tests",
+      "methods": [
+        "Scenario_AC01_EmptyEndpoints_FillsDefaults",
+        "Scenario_AC02_ProxyEndpoints_KeepsExistingValues",
+        "Scenario_AC02_AzureEndpoints_KeepsExistingValues",
+        "Scenario_AC02_OnlyBaseUrl_LeavesPathsEmpty",
+        "Scenario_AC02_OnlyChatPath_FillsBaseUrlOnly",
+        "Scenario_AC02_OnlyModelsPath_FillsBaseUrlOnly",
+        "Scenario_AC02_RepeatedSelection_KeepsUserEdits",
+        "Scenario_AC01_TableValidation_FillsDefaults",
+        "Scenario_AC02_AzureSelection_LeavesEndpointsEmpty",
+        "Scenario_AC01_DefaultBase_BuildsEndpointUrls",
+        "Scenario_AC01_CustomTrailingSlash_BuildsEndpointUrls",
+        "Scenario_AC01_WhitespaceAroundBase_BuildsEndpointUrls",
+        "Scenario_AC01_WhitespaceBase_DefaultsOnCard",
+        "Scenario_AC01_WhitespaceBase_UsesRuntimeDefault",
+        "Scenario_AC01_VersionedBase_BuildsSingleV1Urls",
+        "Scenario_AC01_VersionedTrailingSlash_BuildsSingleV1Urls",
+        "Scenario_AC02_PathsWithoutLeadingSlash_BuildsEndpointUrls",
+        "Scenario_AC02_VersionedPaths_PreservesSegmentBoundaries"
+      ]
+    },
+    {
+      "codeunit": 96004,
+      "name": "LangModel Field Restrict Tests",
+      "methods": [
+        "FieldRestrict_ThreeEndpointFieldsWriteRestricted",
+        "FieldRestrict_EndpointFieldsNotReadRestricted",
+        "FieldRestrict_NeighbourFieldsNotRestricted",
+        "FieldRestrict_TableLevelChecksStayFalse",
+        "FieldRestrict_HintForEndpointFieldsEmptyForNeighbour"
+      ]
+    },
+    {
+      "codeunit": 96035,
+      "name": "LangModel Hint Tests",
+      "methods": [
+        "EnglishRead_KeyPresenceTransitions",
+        "EnglishEdit_KeyPresenceTransitions",
+        "IcelandicRead_KeyPresenceTransitions",
+        "IcelandicEdit_KeyPresenceTransitions"
+      ]
+    },
+    {
+      "codeunit": 96016,
+      "name": "LangModel Registration Tests",
+      "methods": [
+        "AppRegistry_ListsLanguageModelsWithItsSetupPage",
+        "LicAdm_OpensBifrostSetup_WithLanguageModelsInstalled"
+      ]
+    },
+    {
+      "codeunit": 96009,
+      "name": "LangModel Secrets Tests",
+      "methods": [
+        "GetSecretCodes_BuildBothCodesFromLanguageModelCode",
+        "GetSecretCodes_LongestLanguageModelCode_FitsInCode50",
+        "GetSecretCodes_BlankLanguageModelCode_ReturnsBlank",
+        "Insert_LanguageModel_RegistersBothSecretsWithCorrectScope",
+        "Register_CalledTwice_IsIdempotent",
+        "ServiceKey_SetIsSetClear_RoundTrips",
+        "UserKey_SetIsSetClear_RoundTrips",
+        "ServiceAndUserKey_AreStoredIndependently",
+        "TryGetApiKey_PersonalKeyTakesPriorityOverSharedKey",
+        "TryGetApiKey_WithoutPersonalKey_FallsBackToSharedKey",
+        "TryGetApiKey_NoKeyStored_ReturnsFalse",
+        "TryGetApiKey_BlankLanguageModelCode_ReturnsFalse",
+        "MarkApiKeyUsed_NoKeyStored_DoesNotStampUsage",
+        "MarkApiKeyUsed_BlankCode_DoesNotChangeSecrets",
+        "SetServiceKey_BlankLanguageModelCode_Errors",
+        "Delete_LanguageModel_ClearsBothSecrets",
+        "Rename_LanguageModel_MovesSecretsToTheNewCode",
+        "CountModelsWithoutKey_Empty_ReturnsZero",
+        "CountModelsWithoutKey_KeyScopes_CountsWithoutUsageWrites"
+      ]
+    },
+    {
+      "codeunit": 96014,
+      "name": "LangModel Setup Page Tests",
+      "methods": [
+        "LangModelSetupPage_Opens",
+        "LangModelSetupPage_CountsTheLanguageModels",
+        "SetupOri_ExposesTheSingleLangModelAppsAction"
+      ]
+    },
+    {
+      "codeunit": 96037,
+      "name": "LangModel Setup Wizard Tests",
+      "methods": [
+        "Scenario_AC01_AssistedSetup_RegistersWizard",
+        "Scenario_AC02_Setup_OffersBothWizards",
+        "Scenario_AC03_HttpStatus_ReadsCurrentAppSetting",
+        "Scenario_AC03_HttpStep_OffersVerify",
+        "Scenario_AC04_CopilotDeclined_LeavesModelsUnchanged",
+        "Scenario_AC06_NoProvider_ClaimsLanguageModels",
+        "Scenario_AC06_OtherProvider_PreservesHolder",
+        "Scenario_AC06_AlreadyClaimed_RemainsLanguageModels",
+        "Scenario_AC07_TwoUsers_AssignsOnlyTheirTwoSets",
+        "Scenario_AC07_DisabledUser_RefusesWithoutAssignments",
+        "Scenario_AC08_ValidModel_CreatesMissingUserSetup",
+        "Scenario_AC08_ExistingSetup_UpdatesModelOnly",
+        "Scenario_AC08_UnknownModel_RefusesWithoutSetup",
+        "Scenario_AC08_ChangeDefault_LeavesOneDefault",
+        "Scenario_AC08_UnknownDefault_PreservesDefault",
+        "Scenario_AC09_Finish_MarksSetupComplete",
+        "Scenario_AC09_EarlyClose_DoesNotComplete",
+        "Scenario_AC09_NothingConfigured_RefusesCompletion",
+        "Scenario_AC08_MissingUser_RefusesWithoutSetup",
+        "Scenario_AC03_NonAdmin_HttpStatusIsReadOnly",
+        "Scenario_AC07_NonAdmin_AssignmentCommandRefused"
+      ]
+    },
+    {
+      "codeunit": 96040,
+      "name": "LangModel Wizard Reg Tests",
+      "methods": [
+        "Scenario_AC02_EnglishPlatformCaller_RegistersOnce",
+        "Scenario_AC03_IcelandicPlatformCaller_RegistersOnce",
+        "Scenario_AC05_MetadataCaller_WizardExecutionRefused",
+        "Scenario_AC05_MetadataCaller_BusinessAndAdminRefused",
+        "Scenario_AC04_Registration_PreservesConfiguration"
+      ]
+    },
+    {
+      "codeunit": 96038,
+      "name": "LangModel Wizard Users Tests",
+      "methods": [
+        "Scenario_AC02_PermissionCombinations_ShowIndependentColumns",
+        "Scenario_AC02_GlobalAndOtherCompany_RespectCompanyScope",
+        "Scenario_AC02_SameRoleDifferentApp_DoesNotCount",
+        "Scenario_AC02_ModelThenMissingSetup_ClearsDisplayedModel",
+        "Scenario_AC02_Reload_ReplacesCachedAssignments",
+        "Scenario_AC02_IndirectRead_LoadsWithoutAssignmentAuthority",
+        "Scenario_AC02_InheritedGroups_PreserveIndependentEffectiveGrants",
+        "Scenario_AC02_InheritedGroups_RejectOtherCompanyAndApp"
+      ]
+    },
+    {
+      "codeunit": 96028,
+      "name": "LangModel Test Tools Tests",
+      "methods": [
+        "Set_CreatesModelAndStoresKeysWithoutAnsweringThem",
+        "Set_UnknownProviderAndMissingCode_AreReportedTogether",
+        "Delete_RemovesTheModelAndReportsUnknownCodes",
+        "Chat_RunsToolCallsAndReturnsTheReply",
+        "Chat_ProviderError_IsPreconditionFailed",
+        "Chat_UnknownModel_IsRecordNotFound",
+        "Chat_WrongExpectedCount_DoesNotCallProvider",
+        "Contracts_DeclareParametersAndEffects",
+        "Set_UnknownParameter_DoesNotCreateModel",
+        "Set_UnknownModelChild_DoesNotCreateModel",
+        "Delete_UnknownParameter_PreservesModel",
+        "Chat_UnknownParameter_DoesNotCallProvider"
+      ]
+    }
+  ],
+  "testCount": 423
+}
