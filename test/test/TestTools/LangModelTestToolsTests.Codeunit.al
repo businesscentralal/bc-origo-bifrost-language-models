@@ -163,6 +163,32 @@ codeunit 96028 "LangModel Test Tools Tests"
     end;
 
     /// <summary>
+    /// Verifies a mismatched chat confirmation refuses execution before the provider is called.
+    /// </summary>
+    [Test]
+    procedure Chat_WrongExpectedCount_DoesNotCallProvider()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] #103 AC1: an explicit stale count cannot run an irreversible chat turn.
+        // [GIVEN] A self-created mock model and a provider that would otherwise return a reply.
+        Cleanup();
+        Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock"}');
+        MockProvider.Reset();
+        MockProvider.SetSendResponse('{"type":"reply","reply":"Must not run."}');
+
+        // [WHEN] The caller confirms two operations instead of this single chat turn.
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":2}');
+
+        // [THEN] Foundation refuses the stale count without calling the provider.
+        Assert.AreEqual('ConfirmationMismatch', ResponseJson.GetText('code'), 'The explicit count must match the chat operation.');
+        Assert.AreEqual('expectedCount', ResponseJson.GetText('parameter'), 'The refusal names the confirmation key.');
+        Assert.AreEqual('1', ResponseJson.GetText('expected'), 'One chat turn is counted.');
+        Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'Confirmation runs before the provider.');
+        Cleanup();
+    end;
+
+    /// <summary>
     /// Verifies the enum mappings expose request declarations and honest effects for all three tools.
     /// </summary>
     [Test]
@@ -282,28 +308,30 @@ codeunit 96028 "LangModel Test Tools Tests"
 
     local procedure ExecuteChat(RequestBody: Text) ResponseJson: JsonObject
     var
+        Request: JsonObject;
         CodeToken: JsonToken;
     begin
-        // Current Foundation returns ConfirmationRequired for irreversible Chat until expectedCount
-        // matches the default count of 1. Older Foundation has no gate, so the first response stands.
-        // Unknown-parameter refusals stay on the first call and are not confirmed.
+        // Explicit confirmation and refusals are single-shot. Otherwise confirm only the previewed count.
+        Assert.IsTrue(Request.ReadFrom(RequestBody), RequestBody);
         ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", RequestBody);
+        if Request.Contains('expectedCount') then
+            exit;
         if not ResponseJson.Get('code', CodeToken) then
             exit;
         if not CodeToken.IsValue() then
             exit;
         if CodeToken.AsValue().AsText() <> 'ConfirmationRequired' then
             exit;
-        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", WithExpectedCount(RequestBody));
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", WithExpectedCount(RequestBody, ResponseJson.GetInteger('expected')));
     end;
 
-    local procedure WithExpectedCount(RequestBody: Text) ConfirmedBody: Text
+    local procedure WithExpectedCount(RequestBody: Text; ExpectedCount: Integer) ConfirmedBody: Text
     var
         Request: JsonObject;
     begin
         Assert.IsTrue(Request.ReadFrom(RequestBody), RequestBody);
         if not Request.Contains('expectedCount') then
-            Request.Add('expectedCount', 1);
+            Request.Add('expectedCount', ExpectedCount);
         Request.WriteTo(ConfirmedBody);
     end;
 
