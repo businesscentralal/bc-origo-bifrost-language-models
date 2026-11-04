@@ -46,8 +46,10 @@
     },
     {
       "ac": "Current-tip paired CI",
-      "status": "PENDING",
-      "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/41849229363"
+      "status": "VERIFIED",
+      "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/41849229363",
+      "detail": "Normal pairedCI41849229363success; Default/TestALcompile0/0;423executed423passed0failed0skipped, exact compiled method-set match, artifact digest checks and synthetic whole-tree equality.",
+      "evidence": "ci-summary.json"
     },
     {
       "ac": "Owned container cleanup",
