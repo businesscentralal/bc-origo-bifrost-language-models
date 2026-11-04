@@ -757,5 +757,21 @@
     "Build . (Default then Test) / Default / Remove COSMO Alpaca Containers",
     "Code Analysis Processing",
     "Build . (Default then Test) / Test / Remove COSMO Alpaca Containers"
-  ]
+  ],
+  "pipelineDisclosure": {
+    "sharedContainerId": "f01491a905da",
+    "defaultAndTestSamePhysicalContainer": true,
+    "testProductRepublish": {
+      "version": "28.0.2147483647.223",
+      "sha256": "780F954174558295F68609E9EB0E33FD54C204AC62D9974F3D6C519B826BB544",
+      "startedAt": "2026-11-04T14:51:48.6148650Z",
+      "completedAt": "2026-11-04T14:52:06.4588950Z"
+    },
+    "defaultSkipUpgrade": false,
+    "testSkipUpgrade": true,
+    "ciContainerCleanup": "deleted f01491a905da at2026-11-04T14:59:37.1958013Z (CI log, no direct404 readback by worker4)",
+    "defaultInternalsVisibleToModules": 0,
+    "defaultSigning": "PR job resolves doNotSignApps=True; signing not proved by this run. Source pipeline unchanged by this PR; disclose to Reviewer/Architect rather than claim signed Default or modify pipeline.",
+    "sourcePipelineChanged": false
+  }
 }
