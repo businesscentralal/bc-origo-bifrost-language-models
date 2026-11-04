@@ -3,7 +3,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
 
-/// <summary>Nonshipping probe. Preserves transaction mode, never returns provider or customer content.</summary>
+/// <summary>Test-app-only probe. Preserves transaction mode, never returns provider or customer content.</summary>
 codeunit 96050 "LM98 Probe Impl ori" implements "Msg Interface ori", "Msg Contract ori"
 {
     Access = Internal;
@@ -77,7 +77,7 @@ codeunit 96050 "LM98 Probe Impl ori" implements "Msg Interface ori", "Msg Contra
         exit(true);
     end;
 
-    /// <summary>Describes this nonshipping diagnostic.</summary>
+    /// <summary>Describes this test-only diagnostic.</summary>
     procedure GetDescription(): Text[250]
     begin
         exit('TEST ONLY LM98: nonlive transaction, session-time, blob and sanitized native-receipt diagnostics.');
@@ -95,7 +95,7 @@ codeunit 96050 "LM98 Probe Impl ori" implements "Msg Interface ori", "Msg Contra
         exit(0);
     end;
 
-    /// <summary>The test extension registers this nonshipping diagnostic.</summary>
+    /// <summary>The test extension registers this test-only diagnostic.</summary>
     procedure IsEnabled(): Boolean
     begin
         exit(true);
@@ -147,7 +147,7 @@ codeunit 96050 "LM98 Probe Impl ori" implements "Msg Interface ori", "Msg Contra
     /// <summary>No additional notes chapter is provided by this private probe.</summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'Private nonshipping diagnostic; results are observations, not acceptance passes.';
+        Notes := 'Test-app-only diagnostic; results are observations, not acceptance passes.';
         exit(true);
     end;
 }
