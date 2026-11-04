@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-02) - Ask loop reads user setup without a new tabledata grant (#110)
+
+- Codeunit 10035382 `LangModel Chat Provider ori` promotes the caller's existing indirect read on Foundation `User Setup ori` while the codeunit runs, so the API, Read and Full roles combined with Chat and LLM Chat can resolve the assigned language model and system prompt. This relies on those roles retaining their existing indirect read. No permission set or permission-set extension gains tabledata on `Setup ori` or `User Setup ori`. Request Debug Mode is still read through `Setup ori`.GetRequestDebugMode. No production message contract changes.
+- The test app adds enum extension 96050 and `Test.LanguageModel.AskProbe`, implementation codeunit 96050, diagnostic codeunit 96051, regression test codeunit 96052 and restricted-role runner codeunit 96058. The regression asserts a successful mock headless tool loop under each of the three exact role combinations, captures native failure stacks and cleans up its own fixture. The test-only message provides nonlive transaction, session-time, blob and tool-metadata diagnostics; it is not a production endpoint.
+- Optional OnPrem tooling under `tools/lm98-live` (table 96050 and codeunits 96053–96057) remains outside the product and test app folders. Its isolated live-provider trial is separate from this fix's mock regression coverage and is not included in the shipping app.
+
 ### Fixed (2026-10-31) - Confirm irreversible test chat turns (#103)
 
 - Test codeunit 96028 `LangModel Test Tools Tests` uses main's preview-and-confirm helper for irreversible `Test.LanguageModel.Chat` turns before asserting tool replies, provider errors and missing models. The helper retries only `ConfirmationRequired`, using the returned `expected` count, and leaves requests with an explicit `expectedCount` single-shot. This follows Foundation 28.0.11.643's default counted-confirmation gate without disabling it or changing the tool's irreversible contract. A mismatched-count regression proves the provider is not called.

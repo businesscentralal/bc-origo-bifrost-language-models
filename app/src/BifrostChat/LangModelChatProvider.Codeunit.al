@@ -14,6 +14,12 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
 {
     Access = Public;
 
+    // API and Read hold only an indirect grant on Foundation "User Setup ori". This promotes that
+    // grant to direct while this codeunit runs, so the headless ask loop can read the assigned
+    // language model and system prompt. It does not add tabledata to any permission set (#110).
+    // Request Debug Mode stays on "Setup ori".GetRequestDebugMode, which carries its own inherent read.
+    Permissions = tabledata "User Setup ori" = R;
+
     /// <summary>
     /// Opens Foundation's chat focus with the caller's current record and caption in this session.
     /// </summary>
