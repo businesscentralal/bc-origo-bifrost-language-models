@@ -22,7 +22,7 @@ Repository: bc-origo-bifrost-language-models
 Default branch: main
 
 ## Dependencies
-- Bifrost Foundation **28.0.4.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): includes the `Retryable` error code needed by prompt failures and the public `Setup ori.TryClaimChatProvider`. AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
+- Bifrost Foundation **28.0.11.0** or later in `app/app.json` and `test/app.json` (`7505e808-6e52-4b96-a328-82573391297a`): includes the `Retryable` error code needed by prompt failures and the public `Setup ori.TryClaimChatProvider`. AL-Go probes the latest core CI build (`.AL-Go/settings.json`: `release_status` `latestBuild`, `version` `latest`).
 
 ## Naming Rules
 - Every object carries the `ori` suffix (AppSource mandatory affix) and is at most 30 characters.
