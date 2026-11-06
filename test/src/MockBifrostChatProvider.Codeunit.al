@@ -18,6 +18,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
 
     var
         LastSendPayload: Text;
+        LastCompletePayload: Text;
         LastConversationState: Text;
         LastToolResultsJson: Text;
         LastBaseUrl: Text;
@@ -71,6 +72,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
             ProcType::CompletePrompt:
                 begin
                     CompletePromptCalled := true;
+                    LastCompletePayload := Argument.GetPayload();
                     Argument.SetResultText(CompleteResponseValue);
                 end;
             ProcType::ContinueWithToolResults:
@@ -157,6 +159,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     begin
         RejectCopilotWrite := false;
         LastSendPayload := '';
+        LastCompletePayload := '';
         LastConversationState := '';
         LastToolResultsJson := '';
         LastBaseUrl := '';
@@ -243,6 +246,12 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     procedure GetLastSendPayload(): Text
     begin
         exit(LastSendPayload);
+    end;
+
+    /// <summary>Returns the payload the last CompletePrompt call received, with the systemPrompt the provider would send.</summary>
+    procedure GetLastCompletePayload(): Text
+    begin
+        exit(LastCompletePayload);
     end;
 
     [NonDebuggable]

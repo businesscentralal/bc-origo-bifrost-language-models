@@ -23,6 +23,8 @@ permissionset 10035398 "BIFROST LLM Chat ori"
         codeunit "LangModel Chat Proxy ori" = X,
         codeunit "LangModel Turn Guard ori" = X,
         codeunit "LLM Ask Tool Policy ori" = X,
+        codeunit "LLM Session Time ori" = X,
+        codeunit "MCP Tool Server ori" = X,
         codeunit "Anthropic LangModel Proxy ori" = X,
         codeunit "OpenAI LangModel Prov. ori" = X,
         codeunit "Azure OAI LangModel Prov. ori" = X,
