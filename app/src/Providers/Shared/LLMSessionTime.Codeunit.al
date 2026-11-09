@@ -125,17 +125,19 @@ codeunit 10035431 "LLM Session Time ori"
     end;
 
     /// <summary>
-    /// Puts Block first in a Complete system prompt: replaces a block the caller's text already holds, otherwise
-    /// writes Block, one empty line and the caller's text. An empty caller text yields Block alone.
+    /// Puts Block first in a Complete system prompt, removing any stale blocks from the caller's text.
+    /// An unavailable fresh block leaves only the caller's instructions; an empty caller text yields Block alone.
     /// </summary>
     procedure ForSystemPrompt(CallerSystem: Text; Block: Text): Text
     var
         Result: TextBuilder;
     begin
+        if HasBlock(CallerSystem) then
+            CallerSystem := WithoutBlocks(CallerSystem);
+        if Block = '' then
+            exit(CallerSystem);
         if CallerSystem = '' then
             exit(Block);
-        if HasBlock(CallerSystem) then
-            exit(ReplaceOrAppend(CallerSystem, Block));
         Result.Append(Block);
         Result.AppendLine();
         Result.AppendLine();
@@ -208,6 +210,44 @@ codeunit 10035431 "LLM Session Time ori"
             Warnings.Add(UnavailableWarningTok);
             ResponseJson.Add('warnings', Warnings);
         end;
+    end;
+
+    local procedure WithoutBlocks(Prompt: Text): Text
+    var
+        Lines: List of [Text];
+        KeptLines: List of [Text];
+        Result: TextBuilder;
+        Index: Integer;
+        Line: Text;
+    begin
+        Lines := Prompt.Split(GetLf());
+        Index := 1;
+        while Index <= Lines.Count() do
+            if Lines.Get(Index).StartsWith(HeaderMarkerTok) then begin
+                // A block ends at the next empty line. Consume that separator with the block;
+                // keep the surrounding instructions, including their original line endings.
+                while Index <= Lines.Count() do begin
+                    if IsEmptyLine(Lines.Get(Index)) then
+                        break;
+                    Index += 1;
+                end;
+                if Index > Lines.Count() then
+                    if KeptLines.Count() > 0 then
+                        if IsEmptyLine(KeptLines.Get(KeptLines.Count())) then
+                            KeptLines.RemoveAt(KeptLines.Count());
+                Index += 1;
+            end else begin
+                KeptLines.Add(Lines.Get(Index));
+                Index += 1;
+            end;
+        Index := 0;
+        foreach Line in KeptLines do begin
+            if Index > 0 then
+                Result.Append(GetLf());
+            Result.Append(Line);
+            Index += 1;
+        end;
+        exit(Result.ToText());
     end;
 
     local procedure FindBlockStart(Lines: List of [Text]): Integer

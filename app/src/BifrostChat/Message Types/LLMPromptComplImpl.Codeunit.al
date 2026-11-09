@@ -370,9 +370,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
 
         SystemPrompt := GetTextValue(RequestJson, 'system');
         // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
-        // sent as the caller wrote it and the response says so.
-        if SessionTime.GetBlock(SessionTimeBlock) then
-            SystemPrompt := SessionTime.ForSystemPrompt(SystemPrompt, SessionTimeBlock);
+        // sent without a stale caller-supplied block and the response says so.
+        SessionTime.GetBlock(SessionTimeBlock);
+        SystemPrompt := SessionTime.ForSystemPrompt(SystemPrompt, SessionTimeBlock);
         if SystemPrompt <> '' then
             PayloadJson.Add('systemPrompt', SystemPrompt);
 

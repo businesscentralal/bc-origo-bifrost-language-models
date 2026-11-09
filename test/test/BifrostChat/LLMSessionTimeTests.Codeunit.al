@@ -124,6 +124,25 @@ codeunit 96060 "LLM Session Time Tests"
         Assert.AreEqual(NewBlock(), SessionTime.ForSystemPrompt('', NewBlock()), 'No caller text');
         Assert.AreEqual(Join3(NewBlock(), '', 'Answer with one word.'), SessionTime.ForSystemPrompt('Answer with one word.', NewBlock()), 'Block first');
         Assert.AreEqual(Join3(NewBlock(), '', 'Tail'), SessionTime.ForSystemPrompt(Join3(OldBlock(false), '', 'Tail'), NewBlock()), 'Existing block replaced');
+        Assert.AreEqual(Join3(NewBlock(), '', 'Before'), SessionTime.ForSystemPrompt(Join3('Before', '', OldBlock(false)), NewBlock()), 'A terminal block moves ahead of caller instructions');
+        Assert.AreEqual(Join3(NewBlock(), '', Join3('Before', '', 'After')), SessionTime.ForSystemPrompt(Join3(Join3('Before', '', OldBlock(false)), '', 'After'), NewBlock()), 'A middle block moves first and both instructions stay');
+    end;
+
+    /// <summary>Complete normalizes multiple caller blocks without changing ReplaceOrAppend's first-block contract.</summary>
+    [Test]
+    procedure Scenario_AC03_MultipleCallerBlocks_OneFreshBlockFirst()
+    var
+        SessionTime: Codeunit "LLM Session Time ori";
+        CallerSystem: Text;
+        Result: Text;
+    begin
+        // Story #99, AC03 | Time: fixed block seam; no clock read | Risk: None
+        CallerSystem := Join3(Join3('Before', '', OldBlock(false)), '', Join3(OldBlock(true), '', 'After'));
+        Result := SessionTime.ForSystemPrompt(CallerSystem, NewBlock());
+        Assert.AreEqual(Join3(NewBlock(), '', Join3('Before', '', 'After')), Result, 'One fresh block first; caller instructions stay');
+        Assert.AreEqual(1, CountBlocks(Result), 'Exactly one block');
+        Assert.AreEqual(Result, SessionTime.ForSystemPrompt(Result, NewBlock()), 'Normalization is idempotent');
+        Assert.AreEqual(Join3('Before', '', 'After'), SessionTime.ForSystemPrompt(CallerSystem, ''), 'Fail open drops stale blocks');
     end;
 
     /// <summary>Verifies that the response summary is read from the block, with timeZone left out when the zone is unknown.</summary>
@@ -207,6 +226,7 @@ codeunit 96060 "LLM Session Time Tests"
         Assert.IsFalse(System.Contains('old test block'), 'The caller''s block is gone');
         Assert.IsTrue(System.Contains('fresh test block'), 'The fresh block is there');
         Assert.IsTrue(System.Contains('Be brief.'), 'The caller text is kept');
+        Assert.IsTrue(System.StartsWith(HeaderTok), 'AC03: the fresh block comes first even when the old block was at the end');
     end;
 
     /// <summary>Verifies that the Work date line appears only when the work date differs from today, with Foundation's real block.</summary>
@@ -294,6 +314,34 @@ codeunit 96060 "LLM Session Time Tests"
         Assert.AreEqual('sessionTimeUnavailable', GetArrayText(WarningsToken.AsArray(), 0), 'Warning text');
         System := SystemPromptOf(MockProvider.GetLastCompletePayload());
         Assert.AreEqual('Be brief.', System, 'The prompt is sent as the caller wrote it, without a block');
+    end;
+
+    /// <summary>Fail-open Complete never sends a stale clock from the caller's system prompt.</summary>
+    [Test]
+    procedure Scenario_AC08_FoundationFails_CallerBlockIsRemoved()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        Seam: Codeunit "LLM Session Time Seam";
+        Request: JsonObject;
+        Response: JsonObject;
+        Warnings: JsonToken;
+        RequestText: Text;
+    begin
+        // Story #99, AC08 | Time: forced Foundation failure; no stale clock | Risk: None
+        Initialize();
+        Request.Add('prompt', 'Hello');
+        Request.Add('roleCode', ModelCodeTok);
+        Request.Add('system', Join3('Be brief.', '', OldBlock(false)));
+        Request.WriteTo(RequestText);
+        Seam.Fail();
+        BindSubscription(Seam);
+        Response := Complete(RequestText, 1033);
+        UnbindSubscription(Seam);
+        Assert.AreEqual('Success', Response.GetText('status'), 'Complete still succeeds');
+        Assert.IsFalse(Response.Contains('sessionTime'), 'No sessionTime');
+        Response.Get('warnings', Warnings);
+        Assert.AreEqual('sessionTimeUnavailable', GetArrayText(Warnings.AsArray(), 0), 'Warning');
+        Assert.AreEqual('Be brief.', SystemPromptOf(MockProvider.GetLastCompletePayload()), 'Caller instructions stay without the stale block');
     end;
 
     /// <summary>Verifies that the Complete system text, with the clock lines masked, is the same in session languages 1033 and 1039.</summary>
