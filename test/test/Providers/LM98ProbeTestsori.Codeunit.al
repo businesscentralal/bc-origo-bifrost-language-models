@@ -95,6 +95,7 @@ codeunit 96052 "LM98 Probe Tests ori"
         Model: Record "Bifrost Language Model ori";
         TempArgument: Record "Message Argument ori" temporary;
         Mock: Codeunit "Mock Bifrost Chat Provider";
+        ProbeRun: Codeunit "LM98 Permission Run ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         TestContext: Codeunit "Bifrost LangModel Test Ctx ori";
         Result: JsonObject;
@@ -107,8 +108,12 @@ codeunit 96052 "LM98 Probe Tests ori"
         // Test role changes are in-memory test permissions, never Access Control writes.
         // Fixture creation/cleanup use the test administrator; the measured path resets to the exact three sets.
         LowerPermissions.SetOutsideO365Scope();
-        if Model.Get('BIFT-LM98-MOCK') then
-            Error('LM98 mock fixture collision; retain the existing record.');
+        TestContext.ClearLanguageModel();
+        if Model.Get('BIFT-LM98-MOCK') then begin
+            if (Model."Chat Provider" <> Model."Chat Provider"::Mock) or (Model.Model <> 'lm98-native-mock') then
+                Error('LM98 mock fixture collision; retain the existing record.');
+            Model.Delete(false);
+        end;
         Model.Init();
         Model.Code := 'BIFT-LM98-MOCK';
         Model."Chat Provider" := Model."Chat Provider"::Mock;
@@ -122,15 +127,18 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.SetContinueResponse('{"type":"reply","reply":"{\"verdict\":\"pass\"}"}');
         Request.Add('code', Model.Code);
         Request.Add('customer', 'BIFT-A');
-        TempArgument.SetRequestJson(Request);
+        // The argument blob does not survive Codeunit.Run. 96058 keeps the JSON itself (#110).
+        ProbeRun.SetProbeRequest(Request);
         LowerPermissions.SetExactPermissionSet(BaseRole);
         LowerPermissions.AddPermissionSet('BIFROST Chat ori');
         LowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
         ClearLastError();
-        // A Boolean Codeunit.Run catches and rolls back native failures without prohibiting writes.
-        // The fixture was committed above; the exact roles remain active throughout the measured path.
+        // Codeunit.Run returns a native permission failure without the TryFunction write ban.
+        // The mock loop itself is also outside TryLive, so inherent Setup permissions stay in force (#110).
         Succeeded := Codeunit.Run(Codeunit::"LM98 Permission Run ori", TempArgument);
         FailureText := GetLastErrorText();
+        if not Succeeded then
+            FailureText += ' | ' + GetLastErrorCallStack();
         LowerPermissions.SetOutsideO365Scope();
         TestContext.ClearLanguageModel();
         if Model.GetBySystemId(OwnedId) then
@@ -138,11 +146,11 @@ codeunit 96052 "LM98 Probe Tests ori"
         Mock.Reset();
         Commit(); // Retain cleanup even when the measured permission assertion fails.
         Assert.IsTrue(Succeeded, 'Exact role combination ' + BaseRole + ': ' + FailureText);
-        Result := TempArgument.GetResponseJson();
+        Result := ProbeRun.GetProbeResponse();
+        ProbeRun.ClearProbe();
         Result.WriteTo(ResultText);
         Assert.AreEqual('reply', Result.GetText('stopReason'), ResultText);
         Assert.AreEqual(1, Result.GetInteger('toolCalls'), ResultText);
         Assert.AreEqual(0, Result.GetInteger('toolErrors'), ResultText);
     end;
-
 }

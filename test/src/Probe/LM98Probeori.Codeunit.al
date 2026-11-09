@@ -396,14 +396,17 @@ codeunit 96051 "LM98 Probe ori"
         StartedAt := CurrentDateTime();
         TestContext.SetLanguageModel(Model.Code);
         ClearLastError();
-        if not TryLive(ChatProvider, PayloadText, CustomerNo, Result, OwnedRefs) then begin
-            // Provider errors can contain response bodies: never serialize GetLastErrorText here.
-            if Model."Chat Provider" = Model."Chat Provider"::Mock then
-                Result.Add('mockBcError', GetLastErrorText());
-            Result.Remove('stopReason');
-            Result.Add('stopReason', 'runtimeError');
-            Result.Add('runtimeError', true);
-        end;
+        // Mock is the permission probe. A TryFunction would strip inherent Setup permissions and
+        // refuse the pipeline's inserts, so the mock loop runs directly (#110). Live providers keep
+        // the TryFunction boundary so a provider body is never copied into the result.
+        if Model."Chat Provider" = Model."Chat Provider"::Mock then
+            RunLive(ChatProvider, PayloadText, CustomerNo, Result, OwnedRefs)
+        else
+            if not TryLive(ChatProvider, PayloadText, CustomerNo, Result, OwnedRefs) then begin
+                Result.Remove('stopReason');
+                Result.Add('stopReason', 'runtimeError');
+                Result.Add('runtimeError', true);
+            end;
         TestContext.ClearLanguageModel();
         // This run acquired an empty exclusive session; discover refs even if a tool failed after storing one.
         Refs := BlobRefs();
@@ -422,6 +425,11 @@ codeunit 96051 "LM98 Probe ori"
 
     [TryFunction]
     local procedure TryLive(var ChatProvider: Codeunit "LangModel Chat Provider ori"; PayloadText: Text; CustomerNo: Text; var Result: JsonObject; var OwnedRefs: List of [Text])
+    begin
+        RunLive(ChatProvider, PayloadText, CustomerNo, Result, OwnedRefs);
+    end;
+
+    local procedure RunLive(var ChatProvider: Codeunit "LangModel Chat Provider ori"; PayloadText: Text; CustomerNo: Text; var Result: JsonObject; var OwnedRefs: List of [Text])
     var
         Answer: JsonObject;
         Calls: JsonToken;

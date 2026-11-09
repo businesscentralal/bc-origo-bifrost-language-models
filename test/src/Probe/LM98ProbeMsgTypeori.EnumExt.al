@@ -2,7 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 
-/// <summary>Nonshipping LM98 trial entry point; never include this branch in a release.</summary>
+/// <summary>Test-app-only LM98 diagnostic entry point; excluded from the product app.</summary>
 enumextension 96050 "LM98 Probe MsgType ori" extends "Message Type ori"
 {
     value(96050; "Test.LanguageModel.AskProbe")
