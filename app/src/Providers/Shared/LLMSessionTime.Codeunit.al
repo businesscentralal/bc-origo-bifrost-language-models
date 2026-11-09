@@ -216,6 +216,7 @@ codeunit 10035431 "LLM Session Time ori"
     var
         Lines: List of [Text];
         KeptLines: List of [Text];
+        LastLine: Text;
         Result: TextBuilder;
         Index: Integer;
         Line: Text;
@@ -231,10 +232,18 @@ codeunit 10035431 "LLM Session Time ori"
                         break;
                     Index += 1;
                 end;
-                if Index > Lines.Count() then
+                if Index > Lines.Count() then begin
                     if KeptLines.Count() > 0 then
                         if IsEmptyLine(KeptLines.Get(KeptLines.Count())) then
                             KeptLines.RemoveAt(KeptLines.Count());
+                    if KeptLines.Count() > 0 then begin
+                        // The last retained CR was part of the separator before the removed block,
+                        // not part of the caller's instruction text.
+                        LastLine := KeptLines.Get(KeptLines.Count());
+                        if LastLine.EndsWith(GetCr()) then
+                            KeptLines.Set(KeptLines.Count(), CopyStr(LastLine, 1, StrLen(LastLine) - 1));
+                    end;
+                end;
                 Index += 1;
             end else begin
                 KeptLines.Add(Lines.Get(Index));

@@ -124,7 +124,7 @@ codeunit 96060 "LLM Session Time Tests"
         Assert.AreEqual(NewBlock(), SessionTime.ForSystemPrompt('', NewBlock()), 'No caller text');
         Assert.AreEqual(Join3(NewBlock(), '', 'Answer with one word.'), SessionTime.ForSystemPrompt('Answer with one word.', NewBlock()), 'Block first');
         Assert.AreEqual(Join3(NewBlock(), '', 'Tail'), SessionTime.ForSystemPrompt(Join3(OldBlock(false), '', 'Tail'), NewBlock()), 'Existing block replaced');
-        Assert.AreEqual(Join3(NewBlock(), '', 'Before'), SessionTime.ForSystemPrompt(Join3('Before', '', OldBlock(false)), NewBlock()), 'A terminal block moves ahead of caller instructions');
+        Assert.AreEqual(Join3(NewBlock(), '', 'Before'), SessionTime.ForSystemPrompt(Join3('Before', '', OldBlock(false)), NewBlock()), 'A terminal CRLF block moves first without leaving a carriage return');
         Assert.AreEqual(Join3(NewBlock(), '', Join3('Before', '', 'After')), SessionTime.ForSystemPrompt(Join3(Join3('Before', '', OldBlock(false)), '', 'After'), NewBlock()), 'A middle block moves first and both instructions stay');
     end;
 
