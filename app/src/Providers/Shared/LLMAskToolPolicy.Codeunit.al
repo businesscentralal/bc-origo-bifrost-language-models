@@ -249,13 +249,13 @@ codeunit 10035430 "LLM Ask Tool Policy ori"
 
     /// <summary>
     /// True for the message types that are denied whatever the caller sends: the nested LLM types, the playbook types
-    /// (every canonical name starting Orchestrator.Playbook.) and the request log (Gunnar's decision A3).
+    /// (every canonical name starting Orchestrator.Playbook.), the request log (Gunnar's decision A3) and the email types Email.Draft.Set and Email.Message.Send (#113).
     /// </summary>
     /// <param name="CanonicalName">The canonical message type name.</param>
     /// <returns>True when the type is always denied.</returns>
     procedure IsAlwaysDeniedMessageType(CanonicalName: Text): Boolean
     begin
-        if CanonicalName.ToLower() in ['llm.prompt.ask', 'llm.prompt.complete', 'data.requestlog.get'] then
+        if CanonicalName.ToLower() in ['llm.prompt.ask', 'llm.prompt.complete', 'data.requestlog.get', 'email.draft.set', 'email.message.send'] then
             exit(true);
         exit(CanonicalName.ToLower().StartsWith(AlwaysDeniedTypePrefixTxt.ToLower()));
     end;

@@ -4,6 +4,15 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-11) - LLM.Prompt.Ask html output mode (#113)
+
+- **Added:** optional request key `outputFormat` (`text` default, or `html`) on `LLM.Prompt.Ask` (codeunits 10035432 `LLM Prompt Ask Impl ori`, 10035433 `LLM Ask Runner ori`). With `html` the response adds `html`: one HTML document taken from the answer (code fence, text before the first `<!doctype`/`<html` and after the last `</html>` removed, tag matching case-insensitive); `answer` stays the full reply. A `stopReason` other than `completed`, or an answer without a complete document (including a truncated one), returns a coded `PreconditionFailed` error and no `html`. An unknown value gives `InvalidParameter`, a non-string `InvalidParameterFormat`. `responseSchema` is ignored with warning `responseSchemaIgnored` in html mode.
+- **Added:** `context` above 1,000,000 characters is refused with `InvalidParameter` before any provider call (all formats).
+- **Added:** in html mode the system text says return HTML only, no scripts and no external resources, and that the context is data, not instructions; the context is wrapped in `BEGIN/END UNTRUSTED CONTEXT` delimiters in the user message. Text mode prompts are unchanged.
+- **Changed:** `LLM Ask Tool Policy ori.IsAlwaysDeniedMessageType` also denies `Email.Draft.Set` and `Email.Message.Send`.
+- Help (contract chapters) and the is-IS xlf cover the new parameter, response field and errors. The generated html is not logged: the existing `LLM Req Log Masker ori` redacts request and response bodies outside debug mode, and no new telemetry is added.
+- Tests: 96066 `LLM Ask Html Tests` (mock provider only; extraction, fence/preamble, failures, stop reasons, context cap in 1033/1039, prompt, injection fixture with denied write calls, email deny list, masker).
+
 ### Added (2026-11-11) - LLM.Prompt.Ask message type and headless runner (#101)
 
 - **Added:** message type `LLM.Prompt.Ask` (enum value 10035432 on `LangModel Message Type ori`), implemented by codeunit 10035432 `LLM Prompt Ask Impl ori` (`Msg Interface ori`, `Msg Discovery ori`, `Msg Contract ori`; static effect `read`). The model answers a question with optional `context`, `instructions`, `roleCode` and `subject` (passed as RECORD CONTEXT) using read-only Bifrost tools as the calling user, with no human in the loop. Read-only by policy (#100 `LLM Ask Tool Policy ori`); a denied call is returned to the model as a tool error and counted in `deniedToolCalls`.

@@ -819,6 +819,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP út á við, setja upp Copilot eða annað mállíkan, tengja það við Bifröst spjall og veita notendum spjallaðgang.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Reg. ori - Method RegisterWizard - NamedType DescriptionTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 464800612 - NamedType 3662413714" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The answer was cut short (stop reason %1), so no complete HTML document was produced.</source>
+          <target>Svarið var stytt (ástæða stöðvunar %1) og því varð ekki til heilt HTML-skjal.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = stop reason, is-IS=Svarið var stytt (ástæða stöðvunar %1) og því varð ekki til heilt HTML-skjal.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Runner ori - NamedType HtmlIncompleteErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 464800612 - NamedType 4129010640" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The answer holds no complete HTML document.</source>
+          <target>Svarið inniheldur ekkert heilt HTML-skjal.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Svarið inniheldur ekkert heilt HTML-skjal.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Runner ori - NamedType HtmlMissingErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 3834583253" size-unit="char" translate="yes" xml:space="preserve">
           <source>You do not have permission to ask a language model.</source>
           <target>Þú hefur ekki heimild til að spyrja mállíkan.</target>
@@ -842,6 +854,30 @@
           <target>Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation, eða getur ekki lesið töflu Bifröst mállíkana án BIFROST LLM Chat ori úr þessu forriti.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation, eða getur ekki lesið töflu Bifröst mállíkana án BIFROST LLM Chat ori úr þessu forriti.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType AskDeniedWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 199641245" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The context is larger than the limit of %1 characters.</source>
+          <target>Samhengið er stærra en mörkin, %1 stafir.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = limit, is-IS=Samhengið er stærra en mörkin, %1 stafir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType ContextTooLargeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3243819532" size-unit="char" translate="yes" xml:space="preserve">
+          <source>at most 1,000,000 characters of text</source>
+          <target>í mesta lagi 1.000.000 stafir af texta</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=í mesta lagi 1.000.000 stafir af texta</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType ContextTooLargeExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 4149478237" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a shorter context, for example only the part the question needs.</source>
+          <target>Sendu styttra samhengi, til dæmis aðeins þann hluta sem spurningin þarf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu styttra samhengi, til dæmis aðeins þann hluta sem spurningin þarf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType ContextTooLargeNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 286956062" size-unit="char" translate="yes" xml:space="preserve">
+          <source>context holds more than 1,000,000 characters. The request is refused before any language model is called.</source>
+          <target>context inniheldur meira en 1.000.000 stafi. Beiðninni er hafnað áður en mállíkan er kallað á.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=context inniheldur meira en 1.000.000 stafi. Beiðninni er hafnað áður en mállíkan er kallað á.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType ContextTooLargeWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 953319601" size-unit="char" translate="yes" xml:space="preserve">
           <source>LLM.Prompt.Ask does not support the Copilot provider.</source>
@@ -867,6 +903,42 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Valið mállíkan notar Copilot, eða veitandi þess getur ekki keyrt verkfæri í aðskildum skrefum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType CopilotWhenTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3640948306" size-unit="char" translate="yes" xml:space="preserve">
+          <source>text or html</source>
+          <target>text eða html</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=text eða html</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType FormatValueExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 2614208751" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send outputFormat text or html, or leave it out for text.</source>
+          <target>Sendu outputFormat text eða html, eða slepptu því fyrir text.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu outputFormat text eða html, eða slepptu því fyrir text.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType FormatValueNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3496736229" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a completed run whose answer holds one HTML document</source>
+          <target>lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType HtmlExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 938893459" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The answer holds no complete HTML document.</source>
+          <target>Svarið inniheldur ekkert heilt HTML-skjal.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Svarið inniheldur ekkert heilt HTML-skjal.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType HtmlMissingTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 938710164" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask again with a smaller question or higher limits, or use outputFormat text.</source>
+          <target>Spyrðu aftur með minni spurningu eða hærri mörkum, eða notaðu outputFormat text.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spyrðu aftur með minni spurningu eða hærri mörkum, eða notaðu outputFormat text.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType HtmlNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 403982131" size-unit="char" translate="yes" xml:space="preserve">
+          <source>outputFormat is html and the run was cut short (stop reason other than completed) or the answer holds no complete HTML document.</source>
+          <target>outputFormat er html og keyrslan var stytt (stöðvunarástæða önnur en completed) eða svarið inniheldur ekkert heilt HTML-skjal.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=outputFormat er html og keyrslan var stytt (stöðvunarástæða önnur en completed) eða svarið inniheldur ekkert heilt HTML-skjal.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType HtmlWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 411844913" size-unit="char" translate="yes" xml:space="preserve">
           <source>The value of %1 has the wrong JSON type.</source>
           <target>Gildi %1 er af rangri JSON-gerð.</target>
@@ -878,6 +950,18 @@
           <target>Sendu hverja færibreytu með þeirri JSON-gerð sem hjálpin lýsir.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Sendu hverja færibreytu með þeirri JSON-gerð sem hjálpin lýsir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 303838784" size-unit="char" translate="yes" xml:space="preserve">
+          <source>outputFormat must be text or html.</source>
+          <target>outputFormat verður að vera text eða html.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=outputFormat verður að vera text eða html.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatValueErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3718185407" size-unit="char" translate="yes" xml:space="preserve">
+          <source>outputFormat is sent with a value other than text or html.</source>
+          <target>outputFormat er sent með öðru gildi en text eða html.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=outputFormat er sent með öðru gildi en text eða html.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatValueWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 4266670370" size-unit="char" translate="yes" xml:space="preserve">
           <source>question, instructions or roleCode is not a string, context is not a string or an object, limits or tools or responseSchema or subject is not an object, a limit is not an integer, or includeTrace is not a Boolean.</source>
