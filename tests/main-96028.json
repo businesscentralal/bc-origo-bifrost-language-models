@@ -1,0 +1,24 @@
+{
+ "ok": false,
+ "mode": "local",
+ "exitCode": 2,
+ "durationMs": 5367,
+ "passed": 11,
+ "failed": 1,
+ "skipped": 0,
+ "errors": 0,
+ "failures": [
+  {
+   "name": "Chat_WrongExpectedCount_DoesNotCallProvider",
+   "message": "Assert.AreEqual failed. Expected:&lt;ConfirmationMismatch&gt; (Text). Actual:&lt;BIFT-MOCK&gt; (Text). The explicit count must match the chat operation..",
+   "classname": "96028 LangModel Test Tools Tests"
+  }
+ ],
+ "cosmoExecTestEndpoint": "none",
+ "local": {
+  "clientServicesUrl": "http://host.docker.internal:8080/BC290/",
+  "serviceUrl": "http://host.docker.internal:8080/BC290/cs?tenant=w129-36&company=CRONUS%20International%20Ltd.",
+  "testAssembliesPath": "/opt/origo-mcp/bc29-test-assemblies"
+ },
+ "hint": "Local Client Services run did not pass. Exit 2 = tests failed; 3 = every test page failed (check the web client URL, tenant/company and that the Test Runner app is published); 4 = setup (credentials, Test Assemblies, assembly load)."
+}
