@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-11) - refuse provider-truncated HTML output (#113)
+
+- **Fixed:** shared chat proxy 10035412 and Anthropic proxy 10035417 preserve provider completion metadata (`finish_reason`, Responses `status`, and `stop_reason`). HTML-mode runner 10035433 refuses a token-limited, filtered or incomplete provider response before processing its tools or returning `html`, even when closing HTML tags are present. Normal completions and providers without completion metadata remain supported; text-mode behavior is unchanged.
+- Tests: 96065 verifies completion metadata for chat completions, Responses and Anthropic using HTTP mocks; 96066 covers a complete-looking document with a token-limit stop reason. No live-provider calls.
+- **Test fixture cleanup:** codeunit 96037 removes only its explicitly created user identities, permission assignments and Bifrost user setup after its assertions, so repeated setup-wizard tests do not accumulate licensed user fixtures. It does not change existing users or licence state.
+
 ### Fixed (2026-11-11) - test chat confirmation target (#113, PR #121 verification)
 
 - **Fixed:** test-only codeunit 96026 `Test LangModel Chat Impl` declares `data.code` as its target. Foundation can now count the selected model and refuse a mismatched `expectedCount` before calling the provider. The existing refusal assertion remains; codeunit 96028 also verifies a matching count executes the mock chat turn.

@@ -523,6 +523,7 @@ codeunit 10035433 "LLM Ask Runner ori"
     local procedure ExecuteRound(var TempChatArg: Record "Bifrost Chat Argument ori" temporary; var Answer: JsonObject): Boolean
     var
         ErrorToken: JsonToken;
+        StopReason: Text;
     begin
         Clear(Answer);
         if not TryExecute(TempChatArg) then begin
@@ -540,6 +541,18 @@ codeunit 10035433 "LLM Ask Runner ori"
             exit(false);
         end;
         AddUsage(Answer);
+        if HtmlMode then begin
+            StopReason := GetText(Answer, 'stopReason');
+            if IsToolCallAnswer(Answer) then begin
+                if StopReason in ['', 'completed', 'tool_calls', 'tool_use'] then
+                    exit(true);
+            end else
+                if StopReason in ['', 'completed', 'stop', 'end_turn', 'stop_sequence'] then
+                    exit(true);
+            HtmlFailureCode := "Bifrost Error Code ori"::PreconditionFailed;
+            HtmlFailure := StrSubstNo(HtmlIncompleteErr, StopReason);
+            exit(false);
+        end;
         exit(true);
     end;
 

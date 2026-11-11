@@ -144,6 +144,102 @@ codeunit 96066 "LLM Ask Html Tests"
     end;
 
     [Test]
+    procedure Html_ProviderTokenLimit_FailsWithoutHtml()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        Answer: JsonObject;
+        AnswerText: Text;
+    begin
+        // [SCENARIO AC03] A provider token limit refuses HTML even when its partial answer has closing tags.
+        Initialize();
+        Answer.Add('type', 'reply');
+        Answer.Add('reply', DocumentTok);
+        Answer.Add('stopReason', 'length');
+        Answer.WriteTo(AnswerText);
+        MockProvider.EnqueueAnswer(AnswerText);
+
+        ResponseJson := Execute(Request('{"question":"Q","outputFormat":"html"}'), 1033);
+
+        Assert.AreEqual('Error', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Assert.AreEqual('PreconditionFailed', ResponseJson.GetText('code'), Describe(ResponseJson));
+        Assert.IsFalse(ResponseJson.Contains('html'), 'No HTML is returned from a token-limited response.');
+    end;
+
+    [Test]
+    procedure Html_ProviderIncompleteReasons_FailWithoutHtml()
+    var
+        StopReason: Text;
+        Reasons: List of [Text];
+    begin
+        // [SCENARIO AC03] All provider-specific truncation and filter reasons refuse HTML in both locales.
+        Reasons.Add('max_tokens');
+        Reasons.Add('incomplete');
+        Reasons.Add('content_filter');
+        foreach StopReason in Reasons do begin
+            VerifyHtmlError(ReplyWithStopReason(DocumentTok, StopReason), 1033);
+            VerifyHtmlError(ReplyWithStopReason(DocumentTok, StopReason), 1039);
+        end;
+    end;
+
+    [Test]
+    procedure Html_CompletedProviderReasons_ReturnHtml()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        StopReason: Text;
+        Reasons: List of [Text];
+    begin
+        // [SCENARIO] Successful completion markers from the supported providers permit a complete document.
+        Reasons.Add('stop');
+        Reasons.Add('end_turn');
+        Reasons.Add('stop_sequence');
+        Reasons.Add('completed');
+        foreach StopReason in Reasons do begin
+            Initialize();
+            MockProvider.EnqueueAnswer(ReplyWithStopReason(DocumentTok, StopReason));
+            ResponseJson := Execute(Request('{"question":"Q","outputFormat":"html"}'), 1033);
+            Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+            Assert.AreEqual(DocumentTok, ResponseJson.GetText('html'), 'The completed document is preserved.');
+        end;
+    end;
+
+    [Test]
+    procedure Text_ProviderTokenLimit_PreservesExistingReply()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] HTML truncation protection does not change existing text-mode behavior.
+        Initialize();
+        MockProvider.EnqueueAnswer(ReplyWithStopReason('Partial reply.', 'length'));
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Assert.AreEqual('Partial reply.', ResponseJson.GetText('answer'), 'Text mode still returns the reply.');
+        Assert.IsFalse(ResponseJson.Contains('html'), 'Text mode has no HTML document.');
+    end;
+
+    [Test]
+    procedure Html_IncompleteToolAnswer_FailsBeforeTools()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        Answer: JsonObject;
+        AnswerText: Text;
+    begin
+        // [SCENARIO AC03] An incomplete Responses tool-call envelope is refused before running its tools.
+        Initialize();
+        Answer.ReadFrom(ToolCalls(StrSubstNo(CallTok, 'c1', 'who_am_i')));
+        Answer.Add('stopReason', 'incomplete');
+        Answer.WriteTo(AnswerText);
+        MockProvider.EnqueueAnswer(AnswerText);
+        ResponseJson := Execute(Request('{"question":"Q","outputFormat":"html"}'), 1033);
+        Assert.AreEqual('PreconditionFailed', ResponseJson.GetText('code'), Describe(ResponseJson));
+        Assert.IsFalse(MockProvider.WasContinueWithToolResultsCalled(), 'No tools or continuation run after incomplete output.');
+        Assert.AreEqual(0, MockProvider.GetToolResultsLog().Count(), 'No tool results were produced.');
+    end;
+
+    [Test]
     procedure Context_AboveCap_IsRefusedBeforeProviderCall()
     var
         MockProvider: Codeunit "Mock Bifrost Chat Provider";
@@ -292,6 +388,15 @@ codeunit 96066 "LLM Ask Html Tests"
     begin
         Answer.Add('type', 'reply');
         Answer.Add('reply', ReplyText);
+        Answer.WriteTo(AnswerJson);
+    end;
+
+    local procedure ReplyWithStopReason(ReplyText: Text; StopReason: Text) AnswerJson: Text
+    var
+        Answer: JsonObject;
+    begin
+        Answer.ReadFrom(Reply(ReplyText));
+        Answer.Add('stopReason', StopReason);
         Answer.WriteTo(AnswerJson);
     end;
 
