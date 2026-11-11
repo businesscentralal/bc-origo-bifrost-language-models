@@ -4,7 +4,7 @@
 **Publisher:** Origo — **Version:** 28.0.0.0 (AL-Go stamps build and revision) — **Target:** Cloud (BC 28, runtime 17.0)  
 **App ID:** `f1722684-0c24-4022-a2e0-0f63154aca76` — **Test app ID:** `9c452c6e-df9b-4eb0-9a54-7ea8f32483ec`  
 **Object ID range:** 10035335–10035484 (tests 96000–96199) — **Namespace:** `Origo.Bifrost.LanguageModels`  
-**Depends on:** Bifrost Foundation 28.0.4.0 or later  
+**Depends on:** Bifrost Foundation 28.0.11.0 or later  
 **Environments:** Business Central online (SaaS) and owned, disposable COSMO Alpaca W1 verification environments
 
 ---
@@ -269,7 +269,7 @@ Objects use the `ori` affix convention; the enumextension is `LangModel Chat Pro
 
 | App | ID | Purpose |
 | --- | --- | --- |
-| Bifrost Foundation | `7505e808-6e52-4b96-a328-82573391297a` | 28.0.4.0 or later: the `Retryable` error code, message-type kernel, the chat (control add-in, FactBox, `Bifrost Chat Mgt ori`, MCP Tool Server, chat gate), the secret store, the request log, `User Setup ori`, `Setup ori` and its public `TryClaimChatProvider`. |
+| Bifrost Foundation | `7505e808-6e52-4b96-a328-82573391297a` | 28.0.11.0 or later: the public `MCP Tool Server ori.GetSessionTimeBlock()`, the `Retryable` error code, message-type kernel, the chat (control add-in, FactBox, `Bifrost Chat Mgt ori`, MCP Tool Server, chat gate), the secret store, the request log, `User Setup ori`, `Setup ori` and its public `TryClaimChatProvider`. |
 
 `app.json` declares no other dependency and `internalsVisibleTo` only the test app *Bifrost Language Models -
 Tests* (stripped from Default builds by `.AL-Go/PipelineInitialize.ps1`). It suppresses **AA0215** and **AS0081**

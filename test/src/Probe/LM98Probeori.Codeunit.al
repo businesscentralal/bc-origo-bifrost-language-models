@@ -95,7 +95,7 @@ codeunit 96051 "LM98 Probe ori"
     /// <summary>Finds the real cached Bootstrap block, replaces it, and exposes only the header and clock line.</summary>
     procedure SessionTime() Result: JsonObject
     var
-        Proxy: Codeunit "Copilot Chat Proxy ori";
+        SessionTimeHelper: Codeunit "LLM Session Time ori";
         BeforePrompt: Text;
         AfterPrompt: Text;
         FreshBlock: Text;
@@ -106,7 +106,8 @@ codeunit 96051 "LM98 Probe ori"
         BeforePrompt := ToolServer.Bootstrap('');
         Sleep(1100);
         NowUtc := CurrentDateTime();
-        FreshBlock := Proxy.BuildSessionTimeBlock(NowUtc, 0, '', WorkDate());
+        if not SessionTimeHelper.GetBlock(FreshBlock) then
+            Error('Foundation did not supply a SESSION TIME block.');
         AfterPrompt := ReplaceTimeBlock(BeforePrompt, FreshBlock);
         Result.Add('status', 'Observed');
         Result.Add('beforeBlockCount', CountTimeBlocks(BeforePrompt));
