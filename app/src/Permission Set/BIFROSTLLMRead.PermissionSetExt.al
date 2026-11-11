@@ -30,5 +30,6 @@ permissionsetextension 10035427 "BIFROST LLM Read ori" extends "BIFROST Read ori
         codeunit "Copilot Default Skill ori" = X,
         codeunit "Copilot LangModel Prov. ori" = X,
         codeunit "Copilot Req Log Masker ori" = X,
-        codeunit "LLM Prompt Compl Impl ori" = X;
+        codeunit "LLM Prompt Compl Impl ori" = X,
+        codeunit "LLM Prompt Ask Impl ori" = X;
 }

@@ -17,4 +17,13 @@ enumextension 10035399 "LangModel Message Type ori" extends "Message Type ori"
         Caption = 'LLM.Prompt.Complete', Locked = true;
         Implementation = "Msg Interface ori" = "LLM Prompt Compl Impl ori", "Msg Discovery ori" = "LLM Prompt Compl Impl ori", "Msg Contract ori" = "LLM Prompt Compl Impl ori";
     }
+
+    /// <summary>
+    /// Headless question with read-only Bifrost tools (#101). Read effect, mandatory caps, no timeout.
+    /// </summary>
+    value(10035432; "LLM.Prompt.Ask")
+    {
+        Caption = 'LLM.Prompt.Ask', Locked = true;
+        Implementation = "Msg Interface ori" = "LLM Prompt Ask Impl ori", "Msg Discovery ori" = "LLM Prompt Ask Impl ori", "Msg Contract ori" = "LLM Prompt Ask Impl ori";
+    }
 }
