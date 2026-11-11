@@ -25,6 +25,7 @@ permissionset 10035398 "BIFROST LLM Chat ori"
         codeunit "LLM Ask Tool Policy ori" = X,
         codeunit "LLM Session Time ori" = X,
         codeunit "LLM Ask Runner ori" = X,
+        codeunit "LLM Ask Telemetry ori" = X,
         codeunit "MCP Tool Server ori" = X,
         codeunit "Anthropic LangModel Proxy ori" = X,
         codeunit "OpenAI LangModel Prov. ori" = X,

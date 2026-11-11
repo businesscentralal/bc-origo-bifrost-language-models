@@ -4,6 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-11) - telemetry events for LLM.Prompt.Ask without content (#102)
+
+- **Added:** codeunit 10035434 `LLM Ask Telemetry ori` (Internal, X in `BIFROST LLM Chat ori`), the place that emits the Ask events with `Session.LogMessage` (`SystemMetadata`, scope `ExtensionPublisher`) and the only place that chooses dimension values (`BuildDimensions`). Events: `ORI-LM-ASK-0001` started (Normal), `-0002` completed (Normal; stopReason completed or schemaInvalid), `-0003` limitHit (Warning; maxToolCalls or maxRounds), `-0004` denied (Warning; once per run, a count), `-0005` providerError (Error), `-0006` providerNotSupported (Warning; Copilot or no split tool execution). A run that started ends in exactly one of 0002, 0003 or 0005; there is no per-tool-call event.
+- **Dimension allow-list (nothing else is ever added):** `Category` (`Bifrost.LanguageModels.Ask`), `provider` (enum name), `modelCode`, `rounds`, `toolCalls`, `toolErrors`, `deniedToolCalls`, `stopReason` (completed, schemaInvalid, maxToolCalls, maxRounds, providerError), `durationMs`, `schemaValid` (true, false, notRequested), `callerSource`. Numbers are written with `Format(value, 0, 9)`. No prompt, context, answer, tool name or argument, trace or record data reaches telemetry. Event 0006 carries `Category` and `provider` only.
+- **Changed:** `callerSource` is Foundation's trusted public `GetInvocationSource()` (Direct, Queue, Task, Dispatcher), not the story's Orchestrator / McpToolServer / Other: `Message Argument ori.Source` is `Access = Internal` in Foundation and cannot be read from this app.
+- Tests: 96066 `LLM Ask Telemetry Tests` (events, ids, verbosity, terminal-event rule, allow-list, sentinel strings in question, context, instructions, tool argument, denied tool and source, 1033 / 1039 numbers) with spy 96067 `LLM Ask Telemetry Spy` on the new internal seam `OnAfterEmit`. No new Request Log row, table or field.
+
 ### Added (2026-11-11) - LLM.Prompt.Ask message type and headless runner (#101)
 
 - **Added:** message type `LLM.Prompt.Ask` (enum value 10035432 on `LangModel Message Type ori`), implemented by codeunit 10035432 `LLM Prompt Ask Impl ori` (`Msg Interface ori`, `Msg Discovery ori`, `Msg Contract ori`; static effect `read`). The model answers a question with optional `context`, `instructions`, `roleCode` and `subject` (passed as RECORD CONTEXT) using read-only Bifrost tools as the calling user, with no human in the loop. Read-only by policy (#100 `LLM Ask Tool Policy ori`); a denied call is returned to the model as a tool error and counted in `deniedToolCalls`.
