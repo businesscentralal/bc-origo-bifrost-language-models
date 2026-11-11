@@ -38,7 +38,7 @@ that Bifrost Language Models can make itself through an extension object.
 
 | Foundation object | Bifrost Language Models extension |
 | --- | --- |
-| enum `Message Type ori` | `LangModel Message Type ori` - value `LLM.Prompt.Complete` |
+| enum `Message Type ori` | `LangModel Message Type ori` - values `LLM.Prompt.Complete` and `LLM.Prompt.Ask` |
 | enum `Request Log Type ori` | `LangModel Req Log Type ori` - values `Copilot` and `LLM` + maskers |
 | table `User Setup ori` | `User Setup LangModel ori` - field `Bifrost Language Model Code` |
 | page `User Setup Editor ori` | `User Setup Editor LangMdl ori` - field + Bifrost Chat FactBox |
@@ -83,6 +83,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   From #50 (#49): **96004** `LangModel Field Restrict Tests`. Test codeunit **96029** `LangModel Chat Proxy Tests` (#54).
   Test codeunit **96030** `LangModel Context Spy ori` (manual value-only test observer). Issue #60: **96031** `LangModel 60 Defaults Tests`.
   Issue #65: **96033** `LLM 65 HTTP Mock`, **96034** `LLM 65 Prompt Tests`.
+  Issue #101: **96063** `LLM Prompt Ask Tests`, **96064** `LLM Prompt Ask Perm Tests`, **96065** `LLM Ask Request Builder Tests`.
   Reserved in Claude-owned PR #66: **96032** `LLM Prompt Compl Perm Tests`. Free: 96005-96008, 96035-96199.
 
 ### Testing the chat of every provider
@@ -193,8 +194,8 @@ Key rules always in effect:
   or reuse an existing name. Never switch to a fresh name to "retry" - that reproduces the empty run.
 
 ## Message Type Conventions
-- Bifrost Language Models owns exactly one message type, `LLM.Prompt.Complete`, registered on Foundation's `Message Type ori`
-  enum by `LangModel Message Type ori`. `LLM Prompt Compl Impl ori` implements `Msg Interface ori`, `Msg Discovery ori`
+- Bifrost Language Models owns two message types, `LLM.Prompt.Complete` (10035399) and `LLM.Prompt.Ask` (10035432, #101: `LLM Prompt Ask Impl ori`
+  10035432, `LLM Ask Runner ori` 10035433), registered on Foundation's `Message Type ori` enum by `LangModel Message Type ori`. `LLM Prompt Compl Impl ori` implements `Msg Interface ori`, `Msg Discovery ori`
   and `Msg Contract ori`; its contract chapters are its help (no help codeunit, no message-type page on the site).
 - Errors are returned as `status = Error` through the coded `Argument.RespondWithError(code, message, parameter,
   received, expected, nextStep)`; never an uncoded text and never an unhandled exception. The errors chapter uses the

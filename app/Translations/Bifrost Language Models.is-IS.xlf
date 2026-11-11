@@ -819,6 +819,210 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Virkja HTTP út á við, setja upp Copilot eða annað mállíkan, tengja það við Bifröst spjall og veita notendum spjallaðgang.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Wizard Reg. ori - Method RegisterWizard - NamedType DescriptionTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3834583253" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You do not have permission to ask a language model.</source>
+          <target>Þú hefur ekki heimild til að spyrja mállíkan.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þú hefur ekki heimild til að spyrja mállíkan.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType AskDeniedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3027948836" size-unit="char" translate="yes" xml:space="preserve">
+          <source>the BIFROST Chat ori and BIFROST LLM Chat ori permission sets</source>
+          <target>heimildasamstæðurnar BIFROST Chat ori og BIFROST LLM Chat ori</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=heimildasamstæðurnar BIFROST Chat ori og BIFROST LLM Chat ori</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType AskDeniedExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 2530011909" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask your administrator to assign the BIFROST Chat ori and BIFROST LLM Chat ori permission sets.</source>
+          <target>Biddu kerfisstjóra um að úthluta þér heimildasamstæðunum BIFROST Chat ori og BIFROST LLM Chat ori.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að úthluta þér heimildasamstæðunum BIFROST Chat ori og BIFROST LLM Chat ori.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType AskDeniedNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3455708550" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caller does not hold Foundation's BIFROST Chat ori permission set, or cannot read the Bifrost Language Models table without this app's BIFROST LLM Chat ori.</source>
+          <target>Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation, eða getur ekki lesið töflu Bifröst mállíkana án BIFROST LLM Chat ori úr þessu forriti.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation, eða getur ekki lesið töflu Bifröst mállíkana án BIFROST LLM Chat ori úr þessu forriti.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType AskDeniedWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 953319601" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM.Prompt.Ask does not support the Copilot provider.</source>
+          <target>LLM.Prompt.Ask styður ekki Copilot-veitandann.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=LLM.Prompt.Ask styður ekki Copilot-veitandann.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType CopilotErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 1409902144" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a language model whose provider runs tools in separate steps (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google or xAI)</source>
+          <target>mállíkan þar sem veitandinn keyrir verkfæri í aðskildum skrefum (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google eða xAI)</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=mállíkan þar sem veitandinn keyrir verkfæri í aðskildum skrefum (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google eða xAI)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType CopilotExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 1036446625" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send roleCode with a language model whose provider is not Copilot.</source>
+          <target>Sendu roleCode með mállíkani þar sem veitandinn er ekki Copilot.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu roleCode með mállíkani þar sem veitandinn er ekki Copilot.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType CopilotNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3362711714" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The selected language model uses Copilot, or its provider cannot run tools in separate steps.</source>
+          <target>Valið mállíkan notar Copilot, eða veitandi þess getur ekki keyrt verkfæri í aðskildum skrefum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Valið mállíkan notar Copilot, eða veitandi þess getur ekki keyrt verkfæri í aðskildum skrefum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType CopilotWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 411844913" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The value of %1 has the wrong JSON type.</source>
+          <target>Gildi %1 er af rangri JSON-gerð.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = parameter name, is-IS=Gildi %1 er af rangri JSON-gerð.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3442592801" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send each parameter with the JSON type the help describes.</source>
+          <target>Sendu hverja færibreytu með þeirri JSON-gerð sem hjálpin lýsir.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu hverja færibreytu með þeirri JSON-gerð sem hjálpin lýsir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 4266670370" size-unit="char" translate="yes" xml:space="preserve">
+          <source>question, instructions or roleCode is not a string, context is not a string or an object, limits or tools or responseSchema or subject is not an object, a limit is not an integer, or includeTrace is not a Boolean.</source>
+          <target>question, instructions eða roleCode er ekki strengur, context er hvorki strengur né hlutur, limits, tools, responseSchema eða subject er ekki hlutur, mörk eru ekki heiltala eða includeTrace er ekki rökgildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=question, instructions eða roleCode er ekki strengur, context er hvorki strengur né hlutur, limits, tools, responseSchema eða subject er ekki hlutur, mörk eru ekki heiltala eða includeTrace er ekki rökgildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidFormatWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 4213142011" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The limit %1 must be 1 or more.</source>
+          <target>Mörkin %1 verða að vera 1 eða meira.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = limit name, is-IS=Mörkin %1 verða að vera 1 eða meira.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidLimitErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 115126588" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A value in limits is below 1, or subject names a table that does not exist or carries a systemId that is not a GUID.</source>
+          <target>Gildi í limits er lægra en 1, eða subject nefnir töflu sem er ekki til eða ber systemId sem er ekki GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gildi í limits er lægra en 1, eða subject nefnir töflu sem er ekki til eða ber systemId sem er ekki GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidLimitWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 2257785892" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The subject does not name a known table and a record GUID.</source>
+          <target>subject nefnir ekki þekkta töflu og GUID færslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=subject nefnir ekki þekkta töflu og GUID færslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType InvalidSubjectErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3428892221" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an integer of 1 or more</source>
+          <target>heiltala sem er 1 eða meira</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=heiltala sem er 1 eða meira</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType LimitExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 320751228" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a positive integer, or leave the limit out to use the default.</source>
+          <target>Sendu jákvæða heiltölu, eða slepptu mörkunum til að nota sjálfgefið gildi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu jákvæða heiltölu, eða slepptu mörkunum til að nota sjálfgefið gildi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType LimitNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 1059249721" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The question is missing.</source>
+          <target>Spurninguna vantar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Spurninguna vantar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType MissingQuestionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3910263802" size-unit="char" translate="yes" xml:space="preserve">
+          <source>question is missing or empty.</source>
+          <target>question vantar eða er tómt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=question vantar eða er tómt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType MissingQuestionWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3883761671" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No language model with a chat provider is set up for you.</source>
+          <target>Ekkert mállíkan með spjallveitanda er sett upp fyrir þig.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekkert mállíkan með spjallveitanda er sett upp fyrir þig.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType NoProviderErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3418305274" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a Bifrost Language Model with a chat provider and an API key</source>
+          <target>Bifröst mállíkan með spjallveitanda og API-lykli</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst mállíkan með spjallveitanda og API-lykli</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType NoProviderExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3607251783" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask your administrator to set up a language model on the Bifrost Language Models setup page, with its API key on Bifrost App Secrets.</source>
+          <target>Biddu kerfisstjóra um að setja upp mállíkan á uppsetningarsíðu Bifröst mállíkana, með API-lykli þess í leyndarmálum forrita Bifröst.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að setja upp mállíkan á uppsetningarsíðu Bifröst mállíkana, með API-lykli þess í leyndarmálum forrita Bifröst.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType NoProviderNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 945262344" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The selected, the caller's or the default language model has no usable chat provider or API key.</source>
+          <target>Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Valið mállíkan, mállíkan kallandans eða sjálfgefna mállíkanið hefur engan nothæfan spjallveitanda eða API-lykil.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType NoProviderWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3010661194" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The provider of the selected language model cannot run tools in separate steps.</source>
+          <target>Veitandi valins mállíkans getur ekki keyrt verkfæri í aðskildum skrefum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi valins mállíkans getur ekki keyrt verkfæri í aðskildum skrefum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType NoSplitErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 1848437636" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a non-empty JSON string</source>
+          <target>JSON-strengur sem er ekki tómur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=JSON-strengur sem er ekki tómur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType QuestionExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3566573861" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the question to answer in question.</source>
+          <target>Sendu spurninguna sem á að svara í question.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu spurninguna sem á að svara í question.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType QuestionNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 840745974" size-unit="char" translate="yes" xml:space="preserve">
+          <source>the code of a Bifrost Language Model</source>
+          <target>kóði Bifröst mállíkans</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=kóði Bifröst mállíkans</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType RoleExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 2853560670" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost Language Model "%1" was not found.</source>
+          <target>Bifröst mállíkanið "%1" fannst ekki.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = language model code, is-IS=Bifröst mállíkanið "%1" fannst ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType RoleNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3589112302" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Leave roleCode out to use your own or the default language model, or use a code from the Bifrost Language Models list.</source>
+          <target>Slepptu roleCode til að nota þitt eigið eða sjálfgefna mállíkanið, eða notaðu kóða af listanum yfir Bifröst mállíkön.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Slepptu roleCode til að nota þitt eigið eða sjálfgefna mállíkanið, eða notaðu kóða af listanum yfir Bifröst mállíkön.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType RoleNotFoundNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 693364461" size-unit="char" translate="yes" xml:space="preserve">
+          <source>roleCode is sent but no language model has that code.</source>
+          <target>roleCode er sent en ekkert mállíkan hefur þann kóða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=roleCode er sent en ekkert mállíkan hefur þann kóða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType RoleNotFoundWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 1093843590" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an object with table (table name or caption) and systemId (GUID)</source>
+          <target>hlutur með table (heiti eða titill töflu) og systemId (GUID)</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=hlutur með table (heiti eða titill töflu) og systemId (GUID)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType SubjectExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - NamedType 3911326499" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the table name and the SystemId of the record, or leave subject out.</source>
+          <target>Sendu heiti töflunnar og SystemId færslunnar, eða slepptu subject.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu heiti töflunnar og SystemId færslunnar, eða slepptu subject.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType SubjectNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.</source>
+          <target>Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering</source>
+          <target>spyrja gervigreind, spyrja mállíkan, gervigreind án notanda, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind án notanda, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1468868992 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed.</source>
+          <target>Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 2403977524" size-unit="char" translate="yes" xml:space="preserve">
           <source>The prompt must be a JSON string.</source>
           <target>Kvaðningin í prompt verður að vera JSON-strengur.</target>
