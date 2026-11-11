@@ -15,6 +15,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
     var
         ToolServer: Codeunit "MCP Tool Server ori";
+        SessionTime: Codeunit "LLM Session Time ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
         AskPolicy: Codeunit "LLM Ask Tool Policy ori";
@@ -265,7 +266,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         RoleSkill: Text;
         ContextSkill: Text;
     begin
-        PromptBuilder.Append(ToolServer.Bootstrap(''));
+        PromptBuilder.Append(SessionTime.WithFreshBlock(ToolServer.Bootstrap('')));
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);

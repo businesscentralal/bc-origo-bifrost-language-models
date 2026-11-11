@@ -14,6 +14,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
     var
         ToolServer: Codeunit "MCP Tool Server ori";
+        SessionTime: Codeunit "LLM Session Time ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
@@ -412,7 +413,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         RoleSkill: Text;
         ContextSkill: Text;
     begin
-        PromptBuilder.Append(ToolServer.Bootstrap(''));
+        PromptBuilder.Append(SessionTime.WithFreshBlock(ToolServer.Bootstrap('')));
 
         if PayloadObject.Get('recordContext', RecordContextToken) then begin
             RecordContextToken.WriteTo(RecordContext);

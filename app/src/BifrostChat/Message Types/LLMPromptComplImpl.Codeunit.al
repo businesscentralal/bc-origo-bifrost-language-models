@@ -121,7 +121,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         AttachmentParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('prompt', 'string', true, 'The user prompt sent to the language model. A value that is not a JSON string is refused with InvalidParameterFormat; an empty one with MissingParameter.'));
-        Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt sent as-is; no Bootstrap or skill is injected. Left out of the provider request when empty.'));
+        Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt. No Bootstrap or skill is injected, but every call starts the system text with one fresh SESSION TIME block from Foundation (now in UTC, the user''s time zone, today with its weekday and, when it differs, the work date), followed by one empty line and this text. A SESSION TIME block already inside this text is replaced by the fresh one, never doubled. There is no opt-out.'));
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
         FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the prompt; takes precedence over files and attachment. A value that is not a JSON object is ignored, and files and attachment are then ignored too.');
         FileParameter.Add('children', FileChildren());
@@ -148,6 +148,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Fields.Add(ContractMgt.ResponseField('reply', 'string', 'The provider response text, when supplied by the provider.'));
         Fields.Add(ContractMgt.ResponseField('text', 'string', 'A copy of reply, added when the provider did not return text.'));
         Fields.Add(ContractMgt.ResponseField('type', 'string', 'The value reply. Returned by the Anthropic provider only.'));
+        Fields.Add(ContractMgt.ResponseField('sessionTime', 'object', 'The clock the model was given, read from the block that was sent: nowUtc (yyyy-MM-ddTHH:mm:ssZ), workDate (yyyy-MM-dd) and timeZone (the user''s time zone name; left out when Foundation does not know the zone). Left out when no block could be sent.'));
+        Fields.Add(ContractMgt.ResponseField('warnings', 'array', 'Added only when something was left out without failing the call. sessionTimeUnavailable: Foundation could not supply the SESSION TIME block, so the prompt was sent without it and sessionTime is absent.'));
         Fields.Add(ContractMgt.ResponseField('usage', 'object', 'The token usage the provider reported for the call. Returned by the Anthropic provider only, and only when the provider reports usage.'));
         Response.Add('fields', Fields);
         exit(true);
@@ -230,7 +232,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     begin
         Examples.Add(ContractMgt.Example('Complete a prompt with the caller''s own or the default model',
             '{"type":"LLM.Prompt.Complete","data":{"prompt":"Classify the subject \"Invoice 4711 for March\" as invoice, order or other.","system":"Answer with one word."}}',
-            '{"status":"Success","reply":"invoice","text":"invoice"}'));
+            '{"status":"Success","reply":"invoice","text":"invoice","sessionTime":{"nowUtc":"2026-11-06T09:30:00Z","workDate":"2026-11-06","timeZone":"GMT Standard Time"}}'));
         Examples.Add(ContractMgt.Example('Complete a prompt with a selected model',
             '{"type":"LLM.Prompt.Complete","data":{"prompt":"Summarize this text.","system":"Return one concise sentence.","roleCode":"CLAUDE"}}',
             '{"status":"Success","reply":"A concise summary.","text":"A concise summary."}'));
@@ -248,7 +250,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetOverview(var Overview: Text): Boolean
     begin
-        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt, and optionally one or more files, to a configured provider without tools, record context or conversation state, and returns the answer as text. It reads and writes no Business Central records for you: read the data first and put the values in the prompt.';
+        Overview := 'Use LLM.Prompt.Complete for one-shot reasoning, transformation, extraction, classification or generation when no dedicated message type covers the task. It sends one user prompt and optional system prompt, and optionally one or more files, to a configured provider without tools, record context or conversation state, and returns the answer as text. Every call also carries the current date and time, so the prompt can say "today" or "last month". It reads and writes no Business Central records for you: read the data first and put the values in the prompt.';
         exit(true);
     end;
 
@@ -257,7 +259,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
     begin
-        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI use one file policy: the MIME type is trimmed, compared without letter case, and parameters after a semicolon are ignored, and that normalized type is sent; image/png and image/jpeg stay inline; any other image type is refused before a request is sent; a decoded file larger than the language model file size limit is refused before a request is sent; the decoded size of all files on the call cannot exceed 104857600 bytes (100 MB), and a larger total is refused before any upload or provider request with an error that names the total and the cap; a PDF or other document is sent inline when the provider accepts inline documents, otherwise it is uploaded to that provider''s file store, referenced by file id, and deleted after the call, including when the prompt fails. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. A provider HTTP client error includes the HTTP status and, when the provider sends one, a short error code. Provider error text, secrets and the prompt are not returned. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. A document that cannot be sent inline is stored at that provider only for the duration of the call and is then deleted. The reply is free text from an external model: validate it before it is used to change anything.';
+        Notes := 'If roleCode is omitted, the caller''s configured language model is used and then the default model is tried. An inline file takes precedence over a stored attachment. OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI use one file policy: the MIME type is trimmed, compared without letter case, and parameters after a semicolon are ignored, and that normalized type is sent; image/png and image/jpeg stay inline; any other image type is refused before a request is sent; a decoded file larger than the language model file size limit is refused before a request is sent; the decoded size of all files on the call cannot exceed 104857600 bytes (100 MB), and a larger total is refused before any upload or provider request with an error that names the total and the cap; a PDF or other document is sent inline when the provider accepts inline documents, otherwise it is uploaded to that provider''s file store, referenced by file id, and deleted after the call, including when the prompt fails. The Copilot provider does not accept files: a call with a file answers with the provider failure (PreconditionFailed). Other providers may reject files they cannot read. A provider HTTP client error includes the HTTP status and, when the provider sends one, a short error code. Provider error text, secrets and the prompt are not returned. Provider response properties other than status, reply and text are passed through; the Anthropic provider adds type and usage. The prompt and any file leave Business Central for the provider the language model names, so send no data that provider may not receive. A document that cannot be sent inline is stored at that provider only for the duration of the call and is then deleted. Every call adds a fresh SESSION TIME block (Foundation''s own text, in English, whatever the session language) in front of the system prompt, so the model knows the current UTC time, the user''s time zone, today''s date and weekday, and the work date when it differs; the response repeats the clock as sessionTime. If Foundation cannot supply the block the call still succeeds, without sessionTime, and warnings holds sessionTimeUnavailable. The reply is free text from an external model: validate it before it is used to change anything.';
         exit(true);
     end;
 
@@ -304,6 +306,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        SessionTime: Codeunit "LLM Session Time ori";
         PromptToken: JsonToken;
         Provider: Interface "Bifrost LangModel Provider ori";
         RequestJson: JsonObject;
@@ -313,6 +316,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ResponseJson: JsonObject;
         ResponseText: Text;
         SystemPrompt: Text;
+        SessionTimeBlock: Text;
         UserPrompt: Text;
         RoleCode: Code[20];
         RoleCodeText: Text;
@@ -365,6 +369,10 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         end;
 
         SystemPrompt := GetTextValue(RequestJson, 'system');
+        // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
+        // sent without a stale caller-supplied block and the response says so.
+        SessionTime.GetBlock(SessionTimeBlock);
+        SystemPrompt := SessionTime.ForSystemPrompt(SystemPrompt, SessionTimeBlock);
         if SystemPrompt <> '' then
             PayloadJson.Add('systemPrompt', SystemPrompt);
 
@@ -401,6 +409,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
             if HasProperty(ResponseJson, 'reply') then
                 ResponseJson.Add('text', GetTextValue(ResponseJson, 'reply'));
 
+        SessionTime.AddToResponse(ResponseJson, SessionTimeBlock);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
