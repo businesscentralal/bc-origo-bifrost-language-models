@@ -237,6 +237,66 @@ codeunit 96063 "LLM Prompt Ask Tests"
     end;
 
     [Test]
+    procedure Ask_ToolResultLongerThanMax_IsCutWithMarker()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO AC10] a tool result longer than maxResultChars reaches the provider cut, with a marker
+        Initialize();
+        MockProvider.EnqueueAnswer(ToolCalls(StrSubstNo(CallTok, 'c1', 'who_am_i')));
+        MockProvider.EnqueueAnswer(StrSubstNo(ReplyTok, 'ok'));
+
+        ResponseJson := Execute(Request('{"question":"Q","limits":{"maxResultChars":20}}'), 1033);
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Assert.IsTrue(MockProvider.GetToolResultsLog().Get(1).Contains('truncated by Bifrost: 20 of'), MockProvider.GetToolResultsLog().Get(1));
+    end;
+
+    [Test]
+    procedure Ask_FoundationRefusesTool_CountsToolErrorAndContinues()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO AC09] a tool call Foundation refuses comes back as a tool error, counted, and the run succeeds
+        Initialize();
+        MockProvider.EnqueueAnswer(ToolCalls('{"id":"c1","name":"get_records","arguments":{"tableName":"No Such Table LM101"}}'));
+        MockProvider.EnqueueAnswer(StrSubstNo(ReplyTok, 'unknown'));
+
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Assert.AreEqual(1, ResponseJson.GetInteger('toolErrors'), Describe(ResponseJson));
+        Assert.AreEqual(0, ResponseJson.GetInteger('deniedToolCalls'), 'not a policy denial');
+    end;
+
+    [Test]
+    procedure Ask_TwentyRounds_CompletesWithoutTimeout()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        AskImpl: Codeunit "LLM Prompt Ask Impl ori";
+        ResponseJson: JsonObject;
+        Parameters: JsonArray;
+        ParametersText: Text;
+        Index: Integer;
+    begin
+        // [SCENARIO AC11] a run of 20 rounds completes; GetParameters declares no timeout
+        Initialize();
+        for Index := 1 to 19 do
+            MockProvider.EnqueueAnswer(ToolCalls(StrSubstNo(CallTok, 'c' + Format(Index), 'who_am_i')));
+        MockProvider.EnqueueAnswer(StrSubstNo(ReplyTok, 'Done.'));
+
+        ResponseJson := Execute(Request('{"question":"Q","limits":{"maxRounds":20,"maxToolCalls":40}}'), 1033);
+
+        Assert.AreEqual('completed', ResponseJson.GetText('stopReason'), Describe(ResponseJson));
+        Assert.AreEqual(20, ResponseJson.GetInteger('rounds'), 'twenty rounds');
+        AskImpl.GetParameters(Parameters);
+        Parameters.WriteTo(ParametersText);
+        Assert.IsFalse(ParametersText.ToLower().Contains('timeout"'), 'no timeout parameter');
+    end;
+
+    [Test]
     procedure Ask_MissingQuestion_MissingParameter_1033()
     begin
         // [SCENARIO AC03] question missing
