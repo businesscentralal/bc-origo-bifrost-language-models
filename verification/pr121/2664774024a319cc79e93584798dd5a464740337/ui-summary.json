@@ -1,0 +1,59 @@
+{
+  "sha": "2664774024a319cc79e93584798dd5a464740337",
+  "tenant": "w129-12",
+  "runs": [
+    {
+      "sha": "2664774024a319cc79e93584798dd5a464740337",
+      "lcid": 1033,
+      "tenant": "w129-12",
+      "scenarios": [
+        {
+          "name": "LLM.Prompt.Ask visible with English catalogue description",
+          "passed": true
+        },
+        {
+          "name": "Own Mock model visible on English language-model page",
+          "passed": true
+        }
+      ],
+      "catalogueText": "\ue72b\nLLM.Prompt.Ask\nBifrost Message Types\n\t\t\nName\n\t\n\t\nDescription\n\t\nFilter Table No.\n\t\nDirection\n\t\n\t\t\t\n\t\t\t\t\n\n\t\tHelp.WhoAmI.Get\t\tReturns a comprehensive user profile for the current user, including roles, setup, and system prompt.\t\tOutbound\t\n\t\tIncoming.Document.Attach\t\tAdds a file attachment to an existing Incoming Document.\t133\tInbound\t\n\t\tIncoming.Document.Create\t\tCreates a new Incoming Document with a main file attachment.\t130\tInbound\t\n\t\tIncoming.Document.Get\t\tReturns header information and all attachments for an Incoming Document.\t130\tOutbound\t\n\t\tIncoming.Document.Process\t\tProcesses an Incoming Document to create a purchase invoice, credit memo, or journal line.\t130\tInbound\t\n\t\tIncoming.Document",
+      "model": "Skip to main content\nCRONUS International Ltd.\nSales\nPurchasing\nInventory\nPosted Documents\nShopify\nAll Reports\n\ue700\nBifrost Language Models:\nCustom filtered\n\ue70d\n\ue721\nNew\nDelete\nInit Copilot Defaults\n\ue72d\n\ue71c\n\t\nCode\n\t\n\t\nDescription\n\t\nDefault\n\t\nChat Provider\n\t\nHas Skill\n\t\n\t\t\n\t\t\t\t\t\n\tBIFT-W2-121\t\n\tBrokkr PR121 owned mock-only fixture\t\n\tMock\t\n\t\n\nCode, sorted in Ascending order\n\nUse the Left and Right arrow keys to adjust the size. Use the Escape key to undo or the Enter key to accept."
+    },
+    {
+      "sha": "2664774024a319cc79e93584798dd5a464740337",
+      "lcid": 1039,
+      "tenant": "w129-12",
+      "scenarios": [
+        {
+          "name": "LLM.Prompt.Ask visible with Icelandic catalogue description",
+          "passed": true
+        },
+        {
+          "name": "Own Mock model visible on Icelandic language-model page",
+          "passed": true
+        }
+      ],
+      "catalogueText": "\ue72b\nLLM.Prompt.Ask\nSkilabo\u00f0ategundir Bifr\u00f6st\n\t\t\nHeiti\n\t\n\t\nL\u00fdsing\n\t\nAfmarkanir t\u00f6flun\u00famer\n\t\nStefna\n\t\n\t\t\t\n\t\t\t\t\n\n\t\tHelp.WhoAmI.Get\t\tSkilar \u00edtarlegu notandasni\u00f0i n\u00faverandi notanda, \u00fear \u00e1 me\u00f0al hlutverkum, uppsetningu og kerfiskva\u00f0ningu.\t\t\u00datsent\t\n\t\tIncoming.Document.Attach\t\tB\u00e6tir skr\u00e1arvi\u00f0hengi vi\u00f0 fyrirliggjandi innkomi\u00f0 skjal.\t133\tInnsent\t\n\t\tIncoming.Document.Create\t\tStofnar n\u00fdtt innkomi\u00f0 skjal me\u00f0 a\u00f0alvi\u00f0hengi.\t130\tInnsent\t\n\t\tIncoming.Document.Get\t\tSkilar hausuppl\u00fdsingum og \u00f6llum vi\u00f0hengjum innkomins skjals.\t130\t\u00datsent\t\n\t\tIncoming.Document.Process\t\tVinnur innkomi\u00f0 skjal og stofnar innkaupareikning, kreditreikning e\u00f0a l\u00ednu \u00ed f\u00e6rslub\u00f3k.\t130\tInnsent\t\n\t\tIncoming.Document.SetDefault\t\tSetur sj\u00e1lfgefi\u00f0 a",
+      "model": "Fara \u00ed a\u00f0alefni\nCRONUS International Ltd.\nSales\nPurchasing\nInventory\nPosted Documents\nShopify\nAllar sk\u00fdrslur\n\ue700\nBifr\u00f6st m\u00e1ll\u00edk\u00f6n:\nS\u00e9rstilling s\u00edu\u00f0\n\ue70d\n\ue721\nN\u00fdtt\nEy\u00f0a\nFrumstilla Copilot-sj\u00e1lfgildi\n\ue72d\n\ue71c\n\t\nK\u00f3\u00f0i\n\t\n\t\nL\u00fdsing\n\t\nSj\u00e1lfgefi\u00f0\n\t\nSpjallveitandi\n\t\nHefur h\u00e6fni\n\t\n\t\t\n\t\t\t\t\t\n\tBIFT-W2-121\t\n\tBrokkr PR121 owned mock-only fixture\t\n\tMock\t\n\t\n\nK\u00f3\u00f0i, ra\u00f0a\u00f0 \u00ed p\u00f6ntunina H\u00e6kkandi\n\nNota\u00f0u h\u00e6gri og vinstri \u00f6rvalyklana til a\u00f0 stilla st\u00e6r\u00f0ina. Nota\u00f0u Escape-lykilinn til a\u00f0 afturkalla e\u00f0a Enter-lykilinn til a\u00f0 sta\u00f0festa."
+    }
+  ],
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "pending": [],
+  "note": "UI checks catalogue discovery and own mock model in each locale; HTML has no dedicated generation page.",
+  "screenshots": [
+    "ui-catalogue-1033.png",
+    "ui-model-1033.png",
+    "ui-catalogue-1039.png",
+    "ui-model-1039.png"
+  ],
+  "languageSwitch": "Actual My Settings change from English (United States) to Icelandic (Iceland), with Icelandic catalogue description and model page captions asserted",
+  "restore": {
+    "verified": true,
+    "language": "English (United States)",
+    "lcid": 1033,
+    "evidence": "ui-restore-readback.log"
+  }
+}

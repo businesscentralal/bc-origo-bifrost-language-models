@@ -1,0 +1,39 @@
+{
+  "sha": "2664774024a319cc79e93584798dd5a464740337",
+  "owner": "worker-2",
+  "tenant": "w129-12",
+  "mcp": {
+    "fixtureCode": "BIFT-W2-121",
+    "before": 0,
+    "created": 1,
+    "provider": "Mock",
+    "deleted": 1,
+    "after": 0,
+    "verified": true,
+    "evidence": [
+      "mcp-fixture-before.json",
+      "mcp-fixture-seed.json",
+      "mcp-fixture-delete.json",
+      "mcp-fixture-after.json"
+    ],
+    "userSetupOrDefaultModelChanged": false,
+    "apiKeysSet": false
+  },
+  "ui": {
+    "languageBefore": "English (United States)",
+    "testedLanguage": "Icelandic (Iceland)",
+    "restoredLanguage": "English (United States)",
+    "restoredLcid": 1033,
+    "restorationVerified": true
+  },
+  "nativeTestUsers": "Setup-wizard tests delete only each explicitly created identity, its Access Control and Bifrost User Setup after assertions. Two full535-test runs pass. No existing users or licence state changed.",
+  "deploymentRetention": {
+    "product": "Bifrost Language Models28.0.3.0",
+    "tests": "Bifrost Language Models - Tests28.0.3.0",
+    "sourceSha": "2664774024a319cc79e93584798dd5a464740337",
+    "reason": "Retained exact-candidate deployment on operator-provided persistent own tenant for review/amend follow-up; other preexisting apps and tenant preserved",
+    "nextOwner": "Brokkr (worker-2)",
+    "resumeTrigger": "Review amendment, accepted related work or final delivery cleanup disposition"
+  },
+  "verifiedAt": "2026-11-11T21:52:02.820006+00:00"
+}

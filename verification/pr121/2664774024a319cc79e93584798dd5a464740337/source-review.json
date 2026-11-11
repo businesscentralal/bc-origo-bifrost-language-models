@@ -1,0 +1,48 @@
+{
+  "sourceSha": "2664774024a319cc79e93584798dd5a464740337",
+  "standardsCommit": "52ba4754cfd614e4a7c50af87b30149b18b313e3",
+  "snapshotCapturedAt": "2026-11-02T10:35:08.581Z",
+  "lessonsApplied": [
+    "lm121-confirmation-target-brokkr-20261111",
+    "lm121-provider-truncation-brokkr-20261111",
+    "language-models-pr55-1791380953-worker9-diagnosis",
+    "lm-pr54-internal-8c591a38-dependency-executor-evidence"
+  ],
+  "layer1": {
+    "script": "skills/origo-bc-pr-gateway/mcp/tools/Invoke-PrepareForPR.ps1",
+    "initialFailure": "USERPROFILE unset on Linux; retried with USERPROFILE=/home/node",
+    "reportPath": "/workspace/private/lm121-evidence/gateway-layer1-final.json",
+    "passed": 17,
+    "checks": 23,
+    "findingsTriage": {
+      "global_variables": "Runner state predates PR; additional HTML state stays within single execution, not a runtime defect",
+      "format_evaluate_enum": "Typed parameter declaration matched regex; TryEvaluate is existing TryFunction canonical enum parser",
+      "try_prefix_convention": "Boolean extraction/parser methods return false on missing input and do not throw; changing to TryFunction would change semantics",
+      "xml_doc_comments": "Existing methods Run/ExecuteBifrostTask and shifted AddWarning doc; no removed public API",
+      "changelog": "Current release process uses Unreleased; new entries include objects and behavior",
+      "one_statement_per_line": "Procedure parameter separators were incorrectly counted as statements; actual statements remain one per line"
+    }
+  },
+  "layer2": {
+    "breakingChanges": "No public procedures/fields removed or renamed; provider helper signatures are local; completion field is additive",
+    "objectIds": "No new objects; existing product10035412/10035417/10035433 and tests96026/96028/96037/96065/96066 reused within ranges",
+    "translations": "No new user-facing label in repairs; existing HTML refusal labels and is-IS XLF reused. Contract chapter text is English by repository design",
+    "permissionCoverage": "No new objects or permission grants; source repair uses existing model target and own test identity cleanup",
+    "privacy": "No new request logging or telemetry; original masker regression retained",
+    "testScope": "Full configured native suite535executed535passed0failed0skipped at2664774, twice. MCP14/14 and UI4/4 in1033/1039; source-identical package hashes read back. Red AC03 mocks reproduced5 failures before fix. No exclusions or weakened assertions.",
+    "suppressionCheck": {
+      "manifestDiffFromMain": "",
+      "newSuppressionDirectives": false
+    }
+  },
+  "acceptanceMatrix": {
+    "AC01": "Existing native default text/html response tests; exact-tip runtime pending",
+    "AC02": "Existing extraction, fences/preamble, uppercase, missing/truncated document native tests; exact-tip runtime pending",
+    "AC03": "Added raw provider finish metadata, token-limit/filter/incomplete runner refusals including incomplete tool calls;53focused tests pass; final full-suite pending",
+    "AC04": "Native 1000000/1000001 context cap tests; MCP negative boundary planned",
+    "AC05": "Native untrusted context and HTML prompt tests",
+    "AC06": "Native adversarial allow/deny policy prevents write/outside tool calls",
+    "AC07": "Native Email.Draft.Set/Email.Message.Send always-deny tests",
+    "AC08": "Native request/response body masking test; no new telemetry"
+  }
+}

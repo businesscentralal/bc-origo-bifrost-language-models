@@ -1,0 +1,50 @@
+{
+  "sourceSha": "2664774024a319cc79e93584798dd5a464740337",
+  "branch": "feat/113-ask-html-output-hanarr",
+  "tenant": "w129-12",
+  "server": "BC290",
+  "company": "CRONUS International Ltd.",
+  "foundationVersion": "28.0.13.0",
+  "owner": "worker-2",
+  "appVersion": "28.0.3.0",
+  "compile": {
+    "app": {
+      "sha": "2664774024a319cc79e93584798dd5a464740337",
+      "errors": 0,
+      "warnings": 0,
+      "analyzers": [
+        "CodeCop",
+        "UICop",
+        "AppSourceCop"
+      ],
+      "log": "compile-app-final.log"
+    },
+    "test": {
+      "sha": "2664774024a319cc79e93584798dd5a464740337",
+      "errors": 0,
+      "warnings": 0,
+      "analyzers": [
+        "CodeCop",
+        "UICop",
+        "AppSourceCop"
+      ],
+      "log": "compile-test-final.log"
+    }
+  },
+  "artifacts": {
+    "product": {
+      "sha256": "fb7ba5dc7f8104a551e775afde30d958da898e0d4dfcde2b969a457f08b13426",
+      "bytes": 307732,
+      "path": "/workspace/private/lm121-evidence/product-final.app",
+      "builtBy": "worker-2",
+      "sourceSha": "2664774024a319cc79e93584798dd5a464740337"
+    },
+    "tests": {
+      "sha256": "678be1b6a939d8747ef55bf223672e5c9420c15231eea8c4f84161236ce00798",
+      "bytes": 206134,
+      "path": "/workspace/private/lm121-evidence/tests-final.app",
+      "builtBy": "worker-2",
+      "sourceSha": "2664774024a319cc79e93584798dd5a464740337"
+    }
+  }
+}

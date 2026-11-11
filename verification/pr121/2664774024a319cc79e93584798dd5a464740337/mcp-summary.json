@@ -1,0 +1,122 @@
+{
+  "sha": "2664774024a319cc79e93584798dd5a464740337",
+  "tenant": "w129-12",
+  "touchedMessageTypes": [
+    "LLM.Prompt.Ask",
+    "Test.LanguageModel.Chat"
+  ],
+  "createsOwnData": true,
+  "fixtureCode": "BIFT-W2-121",
+  "provider": "Mock",
+  "liveProviderCalls": 0,
+  "total": 14,
+  "passed": 14,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "ask-help",
+      "lcid": 1033,
+      "passed": true,
+      "type": "LLM.Prompt.Ask",
+      "actualCode": null
+    },
+    {
+      "name": "ask-invalid-format",
+      "lcid": 1033,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameter"
+    },
+    {
+      "name": "ask-invalid-format-type",
+      "lcid": 1033,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameterFormat"
+    },
+    {
+      "name": "ask-context-over-cap",
+      "lcid": 1033,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameter"
+    },
+    {
+      "name": "chat-target-help",
+      "lcid": 1033,
+      "passed": true,
+      "type": "Test.LanguageModel.Chat",
+      "actualCode": null
+    },
+    {
+      "name": "chat-count-mismatch",
+      "lcid": 1033,
+      "passed": true,
+      "type": null,
+      "actualCode": "ConfirmationMismatch"
+    },
+    {
+      "name": "chat-count-invalid-type",
+      "lcid": 1033,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameterFormat"
+    },
+    {
+      "name": "ask-help",
+      "lcid": 1039,
+      "passed": true,
+      "type": "LLM.Prompt.Ask",
+      "actualCode": null
+    },
+    {
+      "name": "ask-invalid-format",
+      "lcid": 1039,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameter"
+    },
+    {
+      "name": "ask-invalid-format-type",
+      "lcid": 1039,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameterFormat"
+    },
+    {
+      "name": "ask-context-over-cap",
+      "lcid": 1039,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameter"
+    },
+    {
+      "name": "chat-target-help",
+      "lcid": 1039,
+      "passed": true,
+      "type": "Test.LanguageModel.Chat",
+      "actualCode": null
+    },
+    {
+      "name": "chat-count-mismatch",
+      "lcid": 1039,
+      "passed": true,
+      "type": null,
+      "actualCode": "ConfirmationMismatch"
+    },
+    {
+      "name": "chat-count-invalid-type",
+      "lcid": 1039,
+      "passed": true,
+      "type": null,
+      "actualCode": "InvalidParameterFormat"
+    }
+  ],
+  "scope": "MCP checks cover HTML contract/validation/context boundaries and test-chat confirmation. Successful HTML generation, truncation, adversarial policy and masking are verified by native mock tests in both full535-test runs; no MCP happy-path generation is claimed. Fixture retained briefly for own UI checks, then deleted.",
+  "localizationVerified": {
+    "1033": "outputFormat must be text or html.",
+    "1039": "outputFormat ver\u00f0ur a\u00f0 vera text e\u00f0a html.",
+    "checks": "Actual coded refusal language asserted from recorded responses"
+  }
+}

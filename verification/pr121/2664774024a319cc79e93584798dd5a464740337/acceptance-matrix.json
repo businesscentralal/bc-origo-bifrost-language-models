@@ -1,0 +1,83 @@
+{
+  "sourceSha": "2664774024a319cc79e93584798dd5a464740337",
+  "repo": "businesscentralal/bc-origo-bifrost-language-models",
+  "issue": 113,
+  "pr": 121,
+  "criteria": {
+    "AC01": "Existing native default text/html response tests; exact-tip runtime pending",
+    "AC02": "Existing extraction, fences/preamble, uppercase, missing/truncated document native tests; exact-tip runtime pending",
+    "AC03": "Added raw provider finish metadata, token-limit/filter/incomplete runner refusals including incomplete tool calls;53focused tests pass; final full-suite pending",
+    "AC04": "Native 1000000/1000001 context cap tests; MCP negative boundary planned",
+    "AC05": "Native untrusted context and HTML prompt tests",
+    "AC06": "Native adversarial allow/deny policy prevents write/outside tool calls",
+    "AC07": "Native Email.Draft.Set/Email.Message.Send always-deny tests",
+    "AC08": "Native request/response body masking test; no new telemetry"
+  },
+  "nativeCodeunits": [
+    96065,
+    96066
+  ],
+  "additionalRepairs": {
+    "96026/96028": "Declare test chat model target; refuse stale count and allow matching count",
+    "96037": "Clean only test-created identity, access and setup after assertions"
+  },
+  "scope": "Standalone HTML output option on existing LLM.Prompt.Ask; mock-only; no sanitizer dependency",
+  "verificationStatus": "Native full suite passed twice535/535; MCP14/14; UI4/4 in1033/1039; own MCP model deleted with zero-record readback; paired CI success43103894668 at2664774.",
+  "mergeDecision": "Original story decision-card-before-merge text retained alongside newer standalone unpark; no merge authorization inferred.",
+  "nativeEvidence": {
+    "sha": "2664774024a319cc79e93584798dd5a464740337",
+    "suiteRange": "96000..96199",
+    "firstRun": {
+      "executed": 535,
+      "passed": 535,
+      "failed": 0,
+      "skipped": 0,
+      "result": "full-suite-final-1.json"
+    },
+    "secondRun": {
+      "executed": 535,
+      "passed": 535,
+      "failed": 0,
+      "skipped": 0,
+      "result": "full-suite-final-2.json"
+    }
+  },
+  "mcpEvidence": {
+    "scenarios": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "lcids": [
+      1033,
+      1039
+    ],
+    "fixture": "BIFT-W2-121 (Mock)",
+    "types": [
+      "LLM.Prompt.Ask",
+      "Test.LanguageModel.Chat"
+    ],
+    "localizedRefusalsVerified": true,
+    "htmlHappyPath": "Native mock-provider coverage, not MCP generation"
+  },
+  "uiEvidence": {
+    "scenarios": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "lcids": [
+      1033,
+      1039
+    ],
+    "checks": [
+      "Catalogue discovery with localized LLM.Prompt.Ask description",
+      "Self-created Mock model on localized Language Models list"
+    ]
+  },
+  "pairedCI": {
+    "run": 43103894668,
+    "sha": "2664774024a319cc79e93584798dd5a464740337",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/businesscentralal/bc-origo-bifrost-language-models/actions/runs/43103894668"
+  }
+}
