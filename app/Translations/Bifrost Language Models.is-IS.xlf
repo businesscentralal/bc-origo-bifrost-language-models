@@ -213,6 +213,114 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Aðallykill</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Chat Svc Gate ori - Field Primary Key - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1492395099 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language Model Ask Setup</source>
+          <target>Uppsetning mállíkansspurninga</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetning mállíkansspurninga</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - NamedType 2117794309" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 must be from %2 to %3.</source>
+          <target>%1 verður að vera frá %2 til %3.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, %2 = lowest value, %3 = highest value, is-IS=%1 verður að vera frá %2 til %3.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - NamedType CountCapRangeErr</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - NamedType 1101416477" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 (%2) cannot be above %3 (%4).</source>
+          <target>%1 (%2) má ekki vera hærra en %3 (%4).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = default field caption, %2 = default value, %3 = cap field caption, %4 = cap value, is-IS=%1 (%2) má ekki vera hærra en %3 (%4).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - NamedType DefaultAboveCapErr</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - NamedType 659240741" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 must be 1 or more.</source>
+          <target>%1 verður að vera 1 eða meira.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption, is-IS=%1 verður að vera 1 eða meira.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - NamedType MinOneErr</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2485161220 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.</source>
+          <target>Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Result Chars - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2485161220 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Result Chars</source>
+          <target>Sjálfgefnir stafir í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Result Chars - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 354121853 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.</source>
+          <target>Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Rounds - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 354121853 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Rounds</source>
+          <target>Sjálfgefnar umferðir í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnar umferðir í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Rounds - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 353724477 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.</source>
+          <target>Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Tool Calls - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 353724477 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Tool Calls</source>
+          <target>Sjálfgefin verkfærakköll í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefin verkfærakköll í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Tool Calls - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2587341783 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.</source>
+          <target>Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Result Chars Cap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2587341783 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Result Chars Cap</source>
+          <target>Hámark stafa í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark stafa í verkfæraniðurstöðu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Result Chars Cap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 4271818946 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.</source>
+          <target>Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Rounds Cap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 4271818946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Rounds Cap</source>
+          <target>Hámark umferða í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark umferða í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Rounds Cap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2220255682 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.</source>
+          <target>Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Tool Calls Cap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 2220255682 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Tool Calls Cap</source>
+          <target>Hámark verkfærakalla í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark verkfærakalla í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Tool Calls Cap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 1663593181 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the primary key of the single setup row.</source>
+          <target>Tilgreinir aðallykil einu uppsetningarlínunnar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir aðallykil einu uppsetningarlínunnar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Primary Key - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 1492395099 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <target>Aðallykill</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Aðallykill</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Primary Key - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3867329394 - NamedType 1415688405" size-unit="char" translate="yes" xml:space="preserve">
           <source>Get key from Anthropic Console</source>
           <target>Sækja lykil á Anthropic Console</target>
@@ -1688,6 +1796,90 @@
           <target>(ekkert)</target>
           <note from="Developer" annotates="general" priority="2">is-IS=(ekkert)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - NamedType NoDefaultLanguageModelTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 471598665 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The caps bound every LLM.Prompt.Ask run in this company: a request limit above a cap is cut to the cap with a clamped warning. The defaults are used when a request sends no limit. Every tool call is still a Bifrost message that counts against the monthly quota, and the tools stay read-only.</source>
+          <target>Hámörkin takmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámörkin takmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskLimits - Property InstructionalText</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 471598665 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM.Prompt.Ask Limits</source>
+          <target>Mörk LLM.Prompt.Ask</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mörk LLM.Prompt.Ask</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskLimits - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 588808764 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.</source>
+          <target>Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultResultChars - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 588808764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Result Chars</source>
+          <target>Sjálfgefnir stafir í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultResultChars - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 358416549 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.</source>
+          <target>Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultRounds - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 358416549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Rounds</source>
+          <target>Sjálfgefnar umferðir í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnar umferðir í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultRounds - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 39258301 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.</source>
+          <target>Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultToolCalls - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 39258301 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Default Tool Calls</source>
+          <target>Sjálfgefin verkfærakköll í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefin verkfærakköll í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultToolCalls - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 1202210991 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.</source>
+          <target>Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxResultCharsCap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 1202210991 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Result Chars Cap</source>
+          <target>Hámark stafa í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark stafa í verkfæraniðurstöðu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxResultCharsCap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 1200911322 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.</source>
+          <target>Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxRoundsCap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 1200911322 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Rounds Cap</source>
+          <target>Hámark umferða í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark umferða í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxRoundsCap - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 3502082298 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.</source>
+          <target>Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxToolCallsCap - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3027829156 - Control 3502082298 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask Max Tool Calls Cap</source>
+          <target>Hámark verkfærakalla í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámark verkfærakalla í spurningu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxToolCallsCap - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1873111202 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>A language model connects Chat via Bifrost to a provider - Copilot, OpenAI, Azure OpenAI, a custom LLM, Anthropic, xAI or Google Gemini - and carries the skill content injected into every chat.</source>
