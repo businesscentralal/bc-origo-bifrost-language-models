@@ -38,11 +38,14 @@ codeunit 96026 "Test LangModel Chat Impl" implements "Msg Interface ori", "Msg C
     end;
 
     /// <summary>
-    /// Returns false because models are selected by data parameters, not a subject.
+    /// Names the model selected by code so Foundation confirms one chat turn before calling its provider.
     /// </summary>
     procedure GetTarget(var Target: JsonArray): Boolean
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
     begin
-        exit(false);
+        Target.Add(ContractMgt.TargetEntry('data.code', 'code', 'Code of the language model used for this chat turn.'));
+        exit(true);
     end;
 
     /// <summary>

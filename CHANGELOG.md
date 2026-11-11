@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-11) - test chat confirmation target (#113, PR #121 verification)
+
+- **Fixed:** test-only codeunit 96026 `Test LangModel Chat Impl` declares `data.code` as its target. Foundation can now count the selected model and refuse a mismatched `expectedCount` before calling the provider. The existing refusal assertion remains; codeunit 96028 also verifies a matching count executes the mock chat turn.
+
 ### Added (2026-11-11) - LLM.Prompt.Ask html output mode (#113)
 
 - **Added:** optional request key `outputFormat` (`text` default, or `html`) on `LLM.Prompt.Ask` (codeunits 10035432 `LLM Prompt Ask Impl ori`, 10035433 `LLM Ask Runner ori`). With `html` the response adds `html`: one HTML document taken from the answer (code fence, text before the first `<!doctype`/`<html` and after the last `</html>` removed, tag matching case-insensitive); `answer` stays the full reply. A `stopReason` other than `completed`, or an answer without a complete document (including a truncated one), returns a coded `PreconditionFailed` error and no `html`. An unknown value gives `InvalidParameter`, a non-string `InvalidParameterFormat`. `responseSchema` is ignored with warning `responseSchemaIgnored` in html mode.
