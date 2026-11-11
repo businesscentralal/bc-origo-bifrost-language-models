@@ -4,7 +4,7 @@ using Origo.Bifrost;
 
 /// <summary>
 /// The headless loop of LLM.Prompt.Ask (#101): sends the question, runs the read-only tool calls the model asks for
-/// through Foundation's MCP Tool Server, applies the mandatory caps (D5), forces a final answer at a cap, validates an
+/// through Foundation's MCP Tool Server, applies the mandatory caps (D5, configurable per company since #120), forces a final answer at a cap, validates an
 /// optional response schema with one retry, and builds the response. No wall-clock timeout (D3), no write tools (D2),
 /// and the trace is returned only, never stored (D7). The API key stamp is written once, after the loop (R1).
 /// </summary>
@@ -53,21 +53,25 @@ codeunit 10035433 "LLM Ask Runner ori"
         ContextHeaderTxt: Label 'CONTEXT:', Locked = true;
 
     /// <summary>
-    /// Sets the provider, tools, limits, schema and trace option of the run. Limits above a cap are clamped with a warning.
+    /// Sets the provider, tools, limits, schema and trace option of the run. The caps and defaults come from
+    /// "LangModel Ask Setup ori" of the company (#120); limits above a cap are clamped with a warning.
     /// </summary>
     procedure Initialize(NewProvider: Interface "Bifrost LangModel Provider ori"; NewCallerTools: JsonObject; RequestedToolCalls: Integer; RequestedRounds: Integer; RequestedResultChars: Integer; NewSchema: JsonObject; NewHasSchema: Boolean; NewIncludeTrace: Boolean)
+    var
+        AskSetup: Record "LangModel Ask Setup ori";
     begin
         Provider := NewProvider;
         CallerTools := NewCallerTools;
         ResponseSchema := NewSchema;
         HasSchema := NewHasSchema;
         IncludeTrace := NewIncludeTrace;
-        DefaultMaxToolCalls := 15;
-        DefaultMaxRounds := 10;
-        DefaultMaxResultChars := 8000;
-        MaxToolCalls := ClampLimit('maxToolCalls', RequestedToolCalls, DefaultMaxToolCalls, 40);
-        MaxRounds := ClampLimit('maxRounds', RequestedRounds, DefaultMaxRounds, 20);
-        MaxResultChars := ClampLimit('maxResultChars', RequestedResultChars, DefaultMaxResultChars, 20000);
+        AskSetup.GetSetup();
+        DefaultMaxToolCalls := AskSetup."Ask Default Tool Calls";
+        DefaultMaxRounds := AskSetup."Ask Default Rounds";
+        DefaultMaxResultChars := AskSetup."Ask Default Result Chars";
+        MaxToolCalls := ClampLimit('maxToolCalls', RequestedToolCalls, DefaultMaxToolCalls, AskSetup."Ask Max Tool Calls Cap");
+        MaxRounds := ClampLimit('maxRounds', RequestedRounds, DefaultMaxRounds, AskSetup."Ask Max Rounds Cap");
+        MaxResultChars := ClampLimit('maxResultChars', RequestedResultChars, DefaultMaxResultChars, AskSetup."Ask Max Result Chars Cap");
     end;
 
     /// <summary>

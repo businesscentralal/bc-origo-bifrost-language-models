@@ -8,7 +8,8 @@ using System.AI;
 /// Per database it registers the Copilot capability with Microsoft's Copilot framework; the same
 /// registration runs again from "Copilot Upgrade ori".
 /// Per company it registers the API key secrets of every existing language model with the Foundation secret store
-/// and claims the chat provider through Foundation's "Setup ori".TryClaimChatProvider.
+/// and claims the chat provider through Foundation's "Setup ori".TryClaimChatProvider. It also inserts the
+/// LLM.Prompt.Ask caps and defaults row (#120).
 /// It never creates a language model: InitDefaultLanguageModel is called only on demand, from the
 /// "Init Copilot Defaults" action on the Bifrost Language Model List page, so that installing the
 /// app writes no setup data on its own.
@@ -27,6 +28,19 @@ codeunit 10035390 "Copilot Install ori"
     begin
         RegisterSecrets();
         ClaimChatProvider();
+        InitAskSetup();
+    end;
+
+    /// <summary>
+    /// Inserts the LLM.Prompt.Ask caps and defaults of the company (#120) with the values that were fixed before
+    /// (caps 40 / 20 / 20000, defaults 15 / 10 / 8000), so nothing changes until an administrator raises them.
+    /// An existing row is never changed. Called from install and from upgrade.
+    /// </summary>
+    procedure InitAskSetup()
+    var
+        AskSetup: Record "LangModel Ask Setup ori";
+    begin
+        AskSetup.InitSetup();
     end;
 
     /// <summary>

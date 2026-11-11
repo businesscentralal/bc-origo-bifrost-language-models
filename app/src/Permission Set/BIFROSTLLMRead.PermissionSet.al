@@ -16,6 +16,8 @@ permissionset 10035405 "BIFROST LLM Rd ori"
     Permissions =
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = R,
+        table "LangModel Ask Setup ori" = X,
+        tabledata "LangModel Ask Setup ori" = R,
         table "Bifrost Chat Argument ori" = X,
         // RIMD, not R: "Bifrost Chat Argument ori" is TableType = Temporary — the in-memory DTO of
         // the provider interface. Every provider writes its output fields back into the record the
