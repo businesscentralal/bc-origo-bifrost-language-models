@@ -83,6 +83,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   From #50 (#49): **96004** `LangModel Field Restrict Tests`. Test codeunit **96029** `LangModel Chat Proxy Tests` (#54).
   Test codeunit **96030** `LangModel Context Spy ori` (manual value-only test observer). Issue #60: **96031** `LangModel 60 Defaults Tests`.
   Issue #65: **96033** `LLM 65 HTTP Mock`, **96034** `LLM 65 Prompt Tests`.
+  Issue #101: **96063** `LLM Prompt Ask Tests`, **96064** `LLM Prompt Ask Perm Tests`, **96065** `LLM Ask Request Builder Tests`.
   Reserved in Claude-owned PR #66: **96032** `LLM Prompt Compl Perm Tests`. Free: 96005-96008, 96035-96199.
 
 ### Testing the chat of every provider

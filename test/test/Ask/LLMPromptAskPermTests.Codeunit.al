@@ -1,11 +1,12 @@
 namespace Origo.Bifrost.LanguageModels.Test;
 
+using Microsoft.Finance.GeneralLedger.Account;
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
 
 /// <summary>
-/// Permission tests of LLM.Prompt.Ask (#101, AC04 and AC17): the chat gates refuse with PermissionDenied before the
+/// Permission tests of LLM.Prompt.Ask (#101, AC04, AC17 and AC21): the chat gates refuse with PermissionDenied before the
 /// provider is called, and the three role combinations run Ask end to end with the scripted mock provider and one read tool.
 /// </summary>
 codeunit 96064 "LLM Prompt Ask Perm Tests"
@@ -70,6 +71,41 @@ codeunit 96064 "LLM Prompt Ask Perm Tests"
     begin
         // [SCENARIO AC17] BIFROST Full ori + the two chat sets
         VerifyRuns('BIFROST Full ori');
+    end;
+
+    [Test]
+    [TestPermissions(TestPermissions::Restrictive)]
+    procedure Ask_UserWithoutGLRead_GetsToolErrorAndAnswerUnknown()
+    var
+        GLAccount: Record "G/L Account";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        LibraryLowerPermissions: Codeunit "Library - Lower Permissions";
+        ResponseJson: JsonObject;
+        ResponseText: Text;
+        ToolResultsText: Text;
+    begin
+        // [SCENARIO AC21] exact sets without read on G/L Account: the scripted model asks for G/L Account data, gets the
+        // tool error, and the answer carries unknown; no G/L Account value reaches the model
+        Initialize();
+        MockProvider.EnqueueAnswer('{"type":"tool_calls","toolCalls":[{"id":"c1","name":"get_records","arguments":{"tableName":"G/L Account"}}],"conversationState":"{\"messages\":[],\"model\":\"mock\"}"}');
+        MockProvider.EnqueueAnswer('{"type":"reply","reply":"unknown"}');
+        LibraryLowerPermissions.SetO365Basic();
+        LibraryLowerPermissions.AddPermissionSet('BIFROST API ori');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST Chat ori');
+        LibraryLowerPermissions.AddPermissionSet('BIFROST LLM Chat ori');
+        Assert.IsFalse(GLAccount.ReadPermission(), 'precondition: the exact permission sets lack read on G/L Account');
+
+        ResponseJson := Execute(StrSubstNo('{"question":"What is the balance of the cash account?","roleCode":"%1"}', ModelCodeTok), 1033);
+
+        ResponseJson.WriteTo(ResponseText);
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), ResponseText);
+        Assert.AreEqual(1, ResponseJson.GetInteger('toolCalls'), ResponseText);
+        Assert.AreEqual(1, ResponseJson.GetInteger('toolErrors'), ResponseText);
+        Assert.AreEqual(0, ResponseJson.GetInteger('deniedToolCalls'), 'a permission refusal is a tool error, not a policy denial');
+        Assert.AreEqual('unknown', ResponseJson.GetText('answer'), ResponseText);
+        ToolResultsText := MockProvider.GetToolResultsLog().Get(1);
+        Assert.IsFalse(ToolResultsText.Contains('"No."'), 'no G/L Account record reaches the model: ' + ToolResultsText);
+        Assert.IsFalse(ToolResultsText.Contains('Balance'), 'no G/L Account value reaches the model: ' + ToolResultsText);
     end;
 
     local procedure VerifyRuns(RoleSet: Code[20])

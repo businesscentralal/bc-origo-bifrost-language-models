@@ -48,6 +48,10 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         StatesLog: List of [Text];
         RoundCount: Integer;
         NoSplitTools: Boolean;
+        StampProbeAppId: Guid;
+        StampProbeCode: Code[50];
+        StampProbeActive: Boolean;
+        StampLog: List of [DateTime];
 
     /// <summary>
     /// Records the requested mock operation and returns configured fixture results through the temporary argument.
@@ -74,6 +78,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                     LastSendPayload := Argument.GetPayload();
                     SendPayloads.Add(LastSendPayload);
                     RoundCount += 1;
+                    RecordStamp();
                     CaptureArgument(Argument);
                     Argument.SetResultText(NextAnswer(SendResponseValue));
                 end;
@@ -91,6 +96,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                     ToolResultsLog.Add(LastToolResultsJson);
                     StatesLog.Add(LastConversationState);
                     RoundCount += 1;
+                    RecordStamp();
                     Argument.SetResultText(NextAnswer(ContinueResponseValue));
                 end;
             ProcType::GetAvailableModels:
@@ -221,10 +227,48 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         exit(RoundCount);
     end;
 
+    /// <summary>
+    /// Makes the mock read the "Last Used On" stamp of one App Secret at every provider request (AC14 of #101).
+    /// </summary>
+    /// <param name="AppId">The app id of the secret.</param>
+    /// <param name="SecretCode">The secret code to watch.</param>
+    procedure SetStampProbe(AppId: Guid; SecretCode: Code[50])
+    begin
+        StampProbeAppId := AppId;
+        StampProbeCode := SecretCode;
+        StampProbeActive := true;
+    end;
+
+    /// <summary>
+    /// Returns the "Last Used On" values the stamp probe read, one per provider request.
+    /// </summary>
+    /// <returns>List of DateTime. 0DT when the key had no stamp at that request.</returns>
+    procedure GetStampLog(): List of [DateTime]
+    begin
+        exit(StampLog);
+    end;
+
+    local procedure RecordStamp()
+    var
+        AppSecret: Record "App Secret ori";
+    begin
+        if not StampProbeActive then
+            exit;
+        AppSecret.SetLoadFields("Last Used On");
+        if AppSecret.Get(StampProbeAppId, StampProbeCode) then
+            StampLog.Add(AppSecret."Last Used On")
+        else
+            StampLog.Add(0DT);
+    end;
+
     /// <summary>Resets all mock state — call from each test's Initialize.</summary>
     procedure Reset()
     begin
         NoSplitTools := false;
+        StampProbeActive := false;
+        Clear(StampProbeAppId);
+        StampProbeCode := '';
+        Clear(StampLog);
         Clear(ScriptedAnswers);
         Clear(SendPayloads);
         Clear(ToolResultsLog);

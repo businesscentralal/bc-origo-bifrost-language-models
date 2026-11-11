@@ -480,6 +480,83 @@ codeunit 96063 "LLM Prompt Ask Tests"
         Assert.AreEqual('Error', ResponseJson.GetText('status'), Describe(ResponseJson));
     end;
 
+    [Test]
+    procedure Ask_ApiKeyStamp_UnchangedDuringLoopAndWrittenAfter()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        StampBefore: DateTime;
+    begin
+        // [SCENARIO AC14] the Last Used On stamp is unchanged at every provider request of the loop and written after it
+        Initialize();
+        StampBefore := PrepareStampProbe();
+        MockProvider.EnqueueAnswer(ToolCalls(StrSubstNo(CallTok, 'c1', 'who_am_i')));
+        MockProvider.EnqueueAnswer(ToolCalls(StrSubstNo(CallTok, 'c2', 'who_am_i')));
+        MockProvider.EnqueueAnswer(StrSubstNo(ReplyTok, 'ok'));
+
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        VerifyStampedOnlyAfterLoop(StampBefore, 3);
+    end;
+
+    [Test]
+    procedure Ask_ApiKeyStamp_WrittenAfterLoopOnProviderError()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        StampBefore: DateTime;
+    begin
+        // [SCENARIO AC14] the stamp is also written once after the loop when the loop ends in a provider error
+        Initialize();
+        StampBefore := PrepareStampProbe();
+        MockProvider.EnqueueAnswer(ToolCalls(StrSubstNo(CallTok, 'c1', 'who_am_i')));
+        MockProvider.EnqueueAnswer('{"error":"Could not reach the LLM API.","httpStatus":503}');
+
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+
+        Assert.AreEqual('Error', ResponseJson.GetText('status'), Describe(ResponseJson));
+        VerifyStampedOnlyAfterLoop(StampBefore, 2);
+    end;
+
+    local procedure PrepareStampProbe() StampBefore: DateTime
+    var
+        AppSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        KeyText: Text;
+        KeyValue: SecretText;
+    begin
+        KeyText := 'sk-ask-stamp';
+        KeyValue := KeyText;
+        LangModelSecrets.SetServiceKey(ModelCodeTok, KeyValue);
+        AppSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(ModelCodeTok));
+        if AppSecret."Last Used On" <> 0DT then begin
+            // test isolation is per codeunit: start each scenario from an unstamped key
+            AppSecret."Last Used On" := 0DT;
+            AppSecret.Modify();
+        end;
+        StampBefore := AppSecret."Last Used On";
+        Assert.AreEqual(0DT, StampBefore, 'precondition: the key is unstamped before the run');
+        MockProvider.SetStampProbe(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(ModelCodeTok));
+        Sleep(20);
+    end;
+
+    local procedure VerifyStampedOnlyAfterLoop(StampBefore: DateTime; ExpectedRequests: Integer)
+    var
+        AppSecret: Record "App Secret ori";
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        StampDuringLoop: DateTime;
+    begin
+        Assert.AreEqual(ExpectedRequests, MockProvider.GetStampLog().Count(), 'the probe reads the stamp at every provider request');
+        foreach StampDuringLoop in MockProvider.GetStampLog() do
+            Assert.AreEqual(StampBefore, StampDuringLoop, 'the stamp must not change while the loop runs');
+        AppSecret.Get(LangModelSecrets.GetAppId(), LangModelSecrets.GetServiceKeyCode(ModelCodeTok));
+        Assert.AreNotEqual(0DT, AppSecret."Last Used On", 'the stamp is written after the loop');
+        Assert.AreNotEqual(StampBefore, AppSecret."Last Used On", 'the stamp changes after the loop');
+    end;
+
     local procedure VerifyCopilotRefused(LanguageId: Integer)
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
