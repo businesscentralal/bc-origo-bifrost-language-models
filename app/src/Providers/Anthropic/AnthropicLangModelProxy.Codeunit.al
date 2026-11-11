@@ -412,6 +412,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         RecordContext: Text;
         RoleSkill: Text;
         ContextSkill: Text;
+        SystemSuffix: Text;
     begin
         PromptBuilder.Append(SessionTime.WithFreshBlock(ToolServer.Bootstrap('')));
 
@@ -440,6 +441,14 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             PromptBuilder.AppendLine();
             PromptBuilder.AppendLine('CONTEXT SKILL:');
             PromptBuilder.Append(ContextSkill);
+        end;
+
+        // LLM.Prompt.Ask (#101) appends its HEADLESS MODE, instructions and OUTPUT FORMAT blocks after the skills.
+        SystemSuffix := GetText(PayloadObject, 'systemSuffix');
+        if SystemSuffix <> '' then begin
+            PromptBuilder.AppendLine();
+            PromptBuilder.AppendLine();
+            PromptBuilder.Append(SystemSuffix);
         end;
 
         // The user's own prompt is not appended here: Foundation's Bootstrap carries it once, under USER INSTRUCTIONS (#40, core#157).

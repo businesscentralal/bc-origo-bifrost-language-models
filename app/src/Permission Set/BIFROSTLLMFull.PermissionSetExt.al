@@ -32,5 +32,6 @@ permissionsetextension 10035426 "BIFROST LLM Full ori" extends "BIFROST Full ori
         codeunit "Copilot LangModel Prov. ori" = X,
         codeunit "Copilot Req Log Masker ori" = X,
         codeunit "Copilot Upgrade ori" = X,
-        codeunit "LLM Prompt Compl Impl ori" = X;
+        codeunit "LLM Prompt Compl Impl ori" = X,
+        codeunit "LLM Prompt Ask Impl ori" = X;
 }
