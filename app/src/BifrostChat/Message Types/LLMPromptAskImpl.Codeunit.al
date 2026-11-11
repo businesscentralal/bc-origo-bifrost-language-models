@@ -424,7 +424,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, CopilotErr, 'roleCode', RoleCodeText, CopilotExpectedTxt, CopilotNextStepTxt);
             exit;
         end;
-        BuildChatArgument(BifrostLanguageModel, TempChatArg);
+        ProviderBase.BuildModelChatArgument(BifrostLanguageModel, TempChatArg);
         TempChatArg."Procedure Type" := TempChatArg."Procedure Type"::IsConfigured;
         Provider.Execute(TempChatArg);
         if not TempChatArg."Result Boolean" then begin
@@ -535,23 +535,6 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         RecordContext.Add('recordSystemId', Format(RecordSystemId, 0, 4).ToLower());
         RecordContext.Add('tableName', AllObjWithCaption."Object Caption");
         exit(true);
-    end;
-
-    [NonDebuggable]
-    local procedure BuildChatArgument(var BifrostLanguageModel: Record "Bifrost Language Model ori"; var TempChatArg: Record "Bifrost Chat Argument ori" temporary)
-    var
-        LangModelSecrets: Codeunit "LangModel Secrets ori";
-        ApiKeyValue: SecretText;
-    begin
-        TempChatArg.Init();
-        TempChatArg."Language Model SystemId" := BifrostLanguageModel.SystemId;
-        TempChatArg."Base URL" := BifrostLanguageModel."Base URL";
-        TempChatArg.Model := BifrostLanguageModel.Model;
-        TempChatArg."Timeout Ms" := BifrostLanguageModel."Timeout Seconds" * 1000;
-        TempChatArg."Max Tokens" := BifrostLanguageModel."Max Tokens";
-        TempChatArg."Context Tokens" := BifrostLanguageModel.GetContextTokens();
-        if LangModelSecrets.TryGetApiKey(BifrostLanguageModel.Code, ApiKeyValue) then
-            TempChatArg.SetApiKey(ApiKeyValue);
     end;
 
     local procedure IsJsonString(Token: JsonToken): Boolean

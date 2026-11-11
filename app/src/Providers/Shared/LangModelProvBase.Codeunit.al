@@ -345,6 +345,27 @@ codeunit 10035410 "LangModel Prov. Base ori"
     end;
 
     /// <summary>
+    /// Fills a chat argument from a language model: endpoint, model, timeout, token limits and API key.
+    /// Shared by LLM.Prompt.Complete and LLM.Prompt.Ask so both build the provider call the same way.
+    /// </summary>
+    [NonDebuggable]
+    procedure BuildModelChatArgument(var BifrostLanguageModel: Record "Bifrost Language Model ori"; var TempChatArg: Record "Bifrost Chat Argument ori" temporary)
+    var
+        LangModelSecrets: Codeunit "LangModel Secrets ori";
+        ApiKeyValue: SecretText;
+    begin
+        TempChatArg.Init();
+        TempChatArg."Language Model SystemId" := BifrostLanguageModel.SystemId;
+        TempChatArg."Base URL" := BifrostLanguageModel."Base URL";
+        TempChatArg.Model := BifrostLanguageModel.Model;
+        TempChatArg."Timeout Ms" := BifrostLanguageModel."Timeout Seconds" * 1000;
+        TempChatArg."Max Tokens" := BifrostLanguageModel."Max Tokens";
+        TempChatArg."Context Tokens" := BifrostLanguageModel.GetContextTokens();
+        if LangModelSecrets.TryGetApiKey(BifrostLanguageModel.Code, ApiKeyValue) then
+            TempChatArg.SetApiKey(ApiKeyValue);
+    end;
+
+    /// <summary>
     /// Returns whether the current user may view, set or clear the shared (service) API key.
     /// </summary>
     procedure HasServiceKeyPermission(): Boolean
