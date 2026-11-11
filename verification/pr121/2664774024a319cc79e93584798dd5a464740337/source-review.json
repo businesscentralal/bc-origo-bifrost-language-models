@@ -36,13 +36,13 @@
     }
   },
   "acceptanceMatrix": {
-    "AC01": "Existing native default text/html response tests; exact-tip runtime pending",
-    "AC02": "Existing extraction, fences/preamble, uppercase, missing/truncated document native tests; exact-tip runtime pending",
-    "AC03": "Added raw provider finish metadata, token-limit/filter/incomplete runner refusals including incomplete tool calls;53focused tests pass; final full-suite pending",
-    "AC04": "Native 1000000/1000001 context cap tests; MCP negative boundary planned",
-    "AC05": "Native untrusted context and HTML prompt tests",
-    "AC06": "Native adversarial allow/deny policy prevents write/outside tool calls",
-    "AC07": "Native Email.Draft.Set/Email.Message.Send always-deny tests",
-    "AC08": "Native request/response body masking test; no new telemetry"
+    "AC01": "Verified: native HTML/answer and default-text contract tests in both535-test passes; MCP outputFormat help and invalid value/type in1033/1039.",
+    "AC02": "Verified: native extraction/fence/preamble/case-insensitive/missing/truncated document tests in both535-test passes.",
+    "AC03": "Verified: raw provider completion metadata and HTML-mode refusals for token limit/filter/incomplete replies and tool envelopes; completed providers and unchanged text mode also pass in both full suites.",
+    "AC04": "Verified: native1000000/1000001 boundary tests; self-seeded MCP oversized context refusals in1033/1039.",
+    "AC05": "Verified: native prompt tests assert HTML-only/no scripts/no external resources and delimited context as data, not instructions.",
+    "AC06": "Verified: native adversarial write/outside-allow tool calls are denied and counted; no write tools execute.",
+    "AC07": "Verified: native policy tests always deny Email.Draft.Set and Email.Message.Send, including case variants.",
+    "AC08": "Verified: native request/response masker test redacts HTML outside debug; no new telemetry or request logging added."
   }
 }
