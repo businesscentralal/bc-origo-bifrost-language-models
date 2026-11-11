@@ -616,20 +616,20 @@ codeunit 10035433 "LLM Ask Runner ori"
     begin
         TypeName := GetText(Schema, 'type');
         if (TypeName <> '') and (not MatchesType(Node, TypeName)) then begin
-            AddError(Errors, StrSubstNo(SchemaTypeTxt, Path, TypeName));
+            AppendSchemaError(Errors, StrSubstNo(SchemaTypeTxt, Path, TypeName));
             exit;
         end;
         if Schema.Get('enum', Token) then
             if Token.IsArray() then
                 if not EnumContains(Token.AsArray(), Node) then
-                    AddError(Errors, StrSubstNo(SchemaEnumTxt, Path));
+                    AppendSchemaError(Errors, StrSubstNo(SchemaEnumTxt, Path));
         if Node.IsObject() then begin
             if Schema.Get('required', RequiredToken) then
                 if RequiredToken.IsArray() then
                     foreach ChildToken in RequiredToken.AsArray() do
                         if ChildToken.IsValue() then
                             if not Node.AsObject().Contains(ChildToken.AsValue().AsText()) then
-                                AddError(Errors, StrSubstNo(SchemaRequiredTxt, Path, ChildToken.AsValue().AsText()));
+                                AppendSchemaError(Errors, StrSubstNo(SchemaRequiredTxt, Path, ChildToken.AsValue().AsText()));
             if Schema.Get('properties', Token) then
                 if Token.IsObject() then
                     foreach PropertyName in Token.AsObject().Keys() do
@@ -692,7 +692,7 @@ codeunit 10035433 "LLM Ask Runner ori"
         exit(false);
     end;
 
-    local procedure AddError(var Errors: Text; ErrorText: Text)
+    local procedure AppendSchemaError(var Errors: Text; ErrorText: Text)
     begin
         if Errors <> '' then
             Errors += ' ';

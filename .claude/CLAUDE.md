@@ -38,7 +38,7 @@ that Bifrost Language Models can make itself through an extension object.
 
 | Foundation object | Bifrost Language Models extension |
 | --- | --- |
-| enum `Message Type ori` | `LangModel Message Type ori` - value `LLM.Prompt.Complete` |
+| enum `Message Type ori` | `LangModel Message Type ori` - values `LLM.Prompt.Complete` and `LLM.Prompt.Ask` |
 | enum `Request Log Type ori` | `LangModel Req Log Type ori` - values `Copilot` and `LLM` + maskers |
 | table `User Setup ori` | `User Setup LangModel ori` - field `Bifrost Language Model Code` |
 | page `User Setup Editor ori` | `User Setup Editor LangMdl ori` - field + Bifrost Chat FactBox |
@@ -193,8 +193,8 @@ Key rules always in effect:
   or reuse an existing name. Never switch to a fresh name to "retry" - that reproduces the empty run.
 
 ## Message Type Conventions
-- Bifrost Language Models owns exactly one message type, `LLM.Prompt.Complete`, registered on Foundation's `Message Type ori`
-  enum by `LangModel Message Type ori`. `LLM Prompt Compl Impl ori` implements `Msg Interface ori`, `Msg Discovery ori`
+- Bifrost Language Models owns two message types, `LLM.Prompt.Complete` (10035399) and `LLM.Prompt.Ask` (10035432, #101: `LLM Prompt Ask Impl ori`
+  10035432, `LLM Ask Runner ori` 10035433), registered on Foundation's `Message Type ori` enum by `LangModel Message Type ori`. `LLM Prompt Compl Impl ori` implements `Msg Interface ori`, `Msg Discovery ori`
   and `Msg Contract ori`; its contract chapters are its help (no help codeunit, no message-type page on the site).
 - Errors are returned as `status = Error` through the coded `Argument.RespondWithError(code, message, parameter,
   received, expected, nextStep)`; never an uncoded text and never an unhandled exception. The errors chapter uses the

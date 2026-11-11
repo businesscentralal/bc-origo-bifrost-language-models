@@ -42,6 +42,11 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         GetAvailableModelsCalled: Boolean;
         ModelCount: Integer;
         RejectCopilotWrite: Boolean;
+        ScriptedAnswers: List of [Text];
+        SendPayloads: List of [Text];
+        ToolResultsLog: List of [Text];
+        StatesLog: List of [Text];
+        RoundCount: Integer;
 
     /// <summary>
     /// Records the requested mock operation and returns configured fixture results through the temporary argument.
@@ -66,8 +71,10 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                 begin
                     SendChatMessageCalled := true;
                     LastSendPayload := Argument.GetPayload();
+                    SendPayloads.Add(LastSendPayload);
+                    RoundCount += 1;
                     CaptureArgument(Argument);
-                    Argument.SetResultText(SendResponseValue);
+                    Argument.SetResultText(NextAnswer(SendResponseValue));
                 end;
             ProcType::CompletePrompt:
                 begin
@@ -80,7 +87,10 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
                     ContinueWithToolResultsCalled := true;
                     LastConversationState := Argument.GetConversationState();
                     LastToolResultsJson := Argument.GetToolResults();
-                    Argument.SetResultText(ContinueResponseValue);
+                    ToolResultsLog.Add(LastToolResultsJson);
+                    StatesLog.Add(LastConversationState);
+                    RoundCount += 1;
+                    Argument.SetResultText(NextAnswer(ContinueResponseValue));
                 end;
             ProcType::GetAvailableModels:
                 begin
@@ -154,9 +164,62 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         Argument."Result Boolean" := ModelCount > 0;
     end;
 
+    local procedure NextAnswer(DefaultAnswer: Text) Answer: Text
+    begin
+        if ScriptedAnswers.Count() = 0 then
+            exit(DefaultAnswer);
+        Answer := ScriptedAnswers.Get(1);
+        ScriptedAnswers.RemoveAt(1);
+    end;
+
+    /// <summary>
+    /// Queues one scripted answer (a tool_calls or reply JSON) for the next SendChatMessage or ContinueWithToolResults.
+    /// </summary>
+    procedure EnqueueAnswer(AnswerJson: Text)
+    begin
+        ScriptedAnswers.Add(AnswerJson);
+    end;
+
+    /// <summary>
+    /// Returns the payloads of every SendChatMessage call of the run.
+    /// </summary>
+    procedure GetSendPayloads(): List of [Text]
+    begin
+        exit(SendPayloads);
+    end;
+
+    /// <summary>
+    /// Returns the tool results text of every ContinueWithToolResults call of the run.
+    /// </summary>
+    procedure GetToolResultsLog(): List of [Text]
+    begin
+        exit(ToolResultsLog);
+    end;
+
+    /// <summary>
+    /// Returns the conversation state of every ContinueWithToolResults call of the run.
+    /// </summary>
+    procedure GetStatesLog(): List of [Text]
+    begin
+        exit(StatesLog);
+    end;
+
+    /// <summary>
+    /// Returns the number of provider requests (SendChatMessage plus ContinueWithToolResults) since Reset.
+    /// </summary>
+    procedure GetRoundCount(): Integer
+    begin
+        exit(RoundCount);
+    end;
+
     /// <summary>Resets all mock state — call from each test's Initialize.</summary>
     procedure Reset()
     begin
+        Clear(ScriptedAnswers);
+        Clear(SendPayloads);
+        Clear(ToolResultsLog);
+        Clear(StatesLog);
+        RoundCount := 0;
         RejectCopilotWrite := false;
         LastSendPayload := '';
         LastCompletePayload := '';
