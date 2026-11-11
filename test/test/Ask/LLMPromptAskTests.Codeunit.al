@@ -297,6 +297,52 @@ codeunit 96063 "LLM Prompt Ask Tests"
     end;
 
     [Test]
+    procedure Ask_Usage_IsSumOfProviderUsage()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO AC16] usage is the sum of what the provider reported over the rounds; model and warnings are present
+        Initialize();
+        MockProvider.EnqueueAnswer('{"type":"tool_calls","toolCalls":[{"id":"c1","name":"who_am_i","arguments":{}}],"conversationState":"{\"messages\":[]}","usage":{"input_tokens":100,"output_tokens":10}}');
+        MockProvider.EnqueueAnswer('{"type":"reply","reply":"ok","usage":{"input_tokens":50,"output_tokens":5}}');
+
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+
+        Assert.AreEqual(150, ResponseJson.GetObject('usage').GetInteger('input_tokens'), Describe(ResponseJson));
+        Assert.AreEqual(15, ResponseJson.GetObject('usage').GetInteger('output_tokens'), Describe(ResponseJson));
+        Assert.AreEqual(ModelCodeTok, ResponseJson.GetObject('model').GetText('code'), 'model code');
+        Assert.IsTrue(ResponseJson.Contains('warnings'), 'warnings present');
+    end;
+
+    [Test]
+    procedure Ask_NoUsageReported_UsageAbsent()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO AC16] usage is absent when no provider reports it
+        Initialize();
+        MockProvider.EnqueueAnswer(StrSubstNo(ReplyTok, 'ok'));
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+        Assert.IsFalse(ResponseJson.Contains('usage'), Describe(ResponseJson));
+    end;
+
+    [Test]
+    procedure Ask_ProviderWithoutSplitTools_PreconditionFailed()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO AC04] a provider with no split tool execution is refused before any provider request
+        Initialize();
+        MockProvider.SetNoSplitToolExecution(true);
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+        Assert.AreEqual('PreconditionFailed', ResponseJson.GetText('code'), Describe(ResponseJson));
+        Assert.IsFalse(MockProvider.WasSendChatMessageCalled(), 'the provider must not be called');
+    end;
+
+    [Test]
     procedure Ask_MissingQuestion_MissingParameter_1033()
     begin
         // [SCENARIO AC03] question missing

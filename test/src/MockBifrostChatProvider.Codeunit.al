@@ -47,6 +47,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
         ToolResultsLog: List of [Text];
         StatesLog: List of [Text];
         RoundCount: Integer;
+        NoSplitTools: Boolean;
 
     /// <summary>
     /// Records the requested mock operation and returns configured fixture results through the temporary argument.
@@ -111,7 +112,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
             ProcType::HasServiceKeyPermission:
                 Argument."Result Boolean" := false;
             ProcType::SupportsSplitToolExecution:
-                Argument."Result Boolean" := true;
+                Argument."Result Boolean" := not NoSplitTools;
             ProcType::SupportsModelSelection:
                 Argument."Result Boolean" := true;
             ProcType::SupportsToolCalling:
@@ -181,6 +182,14 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     end;
 
     /// <summary>
+    /// Makes the mock answer SupportsSplitToolExecution with false.
+    /// </summary>
+    procedure SetNoSplitToolExecution(Value: Boolean)
+    begin
+        NoSplitTools := Value;
+    end;
+
+    /// <summary>
     /// Returns the payloads of every SendChatMessage call of the run.
     /// </summary>
     procedure GetSendPayloads(): List of [Text]
@@ -215,6 +224,7 @@ codeunit 96001 "Mock Bifrost Chat Provider" implements "Bifrost LangModel Provid
     /// <summary>Resets all mock state — call from each test's Initialize.</summary>
     procedure Reset()
     begin
+        NoSplitTools := false;
         Clear(ScriptedAnswers);
         Clear(SendPayloads);
         Clear(ToolResultsLog);
