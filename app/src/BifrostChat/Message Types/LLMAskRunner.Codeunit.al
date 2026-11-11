@@ -343,6 +343,8 @@ codeunit 10035433 "LLM Ask Runner ori"
                                 ToolResultText := StrSubstNo(DeniedResultTxt, Reason.Replace('"', '\"'));
                             end else begin
                                 ToolServer.CallTool(ToolName, Arguments, ToolResultText, IsError);
+                                if not IsError then
+                                    IsError := IsErrorResult(ToolResultText);
                                 CollectBlobRefs(ToolResultText);
                                 if IsError then
                                     ToolErrorCount += 1;
@@ -357,6 +359,18 @@ codeunit 10035433 "LLM Ask Runner ori"
         if (not CapReached) and (ToolCallCount >= MaxToolCalls) then
             CapReached := true;
         Results.WriteTo(ResultsText);
+    end;
+
+    local procedure IsErrorResult(ResultText: Text): Boolean
+    var
+        ResultObject: JsonObject;
+    begin
+        // Foundation answers some refusals (unknown table, no permission, quota) as an error body without the isError flag.
+        if not ResultObject.ReadFrom(ResultText) then
+            exit(false);
+        if ResultObject.Contains('error') then
+            exit(true);
+        exit(GetText(ResultObject, 'status') = 'Error');
     end;
 
     local procedure ForceFinalState(StateText: Text): Text
