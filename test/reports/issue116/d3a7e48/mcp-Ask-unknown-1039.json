@@ -1,0 +1,39 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "unknown"
+    },
+    "lcid": 1039
+  },
+  "at": "2026-11-12T22:22:50.100Z",
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"status\": \"Error\",\n    \"code\": \"RecordNotFound\",\n    \"error\": \"Upphlaðna skjalið fannst ekki í biðgeymslu.\",\n    \"parameter\": \"attachments[1].stagingId\",\n    \"received\": \"6D7C9538-2C5E-4E53-9A57-AF2898A64C36\",\n    \"expected\": \"ónotað stagingId í eigu kallandans\",\n    \"nextStep\": \"Hladdu skránni upp aftur og sendu nýtt stagingId hennar.\",\n    \"hint\": \"Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \\\"Help.Implementation.Get\\\" með subject \\\"LLM.Prompt.Ask\\\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund.\"\n  },\n  \"providerCalled\": false,\n  \"firstConsumed\": false,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "status": "Error",
+      "code": "RecordNotFound",
+      "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+      "parameter": "attachments[1].stagingId",
+      "received": "6D7C9538-2C5E-4E53-9A57-AF2898A64C36",
+      "expected": "ónotað stagingId í eigu kallandans",
+      "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+      "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+    },
+    "providerCalled": false,
+    "firstConsumed": false,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}

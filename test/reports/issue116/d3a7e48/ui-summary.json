@@ -1,0 +1,35 @@
+{
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "tenant": "w129-16",
+  "tool": "Playwright MCP (isolated worker6 browser profile)",
+  "scenarios": [
+    {
+      "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+      "lcid": 1033,
+      "scenario": "Change and persist the per-model attachment byte cap through the Web Client",
+      "code": "LM116-UI",
+      "limitBytes": 6144,
+      "language": "en-US",
+      "passed": true
+    },
+    {
+      "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+      "lcid": 1039,
+      "scenario": "Translated attachment cap caption and editable persisted value in Icelandic",
+      "caption": "St\u00e6r\u00f0arm\u00f6rk vi\u00f0hengja \u00ed b\u00e6tum",
+      "limitBytes": 8192,
+      "language": "is-IS",
+      "passed": true
+    }
+  ],
+  "executed": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "screenshots": [
+    "ui-1033-model-limit.png",
+    "ui-1039-model-limit.png"
+  ],
+  "automationRetry": "Initial fill targeted a read-only card view. Entered Edit mode and reran the same scenario successfully; first automation failure retained privately.",
+  "originalLanguageRestored": true
+}

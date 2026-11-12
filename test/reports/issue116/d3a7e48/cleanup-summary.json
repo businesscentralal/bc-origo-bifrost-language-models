@@ -1,0 +1,26 @@
+{
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "verified": true,
+  "at": "2026-11-12T22:33:09.178245+00:00",
+  "syntheticForeignRowsDeleted": 1,
+  "allTaskStagingRowsRemaining": 0,
+  "modelsRemaining": 0,
+  "installerSeedRowsRemaining": 0,
+  "emptyUiSecretRegistrationsDeleted": 2,
+  "uiSecretRegistrationsRemaining": 0,
+  "languageRestored": 1033,
+  "testApp": "uninstalled with deleteExtensionData, then unpublished; read-back confirms absent",
+  "restoredApps": [
+    {
+      "name": "Bifrost Attachments",
+      "installed": true,
+      "version": "28.3.2.0"
+    },
+    {
+      "name": "Bifrost Attachments - Tests",
+      "installed": true,
+      "version": "28.3.2.0"
+    }
+  ],
+  "environment": "Assigned persistent local BC29 tenant w129-16; no COSMO resource created or used. Exact-tip Language Models product remains installed for related work."
+}

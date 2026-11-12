@@ -1,0 +1,507 @@
+{
+  "name": "get_message_type_help",
+  "args": {
+    "messageType": "LLM.Prompt.Ask",
+    "lcid": 1039
+  },
+  "at": "2026-11-12T22:22:51.496Z",
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"LLM.Prompt.Ask\",\n  \"status\": \"Success\",\n  \"contract\": \"json\",\n  \"format\": \"chapters\",\n  \"catalogue\": {\n    \"name\": \"LLM.Prompt.Ask\",\n    \"isEnabled\": true,\n    \"filterTableNo\": 0,\n    \"description\": \"Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.\",\n    \"selectionDescription\": \"Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.\",\n    \"messageDirection\": \"Outbound\",\n    \"keywords\": [\n      \"spyrja gervigreind\",\n      \"spyrja mállíkan\",\n      \"gervigreind án notanda\",\n      \"athugunarskref með gervigreind\",\n      \"athugun í verkferli\",\n      \"sannreyna uppsetningu með gervigreind\",\n      \"verkfæri sem aðeins lesa\",\n      \"verkfæralykkja\",\n      \"llm\",\n      \"mállíkan\",\n      \"svara spurningum\"\n    ],\n    \"chargeable\": true\n  },\n  \"chapters\": {\n    \"envelope\": {\n      \"strict\": {\n        \"type\": \"boolean\",\n        \"required\": false,\n        \"default\": false,\n        \"description\": \"Optional root Boolean, default false. When true, unknown data keys are refused before execution with UnknownParameter. Do not place this option inside data.\"\n      },\n      \"subject\": {\n        \"use\": \"notUsed\",\n        \"description\": \"The envelope subject is not used; the record to look at is sent as data.subject.\"\n      },\n      \"dataRequired\": true,\n      \"version\": \"1.0\",\n      \"contentType\": \"text/json\"\n    },\n    \"parameters\": [\n      {\n        \"name\": \"question\",\n        \"type\": \"string\",\n        \"required\": true,\n        \"description\": \"The question the model answers. Required, a non-empty JSON string.\"\n      },\n      {\n        \"name\": \"context\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"description\": \"Optional data the model may use, as a string or a JSON object (written compactly), at most 1,000,000 characters; a larger context is refused before any provider call. It is sent in the user message under CONTEXT, never in the system text.\"\n      },\n      {\n        \"name\": \"instructions\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"description\": \"Optional extra instructions, added to the system text after HEADLESS MODE.\"\n      },\n      {\n        \"name\": \"attachments\",\n        \"type\": \"array\",\n        \"required\": false,\n        \"description\": \"Files uploaded to Foundation staging, in order. Each entry has exactly one key, stagingId. The caller-owned upload is consumed in this transaction. Supports text/*, application/pdf, image/png and image/jpeg. Total bytes must fit the language model Attachment Limit Bytes (0 uses 100 MB). Invalid uploads never call the model or incur a provider charge. Upload again after a refusal.\",\n        \"children\": [\n          {\n            \"name\": \"stagingId\",\n            \"type\": \"string\",\n            \"required\": true,\n            \"description\": \"The GUID returned when the caller uploaded the file to Foundation staging.\"\n          }\n        ]\n      },\n      {\n        \"name\": \"roleCode\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"description\": \"Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller's own language model is used, and then the default model.\"\n      },\n      {\n        \"name\": \"subject\",\n        \"type\": \"object\",\n        \"required\": false,\n        \"description\": \"Optional record to look at. It is passed to the model as RECORD CONTEXT; the record itself is read only by the model's tools.\",\n        \"children\": [\n          {\n            \"name\": \"table\",\n            \"type\": \"string\",\n            \"required\": true,\n            \"description\": \"The table name or caption.\"\n          },\n          {\n            \"name\": \"systemId\",\n            \"type\": \"string\",\n            \"required\": true,\n            \"description\": \"The SystemId (GUID) of the record.\"\n          }\n        ]\n      },\n      {\n        \"name\": \"tools\",\n        \"type\": \"object\",\n        \"required\": false,\n        \"description\": \"Optional lists that narrow the read-only tools; they never widen the policy.\",\n        \"children\": [\n          {\n            \"name\": \"allow\",\n            \"type\": \"array\",\n            \"required\": false,\n            \"description\": \"Tool names to offer; others are not offered.\"\n          },\n          {\n            \"name\": \"deny\",\n            \"type\": \"array\",\n            \"required\": false,\n            \"description\": \"Tool names not to offer.\"\n          },\n          {\n            \"name\": \"allowMessageTypes\",\n            \"type\": \"array\",\n            \"required\": false,\n            \"description\": \"Read-only message types invoke_message_type may run; others are refused.\"\n          },\n          {\n            \"name\": \"denyMessageTypes\",\n            \"type\": \"array\",\n            \"required\": false,\n            \"description\": \"Message types invoke_message_type may not run.\"\n          }\n        ]\n      },\n      {\n        \"name\": \"limits\",\n        \"type\": \"object\",\n        \"required\": false,\n        \"description\": \"Optional limits of the run. The defaults and caps come from the Language Model setup of the company (LLM.Prompt.Ask Limits on Bifrost Language Models Setup); a value above the cap is clamped and warnings holds clamped:<key>.\",\n        \"children\": [\n          {\n            \"name\": \"maxToolCalls\",\n            \"type\": \"integer\",\n            \"required\": false,\n            \"description\": \"Tool calls the model may request, denied calls included. Default and cap from the setup; on install 15 and 40.\"\n          },\n          {\n            \"name\": \"maxRounds\",\n            \"type\": \"integer\",\n            \"required\": false,\n            \"description\": \"Provider requests. Default and cap from the setup; on install 10 and 20.\"\n          },\n          {\n            \"name\": \"maxResultChars\",\n            \"type\": \"integer\",\n            \"required\": false,\n            \"description\": \"Characters of one tool result sent to the model; longer results are cut with a marker. Default and cap from the setup; on install 8000 and 20000.\"\n          }\n        ]\n      },\n      {\n        \"name\": \"responseSchema\",\n        \"type\": \"object\",\n        \"required\": false,\n        \"description\": \"Optional JSON schema the answer must match (keywords type, properties, required, enum, items; others are ignored with a warning). An invalid answer is retried once.\"\n      },\n      {\n        \"name\": \"outputFormat\",\n        \"type\": \"string\",\n        \"required\": false,\n        \"description\": \"Optional, text (default) or html. With html the response holds html: one complete HTML document taken from the answer (code fences and text outside the document are removed). A run that stops for any reason other than completed, or an answer without a complete document, fails with a coded error and no html. context is then sent as untrusted data, and responseSchema is ignored with a warning.\"\n      },\n      {\n        \"name\": \"includeTrace\",\n        \"type\": \"boolean\",\n        \"required\": false,\n        \"description\": \"Optional, default false. When true, the response holds a trace of the tool calls. The trace is never stored by Language Models.\"\n      }\n    ],\n    \"response\": {\n      \"contentType\": \"text/json\",\n      \"fields\": [\n        {\n          \"name\": \"status\",\n          \"type\": \"string\",\n          \"description\": \"Success when the model answered, also when the answer did not match the schema.\"\n        },\n        {\n          \"name\": \"answer\",\n          \"type\": \"string\",\n          \"description\": \"The final answer text of the model.\"\n        },\n        {\n          \"name\": \"html\",\n          \"type\": \"string\",\n          \"description\": \"Only with outputFormat html: the one HTML document of the answer. The answer field keeps the full text.\"\n        },\n        {\n          \"name\": \"data\",\n          \"type\": \"object\",\n          \"description\": \"The answer parsed as JSON, when a schema was sent and the answer matches it.\"\n        },\n        {\n          \"name\": \"schemaValid\",\n          \"type\": \"boolean\",\n          \"description\": \"When a schema was sent: true when the answer matches it.\"\n        },\n        {\n          \"name\": \"stopReason\",\n          \"type\": \"string\",\n          \"description\": \"completed, maxToolCalls, maxRounds or schemaInvalid.\"\n        },\n        {\n          \"name\": \"toolCalls\",\n          \"type\": \"integer\",\n          \"description\": \"Tool calls the model requested and that counted against maxToolCalls.\"\n        },\n        {\n          \"name\": \"toolErrors\",\n          \"type\": \"integer\",\n          \"description\": \"Tool calls Foundation refused or failed.\"\n        },\n        {\n          \"name\": \"deniedToolCalls\",\n          \"type\": \"integer\",\n          \"description\": \"Tool calls the read-only policy denied.\"\n        },\n        {\n          \"name\": \"rounds\",\n          \"type\": \"integer\",\n          \"description\": \"Provider requests, the schema retry included.\"\n        },\n        {\n          \"name\": \"usage\",\n          \"type\": \"object\",\n          \"description\": \"The sum of the token usage the provider reported; left out when the provider reports none.\"\n        },\n        {\n          \"name\": \"model\",\n          \"type\": \"object\",\n          \"description\": \"code, provider and model of the language model used.\"\n        },\n        {\n          \"name\": \"sessionTime\",\n          \"type\": \"object\",\n          \"description\": \"The clock the model was given (nowUtc, workDate, timeZone); left out when no block could be sent.\"\n        },\n        {\n          \"name\": \"warnings\",\n          \"type\": \"array\",\n          \"description\": \"clamped:<key>, responseSchemaIgnored, schemaKeywordIgnored:<keyword>, toolNotAvailable:<name> or sessionTimeUnavailable.\"\n        },\n        {\n          \"name\": \"trace\",\n          \"type\": \"array\",\n          \"description\": \"Only when includeTrace is true: round, tool, args, isError, denied, ms, resultChars and preview of each tool call, truncated.\"\n        }\n      ]\n    },\n    \"errors\": [\n      {\n        \"code\": \"PermissionDenied\",\n        \"error\": \"You do not have permission to ask a language model.\",\n        \"when\": \"The caller does not hold Foundation's BIFROST Chat ori permission set, or cannot read the Bifrost Language Models table without this app's BIFROST LLM Chat ori.\",\n        \"fix\": \"Ask your administrator to assign the BIFROST Chat ori and BIFROST LLM Chat ori permission sets.\"\n      },\n      {\n        \"code\": \"MissingParameter\",\n        \"error\": \"The question is missing.\",\n        \"when\": \"question is missing or empty.\",\n        \"fix\": \"Send the question to answer in question.\"\n      },\n      {\n        \"code\": \"InvalidParameterFormat\",\n        \"error\": \"The value of %1 has the wrong JSON type.\",\n        \"when\": \"question, instructions or roleCode is not a string, context is not a string or an object, limits or tools or responseSchema or subject is not an object, a limit is not an integer, or includeTrace is not a Boolean.\",\n        \"fix\": \"Send each parameter with the JSON type the help describes.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"The limit %1 must be 1 or more.\",\n        \"when\": \"A value in limits is below 1, or subject names a table that does not exist or carries a systemId that is not a GUID.\",\n        \"fix\": \"Send a positive integer, or leave the limit out to use the default.\"\n      },\n      {\n        \"code\": \"RecordNotFound\",\n        \"error\": \"Bifrost Language Model \\\"%1\\\" was not found.\",\n        \"when\": \"roleCode is sent but no language model has that code.\",\n        \"fix\": \"Leave roleCode out to use your own or the default language model, or use a code from the Bifrost Language Models list.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"No language model with a chat provider is set up for you.\",\n        \"when\": \"The selected, the caller's or the default language model has no usable chat provider or API key.\",\n        \"fix\": \"Ask your administrator to set up a language model on the Bifrost Language Models setup page, with its API key on Bifrost App Secrets.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"LLM.Prompt.Ask does not support the Copilot provider.\",\n        \"when\": \"The selected language model uses Copilot, or its provider cannot run tools in separate steps.\",\n        \"fix\": \"Send roleCode with a language model whose provider is not Copilot.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"outputFormat must be text or html.\",\n        \"when\": \"outputFormat is sent with a value other than text or html.\",\n        \"fix\": \"Send outputFormat text or html, or leave it out for text.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"The context is larger than the limit of 1000000 characters.\",\n        \"when\": \"context holds more than 1,000,000 characters. The request is refused before any language model is called.\",\n        \"fix\": \"Send a shorter context, for example only the part the question needs.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"The answer holds no complete HTML document.\",\n        \"when\": \"outputFormat is html and the run was cut short (stop reason other than completed) or the answer holds no complete HTML document.\",\n        \"fix\": \"Ask again with a smaller question or higher limits, or use outputFormat text.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"The language model provider refused authentication.\",\n        \"when\": \"The provider returns HTTP 401 or 403. Provider error bodies are never returned or logged.\",\n        \"fix\": \"Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection.\"\n      },\n      {\n        \"code\": \"Retryable\",\n        \"error\": \"The language model provider is temporarily unavailable.\",\n        \"when\": \"The provider returns HTTP 408, 429 or 5xx, or the request times out or cannot reach the provider.\",\n        \"fix\": \"Wait and retry. If the failure persists, check the provider status and the limits on the Bifrost Language Model card.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.\",\n        \"when\": \"Allow HttpClient Requests is disabled for the app.\",\n        \"fix\": \"Ask an administrator to enable Allow HttpClient Requests for Bifrost Language Models in Extension Management, then retry.\"\n      },\n      {\n        \"code\": \"PreconditionFailed\",\n        \"error\": \"The language model provider could not complete the prompt.\",\n        \"when\": \"The provider refuses the request or returns an invalid response, including an unsupported file.\",\n        \"fix\": \"Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"This language model accepts only PNG and JPEG images.\",\n        \"when\": \"The file mimeType is an image other than image/png or image/jpeg.\",\n        \"fix\": \"Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"The file is larger than the language model file size limit.\",\n        \"when\": \"The decoded file is larger than the language model file size limit.\",\n        \"fix\": \"Reduce the file size. No request was sent.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"The attached files total %1 bytes, which is over the %2 byte cap.\",\n        \"when\": \"The decoded size of all attached files together is larger than the total file size cap.\",\n        \"fix\": \"Remove or reduce files so the total decoded size is within the cap. No request was sent.\"\n      },\n      {\n        \"code\": \"UnknownParameter\",\n        \"error\": \"The attachment contains an unknown parameter.\",\n        \"when\": \"An attachments entry has a key other than stagingId.\",\n        \"fix\": \"Upload the file again and send its new stagingId.\"\n      },\n      {\n        \"code\": \"InvalidParameterFormat\",\n        \"error\": \"The attachment must contain one stagingId GUID.\",\n        \"when\": \"attachments is not an array of objects with a stagingId GUID.\",\n        \"fix\": \"Upload the file again and send its new stagingId.\"\n      },\n      {\n        \"code\": \"MissingParameter\",\n        \"error\": \"The attachment must contain one stagingId GUID.\",\n        \"when\": \"An attachments entry has no stagingId.\",\n        \"fix\": \"Upload the file again and send its new stagingId.\"\n      },\n      {\n        \"code\": \"RecordNotFound\",\n        \"error\": \"The staged upload was not found.\",\n        \"when\": \"An upload is unknown, owned by another user, duplicated or already consumed.\",\n        \"fix\": \"Upload the file again and send its new stagingId.\"\n      },\n      {\n        \"code\": \"InvalidParameter\",\n        \"error\": \"The attachment content type is not supported.\",\n        \"when\": \"An attachment is not text, PDF, PNG or JPEG.\",\n        \"fix\": \"Upload the file again and send its new stagingId.\"\n      },\n      {\n        \"code\": \"LimitExceeded\",\n        \"error\": \"The total attachment size exceeds the language model limit.\",\n        \"when\": \"The attachments total exceeds the model attachment byte limit.\",\n        \"fix\": \"Send smaller files or ask your administrator to change the model attachment limit.\"\n      }\n    ],\n    \"effect\": {\n      \"effect\": \"read\",\n      \"changes\": \"Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, the deletion of the blobs this run created, and consumption of caller-owned staging uploads supplied in attachments.\",\n      \"idempotent\": false,\n      \"permissionSet\": \"BIFROST Chat ori; BIFROST LLM Chat ori\",\n      \"preconditions\": [\n        \"The caller holds Foundation's BIFROST Chat ori and this app's BIFROST LLM Chat ori permission sets.\",\n        \"A language model whose provider runs tools in separate steps is set up, with its API key; Copilot is refused.\",\n        \"Outbound HttpClient requests are allowed for the app.\"\n      ]\n    },\n    \"metering\": {\n      \"chargeable\": true,\n      \"chargedAs\": \"message\"\n    },\n    \"related\": [\n      {\n        \"name\": \"LLM.Prompt.Complete\",\n        \"useInsteadWhen\": \"The sibling without tools: one prompt, one answer, when the prompt already holds the data.\"\n      },\n      {\n        \"name\": \"Data.Records.Get\",\n        \"useInsteadWhen\": \"Read the data yourself and send it as context when the question needs no lookup.\"\n      },\n      {\n        \"name\": \"Storage.Upload.CommitToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      }\n    ],\n    \"examples\": [\n      {\n        \"title\": \"Check the posting setup of a customer\",\n        \"request\": {\n          \"type\": \"LLM.Prompt.Ask\",\n          \"data\": {\n            \"question\": \"Is customer 10000 ready to invoice? Check its posting groups and their setup.\",\n            \"responseSchema\": {\n              \"type\": \"object\",\n              \"required\": [\n                \"verdict\",\n                \"findings\"\n              ],\n              \"properties\": {\n                \"verdict\": {\n                  \"type\": \"string\",\n                  \"enum\": [\n                    \"pass\",\n                    \"fail\",\n                    \"unknown\"\n                  ]\n                },\n                \"findings\": {\n                  \"type\": \"array\",\n                  \"items\": {\n                    \"type\": \"string\"\n                  }\n                }\n              }\n            }\n          }\n        },\n        \"response\": {\n          \"status\": \"Success\",\n          \"answer\": \"{\\\"verdict\\\":\\\"fail\\\",\\\"findings\\\":[\\\"Gen. Bus. Posting Group is empty.\\\"]}\",\n          \"data\": {\n            \"verdict\": \"fail\",\n            \"findings\": [\n              \"Gen. Bus. Posting Group is empty.\"\n            ]\n          },\n          \"schemaValid\": true,\n          \"stopReason\": \"completed\",\n          \"toolCalls\": 3,\n          \"toolErrors\": 0,\n          \"deniedToolCalls\": 0,\n          \"rounds\": 4,\n          \"model\": {\n            \"code\": \"CLAUDE\",\n            \"provider\": \"Anthropic\",\n            \"model\": \"claude-sonnet-5-5\"\n          },\n          \"warnings\": []\n        }\n      }\n    ],\n    \"overview\": \"Use LLM.Prompt.Ask when a language model must look up Business Central data before it answers, for example in a playbook Check step. The model gets the question, the optional context and record, and a set of read-only Bifrost tools; it may call tools over several rounds and then answers. No human is present: the model never asks a question back and says unknown when it is not sure. With a responseSchema the answer is parsed and validated as JSON.\",\n    \"notes\": \"Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. Limits in this company (Language Model setup, LLM.Prompt.Ask Limits): maxToolCalls 15 (cap 40), maxRounds 10 (cap 20), maxResultChars 8000 (cap 20000). An administrator can change them; the tool-call and round caps accept 1 to 999. At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model's own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost's message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported.\"\n  },\n  \"conventions\": \"## Errors and warnings\\r\\nAn error response has `status` = `Error`, a stable `code`, the `error` text and, when they apply, `parameter` (the request parameter concerned, e.g. `lines[2].no`), `received` (the value received), `expected` (what was expected) and `nextStep` (what to do now). `hint` says where to read more.\\r\\nWhen a request has several problems, all of them are listed in `errors[]` - each with the same fields - under a top-level `code` (`MultipleErrors`, or a shared code such as `InvalidLine` for the `lines` of a Create type) and a summary `error`. Fix them all before calling again. One problem is reported at the top level, with no `errors[]`.\\r\\nRequest values are checked first and every problem found is reported together. A Business Central validation error raised afterwards, while a record is being written, stops the call and is reported on its own: `code` = `BusinessCentralError`, Business Central's own `error` text, and `parameter` naming the request parameter being applied, e.g. `lines[1].accountNo`. Nothing is written.\\r\\nRequest values are read in one format, whatever the language: dates `YYYY-MM-DD`; date-times ISO 8601 with `Z` or an offset; amounts as JSON numbers (or a string such as `\\\"1234.56\\\"`, no thousands separator); integers as JSON integers; booleans `true` or `false`. Any other value is `InvalidParameterFormat` with `received` and `expected`; for an unambiguous local form such as `26.09.2026`, `nextStep` gives the value to resend. Every bad value of a request is reported together.\\r\\nAnswers are written in one format as well, whatever the language of the call: dates `YYYY-MM-DD`, date-times ISO 8601, numbers with a dot and no thousands separator, and the option and enum values of every answer except `Data.Records.Get` and `Data.Records.Set` as their English names, so a value read from an answer can be sent back. Those two answer the caption of the language of the call, for a person to read. The language of the call (`lcid`) changes captions and message texts, not these forms. Two things are outside Bifrost's control: Business Central writes its own texts (a ledger entry description such as `Direct Cost V00010 on 10/02/26`, the text of a `BusinessCentralError`) with the regional settings of the server session, which `lcid` does not change, so a date in such a text can be in month-day order; and a table view is read with those settings too, so write dates in a view as `YYYY-MM-DD` and decimals with a dot.\\r\\nBoth success and error responses can carry `warnings[]`, each with `code`, `message` and, when they apply, `parameter` and `nextStep`.\\r\\n`UnknownParameter` refuses undeclared data keys before execution for every type whose effect is not read, including a missing effect. The root envelope option `strict:false` cannot opt out. Read types keep warnings without changing status, validationResult or domain warningCount unless the caller sets `strict:true` (next to type and subject, never inside data). Refusals list the keys and localized nextStep corrections; no business changes or successful execution charges occur. Example: {\\\"type\\\":\\\"Memory.User.Set\\\",\\\"strict\\\":true,\\\"data\\\":{\\\"memory\\\":\\\"test\\\",\\\"memry\\\":\\\"typo\\\"}} is refused.\\r\\n`FieldChangedByBC` is a warning from Data.Records.Set: another field validation or the write changed a sent field after its own validation. `parameter` names data[n].fields.{jsonName}, counting from 0. Status stays Success. Compare the returned values with what you sent; follow `nextStep` to use validation order or send the field again in a separate call. Normalisation of the field itself, LCY, Dimension Set ID, BLOB, Media, MediaSet and skipped fields are excluded.\\r\\n`SecurityFilterApplied` is a warning from Data.Records.Get, severity `low`, `parameter` `table`: a security filter of the caller applies to the table, so the result may hold fewer records than the table. `securityFiltered` is then true. Status stays Success, and the hidden records are never counted or described. Ask an administrator if you expect more records.\\r\\nData.RecordIds.Get, Data.Totals.Get, Data.Entries.Find and CSV.Records.Get do not return `securityFiltered` or `SecurityFilterApplied`. Their results can still be limited by security filters: counts and totals cover only visible records, and the absence of a flag or warning does not prove that every record in the table was included. Their help explains this visibility limit; request filters such as tableView and date ranges are separate.\\r\\nWhen a Business Central operation fails, the error can identify the request parameter being applied, the expected input and what to do next. That guidance accompanies the original `BusinessCentralError` after rollback, including a failed queued task. It does not change which writes are rolled back or committed. Guidance is cleared between messages; a message without it keeps its existing response shape. Recognized lock errors follow the `Retryable` rules below.\\r\\nSome message types accept calls only through a particular path: a scheduled queue message, the Task API (`/tasks`), the in-product MCP tool server, another message type, or the Messages page Run Task action. Bifrost determines where the call came from; request values cannot override it. A call through an unsupported path is refused with `PreconditionFailed` and a `nextStep` naming the path to use.\\r\\n`Retryable` means a transient lock or deadlock caught while writing or posting. `error` keeps Business Central's original text. `expected` is \\\"no concurrent lock on the same records\\\"; `nextStep` is \\\"Retry the same call after a few seconds; nothing was changed.\\\" Bifrost does not retry automatically. Uncaught recognized lock errors are also `Retryable` for `write` types. Uncaught `read` and `irreversible` errors remain `BusinessCentralError`, because an irreversible operation may already have committed.\\r\\n`ConfirmationRequired` is the preview refusal for an irreversible type called without `expectedCount`. Nothing was changed; inspect `expected` and the description before sending the same request with that count. `ConfirmationMismatch` means the count has changed or the sent count was wrong; nothing was changed. Inspect the new preview before confirming again. Feature apps use the same preview and confirmation protocol for irreversible operations.\\r\\nCodes: `MissingParameter`, `InvalidParameterFormat`, `InvalidParameter`, `RecordNotFound`, `AmbiguousRecord`, `ConflictingIdentifiers`, `InvalidFilterField`, `InvalidLine`, `NothingToPreview`, `LinesSkipped`, `BlockedByWriteGuard`, `PreconditionFailed`, `PermissionDenied`, `LimitExceeded`, `BusinessCentralError`, `MultipleErrors`, `DeprecatedParameter`, `UnknownParameter`, `FieldChangedByBC`, `Retryable`, `EULA_REQUIRED`, `TRIAL_NOT_STARTED`, `ConfirmationRequired`, `ConfirmationMismatch`, `SecurityFilterApplied`. The `error` text may be translated; the code never is.\\r\\n\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "LLM.Prompt.Ask",
+    "status": "Success",
+    "contract": "json",
+    "format": "chapters",
+    "catalogue": {
+      "name": "LLM.Prompt.Ask",
+      "isEnabled": true,
+      "filterTableNo": 0,
+      "description": "Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.",
+      "selectionDescription": "Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.",
+      "messageDirection": "Outbound",
+      "keywords": [
+        "spyrja gervigreind",
+        "spyrja mállíkan",
+        "gervigreind án notanda",
+        "athugunarskref með gervigreind",
+        "athugun í verkferli",
+        "sannreyna uppsetningu með gervigreind",
+        "verkfæri sem aðeins lesa",
+        "verkfæralykkja",
+        "llm",
+        "mállíkan",
+        "svara spurningum"
+      ],
+      "chargeable": true
+    },
+    "chapters": {
+      "envelope": {
+        "strict": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Optional root Boolean, default false. When true, unknown data keys are refused before execution with UnknownParameter. Do not place this option inside data."
+        },
+        "subject": {
+          "use": "notUsed",
+          "description": "The envelope subject is not used; the record to look at is sent as data.subject."
+        },
+        "dataRequired": true,
+        "version": "1.0",
+        "contentType": "text/json"
+      },
+      "parameters": [
+        {
+          "name": "question",
+          "type": "string",
+          "required": true,
+          "description": "The question the model answers. Required, a non-empty JSON string."
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "required": false,
+          "description": "Optional data the model may use, as a string or a JSON object (written compactly), at most 1,000,000 characters; a larger context is refused before any provider call. It is sent in the user message under CONTEXT, never in the system text."
+        },
+        {
+          "name": "instructions",
+          "type": "string",
+          "required": false,
+          "description": "Optional extra instructions, added to the system text after HEADLESS MODE."
+        },
+        {
+          "name": "attachments",
+          "type": "array",
+          "required": false,
+          "description": "Files uploaded to Foundation staging, in order. Each entry has exactly one key, stagingId. The caller-owned upload is consumed in this transaction. Supports text/*, application/pdf, image/png and image/jpeg. Total bytes must fit the language model Attachment Limit Bytes (0 uses 100 MB). Invalid uploads never call the model or incur a provider charge. Upload again after a refusal.",
+          "children": [
+            {
+              "name": "stagingId",
+              "type": "string",
+              "required": true,
+              "description": "The GUID returned when the caller uploaded the file to Foundation staging."
+            }
+          ]
+        },
+        {
+          "name": "roleCode",
+          "type": "string",
+          "required": false,
+          "description": "Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller's own language model is used, and then the default model."
+        },
+        {
+          "name": "subject",
+          "type": "object",
+          "required": false,
+          "description": "Optional record to look at. It is passed to the model as RECORD CONTEXT; the record itself is read only by the model's tools.",
+          "children": [
+            {
+              "name": "table",
+              "type": "string",
+              "required": true,
+              "description": "The table name or caption."
+            },
+            {
+              "name": "systemId",
+              "type": "string",
+              "required": true,
+              "description": "The SystemId (GUID) of the record."
+            }
+          ]
+        },
+        {
+          "name": "tools",
+          "type": "object",
+          "required": false,
+          "description": "Optional lists that narrow the read-only tools; they never widen the policy.",
+          "children": [
+            {
+              "name": "allow",
+              "type": "array",
+              "required": false,
+              "description": "Tool names to offer; others are not offered."
+            },
+            {
+              "name": "deny",
+              "type": "array",
+              "required": false,
+              "description": "Tool names not to offer."
+            },
+            {
+              "name": "allowMessageTypes",
+              "type": "array",
+              "required": false,
+              "description": "Read-only message types invoke_message_type may run; others are refused."
+            },
+            {
+              "name": "denyMessageTypes",
+              "type": "array",
+              "required": false,
+              "description": "Message types invoke_message_type may not run."
+            }
+          ]
+        },
+        {
+          "name": "limits",
+          "type": "object",
+          "required": false,
+          "description": "Optional limits of the run. The defaults and caps come from the Language Model setup of the company (LLM.Prompt.Ask Limits on Bifrost Language Models Setup); a value above the cap is clamped and warnings holds clamped:<key>.",
+          "children": [
+            {
+              "name": "maxToolCalls",
+              "type": "integer",
+              "required": false,
+              "description": "Tool calls the model may request, denied calls included. Default and cap from the setup; on install 15 and 40."
+            },
+            {
+              "name": "maxRounds",
+              "type": "integer",
+              "required": false,
+              "description": "Provider requests. Default and cap from the setup; on install 10 and 20."
+            },
+            {
+              "name": "maxResultChars",
+              "type": "integer",
+              "required": false,
+              "description": "Characters of one tool result sent to the model; longer results are cut with a marker. Default and cap from the setup; on install 8000 and 20000."
+            }
+          ]
+        },
+        {
+          "name": "responseSchema",
+          "type": "object",
+          "required": false,
+          "description": "Optional JSON schema the answer must match (keywords type, properties, required, enum, items; others are ignored with a warning). An invalid answer is retried once."
+        },
+        {
+          "name": "outputFormat",
+          "type": "string",
+          "required": false,
+          "description": "Optional, text (default) or html. With html the response holds html: one complete HTML document taken from the answer (code fences and text outside the document are removed). A run that stops for any reason other than completed, or an answer without a complete document, fails with a coded error and no html. context is then sent as untrusted data, and responseSchema is ignored with a warning."
+        },
+        {
+          "name": "includeTrace",
+          "type": "boolean",
+          "required": false,
+          "description": "Optional, default false. When true, the response holds a trace of the tool calls. The trace is never stored by Language Models."
+        }
+      ],
+      "response": {
+        "contentType": "text/json",
+        "fields": [
+          {
+            "name": "status",
+            "type": "string",
+            "description": "Success when the model answered, also when the answer did not match the schema."
+          },
+          {
+            "name": "answer",
+            "type": "string",
+            "description": "The final answer text of the model."
+          },
+          {
+            "name": "html",
+            "type": "string",
+            "description": "Only with outputFormat html: the one HTML document of the answer. The answer field keeps the full text."
+          },
+          {
+            "name": "data",
+            "type": "object",
+            "description": "The answer parsed as JSON, when a schema was sent and the answer matches it."
+          },
+          {
+            "name": "schemaValid",
+            "type": "boolean",
+            "description": "When a schema was sent: true when the answer matches it."
+          },
+          {
+            "name": "stopReason",
+            "type": "string",
+            "description": "completed, maxToolCalls, maxRounds or schemaInvalid."
+          },
+          {
+            "name": "toolCalls",
+            "type": "integer",
+            "description": "Tool calls the model requested and that counted against maxToolCalls."
+          },
+          {
+            "name": "toolErrors",
+            "type": "integer",
+            "description": "Tool calls Foundation refused or failed."
+          },
+          {
+            "name": "deniedToolCalls",
+            "type": "integer",
+            "description": "Tool calls the read-only policy denied."
+          },
+          {
+            "name": "rounds",
+            "type": "integer",
+            "description": "Provider requests, the schema retry included."
+          },
+          {
+            "name": "usage",
+            "type": "object",
+            "description": "The sum of the token usage the provider reported; left out when the provider reports none."
+          },
+          {
+            "name": "model",
+            "type": "object",
+            "description": "code, provider and model of the language model used."
+          },
+          {
+            "name": "sessionTime",
+            "type": "object",
+            "description": "The clock the model was given (nowUtc, workDate, timeZone); left out when no block could be sent."
+          },
+          {
+            "name": "warnings",
+            "type": "array",
+            "description": "clamped:<key>, responseSchemaIgnored, schemaKeywordIgnored:<keyword>, toolNotAvailable:<name> or sessionTimeUnavailable."
+          },
+          {
+            "name": "trace",
+            "type": "array",
+            "description": "Only when includeTrace is true: round, tool, args, isError, denied, ms, resultChars and preview of each tool call, truncated."
+          }
+        ]
+      },
+      "errors": [
+        {
+          "code": "PermissionDenied",
+          "error": "You do not have permission to ask a language model.",
+          "when": "The caller does not hold Foundation's BIFROST Chat ori permission set, or cannot read the Bifrost Language Models table without this app's BIFROST LLM Chat ori.",
+          "fix": "Ask your administrator to assign the BIFROST Chat ori and BIFROST LLM Chat ori permission sets."
+        },
+        {
+          "code": "MissingParameter",
+          "error": "The question is missing.",
+          "when": "question is missing or empty.",
+          "fix": "Send the question to answer in question."
+        },
+        {
+          "code": "InvalidParameterFormat",
+          "error": "The value of %1 has the wrong JSON type.",
+          "when": "question, instructions or roleCode is not a string, context is not a string or an object, limits or tools or responseSchema or subject is not an object, a limit is not an integer, or includeTrace is not a Boolean.",
+          "fix": "Send each parameter with the JSON type the help describes."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "The limit %1 must be 1 or more.",
+          "when": "A value in limits is below 1, or subject names a table that does not exist or carries a systemId that is not a GUID.",
+          "fix": "Send a positive integer, or leave the limit out to use the default."
+        },
+        {
+          "code": "RecordNotFound",
+          "error": "Bifrost Language Model \"%1\" was not found.",
+          "when": "roleCode is sent but no language model has that code.",
+          "fix": "Leave roleCode out to use your own or the default language model, or use a code from the Bifrost Language Models list."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "No language model with a chat provider is set up for you.",
+          "when": "The selected, the caller's or the default language model has no usable chat provider or API key.",
+          "fix": "Ask your administrator to set up a language model on the Bifrost Language Models setup page, with its API key on Bifrost App Secrets."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "LLM.Prompt.Ask does not support the Copilot provider.",
+          "when": "The selected language model uses Copilot, or its provider cannot run tools in separate steps.",
+          "fix": "Send roleCode with a language model whose provider is not Copilot."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "outputFormat must be text or html.",
+          "when": "outputFormat is sent with a value other than text or html.",
+          "fix": "Send outputFormat text or html, or leave it out for text."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "The context is larger than the limit of 1000000 characters.",
+          "when": "context holds more than 1,000,000 characters. The request is refused before any language model is called.",
+          "fix": "Send a shorter context, for example only the part the question needs."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "The answer holds no complete HTML document.",
+          "when": "outputFormat is html and the run was cut short (stop reason other than completed) or the answer holds no complete HTML document.",
+          "fix": "Ask again with a smaller question or higher limits, or use outputFormat text."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "The language model provider refused authentication.",
+          "when": "The provider returns HTTP 401 or 403. Provider error bodies are never returned or logged.",
+          "fix": "Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection."
+        },
+        {
+          "code": "Retryable",
+          "error": "The language model provider is temporarily unavailable.",
+          "when": "The provider returns HTTP 408, 429 or 5xx, or the request times out or cannot reach the provider.",
+          "fix": "Wait and retry. If the failure persists, check the provider status and the limits on the Bifrost Language Model card."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.",
+          "when": "Allow HttpClient Requests is disabled for the app.",
+          "fix": "Ask an administrator to enable Allow HttpClient Requests for Bifrost Language Models in Extension Management, then retry."
+        },
+        {
+          "code": "PreconditionFailed",
+          "error": "The language model provider could not complete the prompt.",
+          "when": "The provider refuses the request or returns an invalid response, including an unsupported file.",
+          "fix": "Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "This language model accepts only PNG and JPEG images.",
+          "when": "The file mimeType is an image other than image/png or image/jpeg.",
+          "fix": "Send a PNG or JPEG image, or send a PDF or another document instead of this image type. No request was sent."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "The file is larger than the language model file size limit.",
+          "when": "The decoded file is larger than the language model file size limit.",
+          "fix": "Reduce the file size. No request was sent."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "The attached files total %1 bytes, which is over the %2 byte cap.",
+          "when": "The decoded size of all attached files together is larger than the total file size cap.",
+          "fix": "Remove or reduce files so the total decoded size is within the cap. No request was sent."
+        },
+        {
+          "code": "UnknownParameter",
+          "error": "The attachment contains an unknown parameter.",
+          "when": "An attachments entry has a key other than stagingId.",
+          "fix": "Upload the file again and send its new stagingId."
+        },
+        {
+          "code": "InvalidParameterFormat",
+          "error": "The attachment must contain one stagingId GUID.",
+          "when": "attachments is not an array of objects with a stagingId GUID.",
+          "fix": "Upload the file again and send its new stagingId."
+        },
+        {
+          "code": "MissingParameter",
+          "error": "The attachment must contain one stagingId GUID.",
+          "when": "An attachments entry has no stagingId.",
+          "fix": "Upload the file again and send its new stagingId."
+        },
+        {
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "when": "An upload is unknown, owned by another user, duplicated or already consumed.",
+          "fix": "Upload the file again and send its new stagingId."
+        },
+        {
+          "code": "InvalidParameter",
+          "error": "The attachment content type is not supported.",
+          "when": "An attachment is not text, PDF, PNG or JPEG.",
+          "fix": "Upload the file again and send its new stagingId."
+        },
+        {
+          "code": "LimitExceeded",
+          "error": "The total attachment size exceeds the language model limit.",
+          "when": "The attachments total exceeds the model attachment byte limit.",
+          "fix": "Send smaller files or ask your administrator to change the model attachment limit."
+        }
+      ],
+      "effect": {
+        "effect": "read",
+        "changes": "Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, the deletion of the blobs this run created, and consumption of caller-owned staging uploads supplied in attachments.",
+        "idempotent": false,
+        "permissionSet": "BIFROST Chat ori; BIFROST LLM Chat ori",
+        "preconditions": [
+          "The caller holds Foundation's BIFROST Chat ori and this app's BIFROST LLM Chat ori permission sets.",
+          "A language model whose provider runs tools in separate steps is set up, with its API key; Copilot is refused.",
+          "Outbound HttpClient requests are allowed for the app."
+        ]
+      },
+      "metering": {
+        "chargeable": true,
+        "chargedAs": "message"
+      },
+      "related": [
+        {
+          "name": "LLM.Prompt.Complete",
+          "useInsteadWhen": "The sibling without tools: one prompt, one answer, when the prompt already holds the data."
+        },
+        {
+          "name": "Data.Records.Get",
+          "useInsteadWhen": "Read the data yourself and send it as context when the question needs no lookup."
+        },
+        {
+          "name": "Storage.Upload.CommitToStaging",
+          "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Check the posting setup of a customer",
+          "request": {
+            "type": "LLM.Prompt.Ask",
+            "data": {
+              "question": "Is customer 10000 ready to invoice? Check its posting groups and their setup.",
+              "responseSchema": {
+                "type": "object",
+                "required": [
+                  "verdict",
+                  "findings"
+                ],
+                "properties": {
+                  "verdict": {
+                    "type": "string",
+                    "enum": [
+                      "pass",
+                      "fail",
+                      "unknown"
+                    ]
+                  },
+                  "findings": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "response": {
+            "status": "Success",
+            "answer": "{\"verdict\":\"fail\",\"findings\":[\"Gen. Bus. Posting Group is empty.\"]}",
+            "data": {
+              "verdict": "fail",
+              "findings": [
+                "Gen. Bus. Posting Group is empty."
+              ]
+            },
+            "schemaValid": true,
+            "stopReason": "completed",
+            "toolCalls": 3,
+            "toolErrors": 0,
+            "deniedToolCalls": 0,
+            "rounds": 4,
+            "model": {
+              "code": "CLAUDE",
+              "provider": "Anthropic",
+              "model": "claude-sonnet-5-5"
+            },
+            "warnings": []
+          }
+        }
+      ],
+      "overview": "Use LLM.Prompt.Ask when a language model must look up Business Central data before it answers, for example in a playbook Check step. The model gets the question, the optional context and record, and a set of read-only Bifrost tools; it may call tools over several rounds and then answers. No human is present: the model never asks a question back and says unknown when it is not sure. With a responseSchema the answer is parsed and validated as JSON.",
+      "notes": "Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. Limits in this company (Language Model setup, LLM.Prompt.Ask Limits): maxToolCalls 15 (cap 40), maxRounds 10 (cap 20), maxResultChars 8000 (cap 20000). An administrator can change them; the tool-call and round caps accept 1 to 999. At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model's own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost's message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported."
+    },
+    "conventions": "## Errors and warnings\r\nAn error response has `status` = `Error`, a stable `code`, the `error` text and, when they apply, `parameter` (the request parameter concerned, e.g. `lines[2].no`), `received` (the value received), `expected` (what was expected) and `nextStep` (what to do now). `hint` says where to read more.\r\nWhen a request has several problems, all of them are listed in `errors[]` - each with the same fields - under a top-level `code` (`MultipleErrors`, or a shared code such as `InvalidLine` for the `lines` of a Create type) and a summary `error`. Fix them all before calling again. One problem is reported at the top level, with no `errors[]`.\r\nRequest values are checked first and every problem found is reported together. A Business Central validation error raised afterwards, while a record is being written, stops the call and is reported on its own: `code` = `BusinessCentralError`, Business Central's own `error` text, and `parameter` naming the request parameter being applied, e.g. `lines[1].accountNo`. Nothing is written.\r\nRequest values are read in one format, whatever the language: dates `YYYY-MM-DD`; date-times ISO 8601 with `Z` or an offset; amounts as JSON numbers (or a string such as `\"1234.56\"`, no thousands separator); integers as JSON integers; booleans `true` or `false`. Any other value is `InvalidParameterFormat` with `received` and `expected`; for an unambiguous local form such as `26.09.2026`, `nextStep` gives the value to resend. Every bad value of a request is reported together.\r\nAnswers are written in one format as well, whatever the language of the call: dates `YYYY-MM-DD`, date-times ISO 8601, numbers with a dot and no thousands separator, and the option and enum values of every answer except `Data.Records.Get` and `Data.Records.Set` as their English names, so a value read from an answer can be sent back. Those two answer the caption of the language of the call, for a person to read. The language of the call (`lcid`) changes captions and message texts, not these forms. Two things are outside Bifrost's control: Business Central writes its own texts (a ledger entry description such as `Direct Cost V00010 on 10/02/26`, the text of a `BusinessCentralError`) with the regional settings of the server session, which `lcid` does not change, so a date in such a text can be in month-day order; and a table view is read with those settings too, so write dates in a view as `YYYY-MM-DD` and decimals with a dot.\r\nBoth success and error responses can carry `warnings[]`, each with `code`, `message` and, when they apply, `parameter` and `nextStep`.\r\n`UnknownParameter` refuses undeclared data keys before execution for every type whose effect is not read, including a missing effect. The root envelope option `strict:false` cannot opt out. Read types keep warnings without changing status, validationResult or domain warningCount unless the caller sets `strict:true` (next to type and subject, never inside data). Refusals list the keys and localized nextStep corrections; no business changes or successful execution charges occur. Example: {\"type\":\"Memory.User.Set\",\"strict\":true,\"data\":{\"memory\":\"test\",\"memry\":\"typo\"}} is refused.\r\n`FieldChangedByBC` is a warning from Data.Records.Set: another field validation or the write changed a sent field after its own validation. `parameter` names data[n].fields.{jsonName}, counting from 0. Status stays Success. Compare the returned values with what you sent; follow `nextStep` to use validation order or send the field again in a separate call. Normalisation of the field itself, LCY, Dimension Set ID, BLOB, Media, MediaSet and skipped fields are excluded.\r\n`SecurityFilterApplied` is a warning from Data.Records.Get, severity `low`, `parameter` `table`: a security filter of the caller applies to the table, so the result may hold fewer records than the table. `securityFiltered` is then true. Status stays Success, and the hidden records are never counted or described. Ask an administrator if you expect more records.\r\nData.RecordIds.Get, Data.Totals.Get, Data.Entries.Find and CSV.Records.Get do not return `securityFiltered` or `SecurityFilterApplied`. Their results can still be limited by security filters: counts and totals cover only visible records, and the absence of a flag or warning does not prove that every record in the table was included. Their help explains this visibility limit; request filters such as tableView and date ranges are separate.\r\nWhen a Business Central operation fails, the error can identify the request parameter being applied, the expected input and what to do next. That guidance accompanies the original `BusinessCentralError` after rollback, including a failed queued task. It does not change which writes are rolled back or committed. Guidance is cleared between messages; a message without it keeps its existing response shape. Recognized lock errors follow the `Retryable` rules below.\r\nSome message types accept calls only through a particular path: a scheduled queue message, the Task API (`/tasks`), the in-product MCP tool server, another message type, or the Messages page Run Task action. Bifrost determines where the call came from; request values cannot override it. A call through an unsupported path is refused with `PreconditionFailed` and a `nextStep` naming the path to use.\r\n`Retryable` means a transient lock or deadlock caught while writing or posting. `error` keeps Business Central's original text. `expected` is \"no concurrent lock on the same records\"; `nextStep` is \"Retry the same call after a few seconds; nothing was changed.\" Bifrost does not retry automatically. Uncaught recognized lock errors are also `Retryable` for `write` types. Uncaught `read` and `irreversible` errors remain `BusinessCentralError`, because an irreversible operation may already have committed.\r\n`ConfirmationRequired` is the preview refusal for an irreversible type called without `expectedCount`. Nothing was changed; inspect `expected` and the description before sending the same request with that count. `ConfirmationMismatch` means the count has changed or the sent count was wrong; nothing was changed. Inspect the new preview before confirming again. Feature apps use the same preview and confirmation protocol for irreversible operations.\r\nCodes: `MissingParameter`, `InvalidParameterFormat`, `InvalidParameter`, `RecordNotFound`, `AmbiguousRecord`, `ConflictingIdentifiers`, `InvalidFilterField`, `InvalidLine`, `NothingToPreview`, `LinesSkipped`, `BlockedByWriteGuard`, `PreconditionFailed`, `PermissionDenied`, `LimitExceeded`, `BusinessCentralError`, `MultipleErrors`, `DeprecatedParameter`, `UnknownParameter`, `FieldChangedByBC`, `Retryable`, `EULA_REQUIRED`, `TRIAL_NOT_STARTED`, `ConfirmationRequired`, `ConfirmationMismatch`, `SecurityFilterApplied`. The `error` text may be translated; the code never is.\r\n"
+  }
+}

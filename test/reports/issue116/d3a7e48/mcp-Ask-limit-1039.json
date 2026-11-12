@@ -1,0 +1,39 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit"
+    },
+    "lcid": 1039
+  },
+  "at": "2026-11-12T22:22:50.457Z",
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"status\": \"Error\",\n    \"code\": \"LimitExceeded\",\n    \"error\": \"Heildarstærð viðhengja er yfir mörkum mállíkansins.\",\n    \"parameter\": \"attachments\",\n    \"received\": \"19\",\n    \"expected\": \"í mesta lagi 1 bæti\",\n    \"nextStep\": \"Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.\",\n    \"hint\": \"Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \\\"Help.Implementation.Get\\\" með subject \\\"LLM.Prompt.Ask\\\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund.\"\n  },\n  \"providerCalled\": false,\n  \"firstConsumed\": true,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "status": "Error",
+      "code": "LimitExceeded",
+      "error": "Heildarstærð viðhengja er yfir mörkum mállíkansins.",
+      "parameter": "attachments",
+      "received": "19",
+      "expected": "í mesta lagi 1 bæti",
+      "nextStep": "Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.",
+      "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+    },
+    "providerCalled": false,
+    "firstConsumed": true,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}

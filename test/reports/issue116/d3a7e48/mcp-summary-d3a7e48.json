@@ -1,0 +1,327 @@
+{
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "tenant": "w129-16",
+  "selfCreatedData": true,
+  "touchedMessageTypes": [
+    "LLM.Prompt.Ask",
+    "LLM.Prompt.Complete"
+  ],
+  "scenarios": [
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "valid",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-valid-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "multiple",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-multiple-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "unknown",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-unknown-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "consumed",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-consumed-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "foreign",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-foreign-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "mime",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-mime-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-limit-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "extra",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-extra-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "valid",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-valid-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "multiple",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-multiple-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "unknown",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-unknown-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "consumed",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-consumed-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "foreign",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-foreign-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "mime",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-mime-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "limit",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-limit-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "extra",
+      "lcid": 1033,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-extra-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "valid",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-valid-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "multiple",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-multiple-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "unknown",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-unknown-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "consumed",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-consumed-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "foreign",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-foreign-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "mime",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-mime-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-limit-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "extra",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Ask-extra-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "valid",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-valid-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "multiple",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-multiple-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "unknown",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-unknown-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "consumed",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-consumed-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "foreign",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-foreign-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "mime",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-mime-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "limit",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-limit-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "extra",
+      "lcid": 1039,
+      "passed": true,
+      "cleanupVerified": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-Complete-extra-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "help-registered-staging-path",
+      "lcid": 1033,
+      "passed": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-help-Ask-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "help-registered-staging-path",
+      "lcid": 1033,
+      "passed": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-help-Complete-1033.json"
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "help-registered-staging-path",
+      "lcid": 1039,
+      "passed": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-help-Ask-1039.json"
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "help-registered-staging-path",
+      "lcid": 1039,
+      "passed": true,
+      "evidence": "/workspace/evidence/lm116-reginn-20261112T2124/d3a7e48/mcp-help-Complete-1039.json"
+    }
+  ],
+  "executed": 36,
+  "passed": 36,
+  "failed": 0,
+  "skipped": 0,
+  "foreignUserScenario": "Synthetic persisted foreign creator tested per Architect1794519937.523119; real two-authenticated-user scenario NOT_RUN by that disposition",
+  "cleanup": true,
+  "sharedFixtureCleanup": {
+    "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+    "verified": true,
+    "at": "2026-11-12T22:33:09.178245+00:00",
+    "syntheticForeignRowsDeleted": 1,
+    "allTaskStagingRowsRemaining": 0,
+    "modelsRemaining": 0,
+    "installerSeedRowsRemaining": 0,
+    "emptyUiSecretRegistrationsDeleted": 2,
+    "uiSecretRegistrationsRemaining": 0,
+    "languageRestored": 1033,
+    "testApp": "uninstalled with deleteExtensionData, then unpublished; read-back confirms absent",
+    "restoredApps": [
+      {
+        "name": "Bifrost Attachments",
+        "installed": true,
+        "version": "28.3.2.0"
+      },
+      {
+        "name": "Bifrost Attachments - Tests",
+        "installed": true,
+        "version": "28.3.2.0"
+      }
+    ],
+    "environment": "Assigned persistent local BC29 tenant w129-16; no COSMO resource created or used. Exact-tip Language Models product remains installed for related work."
+  }
+}

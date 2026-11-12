@@ -1,0 +1,39 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "mime"
+    },
+    "lcid": 1039
+  },
+  "at": "2026-11-12T22:22:51.056Z",
+  "sha": "d3a7e48c783fb2fc295a0ae24df35e39586dfe7a",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"status\": \"Error\",\n    \"code\": \"InvalidParameter\",\n    \"error\": \"Efnisgerð viðhengisins er ekki studd.\",\n    \"parameter\": \"attachments[1].stagingId\",\n    \"received\": \"application/zip\",\n    \"expected\": \"text/*, application/pdf, image/png, image/jpeg\",\n    \"nextStep\": \"Hladdu skránni upp aftur og sendu nýtt stagingId hennar.\",\n    \"hint\": \"Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \\\"Help.Implementation.Get\\\" með subject \\\"LLM.Prompt.Complete\\\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund.\"\n  },\n  \"providerCalled\": false,\n  \"firstConsumed\": true,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "status": "Error",
+      "code": "InvalidParameter",
+      "error": "Efnisgerð viðhengisins er ekki studd.",
+      "parameter": "attachments[1].stagingId",
+      "received": "application/zip",
+      "expected": "text/*, application/pdf, image/png, image/jpeg",
+      "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+      "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+    },
+    "providerCalled": false,
+    "firstConsumed": true,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}
