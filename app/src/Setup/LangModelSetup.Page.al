@@ -19,7 +19,6 @@ page 10035421 "LangModel Setup ori"
     UsageCategory = None;
     InsertAllowed = false;
     DeleteAllowed = false;
-    Editable = false;
 
     layout
     {
@@ -32,6 +31,7 @@ page 10035421 "LangModel Setup ori"
 
                 field(LanguageModelCount; LanguageModelCount)
                 {
+                    Editable = false;
                     Caption = 'Language Models', Comment = 'is-IS=Mállíkön';
                     ToolTip = 'Specifies how many language models are set up in this company.', Comment = 'is-IS=Tilgreinir hversu mörg mállíkön eru sett upp í þessu fyrirtæki.';
                     DrillDown = true;
@@ -43,6 +43,7 @@ page 10035421 "LangModel Setup ori"
                 }
                 field(DefaultLanguageModel; DefaultLanguageModelCode)
                 {
+                    Editable = false;
                     Caption = 'Default Language Model', Comment = 'is-IS=Sjálfgefið mállíkan';
                     ToolTip = 'Used by LLM.Prompt.Complete when neither a role code nor a user language model is given. Not used by Bifrost Chat.', Comment = 'is-IS=Notað af LLM.Prompt.Complete þegar hvorki hlutverkskóði né mállíkan notanda er gefið. Ekki notað af Bifröst spjalli.';
                 }
@@ -54,8 +55,81 @@ page 10035421 "LangModel Setup ori"
 
                 field(ToolCount; ToolCount)
                 {
+                    Editable = false;
                     Caption = 'Available Tools', Comment = 'is-IS=Tiltæk verkfæri';
                     ToolTip = 'Specifies how many Model Context Protocol tools the chat can call in this company.', Comment = 'is-IS=Tilgreinir hversu mörg verkfæri (Model Context Protocol) spjallið getur kallað á í þessu fyrirtæki.';
+                }
+            }
+            group(AskLimits)
+            {
+                Caption = 'LLM.Prompt.Ask Limits', Comment = 'is-IS=Mörk LLM.Prompt.Ask';
+                InstructionalText = 'The caps bound every LLM.Prompt.Ask run in this company: a request limit above a cap is cut to the cap with a clamped warning. The defaults are used when a request sends no limit. Every tool call is still a Bifrost message that counts against the monthly quota, and the tools stay read-only.', Comment = 'is-IS=Hámörkin takmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.';
+
+                field(AskMaxToolCallsCap; AskSetup."Ask Max Tool Calls Cap")
+                {
+                    Caption = 'Ask Max Tool Calls Cap', Comment = 'is-IS=Hámark verkfærakalla í spurningu';
+                    ToolTip = 'Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.', Comment = 'is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Max Tool Calls Cap"), AskSetup."Ask Max Tool Calls Cap");
+                    end;
+                }
+                field(AskDefaultToolCalls; AskSetup."Ask Default Tool Calls")
+                {
+                    Caption = 'Ask Default Tool Calls', Comment = 'is-IS=Sjálfgefin verkfærakköll í spurningu';
+                    ToolTip = 'Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.', Comment = 'is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Default Tool Calls"), AskSetup."Ask Default Tool Calls");
+                    end;
+                }
+                field(AskMaxRoundsCap; AskSetup."Ask Max Rounds Cap")
+                {
+                    Caption = 'Ask Max Rounds Cap', Comment = 'is-IS=Hámark umferða í spurningu';
+                    ToolTip = 'Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.', Comment = 'is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Max Rounds Cap"), AskSetup."Ask Max Rounds Cap");
+                    end;
+                }
+                field(AskDefaultRounds; AskSetup."Ask Default Rounds")
+                {
+                    Caption = 'Ask Default Rounds', Comment = 'is-IS=Sjálfgefnar umferðir í spurningu';
+                    ToolTip = 'Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.', Comment = 'is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Default Rounds"), AskSetup."Ask Default Rounds");
+                    end;
+                }
+                field(AskMaxResultCharsCap; AskSetup."Ask Max Result Chars Cap")
+                {
+                    Caption = 'Ask Max Result Chars Cap', Comment = 'is-IS=Hámark stafa í verkfæraniðurstöðu';
+                    ToolTip = 'Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.', Comment = 'is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Max Result Chars Cap"), AskSetup."Ask Max Result Chars Cap");
+                    end;
+                }
+                field(AskDefaultResultChars; AskSetup."Ask Default Result Chars")
+                {
+                    Caption = 'Ask Default Result Chars', Comment = 'is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu';
+                    ToolTip = 'Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.', Comment = 'is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.';
+                    Editable = AskSetupEditable;
+
+                    trigger OnValidate()
+                    begin
+                        ApplyAskValue(AskSetup.FieldNo("Ask Default Result Chars"), AskSetup."Ask Default Result Chars");
+                    end;
                 }
             }
             group(Secrets)
@@ -65,6 +139,7 @@ page 10035421 "LangModel Setup ori"
 
                 field(ModelsWithoutKey; ModelsWithoutKeyCount)
                 {
+                    Editable = false;
                     Caption = 'Language Models Without a Key', Comment = 'is-IS=Mállíkön án lykils';
                     ToolTip = 'Specifies how many language models need an API key but have neither a shared key nor a personal key stored for you.', Comment = 'is-IS=Tilgreinir hversu mörg mállíkön þurfa API-lykil en hafa hvorki sameiginlegan lykil né persónulegan lykil geymdan fyrir þig.';
                     StyleExpr = MissingKeyStyleExpr;
@@ -77,6 +152,7 @@ page 10035421 "LangModel Setup ori"
                 }
                 field(KeyHint; KeyHintText)
                 {
+                    Editable = false;
                     Caption = 'Note', Comment = 'is-IS=Athugasemd';
                     ToolTip = 'Specifies what to do about the API keys that are still missing.', Comment = 'is-IS=Tilgreinir hvað eigi að gera við API-lyklana sem vantar enn.';
                     MultiLine = true;
@@ -149,6 +225,7 @@ page 10035421 "LangModel Setup ori"
     }
 
     var
+        AskSetup: Record "LangModel Ask Setup ori";
         DefaultLanguageModelCode: Text[50];
         KeyHintText: Text;
         MissingKeyStyleExpr: Text;
@@ -156,6 +233,7 @@ page 10035421 "LangModel Setup ori"
         ToolCount: Integer;
         ModelsWithoutKeyCount: Integer;
         KeyHintVisible: Boolean;
+        AskSetupEditable: Boolean;
         UnfavorableStyleTok: Label 'Unfavorable', Locked = true;
         FavorableStyleTok: Label 'Favorable', Locked = true;
         KeyMissingHintTxt: Label 'API keys cannot be moved from another extension. Open a language model and use Set Personal API Key or Set Shared API Key to enter each key once.', Comment = 'is-IS=Ekki er hægt að flytja API-lykla frá annarri viðbót. Opnaðu mállíkan og notaðu Setja inn persónulegan API-lykil eða Setja inn sameiginlegan API-lykil til að slá hvern lykil inn einu sinni.';
@@ -167,6 +245,22 @@ page 10035421 "LangModel Setup ori"
     begin
         LangModelSecrets.RegisterAll();
         RefreshStatus();
+        AskSetup.GetSetup();
+        AskSetupEditable := AskSetup.WritePermission();
+    end;
+
+    /// <summary>
+    /// Validates one Ask cap or default against the stored row and writes it; inserts the row on the first change. On a
+    /// refusal the page keeps the stored values. Needs write permission on "LangModel Ask Setup ori", which only the
+    /// language-model admin sets grant.
+    /// </summary>
+    local procedure ApplyAskValue(FieldNo: Integer; NewValue: Integer)
+    var
+        StoredAskSetup: Record "LangModel Ask Setup ori";
+    begin
+        AskSetup.GetSetup();
+        StoredAskSetup.SetValue(AskSetup, FieldNo, NewValue);
+        AskSetup := StoredAskSetup;
     end;
 
     local procedure RefreshStatus()

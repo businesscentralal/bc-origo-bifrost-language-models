@@ -151,10 +151,10 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Parameters.Add(Parameter);
 
         Clear(Children);
-        Parameter := ContractMgt.Parameter('limits', 'object', false, 'Optional caps of the run. A value above the cap is clamped and warnings holds clamped:<key>.');
-        Children.Add(ContractMgt.Parameter('maxToolCalls', 'integer', false, 'Tool calls the model may request, denied calls included. Default 15, cap 40.'));
-        Children.Add(ContractMgt.Parameter('maxRounds', 'integer', false, 'Provider requests. Default 10, cap 20.'));
-        Children.Add(ContractMgt.Parameter('maxResultChars', 'integer', false, 'Characters of one tool result sent to the model; longer results are cut with a marker. Default 8000, cap 20000.'));
+        Parameter := ContractMgt.Parameter('limits', 'object', false, 'Optional limits of the run. The defaults and caps come from the Language Model setup of the company (LLM.Prompt.Ask Limits on Bifrost Language Models Setup); a value above the cap is clamped and warnings holds clamped:<key>.');
+        Children.Add(ContractMgt.Parameter('maxToolCalls', 'integer', false, 'Tool calls the model may request, denied calls included. Default and cap from the setup; on install 15 and 40.'));
+        Children.Add(ContractMgt.Parameter('maxRounds', 'integer', false, 'Provider requests. Default and cap from the setup; on install 10 and 20.'));
+        Children.Add(ContractMgt.Parameter('maxResultChars', 'integer', false, 'Characters of one tool result sent to the model; longer results are cut with a marker. Default and cap from the setup; on install 8000 and 20000.'));
         Parameter.Add('children', Children);
         Parameters.Add(Parameter);
 
@@ -281,8 +281,14 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     /// Describes caps, the missing timeout, the trace rule and the cost of tool calls.
     /// </summary>
     procedure GetNotes(var Notes: Text): Boolean
+    var
+        AskSetup: Record "LangModel Ask Setup ori";
+        CompanyCapsTxt: Label 'Limits in this company (Language Model setup, LLM.Prompt.Ask Limits): maxToolCalls %1 (cap %2), maxRounds %3 (cap %4), maxResultChars %5 (cap %6). An administrator can change them; the tool-call and round caps accept 1 to 999.', Comment = '%1..%6 = default and cap of tool calls, rounds and result characters', Locked = true;
     begin
-        Notes := 'Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. Caps: maxToolCalls 15 (at most 40), maxRounds 10 (at most 20), maxResultChars 8000 (at most 20000); at a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported.';
+        AskSetup.GetSetup();
+        Notes := 'Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. ' +
+            StrSubstNo(CompanyCapsTxt, Format(AskSetup."Ask Default Tool Calls", 0, 9), Format(AskSetup."Ask Max Tool Calls Cap", 0, 9), Format(AskSetup."Ask Default Rounds", 0, 9), Format(AskSetup."Ask Max Rounds Cap", 0, 9), Format(AskSetup."Ask Default Result Chars", 0, 9), Format(AskSetup."Ask Max Result Chars Cap", 0, 9)) +
+            ' At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported.';
         exit(true);
     end;
 

@@ -15,6 +15,7 @@ permissionset 10035398 "BIFROST LLM Chat ori"
 
     Permissions =
         tabledata "Bifrost Language Model ori" = R,
+        tabledata "LangModel Ask Setup ori" = R,
         codeunit "LangModel Secrets ori" = X,
         codeunit "Secret Store ori" = X,
         codeunit "LangModel Prov. Base ori" = X,

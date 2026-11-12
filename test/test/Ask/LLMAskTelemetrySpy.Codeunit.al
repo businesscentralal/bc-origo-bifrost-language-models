@@ -6,7 +6,7 @@ using Origo.Bifrost.LanguageModels;
 /// Records the ORI-LM-ASK-* events that "LLM Ask Telemetry ori" logs (#102), through its test seam. Bind it with
 /// BindSubscription; it reads and writes nothing in the database.
 /// </summary>
-codeunit 96067 "LLM Ask Telemetry Spy"
+codeunit 96068 "LLM Ask Telemetry Spy"
 {
     EventSubscriberInstance = Manual;
 
