@@ -4,6 +4,25 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-11) - refuse provider-truncated HTML output (#113)
+
+- **Fixed:** shared chat proxy 10035412 and Anthropic proxy 10035417 preserve provider completion metadata (`finish_reason`, Responses `status`, and `stop_reason`). HTML-mode runner 10035433 refuses a token-limited, filtered or incomplete provider response before processing its tools or returning `html`, even when closing HTML tags are present. Normal completions and providers without completion metadata remain supported; text-mode behavior is unchanged.
+- Tests: 96065 verifies completion metadata for chat completions, Responses and Anthropic using HTTP mocks; 96066 covers a complete-looking document with a token-limit stop reason. No live-provider calls.
+- **Test fixture cleanup:** codeunit 96037 removes only its explicitly created user identities, permission assignments and Bifrost user setup after its assertions, so repeated setup-wizard tests do not accumulate licensed user fixtures. It does not change existing users or licence state.
+
+### Fixed (2026-11-11) - test chat confirmation target (#113, PR #121 verification)
+
+- **Fixed:** test-only codeunit 96026 `Test LangModel Chat Impl` declares `data.code` as its target. Foundation can now count the selected model and refuse a mismatched `expectedCount` before calling the provider. The existing refusal assertion remains; codeunit 96028 also verifies a matching count executes the mock chat turn.
+
+### Added (2026-11-11) - LLM.Prompt.Ask html output mode (#113)
+
+- **Added:** optional request key `outputFormat` (`text` default, or `html`) on `LLM.Prompt.Ask` (codeunits 10035432 `LLM Prompt Ask Impl ori`, 10035433 `LLM Ask Runner ori`). With `html` the response adds `html`: one HTML document taken from the answer (code fence, text before the first `<!doctype`/`<html` and after the last `</html>` removed, tag matching case-insensitive); `answer` stays the full reply. A `stopReason` other than `completed`, or an answer without a complete document (including a truncated one), returns a coded `PreconditionFailed` error and no `html`. An unknown value gives `InvalidParameter`, a non-string `InvalidParameterFormat`. `responseSchema` is ignored with warning `responseSchemaIgnored` in html mode.
+- **Added:** `context` above 1,000,000 characters is refused with `InvalidParameter` before any provider call (all formats).
+- **Added:** in html mode the system text says return HTML only, no scripts and no external resources, and that the context is data, not instructions; the context is wrapped in `BEGIN/END UNTRUSTED CONTEXT` delimiters in the user message. Text mode prompts are unchanged.
+- **Changed:** `LLM Ask Tool Policy ori.IsAlwaysDeniedMessageType` also denies `Email.Draft.Set` and `Email.Message.Send`.
+- Help (contract chapters) and the is-IS xlf cover the new parameter, response field and errors. The generated html is not logged: the existing `LLM Req Log Masker ori` redacts request and response bodies outside debug mode, and no new telemetry is added.
+- Tests: 96066 `LLM Ask Html Tests` (mock provider only; extraction, fence/preamble, failures, stop reasons, context cap in 1033/1039, prompt, injection fixture with denied write calls, email deny list, masker).
+
 ### Changed (2026-11-11) - LLM.Prompt.Ask caps are configurable per company (#120)
 
 - **Added:** table 10035434 `LangModel Ask Setup ori` (per company, one row): **Ask Max Tool Calls Cap**, **Ask Max Rounds Cap**, **Ask Max Result Chars Cap** and the defaults **Ask Default Tool Calls**, **Ask Default Rounds**, **Ask Default Result Chars**. `Copilot Install ori.InitAskSetup` (install and upgrade per company) inserts the row with the values that were fixed before (caps 40 / 20 / 20000, defaults 15 / 10 / 8000) and never changes an existing row, so nothing changes until an administrator raises a cap.

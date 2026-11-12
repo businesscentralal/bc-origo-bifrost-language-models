@@ -61,6 +61,86 @@ codeunit 96065 "LLM Ask Request Builder Tests"
         VerifyBuilder(3, false, false);
     end;
 
+    [Test]
+    procedure ChatCompletions_TokenLimit_PreservesStopReason()
+    begin
+        // [SCENARIO AC03] The chat-completions token limit survives reply normalization.
+        VerifyStopReason(1, '{"choices":[{"finish_reason":"length","message":{"role":"assistant","content":"done"}}]}', 'length');
+    end;
+
+    [Test]
+    procedure Responses_TokenLimit_PreservesIncompleteStatus()
+    begin
+        // [SCENARIO AC03] An incomplete Responses output stays distinguishable from completion.
+        VerifyStopReason(2, '{"status":"incomplete","incomplete_details":{"reason":"max_output_tokens"},"output":[{"type":"message","content":[{"type":"output_text","text":"done"}]}]}', 'incomplete');
+    end;
+
+    [Test]
+    procedure Anthropic_TokenLimit_PreservesStopReason()
+    begin
+        // [SCENARIO AC03] Anthropic max_tokens survives reply normalization.
+        VerifyStopReason(3, '{"stop_reason":"max_tokens","content":[{"type":"text","text":"done"}]}', 'max_tokens');
+    end;
+
+    [Test]
+    procedure Providers_CompletedReplies_PreserveStopReason()
+    begin
+        // [SCENARIO] Normal provider completion metadata remains distinguishable from truncation.
+        VerifyStopReason(1, '{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"done"}}]}', 'stop');
+        VerifyStopReason(2, '{"status":"completed","output":[{"type":"message","content":[{"type":"output_text","text":"done"}]}]}', 'completed');
+        VerifyStopReason(3, '{"stop_reason":"end_turn","content":[{"type":"text","text":"done"}]}', 'end_turn');
+    end;
+
+    [Test]
+    procedure Responses_IncompleteToolCall_PreservesStatus()
+    var
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
+        Mock: Codeunit "LLM 100 HTTP Mock";
+        Extras: JsonObject;
+        Reply: JsonObject;
+        ReplyText: Text;
+    begin
+        // [SCENARIO AC03] Incomplete function-call output is marked before the HTML runner can execute it.
+        SetUpArgument(TempArgument);
+        Mock.Configure('{"status":"incomplete","output":[{"type":"function_call","call_id":"c1","name":"who_am_i","arguments":"{}"}]}');
+        BindSubscription(Mock);
+        ReplyText := ChatProxy.SendChatMessageResponses(TempArgument, AskPayload(false, false), 'Authorization', Extras);
+        UnbindSubscription(Mock);
+        Assert.AreEqual(1, Mock.GetCallCount(), 'One mocked provider request.');
+        Assert.IsTrue(Reply.ReadFrom(ReplyText), ReplyText);
+        Assert.AreEqual('tool_calls', Reply.GetText('type'), 'Tool-call shape is retained.');
+        Assert.AreEqual('incomplete', Reply.GetText('stopReason'), 'The incomplete status is retained.');
+    end;
+
+    local procedure VerifyStopReason(Builder: Integer; ProviderResponse: Text; ExpectedReason: Text)
+    var
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
+        AnthropicProxy: Codeunit "Anthropic LangModel Proxy ori";
+        Mock: Codeunit "LLM 100 HTTP Mock";
+        Extras: JsonObject;
+        Reply: JsonObject;
+        ReplyText: Text;
+    begin
+        SetUpArgument(TempArgument);
+        Mock.Configure(ProviderResponse);
+        BindSubscription(Mock);
+        case Builder of
+            1:
+                ReplyText := ChatProxy.SendChatMessage(TempArgument, AskPayload(false, false), 'Authorization');
+            2:
+                ReplyText := ChatProxy.SendChatMessageResponses(TempArgument, AskPayload(false, false), 'Authorization', Extras);
+            3:
+                ReplyText := AnthropicProxy.SendChatMessage(TempArgument, AskPayload(false, false));
+        end;
+        UnbindSubscription(Mock);
+        Assert.AreEqual(1, Mock.GetCallCount(), 'The provider is answered once by the HTTP mock.');
+        Assert.IsTrue(Reply.ReadFrom(ReplyText), ReplyText);
+        Assert.AreEqual('done', Reply.GetText('reply'), 'The reply content is preserved.');
+        Assert.AreEqual(ExpectedReason, Reply.GetText('stopReason'), 'The provider completion reason is preserved.');
+    end;
+
     local procedure VerifyBuilder(Builder: Integer; WithSchema: Boolean; WithSubject: Boolean)
     var
         TempArgument: Record "Bifrost Chat Argument ori" temporary;

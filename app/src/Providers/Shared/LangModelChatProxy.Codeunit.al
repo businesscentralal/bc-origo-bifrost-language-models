@@ -214,7 +214,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             AddUserMessage(Messages, TurnGuard.GetVerifyFiguresPrompt());
             exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Messages, OpenAITools, Model, ExtraRequestFields));
         end;
-        exit(BuildSuccessResponse(Reply, UsageObject));
+        exit(BuildSuccessResponse(Reply, UsageObject, FinishReason));
     end;
 
     local procedure AddUserMessage(var Messages: JsonArray; Content: Text)
@@ -478,12 +478,14 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ResponseObject.WriteTo(ResponseJson);
     end;
 
-    local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject) ResponseJson: Text
+    local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text
     var
         ResponseObject: JsonObject;
     begin
         ResponseObject.Add('type', 'reply');
         ResponseObject.Add('reply', Reply);
+        if StopReason <> '' then
+            ResponseObject.Add('stopReason', StopReason);
         if Usage.Keys().Count() > 0 then
             ResponseObject.Add('usage', Usage);
         ResponseObject.WriteTo(ResponseJson);
@@ -720,14 +722,14 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         end;
 
         if ToolCalls.Count() > 0 then
-            exit(BuildResponsesToolCallsResponse(ToolCalls, Input, Model, UsageObject));
+            exit(BuildResponsesToolCallsResponse(ToolCalls, Input, Model, UsageObject, GetTextProperty(Response, 'status')));
 
         Reply := ReplyBuilder.ToText();
         if TurnGuard.NeedsFigureCheck(Input, Reply) then begin
             AddUserMessage(Input, TurnGuard.GetVerifyFiguresPrompt());
             exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Input, ResponsesTools, Model, ExtraRequestFields));
         end;
-        exit(BuildSuccessResponse(Reply, UsageObject));
+        exit(BuildSuccessResponse(Reply, UsageObject, GetTextProperty(Response, 'status')));
     end;
 
     local procedure ExtractResponsesMessageText(MessageObject: JsonObject) ResultText: Text
@@ -751,7 +753,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ResultText := Builder.ToText();
     end;
 
-    local procedure BuildResponsesToolCallsResponse(ToolCalls: JsonArray; Input: JsonArray; Model: Text; Usage: JsonObject) ResponseJson: Text
+    local procedure BuildResponsesToolCallsResponse(ToolCalls: JsonArray; Input: JsonArray; Model: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text
     var
         ResponseObject: JsonObject;
         StateObject: JsonObject;
@@ -764,6 +766,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         StateObject.WriteTo(StateText);
 
         ResponseObject.Add('type', 'tool_calls');
+        if StopReason <> '' then
+            ResponseObject.Add('stopReason', StopReason);
         ResponseObject.Add('toolCalls', ToolCalls);
         ResponseObject.Add('conversationState', StateText);
         if Usage.Keys().Count() > 0 then

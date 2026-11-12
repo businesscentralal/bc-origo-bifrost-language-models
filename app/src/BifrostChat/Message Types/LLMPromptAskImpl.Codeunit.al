@@ -23,6 +23,18 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         InvalidFormatErr: Label 'The value of %1 has the wrong JSON type.', Comment = '%1 = parameter name, is-IS=Gildi %1 er af rangri JSON-gerð.';
         InvalidFormatWhenTxt: Label 'question, instructions or roleCode is not a string, context is not a string or an object, limits or tools or responseSchema or subject is not an object, a limit is not an integer, or includeTrace is not a Boolean.', Comment = 'is-IS=question, instructions eða roleCode er ekki strengur, context er hvorki strengur né hlutur, limits, tools, responseSchema eða subject er ekki hlutur, mörk eru ekki heiltala eða includeTrace er ekki rökgildi.';
         InvalidFormatNextStepTxt: Label 'Send each parameter with the JSON type the help describes.', Comment = 'is-IS=Sendu hverja færibreytu með þeirri JSON-gerð sem hjálpin lýsir.';
+        InvalidFormatValueErr: Label 'outputFormat must be text or html.', Comment = 'is-IS=outputFormat verður að vera text eða html.';
+        InvalidFormatValueWhenTxt: Label 'outputFormat is sent with a value other than text or html.', Comment = 'is-IS=outputFormat er sent með öðru gildi en text eða html.';
+        FormatValueExpectedTxt: Label 'text or html', Comment = 'is-IS=text eða html';
+        FormatValueNextStepTxt: Label 'Send outputFormat text or html, or leave it out for text.', Comment = 'is-IS=Sendu outputFormat text eða html, eða slepptu því fyrir text.';
+        ContextTooLargeErr: Label 'The context is larger than the limit of %1 characters.', Comment = '%1 = limit, is-IS=Samhengið er stærra en mörkin, %1 stafir.';
+        ContextTooLargeWhenTxt: Label 'context holds more than 1,000,000 characters. The request is refused before any language model is called.', Comment = 'is-IS=context inniheldur meira en 1.000.000 stafi. Beiðninni er hafnað áður en mállíkan er kallað á.';
+        ContextTooLargeExpectedTxt: Label 'at most 1,000,000 characters of text', Comment = 'is-IS=í mesta lagi 1.000.000 stafir af texta';
+        ContextTooLargeNextStepTxt: Label 'Send a shorter context, for example only the part the question needs.', Comment = 'is-IS=Sendu styttra samhengi, til dæmis aðeins þann hluta sem spurningin þarf.';
+        HtmlWhenTxt: Label 'outputFormat is html and the run was cut short (stop reason other than completed) or the answer holds no complete HTML document.', Comment = 'is-IS=outputFormat er html og keyrslan var stytt (stöðvunarástæða önnur en completed) eða svarið inniheldur ekkert heilt HTML-skjal.';
+        HtmlExpectedTxt: Label 'a completed run whose answer holds one HTML document', Comment = 'is-IS=lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal';
+        HtmlNextStepTxt: Label 'Ask again with a smaller question or higher limits, or use outputFormat text.', Comment = 'is-IS=Spyrðu aftur með minni spurningu eða hærri mörkum, eða notaðu outputFormat text.';
+        HtmlMissingTxt: Label 'The answer holds no complete HTML document.', Comment = 'is-IS=Svarið inniheldur ekkert heilt HTML-skjal.';
         InvalidLimitErr: Label 'The limit %1 must be 1 or more.', Comment = '%1 = limit name, is-IS=Mörkin %1 verða að vera 1 eða meira.';
         InvalidLimitWhenTxt: Label 'A value in limits is below 1, or subject names a table that does not exist or carries a systemId that is not a GUID.', Comment = 'is-IS=Gildi í limits er lægra en 1, eða subject nefnir töflu sem er ekki til eða ber systemId sem er ekki GUID.';
         LimitExpectedTxt: Label 'an integer of 1 or more', Comment = 'is-IS=heiltala sem er 1 eða meira';
@@ -130,7 +142,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Children: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('question', 'string', true, 'The question the model answers. Required, a non-empty JSON string.'));
-        Parameters.Add(ContractMgt.Parameter('context', 'string', false, 'Optional data the model may use, as a string or a JSON object (written compactly). It is sent in the user message under CONTEXT, never in the system text.'));
+        Parameters.Add(ContractMgt.Parameter('context', 'string', false, 'Optional data the model may use, as a string or a JSON object (written compactly), at most 1,000,000 characters; a larger context is refused before any provider call. It is sent in the user message under CONTEXT, never in the system text.'));
         Parameters.Add(ContractMgt.Parameter('instructions', 'string', false, 'Optional extra instructions, added to the system text after HEADLESS MODE.'));
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
 
@@ -158,6 +170,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Parameters.Add(Parameter);
 
         Parameters.Add(ContractMgt.Parameter('responseSchema', 'object', false, 'Optional JSON schema the answer must match (keywords type, properties, required, enum, items; others are ignored with a warning). An invalid answer is retried once.'));
+        Parameters.Add(ContractMgt.Parameter('outputFormat', 'string', false, 'Optional, text (default) or html. With html the response holds html: one complete HTML document taken from the answer (code fences and text outside the document are removed). A run that stops for any reason other than completed, or an answer without a complete document, fails with a coded error and no html. context is then sent as untrusted data, and responseSchema is ignored with a warning.'));
         Parameters.Add(ContractMgt.Parameter('includeTrace', 'boolean', false, 'Optional, default false. When true, the response holds a trace of the tool calls. The trace is never stored by Language Models.'));
         exit(true);
     end;
@@ -173,6 +186,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Response.Add('contentType', 'text/json');
         Fields.Add(ContractMgt.ResponseField('status', 'string', 'Success when the model answered, also when the answer did not match the schema.'));
         Fields.Add(ContractMgt.ResponseField('answer', 'string', 'The final answer text of the model.'));
+        Fields.Add(ContractMgt.ResponseField('html', 'string', 'Only with outputFormat html: the one HTML document of the answer. The answer field keeps the full text.'));
         Fields.Add(ContractMgt.ResponseField('data', 'object', 'The answer parsed as JSON, when a schema was sent and the answer matches it.'));
         Fields.Add(ContractMgt.ResponseField('schemaValid', 'boolean', 'When a schema was sent: true when the answer matches it.'));
         Fields.Add(ContractMgt.ResponseField('stopReason', 'string', 'completed, maxToolCalls, maxRounds or schemaInvalid.'));
@@ -183,7 +197,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Fields.Add(ContractMgt.ResponseField('usage', 'object', 'The sum of the token usage the provider reported; left out when the provider reports none.'));
         Fields.Add(ContractMgt.ResponseField('model', 'object', 'code, provider and model of the language model used.'));
         Fields.Add(ContractMgt.ResponseField('sessionTime', 'object', 'The clock the model was given (nowUtc, workDate, timeZone); left out when no block could be sent.'));
-        Fields.Add(ContractMgt.ResponseField('warnings', 'array', 'clamped:<key>, schemaKeywordIgnored:<keyword>, toolNotAvailable:<name> or sessionTimeUnavailable.'));
+        Fields.Add(ContractMgt.ResponseField('warnings', 'array', 'clamped:<key>, responseSchemaIgnored, schemaKeywordIgnored:<keyword>, toolNotAvailable:<name> or sessionTimeUnavailable.'));
         Fields.Add(ContractMgt.ResponseField('trace', 'array', 'Only when includeTrace is true: round, tool, args, isError, denied, ms, resultChars and preview of each tool call, truncated.'));
         Response.Add('fields', Fields);
         exit(true);
@@ -204,6 +218,9 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, RoleNotFoundErr, RoleNotFoundWhenTxt, RoleNotFoundNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, NoProviderWhenTxt, NoProviderNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, CopilotErr, CopilotWhenTxt, CopilotNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, InvalidFormatValueErr, InvalidFormatValueWhenTxt, FormatValueNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ContextTooLargeErr, MaxContextChars()), ContextTooLargeWhenTxt, ContextTooLargeNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HtmlMissingTxt, HtmlWhenTxt, HtmlNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
         exit(true);
     end;
@@ -336,6 +353,9 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         HasRecordContext: Boolean;
         IncludeTrace: Boolean;
         Completed: Boolean;
+        HtmlMode: Boolean;
+        HtmlFailureText: Text;
+        HtmlErrorCode: Enum "Bifrost Error Code ori";
     begin
         Argument.AssertVersion1();
         Argument.AssertIsLicensed();
@@ -366,6 +386,21 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
                     RespondFormat(Argument, 'context');
                     exit;
                 end;
+        if StrLen(ContextText) > MaxContextChars() then begin
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ContextTooLargeErr, MaxContextChars()), 'context', '', ContextTooLargeExpectedTxt, ContextTooLargeNextStepTxt);
+            exit;
+        end;
+        if RequestJson.Get('outputFormat', Token) then begin
+            if not IsJsonString(Token) then begin
+                RespondFormat(Argument, 'outputFormat');
+                exit;
+            end;
+            if not (Token.AsValue().AsText().ToLower() in ['text', 'html']) then begin
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, InvalidFormatValueErr, 'outputFormat', Token.AsValue().AsText(), FormatValueExpectedTxt, FormatValueNextStepTxt);
+                exit;
+            end;
+            HtmlMode := Token.AsValue().AsText().ToLower() = 'html';
+        end;
         foreach BadKey in RequestJson.Keys() do
             if (BadKey in ['instructions', 'roleCode']) and RequestJson.Get(BadKey, Token) then
                 if not IsJsonString(Token) then begin
@@ -445,7 +480,12 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
 
+        if HtmlMode and HasSchema then
+            HasSchema := false;
         Runner.Initialize(Provider, CallerTools, RequestedToolCalls, RequestedRounds, RequestedResultChars, Schema, HasSchema, IncludeTrace);
+        Runner.SetHtmlMode(HtmlMode);
+        if HtmlMode and RequestJson.Contains('responseSchema') then
+            Runner.AddWarning('responseSchemaIgnored');
         if HasSchema then
             Runner.CheckSchemaKeywords(Schema);
         if not SessionTime.GetBlock(SessionTimeBlock) then
@@ -455,6 +495,11 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         // After the loop (R1), also on the error path: one stamp, and this run's blobs only.
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         Runner.DeleteRunBlobs();
+        if (not Completed) and Runner.HasHtmlFailure() then begin
+            HtmlFailureText := Runner.GetHtmlFailure(HtmlErrorCode);
+            Argument.RespondWithError(HtmlErrorCode, HtmlFailureText, 'outputFormat', '', HtmlExpectedTxt, HtmlNextStepTxt);
+            exit;
+        end;
         if not Completed then begin
             ProviderBase.RespondPromptError(Argument, Runner.GetProviderFailure());
             exit;
@@ -467,6 +512,11 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         SessionTime.AddToResponse(ResponseJson, SessionTimeBlock);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure MaxContextChars(): Integer
+    begin
+        exit(1000000);
     end;
 
     local procedure RespondFormat(var Argument: Record "Message Argument ori"; ParameterName: Text)
