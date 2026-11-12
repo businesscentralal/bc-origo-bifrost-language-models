@@ -130,7 +130,9 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             ResponseText := Mock.GetLastSendPayload()
         else
             ResponseText := Mock.GetLastCompletePayload();
-        Payload.ReadFrom(ResponseText);
+        if ResponseText <> '' then
+            if not Payload.ReadFrom(ResponseText) then
+                Clear(Payload);
         Result.Add('promptResponse', PromptResponse);
         Result.Add('providerCalled', Mock.WasCompletePromptCalled() or Mock.WasSendChatMessageCalled());
         if Payload.Get('files', Token) then
