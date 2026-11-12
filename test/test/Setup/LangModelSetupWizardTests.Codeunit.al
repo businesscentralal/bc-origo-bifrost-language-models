@@ -169,6 +169,9 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         AssertUserSets(User2."User Security ID");
         AccessControl.SetRange("User Security ID", UnselectedUser."User Security ID");
         Assert.IsTrue(AccessControl.IsEmpty(), 'Unselected user must remain unchanged.');
+        DeleteUserFixture(User1);
+        DeleteUserFixture(User2);
+        DeleteUserFixture(UnselectedUser);
     end;
 
     /// <summary>A disabled user cannot receive chat access.</summary>
@@ -188,6 +191,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         // [THEN] No access row was created.
         AccessControl.SetRange("User Security ID", SelectedUser."User Security ID");
         Assert.IsTrue(AccessControl.IsEmpty(), 'Disabled user must receive no permissions.');
+        DeleteUserFixture(SelectedUser);
     end;
 
     /// <summary>A valid user model creates missing company-scoped setup.</summary>
@@ -207,6 +211,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         // [THEN] A setup row exists with that validated model.
         UserSetup.Get(SelectedUser."User Security ID");
         Assert.AreEqual(ModelCode, UserSetup."Bifrost Language Model Code", 'Missing user setup must be created.');
+        DeleteUserFixture(SelectedUser);
     end;
 
     /// <summary>Updating a model preserves other user setup fields.</summary>
@@ -228,6 +233,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         UserSetup.SetRange("User Security ID", SelectedUser."User Security ID");
         Assert.AreEqual(1, UserSetup.Count(), 'Assignment must be idempotent.');
         Assert.AreEqual(ModelCode, WizardMgt.GetUserModel(SelectedUser."User Security ID"), 'Model must be retained.');
+        DeleteUserFixture(SelectedUser);
     end;
 
     /// <summary>An unknown model fails before creating user setup.</summary>
@@ -247,6 +253,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         // [THEN] The error names that code and no setup is inserted.
         Assert.ExpectedError(UnknownCode);
         Assert.IsFalse(UserSetup.Get(SelectedUser."User Security ID"), 'Invalid code must not create setup.');
+        DeleteUserFixture(SelectedUser);
     end;
 
     /// <summary>Changing the default leaves exactly one default model.</summary>
@@ -441,6 +448,22 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         // Run normal user-insert triggers, then flush the user buffer before native permission APIs.
         NewUser.Insert(true);
         NewUser.Get(NewUser."User Security ID");
+    end;
+
+    local procedure DeleteUserFixture(var CreatedUser: Record User)
+    var
+        AccessControl: Record "Access Control";
+        UserSetup: Record "User Setup ori";
+    begin
+        // Only the identity created by this test is removed; never enumerate or change existing users.
+        if IsNullGuid(CreatedUser."User Security ID") then
+            exit;
+        AccessControl.SetRange("User Security ID", CreatedUser."User Security ID");
+        AccessControl.DeleteAll(true);
+        UserSetup.SetRange("User Security ID", CreatedUser."User Security ID");
+        UserSetup.DeleteAll(true);
+        if CreatedUser.Get(CreatedUser."User Security ID") then
+            CreatedUser.Delete(true);
     end;
 
     local procedure AssertUserSets(SecurityId: Guid)

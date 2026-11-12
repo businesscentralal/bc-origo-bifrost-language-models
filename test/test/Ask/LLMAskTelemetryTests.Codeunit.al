@@ -9,7 +9,7 @@ using System.TestLibraries.Utilities;
 /// the dimension allow-list, no content in any dimension, callerSource normalization and language-independent numbers.
 /// Events are observed through the test seam of "LLM Ask Telemetry ori"; the scripted "Mock Bifrost Chat Provider" runs the loop.
 /// </summary>
-codeunit 96066 "LLM Ask Telemetry Tests"
+codeunit 96069 "LLM Ask Telemetry Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;

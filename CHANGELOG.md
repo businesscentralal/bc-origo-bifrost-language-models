@@ -9,7 +9,26 @@ All notable changes to Bifrost Language Models are documented here.
 - **Added:** codeunit 10035434 `LLM Ask Telemetry ori` (Internal, X in `BIFROST LLM Chat ori`), the place that emits the Ask events with `Session.LogMessage` (`SystemMetadata`, scope `ExtensionPublisher`) and the only place that chooses dimension values (`BuildDimensions`). Events: `ORI-LM-ASK-0001` started (Normal), `-0002` completed (Normal; stopReason completed or schemaInvalid), `-0003` limitHit (Warning; maxToolCalls or maxRounds), `-0004` denied (Warning; once per run, a count), `-0005` providerError (Error), `-0006` providerNotSupported (Warning; Copilot or no split tool execution). A run that started ends in exactly one of 0002, 0003 or 0005; there is no per-tool-call event.
 - **Dimension allow-list (nothing else is ever added):** `Category` (`Bifrost.LanguageModels.Ask`), `provider` (enum name), `modelCode`, `rounds`, `toolCalls`, `toolErrors`, `deniedToolCalls`, `stopReason` (completed, schemaInvalid, maxToolCalls, maxRounds, providerError), `durationMs`, `schemaValid` (true, false, notRequested), `callerSource`. Numbers are written with `Format(value, 0, 9)`. No prompt, context, answer, tool name or argument, trace or record data reaches telemetry. Event 0006 carries `Category` and `provider` only.
 - **Changed:** `callerSource` is Foundation's trusted public `GetInvocationSource()` (Direct, Queue, Task, Dispatcher), not the story's Orchestrator / McpToolServer / Other: `Message Argument ori.Source` is `Access = Internal` in Foundation and cannot be read from this app.
-- Tests: 96066 `LLM Ask Telemetry Tests` (events, ids, verbosity, terminal-event rule, allow-list, sentinel strings in question, context, instructions, tool argument, denied tool and source, 1033 / 1039 numbers) with spy 96068 `LLM Ask Telemetry Spy` on the new internal seam `OnAfterEmit`. No new Request Log row, table or field.
+- Tests: 96069 `LLM Ask Telemetry Tests` (events, ids, verbosity, terminal-event rule, allow-list, sentinel strings in question, context, instructions, tool argument, denied tool and source, 1033 / 1039 numbers) with spy 96068 `LLM Ask Telemetry Spy` on the new internal seam `OnAfterEmit`. No new Request Log row, table or field.
+
+### Fixed (2026-11-11) - refuse provider-truncated HTML output (#113)
+
+- **Fixed:** shared chat proxy 10035412 and Anthropic proxy 10035417 preserve provider completion metadata (`finish_reason`, Responses `status`, and `stop_reason`). HTML-mode runner 10035433 refuses a token-limited, filtered or incomplete provider response before processing its tools or returning `html`, even when closing HTML tags are present. Normal completions and providers without completion metadata remain supported; text-mode behavior is unchanged.
+- Tests: 96065 verifies completion metadata for chat completions, Responses and Anthropic using HTTP mocks; 96066 covers a complete-looking document with a token-limit stop reason. No live-provider calls.
+- **Test fixture cleanup:** codeunit 96037 removes only its explicitly created user identities, permission assignments and Bifrost user setup after its assertions, so repeated setup-wizard tests do not accumulate licensed user fixtures. It does not change existing users or licence state.
+
+### Fixed (2026-11-11) - test chat confirmation target (#113, PR #121 verification)
+
+- **Fixed:** test-only codeunit 96026 `Test LangModel Chat Impl` declares `data.code` as its target. Foundation can now count the selected model and refuse a mismatched `expectedCount` before calling the provider. The existing refusal assertion remains; codeunit 96028 also verifies a matching count executes the mock chat turn.
+
+### Added (2026-11-11) - LLM.Prompt.Ask html output mode (#113)
+
+- **Added:** optional request key `outputFormat` (`text` default, or `html`) on `LLM.Prompt.Ask` (codeunits 10035432 `LLM Prompt Ask Impl ori`, 10035433 `LLM Ask Runner ori`). With `html` the response adds `html`: one HTML document taken from the answer (code fence, text before the first `<!doctype`/`<html` and after the last `</html>` removed, tag matching case-insensitive); `answer` stays the full reply. A `stopReason` other than `completed`, or an answer without a complete document (including a truncated one), returns a coded `PreconditionFailed` error and no `html`. An unknown value gives `InvalidParameter`, a non-string `InvalidParameterFormat`. `responseSchema` is ignored with warning `responseSchemaIgnored` in html mode.
+- **Added:** `context` above 1,000,000 characters is refused with `InvalidParameter` before any provider call (all formats).
+- **Added:** in html mode the system text says return HTML only, no scripts and no external resources, and that the context is data, not instructions; the context is wrapped in `BEGIN/END UNTRUSTED CONTEXT` delimiters in the user message. Text mode prompts are unchanged.
+- **Changed:** `LLM Ask Tool Policy ori.IsAlwaysDeniedMessageType` also denies `Email.Draft.Set` and `Email.Message.Send`.
+- Help (contract chapters) and the is-IS xlf cover the new parameter, response field and errors. The generated html is not logged: the existing `LLM Req Log Masker ori` redacts request and response bodies outside debug mode, and no new telemetry is added.
+- Tests: 96066 `LLM Ask Html Tests` (mock provider only; extraction, fence/preamble, failures, stop reasons, context cap in 1033/1039, prompt, injection fixture with denied write calls, email deny list, masker).
 
 ### Changed (2026-11-11) - LLM.Prompt.Ask caps are configurable per company (#120)
 

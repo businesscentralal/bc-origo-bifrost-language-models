@@ -189,6 +189,28 @@ codeunit 96028 "LangModel Test Tools Tests"
     end;
 
     /// <summary>
+    /// Verifies a matching count permits the single confirmed mock chat turn.
+    /// </summary>
+    [Test]
+    procedure Chat_MatchingExpectedCount_CallsProvider()
+    var
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO] A matching count reaches the provider and preserves its reply.
+        Cleanup();
+        Execute("Message Type ori"::"Test.LanguageModel.Set", '{"code":"BIFT-MOCK","chatProvider":"Mock"}');
+        MockProvider.Reset();
+        MockProvider.SetSendResponse('{"type":"reply","reply":"Confirmed turn."}');
+
+        ResponseJson := Execute("Message Type ori"::"Test.LanguageModel.Chat", '{"code":"BIFT-MOCK","prompt":"Hello","expectedCount":1}');
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), 'A matching count permits the chat turn.');
+        Assert.AreEqual('Confirmed turn.', ResponseJson.GetText('reply'), 'The provider reply is returned.');
+        Assert.IsTrue(MockProvider.WasSendChatMessageCalled(), 'The confirmed turn calls the provider.');
+        Cleanup();
+    end;
+
+    /// <summary>
     /// Verifies the enum mappings expose request declarations and honest effects for all three tools.
     /// </summary>
     [Test]

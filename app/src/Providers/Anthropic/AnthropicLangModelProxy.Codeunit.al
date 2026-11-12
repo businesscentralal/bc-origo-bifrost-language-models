@@ -141,7 +141,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
                 UsageObject := UsageToken.AsObject();
 
         Reply := ExtractText(Response);
-        exit(BuildSuccessResponse(Reply, UsageObject));
+        exit(BuildSuccessResponse(Reply, UsageObject, GetText(Response, 'stop_reason')));
     end;
 
     local procedure AttachFilesToAnthropicMessages(PayloadObject: JsonObject; var Messages: JsonArray)
@@ -300,7 +300,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             Messages.Add(VerifyMessage);
             exit(CallAnthropicOnce(Messages, AnthropicTools, Model, SystemPrompt, ApiKey, BaseUrl, TimeoutMs, MaxTokens, ContextTokens));
         end;
-        exit(BuildSuccessResponse(Reply, UsageObject));
+        exit(BuildSuccessResponse(Reply, UsageObject, GetText(Response, 'stop_reason')));
     end;
 
     [IntegrationEvent(false, false)]
@@ -555,12 +555,14 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         ResponseObject.WriteTo(ResponseJson);
     end;
 
-    local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject) ResponseJson: Text
+    local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text
     var
         ResponseObject: JsonObject;
     begin
         ResponseObject.Add('type', 'reply');
         ResponseObject.Add('reply', Reply);
+        if StopReason <> '' then
+            ResponseObject.Add('stopReason', StopReason);
         if Usage.Keys().Count() > 0 then
             ResponseObject.Add('usage', Usage);
         ResponseObject.WriteTo(ResponseJson);
