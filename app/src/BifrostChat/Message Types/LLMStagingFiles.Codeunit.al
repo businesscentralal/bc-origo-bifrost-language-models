@@ -10,6 +10,11 @@ codeunit 10035435 "LLM Staging Files ori"
     Access = Internal;
 
     var
+        ArrayExpectedTxt: Label 'an array of objects with stagingId', Comment = 'is-IS=fylki hluta með stagingId';
+        ObjectExpectedTxt: Label 'an object with stagingId GUID', Comment = 'is-IS=hlutur með stagingId GUID';
+        GuidExpectedTxt: Label 'a stagingId GUID', Comment = 'is-IS=stagingId GUID';
+        OwnedExpectedTxt: Label 'an unused stagingId owned by the caller', Comment = 'is-IS=ónotað stagingId í eigu kallandans';
+        BytesExpectedTxt: Label 'at most %1 bytes', Comment = '%1 = model byte limit, is-IS=í mesta lagi %1 bæti';
         FormatErr: Label 'The attachment must contain one stagingId GUID.', Comment = 'is-IS=Viðhengið verður að innihalda eitt stagingId GUID.';
         UnknownErr: Label 'The attachment contains an unknown parameter.', Comment = 'is-IS=Viðhengið inniheldur óþekkta færibreytu.';
         MissingErr: Label 'The staged upload was not found.', Comment = 'is-IS=Upphlaðna skjalið fannst ekki í biðgeymslu.';
@@ -20,6 +25,11 @@ codeunit 10035435 "LLM Staging Files ori"
         LimitNextTxt: Label 'Send smaller files or ask your administrator to change the model attachment limit.', Comment = 'is-IS=Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.';
 
     /// <summary>Validates all entry shapes before taking uploads in order in the caller transaction. No provider is called here.</summary>
+    /// <param name="Argument">Receives a coded refusal without calling a provider.</param>
+    /// <param name="Request">Prompt data containing optional attachments.</param>
+    /// <param name="Model">Resolved model and its aggregate attachment byte limit.</param>
+    /// <param name="Files">Receives provider-format files in the request order.</param>
+    /// <returns>True when every attachment was resolved, otherwise false.</returns>
     [NonDebuggable]
     procedure Resolve(var Argument: Record "Message Argument ori"; Request: JsonObject; Model: Record "Bifrost Language Model ori"; var Files: JsonArray): Boolean
     var
@@ -47,14 +57,14 @@ codeunit 10035435 "LLM Staging Files ori"
         if not Request.Get('attachments', Attachments) then
             exit(true);
         if not Attachments.IsArray() then begin
-            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, 'attachments', '', 'array of objects with stagingId', UploadAgainTxt);
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, 'attachments', '', ArrayExpectedTxt, UploadAgainTxt);
             exit(false);
         end;
         foreach Entry in Attachments.AsArray() do begin
             Index += 1;
             ParameterName := 'attachments[' + Format(Index, 0, 9) + '].stagingId';
             if not Entry.IsObject() then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, ParameterName, '', 'object with stagingId GUID', UploadAgainTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, ParameterName, '', ObjectExpectedTxt, UploadAgainTxt);
                 exit(false);
             end;
             Item := Entry.AsObject();
@@ -64,15 +74,15 @@ codeunit 10035435 "LLM Staging Files ori"
                     exit(false);
                 end;
             if not Item.Get('stagingId', IdToken) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, FormatErr, ParameterName, '', 'stagingId GUID', UploadAgainTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::MissingParameter, FormatErr, ParameterName, '', GuidExpectedTxt, UploadAgainTxt);
                 exit(false);
             end;
             if not IsGuid(IdToken, StagingId) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, ParameterName, '', 'stagingId GUID', UploadAgainTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, ParameterName, '', GuidExpectedTxt, UploadAgainTxt);
                 exit(false);
             end;
             if Ids.Contains(StagingId) or not Staging.Exists(StagingId) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, MissingErr, ParameterName, Format(StagingId, 0, 4), 'an unused stagingId owned by the caller', UploadAgainTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, MissingErr, ParameterName, Format(StagingId, 0, 4), OwnedExpectedTxt, UploadAgainTxt);
                 exit(false);
             end;
             Ids.Add(StagingId);
@@ -85,17 +95,17 @@ codeunit 10035435 "LLM Staging Files ori"
             Index += 1;
             ParameterName := 'attachments[' + Format(Index, 0, 9) + '].stagingId';
             if not Staging.Take(StagingId, TempBlob, ContentType, FileName) then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, MissingErr, ParameterName, Format(StagingId, 0, 4), 'an unused stagingId owned by the caller', UploadAgainTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::RecordNotFound, MissingErr, ParameterName, Format(StagingId, 0, 4), OwnedExpectedTxt, UploadAgainTxt);
                 exit(false);
             end;
             ContentType := FileHandling.NormalizeMimeType(ContentType);
-            if not (ContentType.StartsWith('text/') or (ContentType in ['application/pdf', 'image/png', 'image/jpeg'])) then begin
+            if not ((ContentType.StartsWith('text/') and (StrLen(ContentType) > 5)) or (ContentType in ['application/pdf', 'image/png', 'image/jpeg'])) then begin
                 Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, InvalidTypeErr, ParameterName, ContentType, AllowedTypesTxt, UploadAgainTxt);
                 exit(false);
             end;
             TotalBytes += TempBlob.Length();
             if TotalBytes > LimitBytes then begin
-                Argument.RespondWithError("Bifrost Error Code ori"::LimitExceeded, LimitErr, 'attachments', Format(TotalBytes, 0, 9), Format(LimitBytes, 0, 9) + ' bytes', LimitNextTxt);
+                Argument.RespondWithError("Bifrost Error Code ori"::LimitExceeded, LimitErr, 'attachments', Format(TotalBytes, 0, 9), StrSubstNo(BytesExpectedTxt, Format(LimitBytes, 0, 9)), LimitNextTxt);
                 exit(false);
             end;
             Clear(FileObject);

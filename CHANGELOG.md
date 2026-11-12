@@ -1,4 +1,4 @@
-## Unreleased
+## [28.0.3.0]
 
 - #116: `LLM.Prompt.Ask` and `LLM.Prompt.Complete` accept ordered caller-owned Foundation staging attachments, with MIME validation, coded errors and a per-model total byte limit. Related help names installed storage-to-staging types only. Adds codeunit 10035435 and field 27 on table 10035335; updates pages/permissions, Ask runner 10035433 and prompt implementations 10035432/10035396. Requires Foundation 28.0.13. Existing Complete file inputs remain compatible.
 

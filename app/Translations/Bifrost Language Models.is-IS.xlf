@@ -1353,11 +1353,29 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1168347065" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an array of objects with stagingId</source>
+          <target>fylki hluta með stagingId</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=fylki hluta með stagingId</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType ArrayExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3023610385" size-unit="char" translate="yes" xml:space="preserve">
+          <source>at most %1 bytes</source>
+          <target>í mesta lagi %1 bæti</target>
+          <note from="Developer" annotates="general" priority="2">%1 = model byte limit, is-IS=í mesta lagi %1 bæti</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType BytesExpectedTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 1468028954" size-unit="char" translate="yes" xml:space="preserve">
           <source>The attachment must contain one stagingId GUID.</source>
           <target>Viðhengið verður að innihalda eitt stagingId GUID.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Viðhengið verður að innihalda eitt stagingId GUID.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType FormatErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 860338395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a stagingId GUID</source>
+          <target>stagingId GUID</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=stagingId GUID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType GuidExpectedTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 2034178160" size-unit="char" translate="yes" xml:space="preserve">
           <source>The attachment content type is not supported.</source>
@@ -1382,6 +1400,18 @@
           <target>Upphlaðna skjalið fannst ekki í biðgeymslu.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Upphlaðna skjalið fannst ekki í biðgeymslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType MissingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3534312869" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an object with stagingId GUID</source>
+          <target>hlutur með stagingId GUID</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=hlutur með stagingId GUID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType ObjectExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1419390715" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an unused stagingId owned by the caller</source>
+          <target>ónotað stagingId í eigu kallandans</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=ónotað stagingId í eigu kallandans</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType OwnedExpectedTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 1668614503" size-unit="char" translate="yes" xml:space="preserve">
           <source>The attachment contains an unknown parameter.</source>
