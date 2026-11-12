@@ -56,6 +56,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
         SystemPrompt := BuildSystemPrompt(PayloadObject, Argument);
         ParseMessages(PayloadObject, Messages);
+        AttachFilesToAnthropicMessages(PayloadObject, Messages);
         HasAllowedTools := AskPolicy.ReadAllowedTools(PayloadObject, AllowedTools);
         BuildToolDefinitions(AnthropicTools);
 

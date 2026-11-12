@@ -8,6 +8,7 @@ using Origo.Bifrost;
 permissionsetextension 10035427 "BIFROST LLM Read ori" extends "BIFROST Read ori"
 {
     Permissions =
+        codeunit "LLM Staging Files ori" = X,
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = R,
         table "LangModel Ask Setup ori" = X,

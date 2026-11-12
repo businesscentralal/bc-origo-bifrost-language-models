@@ -148,6 +148,13 @@ table 10035335 "Bifrost Language Model ori"
             MinValue = 0;
             MaxValue = 10000000;
         }
+        field(27; "Attachment Limit Bytes"; Integer)
+        {
+            Caption = 'Attachment Limit Bytes', Comment = 'is-IS=Stærðarmörk viðhengja í bætum';
+            ToolTip = 'Specifies the maximum total bytes of staged attachments per prompt. 0 uses 100 MB.', Comment = 'is-IS=Tilgreinir hámarksheildarstærð viðhengja úr biðgeymslu í hverri kvaðningu í bætum. 0 notar 100 MB.';
+            MinValue = 0;
+        }
+
     }
 
     keys

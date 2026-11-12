@@ -14,6 +14,7 @@ permissionset 10035404 "BIFROST LLM ori"
     Caption = 'Bifrost Language Models', MaxLength = 30, Comment = 'is-IS=Bifröst mállíkön';
 
     Permissions =
+        codeunit "LLM Staging Files ori" = X,
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = RIMD,
         table "LangModel Ask Setup ori" = X,

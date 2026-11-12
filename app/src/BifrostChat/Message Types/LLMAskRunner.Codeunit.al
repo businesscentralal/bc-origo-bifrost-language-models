@@ -16,6 +16,7 @@ codeunit 10035433 "LLM Ask Runner ori"
         AskPolicy: Codeunit "LLM Ask Tool Policy ori";
         ToolServer: Codeunit "MCP Tool Server ori";
         Provider: Interface "Bifrost LangModel Provider ori";
+        StagedFiles: JsonArray;
         CallerTools: JsonObject;
         ResponseSchema: JsonObject;
         HasSchema: Boolean;
@@ -383,9 +384,17 @@ codeunit 10035433 "LLM Ask Runner ori"
         exit(RunBlobRefs);
     end;
 
+    /// <summary>Supplies resolved files to the existing provider payload without changing the provider interface.</summary>
+    procedure SetFiles(Files: JsonArray)
+    begin
+        StagedFiles := Files.Clone().AsArray();
+    end;
+
     local procedure BuildPayload(Messages: JsonArray; SystemSuffix: Text; RecordContext: JsonObject; HasRecordContext: Boolean; Names: List of [Text]) Payload: JsonObject
     begin
         Payload.Add('messages', Messages.Clone());
+        if StagedFiles.Count() > 0 then
+            Payload.Add('files', StagedFiles.Clone());
         if SystemSuffix <> '' then
             Payload.Add('systemSuffix', SystemSuffix);
         if HasRecordContext then
