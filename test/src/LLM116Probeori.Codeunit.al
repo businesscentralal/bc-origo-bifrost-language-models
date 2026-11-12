@@ -72,6 +72,10 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             exit;
         Request := Argument.GetRequestJson();
         Scenario := Tools.GetText(Request, 'scenario');
+        if Scenario = 'cleanupForeign' then begin
+            CleanupForeignFixture(Argument);
+            exit;
+        end;
         MessageType := Enum::"Message Type ori"::"LLM.Prompt.Complete";
         if Tools.GetText(Request, 'type') = 'LLM.Prompt.Ask' then
             MessageType := Enum::"Message Type ori"::"LLM.Prompt.Ask";
@@ -98,8 +102,7 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         if Scenario = 'consumed' then
             Staging.Take(FirstId, Blob);
         if Scenario = 'foreign' then
-            if Request.Get('stagingId', Token) then
-                Item.Replace('stagingId', Token.AsValue().AsText());
+            Item.Replace('stagingId', Format(ForeignFixtureId(), 0, 4));
         if Scenario = 'extra' then
             Item.Add('data', 'forbidden');
         Items.Add(Item);
@@ -146,4 +149,55 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         Argument.SetResponseJson(Result);
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
+    local procedure ForeignFixtureId(): Guid
+    var
+        Rows: RecordRef;
+        FixtureField: FieldRef;
+        StagingId: Guid;
+        OwnerId: Guid;
+    begin
+        Rows.Open(10078382);
+        Rows.ReadIsolation := IsolationLevel::ReadCommitted;
+        FixtureField := Rows.Field(6);
+        FixtureField.SetRange('LM116 synthetic foreign fixture');
+        if not Rows.FindFirst() then
+            Error('The LM116 foreign fixture has not been installed.');
+        FixtureField := Rows.Field(Rows.SystemCreatedByNo());
+        OwnerId := FixtureField.Value();
+        if OwnerId = UserSecurityId() then
+            Error('The LM116 fixture must have a different persisted creator.');
+        FixtureField := Rows.Field(Rows.SystemIdNo());
+        StagingId := FixtureField.Value();
+        Rows.Close();
+        exit(StagingId);
+    end;
+
+    local procedure CleanupForeignFixture(var Argument: Record "Message Argument ori")
+    var
+        Rows: RecordRef;
+        FixtureField: FieldRef;
+        Result: JsonObject;
+        Deleted: Integer;
+    begin
+        Rows.Open(10078382);
+        Rows.ReadIsolation := IsolationLevel::UpdLock;
+        Rows.FilterGroup(2);
+        FixtureField := Rows.Field(6);
+        FixtureField.SetRange('LM116 synthetic foreign fixture');
+        FixtureField := Rows.Field(3);
+        FixtureField.SetRange('LM116-PRIVATE-FOREIGN.txt');
+        Rows.FilterGroup(0);
+        if Rows.FindSet() then
+            repeat
+                Rows.Delete(false);
+                Deleted += 1;
+            until Rows.Next() = 0;
+        Result.Add('cleanupVerified', Rows.IsEmpty());
+        Result.Add('deleted', Deleted);
+        Result.Add('status', 'Success');
+        Rows.Close();
+        Argument.SetResponseJson(Result);
+        Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
 }

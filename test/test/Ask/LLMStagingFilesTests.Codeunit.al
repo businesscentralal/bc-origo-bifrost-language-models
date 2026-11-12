@@ -249,6 +249,58 @@ codeunit 96068 "LLM Staging Files Tests"
         Assert.IsTrue(Mock.GetBody(1).Contains('application/pdf'), 'provider request retains MIME type');
     end;
 
+    [Test]
+    procedure Scenario_AC04_ForeignId_BothTypesRefusedWithoutLeak()
+    var
+        Mock: Codeunit "Mock Bifrost Chat Provider";
+        Rows: RecordRef;
+        FixtureField: FieldRef;
+        Data: JsonObject;
+        Response: JsonObject;
+        UnknownResponse: JsonObject;
+        EmptyId: Guid;
+        ForeignId: Guid;
+        MessageType: Enum "Message Type ori";
+        MessageTypes: List of [Enum "Message Type ori"];
+    begin
+        // [GIVEN] The test installer created an owned test fixture with a synthetic different creator, not a new BC user.
+        Initialize();
+        Rows.Open(10078382);
+        Rows.ReadIsolation := IsolationLevel::ReadCommitted;
+        FixtureField := Rows.Field(6);
+        FixtureField.SetRange('LM116 synthetic foreign fixture');
+        Assert.IsTrue(Rows.FindFirst(), 'Test installation must seed the foreign fixture');
+        FixtureField := Rows.Field(Rows.SystemCreatedByNo());
+        Assert.AreNotEqual(UserSecurityId(), FixtureField.Value(), 'The persisted creator must be foreign');
+        FixtureField := Rows.Field(Rows.SystemIdNo());
+        ForeignId := FixtureField.Value();
+        Rows.Close();
+        MessageTypes.Add(Enum::"Message Type ori"::"LLM.Prompt.Ask");
+        MessageTypes.Add(Enum::"Message Type ori"::"LLM.Prompt.Complete");
+        foreach MessageType in MessageTypes do begin
+            Mock.Reset();
+            Mock.SetIsConfigured(true);
+            // [WHEN] The real dispatcher receives the foreign ID, then an unknown ID.
+            Data := Request(ForeignId, EmptyId);
+            Response := Execute(MessageType, Data);
+            Data := Request(CreateGuid(), EmptyId);
+            UnknownResponse := Execute(MessageType, Data);
+            // [THEN] Both are indistinguishable refusals, without provider calls or file-content disclosure.
+            Assert.AreEqual('RecordNotFound', Response.GetText('code'), Describe(Response));
+            Assert.AreEqual('attachments[1].stagingId', Response.GetText('parameter'), Describe(Response));
+            Assert.AreEqual(UnknownResponse.GetText('error'), Response.GetText('error'), 'same error as an unknown ID');
+            Assert.AreEqual(UnknownResponse.GetText('expected'), Response.GetText('expected'), 'same expected value');
+            Assert.AreEqual(UnknownResponse.GetText('nextStep'), Response.GetText('nextStep'), 'same upload-again guidance');
+            Assert.IsFalse(Describe(Response).Contains('LM116-PRIVATE-FOREIGN'), 'no file name leaked');
+            Assert.IsFalse(Describe(Response).Contains('private foreign content'), 'no file bytes leaked');
+            Assert.IsFalse(Mock.WasSendChatMessageCalled(), 'no billable Ask request');
+            Assert.IsFalse(Mock.WasCompletePromptCalled(), 'no billable Complete request');
+        end;
+        Rows.Open(10078382);
+        Assert.IsTrue(Rows.GetBySystemId(ForeignId), 'refusal must preserve the foreign fixture');
+        Rows.Close();
+    end;
+
     local procedure VerifyText(MessageType: Enum "Message Type ori")
     var
         Staging: Codeunit "Blob Staging ori";
