@@ -339,6 +339,17 @@ codeunit 10035433 "LLM Ask Runner ori"
     end;
 
     /// <summary>
+    /// Returns the counters of the run so far, for telemetry (#102). Counts only; no content.
+    /// </summary>
+    procedure GetRunCounters(var RoundsCount: Integer; var ToolCalls: Integer; var ToolErrors: Integer; var DeniedToolCalls: Integer)
+    begin
+        RoundsCount := Rounds;
+        ToolCalls := ToolCallCount;
+        ToolErrors := ToolErrorCount;
+        DeniedToolCalls := DeniedCount;
+    end;
+
+    /// <summary>
     /// True when the last provider request failed; GetProviderFailure returns the provider error response.
     /// </summary>
     procedure HasProviderFailure(): Boolean

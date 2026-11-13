@@ -16,6 +16,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         AskDeniedWhenTxt: Label 'The caller does not hold Foundation''s BIFROST Chat ori permission set, or cannot read the Bifrost Language Models table without this app''s BIFROST LLM Chat ori.', Comment = 'is-IS=Kallandinn hefur ekki heimildasamstæðuna BIFROST Chat ori úr Foundation, eða getur ekki lesið töflu Bifröst mállíkana án BIFROST LLM Chat ori úr þessu forriti.';
         AskDeniedExpectedTxt: Label 'the BIFROST Chat ori and BIFROST LLM Chat ori permission sets', Comment = 'is-IS=heimildasamstæðurnar BIFROST Chat ori og BIFROST LLM Chat ori';
         AskDeniedNextStepTxt: Label 'Ask your administrator to assign the BIFROST Chat ori and BIFROST LLM Chat ori permission sets.', Comment = 'is-IS=Biddu kerfisstjóra um að úthluta þér heimildasamstæðunum BIFROST Chat ori og BIFROST LLM Chat ori.';
+        NotRequestedTok: Label 'notRequested', Locked = true;
         MissingQuestionErr: Label 'The question is missing.', Comment = 'is-IS=Spurninguna vantar.';
         MissingQuestionWhenTxt: Label 'question is missing or empty.', Comment = 'is-IS=question vantar eða er tómt.';
         QuestionExpectedTxt: Label 'a non-empty JSON string', Comment = 'is-IS=JSON-strengur sem er ekki tómur';
@@ -337,6 +338,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         SessionTime: Codeunit "LLM Session Time ori";
         StagingFiles: Codeunit "LLM Staging Files ori";
         Runner: Codeunit "LLM Ask Runner ori";
+        AskTelemetry: Codeunit "LLM Ask Telemetry ori";
         Provider: Interface "Bifrost LangModel Provider ori";
         StagedFiles: JsonArray;
         RequestJson: JsonObject;
@@ -361,6 +363,16 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         HasRecordContext: Boolean;
         IncludeTrace: Boolean;
         Completed: Boolean;
+        ProviderName: Text;
+        StopReasonText: Text;
+        SchemaValidText: Text;
+        StartedAt: DateTime;
+        RoundsCount: Integer;
+        ToolCallsCount: Integer;
+        ToolErrorsCount: Integer;
+        DeniedCount: Integer;
+        Elapsed: Duration;
+        CallerName: Text;
         HtmlMode: Boolean;
         HtmlFailureText: Text;
         HtmlErrorCode: Enum "Bifrost Error Code ori";
@@ -469,7 +481,10 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         else
             Provider := ChatProvider.GetLangModelProviderWithModel(BifrostLanguageModel);
 
+        ProviderName := GetProviderName(BifrostLanguageModel);
+        CallerName := AskTelemetry.GetCallerName(Argument.GetInvocationSource());
         if BifrostLanguageModel."Chat Provider" = BifrostLanguageModel."Chat Provider"::Copilot then begin
+            AskTelemetry.LogProviderNotSupported(ProviderName);
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, CopilotErr, 'roleCode', RoleCodeText, CopilotExpectedTxt, CopilotNextStepTxt);
             exit;
         end;
@@ -484,6 +499,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         TempChatArg."Result Boolean" := false;
         Provider.Execute(TempChatArg);
         if not TempChatArg."Result Boolean" then begin
+            AskTelemetry.LogProviderNotSupported(ProviderName);
             Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, NoSplitErr, 'roleCode', RoleCodeText, CopilotExpectedTxt, CopilotNextStepTxt);
             exit;
         end;
@@ -503,10 +519,22 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         if not SessionTime.GetBlock(SessionTimeBlock) then
             Runner.AddWarning('sessionTimeUnavailable');
 
+        AskTelemetry.LogStarted(ProviderName, BifrostLanguageModel.Code, CallerName);
+        StartedAt := CurrentDateTime();
         Completed := Runner.Run(TempChatArg, Runner.BuildSystemSuffix(Instructions), Runner.BuildUserMessage(Question, ContextText), RecordContext, HasRecordContext, ResponseJson);
         // After the loop (R1), also on the error path: one stamp, and this run's blobs only.
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         Runner.DeleteRunBlobs();
+        Runner.GetRunCounters(RoundsCount, ToolCallsCount, ToolErrorsCount, DeniedCount);
+        if Completed then begin
+            StopReasonText := GetTextValue(ResponseJson, 'stopReason');
+            SchemaValidText := NotRequestedTok;
+            if ResponseJson.Get('schemaValid', Token) then
+                SchemaValidText := Format(Token.AsValue().AsBoolean(), 0, 9);
+        end else
+            StopReasonText := 'providerError';
+        Elapsed := CurrentDateTime() - StartedAt;
+        AskTelemetry.LogRunEnd(ProviderName, BifrostLanguageModel.Code, CallerName, RoundsCount, ToolCallsCount, ToolErrorsCount, DeniedCount, StopReasonText, Elapsed div 1, SchemaValidText);
         if (not Completed) and Runner.HasHtmlFailure() then begin
             HtmlFailureText := Runner.GetHtmlFailure(HtmlErrorCode);
             Argument.RespondWithError(HtmlErrorCode, HtmlFailureText, 'outputFormat', '', HtmlExpectedTxt, HtmlNextStepTxt);
@@ -524,6 +552,21 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         SessionTime.AddToResponse(ResponseJson, SessionTimeBlock);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure GetProviderName(BifrostLanguageModel: Record "Bifrost Language Model ori"): Text
+    var
+        Names: List of [Text];
+        Ordinals: List of [Integer];
+        Position: Integer;
+    begin
+        // The enum name (not the caption), so the value is the same in every session language.
+        Names := BifrostLanguageModel."Chat Provider".Names();
+        Ordinals := BifrostLanguageModel."Chat Provider".Ordinals();
+        Position := Ordinals.IndexOf(BifrostLanguageModel."Chat Provider".AsInteger());
+        if Position > 0 then
+            exit(Names.Get(Position));
+        exit('unknown');
     end;
 
     local procedure MaxContextChars(): Integer
