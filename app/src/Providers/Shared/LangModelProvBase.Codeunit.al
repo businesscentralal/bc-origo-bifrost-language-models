@@ -89,6 +89,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ReceivedText: Text;
         ParameterName: Text;
         ProviderReason: Text;
+        ReasonToken: JsonToken;
     begin
         if IsSafeTotalOversizeRefusal(Response, ReceivedText) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TotalOversizeErr, ReceivedText, Response.GetText('capBytes')), FilesParameterTok, ReceivedText, StrSubstNo(TotalOversizeExpectedTxt, Response.GetText('capBytes')), TotalOversizeNextStepTxt);
@@ -117,8 +118,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
                 ReceivedText += ' ' + ProviderErrorCode;
         end;
         if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
-            if Response.Contains('providerReason') then begin
-                ProviderReason := RedactProviderReason(Response.GetText('providerReason'));
+            if Response.Get('providerReason', ReasonToken) then begin
+                ProviderReason := RedactProviderReason(JsonValueText(ReasonToken));
                 if ProviderReason <> '' then
                     MessageText := StrSubstNo(PromptReasonTxt, MessageText, ProviderReason);
             end;

@@ -98,6 +98,10 @@ codeunit 96072 "LLM 125 xAI Tests"
             Assert.IsTrue(Body.Contains('unsupported field file_data'), 'Retains diagnostic reason.');
             Assert.IsTrue(Body.Contains('file_id instead'), 'Retains actionable field name.');
             Assert.IsTrue(Body.Contains('400 invalid_request'), 'Retains status and safe code.');
+            if Locale = 1039 then
+                Assert.IsTrue(Response.GetText('error').Contains('Ástæða veitanda'), 'The outer error follows Icelandic LCID.')
+            else
+                Assert.IsTrue(Response.GetText('error').Contains('Provider reason'), 'The outer error follows English LCID.');
             Assert.IsFalse(Body.Contains('Z9Q7'), 'No credential fragments.');
             Assert.IsFalse(Body.Contains('private-customer'), 'No customer text.');
             Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Own fixtures removed.');
@@ -132,6 +136,28 @@ codeunit 96072 "LLM 125 xAI Tests"
         Assert.AreEqual('', ProviderBase.ReadProviderReason('{"error":{"message":null}}'), 'Null is harmless.');
         Assert.AreEqual('', ProviderBase.RedactProviderReason(PadStr('invalid ', 8193, 'a')), 'Oversize reason discarded.');
         Assert.IsTrue(StrLen(ProviderBase.RedactProviderReason(PadStr('invalid ', 8192, 'a'))) <= 300, 'Output bounded.');
+    end;
+
+    /// <summary>A malformed diagnostic from an extension provider retains the coded generic failure.</summary>
+    [Test]
+    procedure Scenario_AC03_MalformedReason_ReturnsCodedFailure()
+    var
+        TempArgument: Record "Message Argument ori" temporary;
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        Failure: JsonObject;
+        Response: JsonObject;
+        InvalidReason: JsonArray;
+    begin
+        // Story #125 AC03 | Time: none | Risk: extensible provider response metadata.
+        TempArgument.Init();
+        TempArgument.ID := CreateGuid();
+        TempArgument.Insert(true);
+        Failure := ProviderBase.BuildPromptError(400, false);
+        Failure.Add('providerReason', InvalidReason);
+        ProviderBase.RespondPromptError(TempArgument, Failure);
+        Response.ReadFrom(TempArgument.GetResponseText());
+        Assert.AreEqual('PreconditionFailed', Response.GetText('code'), 'Malformed diagnostic does not raise an exception.');
+        Assert.AreEqual('400', Response.GetText('received'), 'Status remains available.');
     end;
 
     /// <summary>Every continuation reuploads local bytes instead of reusing an already deleted id.</summary>
@@ -316,6 +342,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         Response: JsonObject;
         MessageType: Enum "Message Type ori";
         StagingId: Guid;
+        MessageId: Guid;
         Output: OutStream;
         Input: InStream;
         KeyValue: SecretText;
@@ -350,13 +377,14 @@ codeunit 96072 "LLM 125 xAI Tests"
         end;
         Mock.Configure(HttpStatus, ProviderBody, false, false);
         BindSubscription(Mock);
-        Dispatch(MessageType, Request, Locale, Response);
+        Dispatch(MessageType, Request, Locale, Response, MessageId);
         UnbindSubscription(Mock);
         Model.Delete(true);
         if WithFile then
             if Staging.Exists(StagingId) then
                 Staging.Take(StagingId, Blob);
         Result.Add('response', Response);
+        Result.Add('messageId', Format(MessageId, 0, 4));
         Result.Add('request', Mock.GetRequestBody());
         Result.Add('url', Mock.GetRequestUrl());
         Result.Add('uploads', Mock.GetUploadCount());
@@ -365,7 +393,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         Result.Add('cleanedUp', not Model.Get(Model.Code) and not Staging.Exists(StagingId));
     end;
 
-    local procedure Dispatch(MessageType: Enum "Message Type ori"; Request: JsonObject; Locale: Integer; var Response: JsonObject)
+    local procedure Dispatch(MessageType: Enum "Message Type ori"; Request: JsonObject; Locale: Integer; var Response: JsonObject; var MessageId: Guid)
     var
         Dispatcher: Codeunit "Dispatcher ori";
         RequestContent: BigText;
@@ -373,14 +401,12 @@ codeunit 96072 "LLM 125 xAI Tests"
         RequestText: Text;
         ResponseText: Text;
         ResponseContentType: Text[100];
-        OriginalLanguage: Integer;
+        EmptyTaskId: Guid;
+        ResponseTime: Duration;
     begin
         Request.WriteTo(RequestText);
         RequestContent.AddText(RequestText);
-        OriginalLanguage := GlobalLanguage();
-        GlobalLanguage(Locale);
-        Dispatcher.Execute(MessageType, Enum::"Message Version ori"::"1.0", '', '', 'text/json', RequestContent, ResponseContent, ResponseContentType);
-        GlobalLanguage(OriginalLanguage);
+        Dispatcher.EnqueueAndProcess(MessageType, Enum::"Message Version ori"::"1.0", '', '', 'text/json', RequestContent, EmptyTaskId, Locale, MessageId, ResponseContent, ResponseContentType, ResponseTime);
         ResponseContent.GetSubText(ResponseText, 1);
         Assert.IsTrue(Response.ReadFrom(ResponseText), 'Dispatcher response JSON.');
     end;
