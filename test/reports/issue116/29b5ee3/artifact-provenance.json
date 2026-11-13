@@ -1,0 +1,84 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "artifacts": [
+    {
+      "lane": "app",
+      "sha256": "f9ef43c1071604642a87f4f6c187fbcec3bcb33a429d775fe9e848b9ef056d8f",
+      "manifest": [
+        {
+          "Id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+          "Name": "Bifrost Language Models",
+          "Publisher": "Origo",
+          "Version": "28.0.3.0",
+          "Platform": "28.0.0.0",
+          "Application": "28.0.0.0",
+          "Runtime": "17.0",
+          "Target": "Cloud"
+        }
+      ],
+      "packageId": null,
+      "installed": [
+        {
+          "@odata.etag": "W/\"JzIwOzE0NDA4NDA5NTQ2ODQwNDI5NDgwMTswMDsn\"",
+          "packageId": "238b90b0-dc9b-496f-929c-952d661f8c3f",
+          "id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+          "displayName": "Bifrost Language Models",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": true,
+          "publishedAs": " Dev"
+        }
+      ]
+    },
+    {
+      "lane": "test",
+      "sha256": "a5036900209deba13b117f1bc0c48218971802c84b133a3050d29a3e71ec0ad6",
+      "manifest": [
+        {
+          "Id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+          "Name": "Bifrost Language Models - Tests",
+          "Publisher": "Origo",
+          "Version": "28.0.3.0",
+          "Platform": "28.0.0.0",
+          "Application": "28.0.0.0",
+          "Runtime": "17.0",
+          "Target": "Cloud"
+        }
+      ],
+      "packageId": null,
+      "installed": [
+        {
+          "@odata.etag": "W/\"JzE5OzEwODAxMjkzMzM0NzkwNzkzMDExOzAwOyc=\"",
+          "packageId": "da76ecb0-2214-41af-91a5-46499388deae",
+          "id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+          "displayName": "Bifrost Language Models - Tests",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": true,
+          "publishedAs": " Dev"
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "Foundation": {
+      "version": "28.0.13.0",
+      "packageId": "eac85999-5719-4ab0-a228-6acbcd071a19",
+      "downloadedSymbolSha256": "2b47cc860b3b51517dc2359f60766ef45b786d5eb968e6ce6143664511e6ef9a",
+      "freshDownload": "foundation-symbol-download.json",
+      "sourceSha": "Not inferred from version; dependency unchanged, no new Foundation deployment in this task"
+    },
+    "Attachments": {
+      "version": "28.3.3.0",
+      "packageId": "546981d9-850e-46b5-b8d7-11af577bf843",
+      "unchanged": true
+    }
+  }
+}

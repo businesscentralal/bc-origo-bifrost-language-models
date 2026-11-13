@@ -1,0 +1,200 @@
+{
+  "codeunits": [
+    {
+      "file": "test/Ask/LLMAskHtmlTests.Codeunit.al",
+      "codeunit": "96066",
+      "tests": 21
+    },
+    {
+      "file": "test/Ask/LLMAskRequestBuilderTests.Codeunit.al",
+      "codeunit": "96065",
+      "tests": 11
+    },
+    {
+      "file": "test/Ask/LLMAskSetupTests.Codeunit.al",
+      "codeunit": "96067",
+      "tests": 19
+    },
+    {
+      "file": "test/Ask/LLMAskTelemetryTests.Codeunit.al",
+      "codeunit": "96069",
+      "tests": 16
+    },
+    {
+      "file": "test/Ask/LLMAskToolDefsTests.Codeunit.al",
+      "codeunit": "96045",
+      "tests": 7
+    },
+    {
+      "file": "test/Ask/LLMAskToolPolicyPermTests.Codeunit.al",
+      "codeunit": "96043",
+      "tests": 2
+    },
+    {
+      "file": "test/Ask/LLMAskToolPolicyTests.Codeunit.al",
+      "codeunit": "96042",
+      "tests": 14
+    },
+    {
+      "file": "test/Ask/LLMPromptAskPermTests.Codeunit.al",
+      "codeunit": "96064",
+      "tests": 8
+    },
+    {
+      "file": "test/Ask/LLMPromptAskTests.Codeunit.al",
+      "codeunit": "96063",
+      "tests": 35
+    },
+    {
+      "file": "test/Ask/LLMStagingFilesTests.Codeunit.al",
+      "codeunit": "96071",
+      "tests": 16
+    },
+    {
+      "file": "test/BifrostChat/BifrostLanguageModelTests.Codeunit.al",
+      "codeunit": "96003",
+      "tests": 7
+    },
+    {
+      "file": "test/BifrostChat/CopilotInstallTests.Codeunit.al",
+      "codeunit": "96018",
+      "tests": 11
+    },
+    {
+      "file": "test/BifrostChat/CopilotUpgradeTests.Codeunit.al",
+      "codeunit": "96017",
+      "tests": 2
+    },
+    {
+      "file": "test/BifrostChat/LangModelChatProviderTests.Codeunit.al",
+      "codeunit": "96002",
+      "tests": 46
+    },
+    {
+      "file": "test/BifrostChat/LangModelContractComplTests.Codeunit.al",
+      "codeunit": "96036",
+      "tests": 9
+    },
+    {
+      "file": "test/BifrostChat/LLM65PromptTests.Codeunit.al",
+      "codeunit": "96034",
+      "tests": 125
+    },
+    {
+      "file": "test/BifrostChat/LLMPromptComplPermTests.Codeunit.al",
+      "codeunit": "96032",
+      "tests": 4
+    },
+    {
+      "file": "test/BifrostChat/LLMPromptContractTests.Codeunit.al",
+      "codeunit": "96019",
+      "tests": 6
+    },
+    {
+      "file": "test/BifrostChat/LLMSessionTimePermTests.Codeunit.al",
+      "codeunit": "96061",
+      "tests": 6
+    },
+    {
+      "file": "test/BifrostChat/LLMSessionTimeTests.Codeunit.al",
+      "codeunit": "96060",
+      "tests": 23
+    },
+    {
+      "file": "test/BifrostChat/LM96MimeTests.Codeunit.al",
+      "codeunit": "96041",
+      "tests": 9
+    },
+    {
+      "file": "test/Providers/ChatSvcGateTests.Codeunit.al",
+      "codeunit": "96013",
+      "tests": 5
+    },
+    {
+      "file": "test/Providers/LangModelAPIClientTests.Codeunit.al",
+      "codeunit": "96011",
+      "tests": 6
+    },
+    {
+      "file": "test/Providers/LangModelChatProxyTests.Codeunit.al",
+      "codeunit": "96029",
+      "tests": 4
+    },
+    {
+      "file": "test/Providers/LangModelProvBaseTests.Codeunit.al",
+      "codeunit": "96010",
+      "tests": 17
+    },
+    {
+      "file": "test/Providers/LangModelProvidersTests.Codeunit.al",
+      "codeunit": "96012",
+      "tests": 10
+    },
+    {
+      "file": "test/Providers/LangModelTurnGuardTests.Codeunit.al",
+      "codeunit": "96022",
+      "tests": 13
+    },
+    {
+      "file": "test/Providers/LLMReqLogMaskerTests.Codeunit.al",
+      "codeunit": "96015",
+      "tests": 10
+    },
+    {
+      "file": "test/Providers/LM98ProbeTestsori.Codeunit.al",
+      "codeunit": "96052",
+      "tests": 7
+    },
+    {
+      "file": "test/Setup/LangModel60DefaultsTests.Codeunit.al",
+      "codeunit": "96031",
+      "tests": 18
+    },
+    {
+      "file": "test/Setup/LangModelFieldRestrictTests.Codeunit.al",
+      "codeunit": "96004",
+      "tests": 5
+    },
+    {
+      "file": "test/Setup/LangModelHintTests.Codeunit.al",
+      "codeunit": "96035",
+      "tests": 4
+    },
+    {
+      "file": "test/Setup/LangModelRegistrationTests.Codeunit.al",
+      "codeunit": "96016",
+      "tests": 2
+    },
+    {
+      "file": "test/Setup/LangModelSecretsTests.Codeunit.al",
+      "codeunit": "96009",
+      "tests": 19
+    },
+    {
+      "file": "test/Setup/LangModelSetupPageTests.Codeunit.al",
+      "codeunit": "96014",
+      "tests": 3
+    },
+    {
+      "file": "test/Setup/LangModelSetupWizardTests.Codeunit.al",
+      "codeunit": "96037",
+      "tests": 21
+    },
+    {
+      "file": "test/Setup/LangModelWizardRegTests.Codeunit.al",
+      "codeunit": "96040",
+      "tests": 5
+    },
+    {
+      "file": "test/Setup/LangModelWizardUsersTests.Codeunit.al",
+      "codeunit": "96038",
+      "tests": 8
+    },
+    {
+      "file": "test/TestTools/LangModelTestToolsTests.Codeunit.al",
+      "codeunit": "96028",
+      "tests": 13
+    }
+  ],
+  "total": 567
+}

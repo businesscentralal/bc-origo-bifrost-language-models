@@ -1,0 +1,422 @@
+{
+  "checks": {
+    "one_statement_per_line": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 491,
+          "file": "BifrostLangModelCard.Page.al",
+          "text": "local procedure ExecuteProvider(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\")"
+        },
+        {
+          "line": 501,
+          "file": "BifrostLangModelCard.Page.al",
+          "text": "local procedure GetProviderBool(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\"): Boolean"
+        },
+        {
+          "line": 507,
+          "file": "BifrostLangModelCard.Page.al",
+          "text": "local procedure GetProviderText(var Provider: Interface \"Bifrost LangModel Provider ori\"; var TempArgument: Record \"Bifrost Chat Argument ori\" temporary; ProcType: Enum \"Bifrost Chat Proc. Type ori\"): Text"
+        },
+        {
+          "line": 69,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "procedure Initialize(NewProvider: Interface \"Bifrost LangModel Provider ori\"; NewCallerTools: JsonObject; RequestedToolCalls: Integer; RequestedRounds: Integer; RequestedResultChars: Integer; NewSchema: JsonObject; NewHasSchema: Boolean; NewIncludeTrace: Boolean)"
+        },
+        {
+          "line": 222,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "procedure Run(var TempChatArg: Record \"Bifrost Chat Argument ori\" temporary; SystemSuffix: Text; UserContent: Text; RecordContext: JsonObject; HasRecordContext: Boolean; var Result: JsonObject): Boolean"
+        },
+        {
+          "line": 344,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "procedure GetRunCounters(var RoundsCount: Integer; var ToolCalls: Integer; var ToolErrors: Integer; var DeniedToolCalls: Integer)"
+        },
+        {
+          "line": 404,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure BuildPayload(Messages: JsonArray; SystemSuffix: Text; RecordContext: JsonObject; HasRecordContext: Boolean; Names: List of [Text]) Payload: JsonObject"
+        },
+        {
+          "line": 522,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure SendRound(var TempChatArg: Record \"Bifrost Chat Argument ori\" temporary; PayloadText: Text; var Answer: JsonObject): Boolean"
+        },
+        {
+          "line": 532,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure ContinueRound(var TempChatArg: Record \"Bifrost Chat Argument ori\" temporary; StateText: Text; ToolResultsText: Text; var Answer: JsonObject): Boolean"
+        },
+        {
+          "line": 622,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure AddTrace(ToolName: Text; Arguments: JsonObject; IsError: Boolean; Denied: Boolean; Duration: Duration; ResultText: Text)"
+        },
+        {
+          "line": 672,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure ClampLimit(KeyName: Text; Requested: Integer; DefaultValue: Integer; Cap: Integer): Integer"
+        },
+        {
+          "line": 683,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure ValidateAnswer(ReplyText: Text; var Data: JsonToken; var Errors: Text): Boolean"
+        },
+        {
+          "line": 746,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure ValidateNode(Node: JsonToken; Schema: JsonObject; Path: Text; var Errors: Text)"
+        },
+        {
+          "line": 840,
+          "file": "LLMAskRunner.Codeunit.al",
+          "text": "local procedure AddMessage(var Messages: JsonArray; Role: Text; Content: Text)"
+        },
+        {
+          "line": 582,
+          "file": "LLMPromptAskImpl.Codeunit.al",
+          "text": "local procedure ReadObject(Source: JsonObject; KeyName: Text; var Target: JsonObject; var BadKey: Text): Boolean"
+        },
+        {
+          "line": 595,
+          "file": "LLMPromptAskImpl.Codeunit.al",
+          "text": "local procedure ReadLimit(var Argument: Record \"Message Argument ori\"; Limits: JsonObject; KeyName: Text; var Value: Integer): Boolean"
+        },
+        {
+          "line": 34,
+          "file": "LLMStagingFiles.Codeunit.al",
+          "text": "procedure Resolve(var Argument: Record \"Message Argument ori\"; Request: JsonObject; Model: Record \"Bifrost Language Model ori\"; var Files: JsonArray): Boolean"
+        },
+        {
+          "line": 116,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure CallAnthropicDirect(var Messages: JsonArray; Model: Text; SystemPrompt: Text; ApiKey: SecretText; BaseUrl: Text; TimeoutMs: Integer; MaxTokens: Integer): Text"
+        },
+        {
+          "line": 213,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "procedure ContinueWithToolResults(var Argument: Record \"Bifrost Chat Argument ori\" temporary; ConversationState: Text; ToolResultsJson: Text): Text"
+        },
+        {
+          "line": 253,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure CallAnthropicOnce(var Messages: JsonArray; AnthropicTools: JsonArray; Model: Text; SystemPrompt: Text; ApiKey: SecretText; BaseUrl: Text; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer): Text"
+        },
+        {
+          "line": 308,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure OnBeforeMessagesPost(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)"
+        },
+        {
+          "line": 314,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure TrySendMessages(BaseUrl: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject)"
+        },
+        {
+          "line": 320,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure DoSendMessages(BaseUrl: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject) Response: JsonObject"
+        },
+        {
+          "line": 519,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure BuildToolCallsResponse(ContentArray: JsonArray; Messages: JsonArray; Model: Text; SystemPrompt: Text; Usage: JsonObject) ResponseJson: Text"
+        },
+        {
+          "line": 559,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text"
+        },
+        {
+          "line": 703,
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "text": "local procedure LogApiCall(Operation: Text[50]; HttpMethod: Text[10]; RequestUrl: Text; HttpStatus: Integer; Elapsed: Duration; RequestText: Text; ResponseText: Text)"
+        },
+        {
+          "line": 30,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure SendChatMessage(var Argument: Record \"Bifrost Chat Argument ori\" temporary; PayloadJson: Text; AuthHeaderName: Text): Text"
+        },
+        {
+          "line": 41,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure SendChatMessage(var Argument: Record \"Bifrost Chat Argument ori\" temporary; PayloadJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 86,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure ContinueWithToolResults(var Argument: Record \"Bifrost Chat Argument ori\" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text): Text"
+        },
+        {
+          "line": 97,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure ContinueWithToolResults(var Argument: Record \"Bifrost Chat Argument ori\" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 135,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure CallModelOnce(var ApiClient: Codeunit \"LangModel API Client ori\"; ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer; var Messages: JsonArray; OpenAITools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 395,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure TrySendToModel(var ApiClient: Codeunit \"LangModel API Client ori\"; ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject)"
+        },
+        {
+          "line": 432,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure BuildToolCallsResponse(ToolCallsArray: JsonArray; Messages: JsonArray; Model: Text; Usage: JsonObject; ExtraRequestFields: JsonObject) ResponseJson: Text"
+        },
+        {
+          "line": 482,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure BuildSuccessResponse(Reply: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text"
+        },
+        {
+          "line": 563,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure SendChatMessageResponses(var Argument: Record \"Bifrost Chat Argument ori\" temporary; PayloadJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 612,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "procedure ContinueWithToolResultsResponses(var Argument: Record \"Bifrost Chat Argument ori\" temporary; ConversationState: Text; ToolResultsJson: Text; AuthHeaderName: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 648,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure CallResponsesOnce(var ApiClient: Codeunit \"LangModel API Client ori\"; Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; MaxTokens: Integer; ContextTokens: Integer; var Input: JsonArray; ResponsesTools: JsonArray; Model: Text; ExtraRequestFields: JsonObject): Text"
+        },
+        {
+          "line": 758,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure BuildResponsesToolCallsResponse(ToolCalls: JsonArray; Input: JsonArray; Model: Text; Usage: JsonObject; StopReason: Text) ResponseJson: Text"
+        },
+        {
+          "line": 806,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure AddResponsesInputItem(var Input: JsonArray; Role: Text; Content: Text)"
+        },
+        {
+          "line": 901,
+          "file": "LangModelChatProxy.Codeunit.al",
+          "text": "local procedure AddResponsesFunctionCallOutput(var Input: JsonArray; CallId: Text; Output: Text)"
+        }
+      ]
+    },
+    "app_json": {
+      "pass": true,
+      "findings": []
+    },
+    "set_load_fields": {
+      "pass": true,
+      "findings": [],
+      "advisory": "Loops without SetLoadFields - consider it only for wide tables; not a gate failure"
+    },
+    "modernization": {
+      "pass": true,
+      "findings": []
+    },
+    "format_guid": {
+      "pass": true,
+      "findings": []
+    },
+    "today_vs_workdate": {
+      "pass": true,
+      "findings": []
+    },
+    "global_variables": {
+      "pass": false,
+      "findings": [
+        {
+          "count": 29,
+          "names": "AskPolicy, ToolServer, Provider, StagedFiles, CallerTools, ResponseSchema",
+          "file": "LLMAskRunner.Codeunit.al",
+          "issue": "Object has 29 global variables (recommended max: 3-5 non-Label vars)"
+        },
+        {
+          "count": 8,
+          "names": "ToolServer, SessionTime, ChatUtils, ProviderBase, TurnGuard, AskPolicy",
+          "file": "AnthropicLangModelProxy.Codeunit.al",
+          "issue": "Object has 8 global variables (recommended max: 3-5 non-Label vars)"
+        },
+        {
+          "count": 7,
+          "names": "ToolServer, SessionTime, ChatUtils, TurnGuard, AskPolicy, AllowedTools",
+          "file": "LangModelChatProxy.Codeunit.al",
+          "issue": "Object has 7 global variables (recommended max: 3-5 non-Label vars)"
+        }
+      ]
+    },
+    "format_evaluate_enum": {
+      "pass": true,
+      "findings": []
+    },
+    "reserved_var_names": {
+      "pass": true,
+      "findings": []
+    },
+    "changelog": {
+      "pass": false,
+      "findings": [
+        "No entry for version 28.0.3.0"
+      ]
+    },
+    "namespace": {
+      "pass": true,
+      "findings": []
+    },
+    "caption_translation": {
+      "pass": true,
+      "skipped": null,
+      "findings": []
+    },
+    "commit_in_loop": {
+      "pass": true,
+      "findings": []
+    },
+    "object_naming": {
+      "pass": true,
+      "findings": []
+    },
+    "read_isolation": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 55,
+          "text": "if OtherRole.FindFirst() then",
+          "file": "BifrostLanguageModel.Table.al",
+          "variable": "OtherRole"
+        }
+      ]
+    },
+    "try_prefix_convention": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 116,
+          "procedure": "TryExtractHtml",
+          "file": "LLMAskRunner.Codeunit.al",
+          "issue": "Procedure 'TryExtractHtml' uses Try prefix but has no [TryFunction] attribute"
+        }
+      ]
+    },
+    "page_code_minimal": {
+      "pass": true,
+      "findings": []
+    },
+    "data_classification": {
+      "pass": true,
+      "findings": []
+    },
+    "xml_doc_comments": {
+      "pass": false,
+      "findings": [
+        {
+          "line": 143,
+          "procedure": "AddWarning",
+          "file": "LLMAskRunner.Codeunit.al"
+        },
+        {
+          "line": 222,
+          "procedure": "Run",
+          "file": "LLMAskRunner.Codeunit.al"
+        },
+        {
+          "line": 330,
+          "procedure": "ExecuteBifrostTask",
+          "file": "LLMPromptAskImpl.Codeunit.al"
+        },
+        {
+          "line": 307,
+          "procedure": "ExecuteBifrostTask",
+          "file": "LLMPromptComplImpl.Codeunit.al"
+        },
+        {
+          "line": 34,
+          "procedure": "Resolve",
+          "file": "LLMStagingFiles.Codeunit.al"
+        },
+        {
+          "line": 37,
+          "procedure": "SendChatMessage",
+          "file": "AnthropicLangModelProxy.Codeunit.al"
+        },
+        {
+          "line": 75,
+          "procedure": "CompletePrompt",
+          "file": "AnthropicLangModelProxy.Codeunit.al"
+        },
+        {
+          "line": 213,
+          "procedure": "ContinueWithToolResults",
+          "file": "AnthropicLangModelProxy.Codeunit.al"
+        },
+        {
+          "line": 373,
+          "procedure": "ListModels",
+          "file": "AnthropicLangModelProxy.Codeunit.al"
+        },
+        {
+          "line": 30,
+          "procedure": "SendChatMessage",
+          "file": "LangModelChatProxy.Codeunit.al"
+        },
+        {
+          "line": 41,
+          "procedure": "SendChatMessage",
+          "file": "LangModelChatProxy.Codeunit.al"
+        },
+        {
+          "line": 86,
+          "procedure": "ContinueWithToolResults",
+          "file": "LangModelChatProxy.Codeunit.al"
+        },
+        {
+          "line": 97,
+          "procedure": "ContinueWithToolResults",
+          "file": "LangModelChatProxy.Codeunit.al"
+        },
+        {
+          "line": 563,
+          "procedure": "SendChatMessageResponses",
+          "file": "LangModelChatProxy.Codeunit.al"
+        },
+        {
+          "line": 612,
+          "procedure": "ContinueWithToolResultsResponses",
+          "file": "LangModelChatProxy.Codeunit.al"
+        }
+      ]
+    },
+    "hardcoded_values": {
+      "pass": true,
+      "findings": []
+    },
+    "event_subscriber_placement": {
+      "pass": true,
+      "findings": []
+    },
+    "with_statements": {
+      "pass": true,
+      "findings": []
+    },
+    "confirm_in_page": {
+      "pass": true,
+      "findings": []
+    }
+  },
+  "project": "Bifrost Language Models",
+  "mode": "diff (vs origin/main)",
+  "summary": {
+    "total": 23,
+    "failed": 6,
+    "ready": false,
+    "passed": 17
+  },
+  "total_al_files": 97,
+  "publisher": "Origo",
+  "version": "28.0.3.0",
+  "files_scanned": 13
+}

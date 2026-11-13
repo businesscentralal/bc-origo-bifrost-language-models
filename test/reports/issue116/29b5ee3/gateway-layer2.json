@@ -1,0 +1,36 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "target": "main",
+  "amendmentBase": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "filesChanged": 4,
+  "implementation": "Only internal related-help type literal changed. Test registry now injected with exact shipped name; duplicate test enum removed. CHANGELOG updated.",
+  "layer1": {
+    "filesScanned": 13,
+    "rawPassed": 17,
+    "rawFailed": 6,
+    "dispositions": {
+      "one_statement_per_line": "All findings are semicolons separating AL procedure parameters, not multiple executable statements.",
+      "xml_doc_comments": "Resolve has summary + param + returns already; parser fixed lookback misses preceding summary. Other findings predate this amendment.",
+      "changelog": "Current Unreleased entry with date/issue/object IDs present; no new release heading because version is unchanged.",
+      "read_isolation": "OtherRole.FindFirst is single-record validation in unchanged table code; no scan or write-isolation change in amendment.",
+      "global_variables": "Advice for unchanged runner/proxy state machines.",
+      "try_prefix_convention": "TryExtractHtml returns Boolean and intentionally reports failure without exception; no TryFunction semantic required."
+    }
+  },
+  "layer2": {
+    "compile": "App and test with CodeCop/UICop/AppSourceCop 0errors0warnings",
+    "namingIds": "No new object IDs; new test method in existing codeunit96071.",
+    "breakingChanges": "Exact-tip candidate compiled with CodeCop/UICop/AppSourceCop against locally built main17fa494 baseline, 0 errors and 0 warnings; details compatibility/summary.json. No product public API removal/signature change; removed duplicate test-only enum registration.",
+    "manifestDependencies": "No manifest/dependency change; Foundation28.0.13.0 public facade only. Attachments optional at runtime.",
+    "docsXlf": "CHANGELOG lists corrected shipped type/codeunits. No new translated labels; Test-IcelandicXlfInSync passes. Help chapters remain English by established contract.",
+    "tests": "Source inventory567tests/39codeunits. First full run567passed0failed0skipped at29b5ee3. Second full run pending.",
+    "logic": "Both Ask/Complete share exact registered names only. Actual Attachments28.3.3.0 installed on own tenant: live help4/4passed in1033/1039 including CopyToStaging; unshipped name absent.",
+    "roles": "No new runtime object or permission requirement.",
+    "limitations": "No live two-authenticated-user scenario, per Architect1794519937.523119. Per-file cap advisory remains unchanged. New-tip verification pending."
+  },
+  "reviewLessonIds": [
+    "lm124-ac07-shipped-registry-name-dainn-20261113",
+    "reginn-lm124-incomplete-claude-receipt-header-20261113",
+    "core1208-worker10-help-contract-language-oracle-20261101"
+  ]
+}

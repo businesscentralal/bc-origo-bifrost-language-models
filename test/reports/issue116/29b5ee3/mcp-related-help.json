@@ -1,0 +1,58 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "rows": [
+    {
+      "type": "LLM.Prompt.Ask",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"LLM.Prompt.Ask\",\n  \"status\": \"Success\",\n  \"contract\": \"json\",\n  \"format\": \"chapters\",\n  \"catalogue\": {\n    \"name\": \"LLM.Prompt.Ask\",\n    \"isEnabled\": true,\n    \"filterTableNo\": 0,\n    \"description\": \"Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.\",\n    \"selectionDescription\": \"Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed.\",\n    \"messageDirection\": \"Outbound\",\n    \"keywords\": [\n      \"ask ai\",\n      \"ask a language model\",\n      \"headless ai\",\n      \"ai check step\",\n      \"playbook check\",\n      \"verify setup with ai\",\n      \"read-only tools\",\n      \"tool loop\",\n      \"llm\",\n      \"language model\",\n      \"question answering\"\n    ],\n    \"chargeable\": true\n  },\n  \"chapters\": {\n    \"related\": [\n      {\n        \"name\": \"LLM.Prompt.Complete\",\n        \"useInsteadWhen\": \"The sibling without tools: one prompt, one answer, when the prompt already holds the data.\"\n      },\n      {\n        \"name\": \"Data.Records.Get\",\n        \"useInsteadWhen\": \"Read the data yourself and send it as context when the question needs no lookup.\"\n      },\n      {\n        \"name\": \"Storage.Upload.CommitToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      },\n      {\n        \"name\": \"Storage.File.CopyToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      }\n    ]\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"LLM.Prompt.Complete\",\n  \"status\": \"Success\",\n  \"contract\": \"json\",\n  \"format\": \"chapters\",\n  \"catalogue\": {\n    \"name\": \"LLM.Prompt.Complete\",\n    \"isEnabled\": true,\n    \"filterTableNo\": 0,\n    \"description\": \"Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.\",\n    \"selectionDescription\": \"Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data.\",\n    \"messageDirection\": \"Outbound\",\n    \"keywords\": [\n      \"one-shot ai completion\",\n      \"prompt completion\",\n      \"generate text\",\n      \"transform text\",\n      \"classify text\",\n      \"extract data\",\n      \"summarize text\",\n      \"playbook reasoning\",\n      \"scheduled task ai\",\n      \"language model\",\n      \"llm\",\n      \"ask ai\",\n      \"read document with ai\",\n      \"read image with ai\"\n    ],\n    \"chargeable\": true\n  },\n  \"chapters\": {\n    \"related\": [\n      {\n        \"name\": \"Data.Records.Get\",\n        \"useInsteadWhen\": \"Read Business Central data first, then use the returned values in the prompt.\"\n      },\n      {\n        \"name\": \"Data.Records.Set\",\n        \"useInsteadWhen\": \"Use the completion as input for structured record updates only after validating the generated values.\"\n      },\n      {\n        \"name\": \"Storage.Upload.CommitToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      },\n      {\n        \"name\": \"Storage.File.CopyToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      }\n    ]\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"LLM.Prompt.Ask\",\n  \"status\": \"Success\",\n  \"contract\": \"json\",\n  \"format\": \"chapters\",\n  \"catalogue\": {\n    \"name\": \"LLM.Prompt.Ask\",\n    \"isEnabled\": true,\n    \"filterTableNo\": 0,\n    \"description\": \"Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.\",\n    \"selectionDescription\": \"Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.\",\n    \"messageDirection\": \"Outbound\",\n    \"keywords\": [\n      \"spyrja gervigreind\",\n      \"spyrja mállíkan\",\n      \"gervigreind án notanda\",\n      \"athugunarskref með gervigreind\",\n      \"athugun í verkferli\",\n      \"sannreyna uppsetningu með gervigreind\",\n      \"verkfæri sem aðeins lesa\",\n      \"verkfæralykkja\",\n      \"llm\",\n      \"mállíkan\",\n      \"svara spurningum\"\n    ],\n    \"chargeable\": true\n  },\n  \"chapters\": {\n    \"related\": [\n      {\n        \"name\": \"LLM.Prompt.Complete\",\n        \"useInsteadWhen\": \"The sibling without tools: one prompt, one answer, when the prompt already holds the data.\"\n      },\n      {\n        \"name\": \"Data.Records.Get\",\n        \"useInsteadWhen\": \"Read the data yourself and send it as context when the question needs no lookup.\"\n      },\n      {\n        \"name\": \"Storage.Upload.CommitToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      },\n      {\n        \"name\": \"Storage.File.CopyToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      }\n    ]\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"LLM.Prompt.Complete\",\n  \"status\": \"Success\",\n  \"contract\": \"json\",\n  \"format\": \"chapters\",\n  \"catalogue\": {\n    \"name\": \"LLM.Prompt.Complete\",\n    \"isEnabled\": true,\n    \"filterTableNo\": 0,\n    \"description\": \"Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.\",\n    \"selectionDescription\": \"Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.\",\n    \"messageDirection\": \"Outbound\",\n    \"keywords\": [\n      \"einskots gervigreindarúrvinnsla\",\n      \"úrvinnsla kvaðningar\",\n      \"búa til texta\",\n      \"umbreyta texta\",\n      \"flokka texta\",\n      \"draga gögn út\",\n      \"draga saman texta\",\n      \"röksemdafærsla í verkferli\",\n      \"gervigreind í tímasettu bakgrunnsverkefni\",\n      \"mállíkan\",\n      \"llm\",\n      \"spyrja gervigreind\",\n      \"lesa skjal með gervigreind\",\n      \"lesa mynd með gervigreind\"\n    ],\n    \"chargeable\": true\n  },\n  \"chapters\": {\n    \"related\": [\n      {\n        \"name\": \"Data.Records.Get\",\n        \"useInsteadWhen\": \"Read Business Central data first, then use the returned values in the prompt.\"\n      },\n      {\n        \"name\": \"Data.Records.Set\",\n        \"useInsteadWhen\": \"Use the completion as input for structured record updates only after validating the generated values.\"\n      },\n      {\n        \"name\": \"Storage.Upload.CommitToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      },\n      {\n        \"name\": \"Storage.File.CopyToStaging\",\n        \"useInsteadWhen\": \"Put the file in Foundation staging, then send the returned stagingId in attachments.\"\n      }\n    ]\n  }\n}"
+          }
+        ]
+      }
+    }
+  ]
+}

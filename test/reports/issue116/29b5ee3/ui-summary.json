@@ -1,0 +1,37 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "verified": true,
+  "lcids": [
+    1033,
+    1039
+  ],
+  "scenarios": [
+    {
+      "lcid": 1033,
+      "fixture": "X116-D7-UI",
+      "action": "Created owned model, edit/save/back/reopen Attachment Limit Bytes",
+      "value": 12345,
+      "passed": true,
+      "evidence": "ui-1033-reload.json"
+    },
+    {
+      "lcid": 1039,
+      "fixture": "X116-D7-UI",
+      "action": "Verified translated caption; edit/save/back/navigate-to-bookmark/reopen",
+      "caption": "St\u00e6r\u00f0arm\u00f6rk vi\u00f0hengja \u00ed b\u00e6tum",
+      "value": 23456,
+      "passed": true,
+      "evidence": "ui-1039-reload.json"
+    }
+  ],
+  "restoredLanguage": "English (United States)",
+  "restoredLanguageEvidence": "ui-language-restored.json",
+  "providerCalls": 0,
+  "realCredentialsWritten": false,
+  "screenshots": [
+    "ui-1033-model-limit.png",
+    "ui-1039-model-limit.png"
+  ],
+  "cleanup": "cleanup-final.json: verified; model, empty registrations, staging fixtures and candidate apps removed"
+}

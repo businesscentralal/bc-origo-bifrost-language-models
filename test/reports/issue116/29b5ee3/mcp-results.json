@@ -1,0 +1,1134 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "startedAt": "2026-11-13T10:37:48.189Z",
+  "scenarios": [
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "text",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Success",
+          "answer": "fixture accepted",
+          "stopReason": "completed",
+          "toolCalls": 0,
+          "toolErrors": 0,
+          "deniedToolCalls": 0,
+          "rounds": 1,
+          "model": {
+            "code": "T116-19E2C7F25E914AA",
+            "provider": "Mock",
+            "model": ""
+          },
+          "warnings": [
+            "sessionTimeUnavailable",
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "multiple",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Success",
+          "answer": "fixture accepted",
+          "stopReason": "completed",
+          "toolCalls": 0,
+          "toolErrors": 0,
+          "deniedToolCalls": 0,
+          "rounds": 1,
+          "model": {
+            "code": "T116-F75D6CE7027E4A9",
+            "provider": "Mock",
+            "model": ""
+          },
+          "warnings": [
+            "sessionTimeUnavailable",
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          },
+          {
+            "data": "c2Vjb25kIGZpbGUgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "second.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "unknown",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "8BE2A0E9-3D33-478E-8B03-B3FB94D87116",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "consumed",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "63B8D63E-4EDF-F111-B6FB-00090FFE0001",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "foreign",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "D2191D7A-ABD5-4AD3-8DDD-C7838720C991",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "mime",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "InvalidParameter",
+          "error": "The attachment content type is not supported.",
+          "parameter": "attachments[1].stagingId",
+          "received": "application/zip",
+          "expected": "text/*, application/pdf, image/png, image/jpeg",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "LimitExceeded",
+          "error": "The total attachment size exceeds the language model limit.",
+          "parameter": "attachments",
+          "received": "19",
+          "expected": "at most 1 bytes",
+          "nextStep": "Send smaller files or ask your administrator to change the model attachment limit.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "extra",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "UnknownParameter",
+          "error": "The attachment contains an unknown parameter.",
+          "parameter": "attachments[1].data",
+          "expected": "stagingId",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type.",
+          "warnings": [
+            {
+              "code": "UnknownParameter",
+              "message": "Parameter \"attachments[0].data\" is not declared by this message type and may be ignored.",
+              "parameter": "attachments[0].data",
+              "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters."
+            }
+          ]
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "registered-related-help",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "LLM.Prompt.Ask",
+        "status": "Success",
+        "contract": "json",
+        "format": "chapters",
+        "catalogue": {
+          "name": "LLM.Prompt.Ask",
+          "isEnabled": true,
+          "filterTableNo": 0,
+          "description": "Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.",
+          "selectionDescription": "Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed.",
+          "messageDirection": "Outbound",
+          "keywords": [
+            "ask ai",
+            "ask a language model",
+            "headless ai",
+            "ai check step",
+            "playbook check",
+            "verify setup with ai",
+            "read-only tools",
+            "tool loop",
+            "llm",
+            "language model",
+            "question answering"
+          ],
+          "chargeable": true
+        },
+        "chapters": {
+          "related": [
+            {
+              "name": "LLM.Prompt.Complete",
+              "useInsteadWhen": "The sibling without tools: one prompt, one answer, when the prompt already holds the data."
+            },
+            {
+              "name": "Data.Records.Get",
+              "useInsteadWhen": "Read the data yourself and send it as context when the question needs no lookup."
+            },
+            {
+              "name": "Storage.Upload.CommitToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            },
+            {
+              "name": "Storage.File.CopyToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "text",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "reply": "fixture accepted",
+          "status": "Success",
+          "text": "fixture accepted",
+          "warnings": [
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "multiple",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "reply": "fixture accepted",
+          "status": "Success",
+          "text": "fixture accepted",
+          "warnings": [
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          },
+          {
+            "data": "c2Vjb25kIGZpbGUgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "second.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "unknown",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "26DF69B1-D054-46BC-8ECD-5D7562396C3A",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "consumed",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "CD10D144-4EDF-F111-B6FB-00090FFE0001",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "foreign",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "The staged upload was not found.",
+          "parameter": "attachments[1].stagingId",
+          "received": "D2191D7A-ABD5-4AD3-8DDD-C7838720C991",
+          "expected": "an unused stagingId owned by the caller",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "mime",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "InvalidParameter",
+          "error": "The attachment content type is not supported.",
+          "parameter": "attachments[1].stagingId",
+          "received": "application/zip",
+          "expected": "text/*, application/pdf, image/png, image/jpeg",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "limit",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "LimitExceeded",
+          "error": "The total attachment size exceeds the language model limit.",
+          "parameter": "attachments",
+          "received": "19",
+          "expected": "at most 1 bytes",
+          "nextStep": "Send smaller files or ask your administrator to change the model attachment limit.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "extra",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "UnknownParameter",
+          "error": "The attachment contains an unknown parameter.",
+          "parameter": "attachments[1].data",
+          "expected": "stagingId",
+          "nextStep": "Upload the file again and send its new stagingId.",
+          "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Complete\". Always read the help before calling a message type.",
+          "warnings": [
+            {
+              "code": "UnknownParameter",
+              "message": "Parameter \"attachments[0].data\" is not declared by this message type and may be ignored.",
+              "parameter": "attachments[0].data",
+              "nextStep": "Remove this key or consult Help.Implementation.Get for the declared parameters."
+            }
+          ]
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "registered-related-help",
+      "lcid": 1033,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "LLM.Prompt.Complete",
+        "status": "Success",
+        "contract": "json",
+        "format": "chapters",
+        "catalogue": {
+          "name": "LLM.Prompt.Complete",
+          "isEnabled": true,
+          "filterTableNo": 0,
+          "description": "Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.",
+          "selectionDescription": "Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data.",
+          "messageDirection": "Outbound",
+          "keywords": [
+            "one-shot ai completion",
+            "prompt completion",
+            "generate text",
+            "transform text",
+            "classify text",
+            "extract data",
+            "summarize text",
+            "playbook reasoning",
+            "scheduled task ai",
+            "language model",
+            "llm",
+            "ask ai",
+            "read document with ai",
+            "read image with ai"
+          ],
+          "chargeable": true
+        },
+        "chapters": {
+          "related": [
+            {
+              "name": "Data.Records.Get",
+              "useInsteadWhen": "Read Business Central data first, then use the returned values in the prompt."
+            },
+            {
+              "name": "Data.Records.Set",
+              "useInsteadWhen": "Use the completion as input for structured record updates only after validating the generated values."
+            },
+            {
+              "name": "Storage.Upload.CommitToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            },
+            {
+              "name": "Storage.File.CopyToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "text",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Success",
+          "answer": "fixture accepted",
+          "stopReason": "completed",
+          "toolCalls": 0,
+          "toolErrors": 0,
+          "deniedToolCalls": 0,
+          "rounds": 1,
+          "model": {
+            "code": "T116-342B5E36C3BD43B",
+            "provider": "Mock",
+            "model": ""
+          },
+          "warnings": [
+            "sessionTimeUnavailable",
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "multiple",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Success",
+          "answer": "fixture accepted",
+          "stopReason": "completed",
+          "toolCalls": 0,
+          "toolErrors": 0,
+          "deniedToolCalls": 0,
+          "rounds": 1,
+          "model": {
+            "code": "T116-0538B27804224F6",
+            "provider": "Mock",
+            "model": ""
+          },
+          "warnings": [
+            "sessionTimeUnavailable",
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          },
+          {
+            "data": "c2Vjb25kIGZpbGUgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "second.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "unknown",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "5D666A3B-A892-458B-8825-D5390772C777",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "consumed",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "0E11D144-4EDF-F111-B6FB-00090FFE0001",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "foreign",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "D2191D7A-ABD5-4AD3-8DDD-C7838720C991",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "mime",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "InvalidParameter",
+          "error": "Efnisgerð viðhengisins er ekki studd.",
+          "parameter": "attachments[1].stagingId",
+          "received": "application/zip",
+          "expected": "text/*, application/pdf, image/png, image/jpeg",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "LimitExceeded",
+          "error": "Heildarstærð viðhengja er yfir mörkum mállíkansins.",
+          "parameter": "attachments",
+          "received": "19",
+          "expected": "í mesta lagi 1 bæti",
+          "nextStep": "Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "extra",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "UnknownParameter",
+          "error": "Viðhengið inniheldur óþekkta færibreytu.",
+          "parameter": "attachments[1].data",
+          "expected": "stagingId",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Ask\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund.",
+          "warnings": [
+            {
+              "code": "UnknownParameter",
+              "message": "Viðfangið \"attachments[0].data\" er ekki skilgreint fyrir þessa skilaboðategund og kann að vera hunsað.",
+              "parameter": "attachments[0].data",
+              "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng."
+            }
+          ]
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "registered-related-help",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "LLM.Prompt.Ask",
+        "status": "Success",
+        "contract": "json",
+        "format": "chapters",
+        "catalogue": {
+          "name": "LLM.Prompt.Ask",
+          "isEnabled": true,
+          "filterTableNo": 0,
+          "description": "Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.",
+          "selectionDescription": "Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.",
+          "messageDirection": "Outbound",
+          "keywords": [
+            "spyrja gervigreind",
+            "spyrja mállíkan",
+            "gervigreind án notanda",
+            "athugunarskref með gervigreind",
+            "athugun í verkferli",
+            "sannreyna uppsetningu með gervigreind",
+            "verkfæri sem aðeins lesa",
+            "verkfæralykkja",
+            "llm",
+            "mállíkan",
+            "svara spurningum"
+          ],
+          "chargeable": true
+        },
+        "chapters": {
+          "related": [
+            {
+              "name": "LLM.Prompt.Complete",
+              "useInsteadWhen": "The sibling without tools: one prompt, one answer, when the prompt already holds the data."
+            },
+            {
+              "name": "Data.Records.Get",
+              "useInsteadWhen": "Read the data yourself and send it as context when the question needs no lookup."
+            },
+            {
+              "name": "Storage.Upload.CommitToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            },
+            {
+              "name": "Storage.File.CopyToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "text",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "reply": "fixture accepted",
+          "status": "Success",
+          "text": "fixture accepted",
+          "warnings": [
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "multiple",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "reply": "fixture accepted",
+          "status": "Success",
+          "text": "fixture accepted",
+          "warnings": [
+            "sessionTimeUnavailable"
+          ]
+        },
+        "providerCalled": true,
+        "providerFiles": [
+          {
+            "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "lm116.txt"
+          },
+          {
+            "data": "c2Vjb25kIGZpbGUgZml4dHVyZQ==",
+            "mimeType": "text/plain",
+            "fileName": "second.txt"
+          }
+        ],
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "unknown",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "266DC1FB-2792-4BDA-8330-74F5A37E72C1",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "consumed",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "5611D144-4EDF-F111-B6FB-00090FFE0001",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "foreign",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "RecordNotFound",
+          "error": "Upphlaðna skjalið fannst ekki í biðgeymslu.",
+          "parameter": "attachments[1].stagingId",
+          "received": "D2191D7A-ABD5-4AD3-8DDD-C7838720C991",
+          "expected": "ónotað stagingId í eigu kallandans",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "mime",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "InvalidParameter",
+          "error": "Efnisgerð viðhengisins er ekki studd.",
+          "parameter": "attachments[1].stagingId",
+          "received": "application/zip",
+          "expected": "text/*, application/pdf, image/png, image/jpeg",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "limit",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "LimitExceeded",
+          "error": "Heildarstærð viðhengja er yfir mörkum mállíkansins.",
+          "parameter": "attachments",
+          "received": "19",
+          "expected": "í mesta lagi 1 bæti",
+          "nextStep": "Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund."
+        },
+        "providerCalled": false,
+        "firstConsumed": true,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "extra",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "promptResponse": {
+          "status": "Error",
+          "code": "UnknownParameter",
+          "error": "Viðhengið inniheldur óþekkta færibreytu.",
+          "parameter": "attachments[1].data",
+          "expected": "stagingId",
+          "nextStep": "Hladdu skránni upp aftur og sendu nýtt stagingId hennar.",
+          "hint": "Til að sjá notkunarupplýsingar skaltu kalla á skilaboðategundina \"Help.Implementation.Get\" með subject \"LLM.Prompt.Complete\". Lestu alltaf hjálpina áður en þú kallar á skilaboðategund.",
+          "warnings": [
+            {
+              "code": "UnknownParameter",
+              "message": "Viðfangið \"attachments[0].data\" er ekki skilgreint fyrir þessa skilaboðategund og kann að vera hunsað.",
+              "parameter": "attachments[0].data",
+              "nextStep": "Fjarlægðu þennan lykil eða skoðaðu Help.Implementation.Get til að sjá skilgreind viðföng."
+            }
+          ]
+        },
+        "providerCalled": false,
+        "firstConsumed": false,
+        "cleanupVerified": true,
+        "status": "Success"
+      }
+    },
+    {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "registered-related-help",
+      "lcid": 1039,
+      "passed": true,
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "LLM.Prompt.Complete",
+        "status": "Success",
+        "contract": "json",
+        "format": "chapters",
+        "catalogue": {
+          "name": "LLM.Prompt.Complete",
+          "isEnabled": true,
+          "filterTableNo": 0,
+          "description": "Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.",
+          "selectionDescription": "Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.",
+          "messageDirection": "Outbound",
+          "keywords": [
+            "einskots gervigreindarúrvinnsla",
+            "úrvinnsla kvaðningar",
+            "búa til texta",
+            "umbreyta texta",
+            "flokka texta",
+            "draga gögn út",
+            "draga saman texta",
+            "röksemdafærsla í verkferli",
+            "gervigreind í tímasettu bakgrunnsverkefni",
+            "mállíkan",
+            "llm",
+            "spyrja gervigreind",
+            "lesa skjal með gervigreind",
+            "lesa mynd með gervigreind"
+          ],
+          "chargeable": true
+        },
+        "chapters": {
+          "related": [
+            {
+              "name": "Data.Records.Get",
+              "useInsteadWhen": "Read Business Central data first, then use the returned values in the prompt."
+            },
+            {
+              "name": "Data.Records.Set",
+              "useInsteadWhen": "Use the completion as input for structured record updates only after validating the generated values."
+            },
+            {
+              "name": "Storage.Upload.CommitToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            },
+            {
+              "name": "Storage.File.CopyToStaging",
+              "useInsteadWhen": "Put the file in Foundation staging, then send the returned stagingId in attachments."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "passed": 36,
+  "failed": 0,
+  "skipped": 0,
+  "createsOwnData": true,
+  "finishedAt": "2026-11-13T10:37:51.660Z"
+}

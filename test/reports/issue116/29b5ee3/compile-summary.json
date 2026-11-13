@@ -1,0 +1,24 @@
+[
+  {
+    "lane": "app",
+    "sourceSha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+    "workingDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "version": "28.0.3.0",
+    "appPath": "/workspace/private/lm116-amend-evidence/app.app",
+    "sha256": "f9ef43c1071604642a87f4f6c187fbcec3bcb33a429d775fe9e848b9ef056d8f"
+  },
+  {
+    "lane": "test",
+    "sourceSha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+    "workingDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "version": "28.0.3.0",
+    "appPath": "/workspace/private/lm116-amend-evidence/test.app",
+    "sha256": "a5036900209deba13b117f1bc0c48218971802c84b133a3050d29a3e71ec0ad6"
+  }
+]

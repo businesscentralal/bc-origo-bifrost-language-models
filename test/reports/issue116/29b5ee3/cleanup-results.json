@@ -1,0 +1,95 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "startedAt": "2026-11-13T10:41:49.332Z",
+  "steps": [
+    {
+      "name": "invoke_message_type",
+      "args": {
+        "type": "Test.LLM116.Probe",
+        "data": {
+          "scenario": "cleanupForeign"
+        }
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LLM116.Probe",
+        "cleanupVerified": true,
+        "deleted": 1,
+        "status": "Success"
+      }
+    },
+    {
+      "name": "get_records",
+      "args": {
+        "table": "Bifrost Language Model ori",
+        "filter": "WHERE(Code=FILTER(T116-*|LM116-MOCK|X116-D7-UI))",
+        "fields": [
+          "Code"
+        ],
+        "take": 1000
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "table": "Bifrost Language Model ori",
+        "skip": 0,
+        "take": 1000,
+        "count": 1,
+        "records": [
+          {
+            "id": "D589DA38-4EDF-F111-B6FB-00090FFE0001",
+            "primaryKey": {
+              "Code": "X116-D7-UI"
+            },
+            "fields": {}
+          }
+        ],
+        "noOfRecords": 1
+      }
+    },
+    {
+      "name": "get_records",
+      "args": {
+        "table": "App Secret ori",
+        "filter": "WHERE(Secret Code=FILTER(LANGMODEL-X116-D7-UI-*|LANGMODEL-LM116-MOCK-*))",
+        "fields": [
+          "App Id",
+          "Secret Code",
+          "Is Set"
+        ],
+        "take": 100
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "table": "App Secret ori",
+        "skip": 0,
+        "take": 100,
+        "count": 2,
+        "records": [
+          {
+            "id": "D689DA38-4EDF-F111-B6FB-00090FFE0001",
+            "primaryKey": {
+              "AppId": "F1722684-0C24-4022-A2E0-0F63154ACA76",
+              "SecretCode": "LANGMODEL-X116-D7-UI-API-KEY"
+            },
+            "fields": {
+              "IsSet": "false"
+            }
+          },
+          {
+            "id": "D789DA38-4EDF-F111-B6FB-00090FFE0001",
+            "primaryKey": {
+              "AppId": "F1722684-0C24-4022-A2E0-0F63154ACA76",
+              "SecretCode": "LANGMODEL-X116-D7-UI-USER-API-KEY"
+            },
+            "fields": {
+              "IsSet": "false"
+            }
+          }
+        ],
+        "noOfRecords": 2
+      }
+    }
+  ],
+  "finishedAt": "2026-11-13T10:41:49.939Z"
+}

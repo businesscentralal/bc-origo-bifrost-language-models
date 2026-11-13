@@ -1,0 +1,339 @@
+{
+  "sha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+  "tenant": "w129-17",
+  "startedAt": "2026-11-13T10:44:49.942Z",
+  "steps": [
+    {
+      "name": "invoke_message_type",
+      "args": {
+        "type": "Test.LanguageModel.Delete",
+        "data": {
+          "codes": [
+            "X116-D7-UI"
+          ]
+        }
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.LanguageModel.Delete",
+        "status": "Success",
+        "deleted": [
+          "X116-D7-UI"
+        ],
+        "notFound": []
+      }
+    },
+    {
+      "name": "get_records",
+      "args": {
+        "table": "App Secret ori",
+        "filter": "WHERE(Secret Code=FILTER(LANGMODEL-X116-D7-UI-*))",
+        "fields": [
+          "App Id",
+          "Secret Code",
+          "Is Set"
+        ],
+        "take": 100
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "table": "App Secret ori",
+        "skip": 0,
+        "take": 100,
+        "count": 2,
+        "records": [
+          {
+            "id": "D689DA38-4EDF-F111-B6FB-00090FFE0001",
+            "primaryKey": {
+              "AppId": "F1722684-0C24-4022-A2E0-0F63154ACA76",
+              "SecretCode": "LANGMODEL-X116-D7-UI-API-KEY"
+            },
+            "fields": {
+              "IsSet": "false"
+            }
+          },
+          {
+            "id": "D789DA38-4EDF-F111-B6FB-00090FFE0001",
+            "primaryKey": {
+              "AppId": "F1722684-0C24-4022-A2E0-0F63154ACA76",
+              "SecretCode": "LANGMODEL-X116-D7-UI-USER-API-KEY"
+            },
+            "fields": {
+              "IsSet": "false"
+            }
+          }
+        ],
+        "noOfRecords": 2
+      }
+    },
+    {
+      "name": "invoke_message_type",
+      "args": {
+        "type": "Test.Records.Delete",
+        "data": {
+          "tableId": 10078304,
+          "tableView": "WHERE(App Id=CONST(f1722684-0c24-4022-a2e0-0f63154aca76),Secret Code=FILTER(LANGMODEL-X116-D7-UI-*))"
+        }
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.Records.Delete",
+        "status": "Success",
+        "tableId": 10078304,
+        "deleted": 2,
+        "appliedFilter": "App Id: {F1722684-0C24-4022-A2E0-0F63154ACA76}, Secret Code: LANGMODEL-X116-D7-UI-*"
+      }
+    },
+    {
+      "name": "invoke_message_type",
+      "args": {
+        "type": "Test.Records.Delete",
+        "data": {
+          "tableId": 10078382,
+          "tableView": "WHERE(Source=FILTER(LM116 test|LM116 MCP))"
+        }
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "messageType": "Test.Records.Delete",
+        "status": "Success",
+        "tableId": 10078382,
+        "deleted": 0,
+        "appliedFilter": "Source: LM116 test|LM116 MCP"
+      }
+    },
+    {
+      "name": "get_records",
+      "args": {
+        "table": "App Secret ori",
+        "filter": "WHERE(Secret Code=FILTER(LANGMODEL-X116-D7-UI-*))",
+        "fields": [
+          "Secret Code"
+        ],
+        "take": 100
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "table": "App Secret ori",
+        "skip": 0,
+        "take": 100,
+        "count": 0,
+        "records": [],
+        "noOfRecords": 0
+      }
+    },
+    {
+      "name": "get_records",
+      "args": {
+        "table": "Bifrost Language Model ori",
+        "filter": "WHERE(Code=FILTER(T116-*|LM116-MOCK|X116-D7-UI))",
+        "fields": [
+          "Code"
+        ],
+        "take": 1000
+      },
+      "result": {
+        "company": "CRONUS International Ltd.",
+        "table": "Bifrost Language Model ori",
+        "skip": 0,
+        "take": 1000,
+        "count": 0,
+        "records": [],
+        "noOfRecords": 0
+      }
+    },
+    {
+      "name": "bc_dev_uninstall_app",
+      "args": {
+        "name": "Bifrost Language Models - Tests",
+        "publisher": "Origo",
+        "versionText": "28.0.3.0",
+        "deleteExtensionData": true,
+        "tenant": "w129-17"
+      },
+      "result": {
+        "action": "uninstallAndDeleteExtensionData",
+        "packageId": "da76ecb0-2214-41af-91a5-46499388deae",
+        "statusCode": 204,
+        "durationMs": 267,
+        "ok": true,
+        "body": null,
+        "match": {
+          "packageId": "da76ecb0-2214-41af-91a5-46499388deae",
+          "id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+          "displayName": "Bifrost Language Models - Tests",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": true,
+          "publishedAs": " Dev"
+        }
+      }
+    },
+    {
+      "name": "bc_dev_unpublish_app",
+      "args": {
+        "name": "Bifrost Language Models - Tests",
+        "publisher": "Origo",
+        "versionText": "28.0.3.0"
+      },
+      "result": {
+        "action": "unpublish",
+        "packageId": "da76ecb0-2214-41af-91a5-46499388deae",
+        "statusCode": 204,
+        "durationMs": 190,
+        "ok": true,
+        "body": null,
+        "match": {
+          "packageId": "da76ecb0-2214-41af-91a5-46499388deae",
+          "id": "9c452c6e-df9b-4eb0-9a54-7ea8f32483ec",
+          "displayName": "Bifrost Language Models - Tests",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": false,
+          "publishedAs": " Dev"
+        }
+      }
+    },
+    {
+      "name": "bc_dev_uninstall_app",
+      "args": {
+        "name": "Bifrost Language Models",
+        "publisher": "Origo",
+        "versionText": "28.0.3.0",
+        "deleteExtensionData": true,
+        "tenant": "w129-17"
+      },
+      "result": {
+        "action": "uninstallAndDeleteExtensionData",
+        "packageId": "238b90b0-dc9b-496f-929c-952d661f8c3f",
+        "statusCode": 204,
+        "durationMs": 407,
+        "ok": true,
+        "body": null,
+        "match": {
+          "packageId": "238b90b0-dc9b-496f-929c-952d661f8c3f",
+          "id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+          "displayName": "Bifrost Language Models",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": true,
+          "publishedAs": " Dev"
+        }
+      }
+    },
+    {
+      "name": "bc_dev_unpublish_app",
+      "args": {
+        "name": "Bifrost Language Models",
+        "publisher": "Origo",
+        "versionText": "28.0.3.0"
+      },
+      "result": {
+        "action": "unpublish",
+        "packageId": "238b90b0-dc9b-496f-929c-952d661f8c3f",
+        "statusCode": 204,
+        "durationMs": 196,
+        "ok": true,
+        "body": null,
+        "match": {
+          "packageId": "238b90b0-dc9b-496f-929c-952d661f8c3f",
+          "id": "f1722684-0c24-4022-a2e0-0f63154aca76",
+          "displayName": "Bifrost Language Models",
+          "publisher": "Origo",
+          "versionMajor": 28,
+          "versionMinor": 0,
+          "versionBuild": 3,
+          "versionRevision": 0,
+          "isInstalled": false,
+          "publishedAs": " Dev"
+        }
+      }
+    },
+    {
+      "name": "bc_api_request",
+      "args": {
+        "entity": "extensions",
+        "publisher": "microsoft",
+        "group": "automation",
+        "version": "v2.0",
+        "filter": "publisher eq 'Origo'"
+      },
+      "result": {
+        "entity": "extensions",
+        "method": "GET",
+        "statusCode": 200,
+        "durationMs": 32,
+        "rowCount": 4,
+        "hasMore": false,
+        "rows": [
+          {
+            "@odata.etag": "W/\"JzIwOzE0NzY3MzM3MjAxMjY0MjM4OTM4MTswMDsn\"",
+            "packageId": "546981d9-850e-46b5-b8d7-11af577bf843",
+            "id": "672df32a-a0c5-4a22-b591-0efa38023e95",
+            "displayName": "Bifrost Attachments",
+            "publisher": "Origo",
+            "versionMajor": 28,
+            "versionMinor": 3,
+            "versionBuild": 3,
+            "versionRevision": 0,
+            "isInstalled": true,
+            "publishedAs": " Dev"
+          },
+          {
+            "@odata.etag": "W/\"JzE5OzMwOTIwMTEzMTY0MDMyMTk2OTMxOzAwOyc=\"",
+            "packageId": "a856ae21-8b1b-481f-be67-fa4aa5e79436",
+            "id": "7cdb530b-b74b-446b-9ece-80e2b911bfb3",
+            "displayName": "Bifrost Attachments - Tests",
+            "publisher": "Origo",
+            "versionMajor": 28,
+            "versionMinor": 3,
+            "versionBuild": 3,
+            "versionRevision": 0,
+            "isInstalled": true,
+            "publishedAs": " Dev"
+          },
+          {
+            "@odata.etag": "W/\"JzE5OzkxNzc2NDY0NjU1NzU0ODI3NjkxOzAwOyc=\"",
+            "packageId": "eac85999-5719-4ab0-a228-6acbcd071a19",
+            "id": "7505e808-6e52-4b96-a328-82573391297a",
+            "displayName": "Bifrost Foundation",
+            "publisher": "Origo",
+            "versionMajor": 28,
+            "versionMinor": 0,
+            "versionBuild": 13,
+            "versionRevision": 0,
+            "isInstalled": true,
+            "publishedAs": " Dev"
+          },
+          {
+            "@odata.etag": "W/\"JzIwOzExMjIzNzYyOTgxNDc4Mjc2NjA4MTswMDsn\"",
+            "packageId": "4a8426c1-096f-4a69-ade0-f2e0760a4fcd",
+            "id": "9db1a0c9-c503-4793-a9e4-bcda3d3f3c94",
+            "displayName": "Bifrost Foundation - Tests",
+            "publisher": "Origo",
+            "versionMajor": 28,
+            "versionMinor": 0,
+            "versionBuild": 13,
+            "versionRevision": 0,
+            "isInstalled": true,
+            "publishedAs": " Dev"
+          }
+        ],
+        "odataContext": "http://host.docker.internal:7048/BC290/api/microsoft/automation/v2.0/$metadata#companies(233157a0-f5bb-f111-85bd-6045bdfdea7c)/extensions"
+      }
+    }
+  ],
+  "appsAbsent": true,
+  "dependenciesPreserved": true,
+  "verified": true,
+  "finishedAt": "2026-11-13T10:44:52.412Z"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "lane": "main",
+    "sourceSha": "17fa4946171836bb1d35fc720775777a3a4b8386",
+    "baselineSha": "17fa4946171836bb1d35fc720775777a3a4b8386",
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "lane": "candidate",
+    "sourceSha": "29b5ee3663244b6a77fab2bab0d42e3d5a7e89e7",
+    "baselineSha": "17fa4946171836bb1d35fc720775777a3a4b8386",
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0
+  }
+]
