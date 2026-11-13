@@ -789,6 +789,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Veitandinn hafnar beiðninni eða skilar ógildu svari, þar á meðal vegna skráar sem er ekki studd.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptProviderWhenTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 904861532" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Provider reason: %2</source>
+          <target>%1 Ástæða veitanda: %2</target>
+          <note from="Developer" annotates="general" priority="2">%1 = localized failure, %2 = redacted provider diagnostic, is-IS=%1 Ástæða veitanda: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptReasonTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 3913878835" size-unit="char" translate="yes" xml:space="preserve">
           <source>The language model provider is temporarily unavailable.</source>
           <target>Veitandi mállíkansins er tímabundið ekki tiltækur.</target>

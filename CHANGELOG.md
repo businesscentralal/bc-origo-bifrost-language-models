@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-13) - xAI prompt attachments and provider diagnostics (#125)
+
+- xAI Ask sends documents through Responses using uploaded file IDs. Each round uploads from the caller-owned input and deletes those files after the request, including failures; continuation state keeps local bytes instead of deleted IDs. PNG/JPEG remain inline and shared MIME/size validation runs before transport. HTML remains a prompt instruction, with existing complete-document validation.
+- xAI Ask retains structured HTTP failure metadata. Ask and Complete can show a redacted non-authentication 4xx reason: only a fixed diagnostic vocabulary and protocol field names are retained; unknown tokens are replaced, authentication bodies remain private, and raw error text is never logged by the prompt transport. Complete joins a base URL ending in `/v1` without duplicating that segment.
+- Adds test codeunit **96072** `LLM 125 xAI Tests`: real-provider request shapes through both message types, both locales, HTML/file combinations, text regression, continuation upload cleanup, transport failures, image validation, and redacted errors. The existing test-only staging probe can run these owned synthetic xAI fixtures over MCP. No production object IDs or message types added. Live reproduction and post-deploy UAT remain separate acceptance work.
+
 ### Fixed (2026-11-13) - installed storage path in prompt help (#116)
 
 - Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name. The registry stand-in is injected through `AddRelatedFromTypes`, so the test extension no longer duplicates the Attachments enum registration and can coexist with it.

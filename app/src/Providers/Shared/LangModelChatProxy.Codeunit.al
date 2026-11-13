@@ -14,6 +14,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     Access = Internal;
 
     var
+        TempXaiArgument: Record "Bifrost Chat Argument ori" temporary;
         ToolServer: Codeunit "MCP Tool Server ori";
         SessionTime: Codeunit "LLM Session Time ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
@@ -21,7 +22,17 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         AskPolicy: Codeunit "LLM Ask Tool Policy ori";
         AllowedTools: List of [Text];
         HasAllowedTools: Boolean;
+        XaiTransport: Boolean;
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=Gervigreindarlíkanið skilaði vali án "message"-reits. Sýnishorn af svari: %1';
+
+    /// <summary>Uses safe prompt failures and per-round xAI document uploads for this proxy instance.</summary>
+    [NonDebuggable]
+    procedure UseXaiTransport(var Argument: Record "Bifrost Chat Argument ori" temporary)
+    begin
+        TempXaiArgument := Argument;
+        TempXaiArgument.SetApiKey(Argument.GetApiKey());
+        XaiTransport := true;
+    end;
 
     /// <summary>
     /// Builds and sends an OpenAI-compatible chat request using the supplied model argument and optional extra request fields.
@@ -180,6 +191,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             end;
         end;
         ApiClient.LogLastRequest();
+        if XaiTransport and Response.Contains('error') then begin
+            Response.WriteTo(Reply);
+            exit(Reply);
+        end;
 
         if not Response.Get('choices', ChoicesToken) then
             exit(BuildErrorResponse('Empty response from AI model.'));
@@ -393,8 +408,16 @@ codeunit 10035412 "LangModel Chat Proxy ori"
     [TryFunction]
     [NonDebuggable]
     local procedure TrySendToModel(var ApiClient: Codeunit "LangModel API Client ori"; ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject)
+    var
+        XaiProvider: Codeunit "xAI LangModel Prov. ori";
     begin
-        Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
+        if XaiTransport then begin
+            if RequestBody.Contains('input') then
+                Response := XaiProvider.SendResponseRound(TempXaiArgument, RequestBody)
+            else
+                Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
+        end else
+            Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
     end;
 
     local procedure ParseMessages(PayloadObject: JsonObject; var Messages: JsonArray)
@@ -684,6 +707,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             exit(BuildErrorResponse(GetLastErrorText()));
         end;
         ApiClient.LogLastRequest();
+        if XaiTransport and Response.Contains('error') then begin
+            Response.WriteTo(Reply);
+            exit(Reply);
+        end;
 
         if not Response.Get('output', OutputToken) then
             exit(BuildErrorResponse('AI model response missing "output" array.'));
