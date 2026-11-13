@@ -6,6 +6,7 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Fixed (2026-11-13) - xAI prompt attachments and provider diagnostics (#125)
 
+- Ask persists consumed staging uploads before its provider/tool loop, so a fresh MCP bootstrap can run without an open staging write transaction.
 - xAI Ask sends documents through Responses using uploaded file IDs. Each round uploads from the caller-owned input and deletes those files after the request, including failures; continuation state keeps local bytes instead of deleted IDs. PNG/JPEG remain inline and shared MIME/size validation runs before transport. HTML remains a prompt instruction, with existing complete-document validation.
 - xAI Ask retains structured HTTP failure metadata. Ask and Complete can show a redacted non-authentication 4xx reason: only a fixed diagnostic vocabulary and protocol field names are retained; unknown tokens are replaced, authentication bodies remain private, and raw error text is never logged by the prompt transport. Complete joins a base URL ending in `/v1` without duplicating that segment.
 - Adds test codeunit **96072** `LLM 125 xAI Tests`: real-provider request shapes through both message types, both locales, HTML/file combinations, text regression, continuation upload cleanup, transport failures, image validation, and redacted errors. The existing test-only staging probe can run these owned synthetic xAI fixtures over MCP. No production object IDs or message types added. Live reproduction and post-deploy UAT remain separate acceptance work.

@@ -519,6 +519,11 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         if not SessionTime.GetBlock(SessionTimeBlock) then
             Runner.AddWarning('sessionTimeUnavailable');
 
+        // Persist one-shot staging consumption before bootstrap/tools use Boolean Codeunit.Run.
+        // Otherwise a fresh MCP session fails before the provider receives its attachment.
+        if StagedFiles.Count() > 0 then
+            Commit();
+
         AskTelemetry.LogStarted(ProviderName, BifrostLanguageModel.Code, CallerName);
         StartedAt := CurrentDateTime();
         Completed := Runner.Run(TempChatArg, Runner.BuildSystemSuffix(Instructions), Runner.BuildUserMessage(Question, ContextText), RecordContext, HasRecordContext, ResponseJson);
