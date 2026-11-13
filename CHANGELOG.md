@@ -6,7 +6,7 @@ All notable changes to Bifrost Language Models are documented here.
 
 ### Fixed (2026-11-13) - installed storage path in prompt help (#116)
 
-- Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name.
+- Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name. The registry stand-in is injected through `AddRelatedFromTypes`, so the test extension no longer duplicates the Attachments enum registration and can coexist with it.
 
 ### Added (2026-11-12) - staged prompt attachments (#116)
 

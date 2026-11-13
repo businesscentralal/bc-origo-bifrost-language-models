@@ -168,15 +168,17 @@ codeunit 96071 "LLM Staging Files Tests"
     [Test]
     procedure Scenario_AC07_RegisteredStorage_Advertised()
     var
-        Contract: Interface "Msg Contract ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
         Related: JsonArray;
+        Names: List of [Text];
         TextValue: Text;
     begin
         Initialize();
-        Contract := Enum::"Message Type ori"::"LLM.Prompt.Complete";
-        Contract.GetRelated(Related);
+        Names.Add('Storage.Upload.CommitToStaging');
+        StagingFiles.AddRelatedFromTypes(Related, Names);
         Related.WriteTo(TextValue);
-        Assert.IsTrue(TextValue.Contains('Storage.Upload.CommitToStaging'), 'installed stand-in path is discoverable');
+        Assert.AreEqual(1, Related.Count(), 'one supported registered upload path');
+        Assert.IsTrue(TextValue.Contains('Storage.Upload.CommitToStaging'), 'registry stand-in path is discoverable');
     end;
 
     [Test]
