@@ -6,7 +6,7 @@ using System.TestLibraries.Utilities;
 using System.Utilities;
 
 /// <summary>Issue 116: staged prompt attachments, mock provider only, each scenario creates its own uploads.</summary>
-codeunit 96068 "LLM Staging Files Tests"
+codeunit 96071 "LLM Staging Files Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
