@@ -180,6 +180,28 @@ codeunit 96071 "LLM Staging Files Tests"
     end;
 
     [Test]
+    procedure Scenario_AC07_CopyToStaging_Advertised()
+    var
+        StagingFiles: Codeunit "LLM Staging Files ori";
+        Related: JsonArray;
+        Names: List of [Text];
+        TextValue: Text;
+    begin
+        Initialize();
+        // [GIVEN] A registry stand-in containing the shipped storage path and unrelated types.
+        Names.Add('Storage.File.CopyToStaging');
+        Names.Add('Storage.File.ReadToStaging');
+        Names.Add('Test.Unrelated');
+        // [WHEN] Related help is built from the installed type names.
+        StagingFiles.AddRelatedFromTypes(Related, Names);
+        Related.WriteTo(TextValue);
+        // [THEN] Only the shipped CopyToStaging path is advertised.
+        Assert.AreEqual(1, Related.Count(), 'only the registered supported storage path');
+        Assert.IsTrue(TextValue.Contains('Storage.File.CopyToStaging'), 'shipped storage-to-staging path is discoverable');
+        Assert.IsFalse(TextValue.Contains('Storage.File.ReadToStaging'), 'unshipped path must not be advertised');
+    end;
+
+    [Test]
     procedure Scenario_AC01_ProviderBuilders_ReceiveFileBytes()
     var
         Builder: Integer;

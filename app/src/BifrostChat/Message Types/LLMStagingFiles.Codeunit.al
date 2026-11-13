@@ -144,7 +144,7 @@ codeunit 10035435 "LLM Staging Files ori"
         TypeName: Text;
     begin
         foreach TypeName in Names do
-            if TypeName in ['Storage.Upload.CommitToStaging', 'Storage.File.ReadToStaging'] then
+            if TypeName in ['Storage.Upload.CommitToStaging', 'Storage.File.CopyToStaging'] then
                 Related.Add(ContractMgt.RelatedEntry(TypeName, 'Put the file in Foundation staging, then send the returned stagingId in attachments.'));
     end;
 
