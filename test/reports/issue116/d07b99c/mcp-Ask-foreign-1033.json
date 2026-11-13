@@ -1,0 +1,39 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "foreign"
+    },
+    "lcid": 1033
+  },
+  "at": "2026-11-13T08:58:43.108Z",
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"status\": \"Error\",\n    \"code\": \"RecordNotFound\",\n    \"error\": \"The staged upload was not found.\",\n    \"parameter\": \"attachments[1].stagingId\",\n    \"received\": \"766921EC-4660-4C4F-A63A-23D30BB9D062\",\n    \"expected\": \"an unused stagingId owned by the caller\",\n    \"nextStep\": \"Upload the file again and send its new stagingId.\",\n    \"hint\": \"For usage details, call the \\\"Help.Implementation.Get\\\" message type with subject \\\"LLM.Prompt.Ask\\\". Always read the help before calling a message type.\"\n  },\n  \"providerCalled\": false,\n  \"firstConsumed\": false,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "status": "Error",
+      "code": "RecordNotFound",
+      "error": "The staged upload was not found.",
+      "parameter": "attachments[1].stagingId",
+      "received": "766921EC-4660-4C4F-A63A-23D30BB9D062",
+      "expected": "an unused stagingId owned by the caller",
+      "nextStep": "Upload the file again and send its new stagingId.",
+      "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+    },
+    "providerCalled": false,
+    "firstConsumed": false,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}

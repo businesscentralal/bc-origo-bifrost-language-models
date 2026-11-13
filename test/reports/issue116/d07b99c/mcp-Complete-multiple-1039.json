@@ -1,0 +1,49 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Complete",
+      "scenario": "multiple"
+    },
+    "lcid": 1039
+  },
+  "at": "2026-11-13T08:58:44.992Z",
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"reply\": \"fixture accepted\",\n    \"status\": \"Success\",\n    \"text\": \"fixture accepted\",\n    \"warnings\": [\n      \"sessionTimeUnavailable\"\n    ]\n  },\n  \"providerCalled\": true,\n  \"providerFiles\": [\n    {\n      \"data\": \"TE0xMTYgb3duZWQgZml4dHVyZQ==\",\n      \"mimeType\": \"text/plain\",\n      \"fileName\": \"lm116.txt\"\n    },\n    {\n      \"data\": \"c2Vjb25kIGZpbGUgZml4dHVyZQ==\",\n      \"mimeType\": \"text/plain\",\n      \"fileName\": \"second.txt\"\n    }\n  ],\n  \"firstConsumed\": true,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "reply": "fixture accepted",
+      "status": "Success",
+      "text": "fixture accepted",
+      "warnings": [
+        "sessionTimeUnavailable"
+      ]
+    },
+    "providerCalled": true,
+    "providerFiles": [
+      {
+        "data": "TE0xMTYgb3duZWQgZml4dHVyZQ==",
+        "mimeType": "text/plain",
+        "fileName": "lm116.txt"
+      },
+      {
+        "data": "c2Vjb25kIGZpbGUgZml4dHVyZQ==",
+        "mimeType": "text/plain",
+        "fileName": "second.txt"
+      }
+    ],
+    "firstConsumed": true,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}

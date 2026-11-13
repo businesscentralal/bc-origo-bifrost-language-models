@@ -1,0 +1,24 @@
+{
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "fullSuite": true,
+  "runs": [
+    {
+      "key": "native-full-first",
+      "passed": 566,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "ok": true,
+      "evidence": "/workspace/evidence/lm124-reginn-20261113T0849/d07b99c/native-full-first.json"
+    },
+    {
+      "key": "native-full-second",
+      "passed": 566,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "ok": true,
+      "evidence": "/workspace/evidence/lm124-reginn-20261113T0849/d07b99c/native-full-second.json"
+    }
+  ]
+}

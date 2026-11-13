@@ -1,0 +1,36 @@
+{
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "target": "origin/main@17fa4946171836bb1d35fc720775777a3a4b8386",
+  "tier": "Standard",
+  "reviewedAt": "2026-11-13T08:58:49.604854+00:00",
+  "independentReview": false,
+  "scope": "Language Models116 only; Foundation dependency source compiled/deployed, no Foundation source edits",
+  "publicCompatibility": "Only additive model field27; existing provider interface and Complete file/files/attachment inputs retained. Main-baseline AppSourceCop compile0/0.",
+  "security": "All staging content passes the Foundation user/company ownership facade; extra keys refused; no provider call or key-use stamp before staging validation. Synthetic different creator fixture explicitly authorized by Architect1794519937.523119. Test installer is guarded against SaaS production; no EULA/trial/licence/user/credential writes.",
+  "tests": "Current full suite566/566 twice,0failed/0skipped. Main telemetry test codeunit collision fixed by prior commit d07b99c using96171 test plus96172 permission set (object types differ from install).",
+  "translations": "New captions/tooltips/refusal labels have is-IS comments and generated XLF. Existing contract chapters stay English per Foundation777; runtime refusals verified separately in1039.",
+  "permissions": "New internal helper explicitly granted by existing permission sets/extensions that expose prompt operations; no extra business-table write permission introduced.",
+  "documentation": "Dated existing-format CHANGELOG entry lists touched/new object IDs and public dependency28.0.13; parameter/errors/effects/related chapters updated in repo; external documentation repository untouched.",
+  "layer1Triage": {
+    "xmlDocs": "New Resolve has summary and every parameter documented before [NonDebuggable]; regex only checks adjacency. Other findings are unchanged public interface methods with attributes or existing documentation.",
+    "readIsolation": "Existing OtherRole default-validation lookup untouched.",
+    "globalVariables": "Existing stateful runner/proxies exceed advisory limit; adding one per-run file array is necessary to preserve ordered files on each payload.",
+    "oneStatement": "Regex matches semicolons in declarations and text; manually inspected new blocks for one actual statement per line.",
+    "changelog": "Established Unreleased dated-entry format retained; version-regex advisory is pre-existing.",
+    "tryPrefix": "TryExtractHtml is an existing Boolean parser, never a TryFunction; unchanged from main."
+  },
+  "appliedLessonIds": [
+    "lm89-worker7-contract-effect-direction-selfcheck-20261028",
+    "lm90-review5701463668-changelog-heading-worker7",
+    "worker8-lm65-help777-verifier-expectation-20261019",
+    "lm73-1792151046-lesson-application",
+    "reginn-lm124-199902697-merge-guard-false-positive-20261113"
+  ],
+  "remaining": [
+    "MCP/UI/cleanup",
+    "Independent Claude verification",
+    "Grok clearance and approval",
+    "Architect merge/deployment and Tester postdeployment acceptance"
+  ],
+  "currentTipExtraReview": "Read merged Ask runner/implementation telemetry integration, shared staging resolver, Complete compatibility, provider diff, fixture install/probe and permission set. No new source changes required by audit. Independent Claude review requested separately."
+}

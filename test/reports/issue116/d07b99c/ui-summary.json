@@ -1,0 +1,34 @@
+{
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "tenant": "w129-16",
+  "tool": "Playwright MCP, isolated worker6 browser profile",
+  "scenarios": [
+    {
+      "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+      "lcid": 1033,
+      "scenario": "Change and persist the per-model attachment byte cap through the Web Client",
+      "code": "LM116-UI",
+      "limitBytes": 6144,
+      "language": "en-US",
+      "passed": true
+    },
+    {
+      "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+      "lcid": 1039,
+      "scenario": "Translated attachment cap caption and editable persisted value in Icelandic",
+      "caption": "Stærðarmörk viðhengja í bætum",
+      "limitBytes": 8192,
+      "language": "is-IS",
+      "passed": true
+    }
+  ],
+  "executed": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "screenshots": [
+    "ui-1033-model-limit.png",
+    "ui-1039-model-limit.png"
+  ],
+  "originalLanguageRestored": true
+}

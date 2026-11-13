@@ -1,0 +1,39 @@
+{
+  "name": "invoke_message_type",
+  "args": {
+    "type": "Test.LLM116.Probe",
+    "data": {
+      "type": "LLM.Prompt.Ask",
+      "scenario": "limit"
+    },
+    "lcid": 1033
+  },
+  "at": "2026-11-13T08:58:43.288Z",
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "raw": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"company\": \"CRONUS International Ltd.\",\n  \"messageType\": \"Test.LLM116.Probe\",\n  \"promptResponse\": {\n    \"status\": \"Error\",\n    \"code\": \"LimitExceeded\",\n    \"error\": \"The total attachment size exceeds the language model limit.\",\n    \"parameter\": \"attachments\",\n    \"received\": \"19\",\n    \"expected\": \"at most 1 bytes\",\n    \"nextStep\": \"Send smaller files or ask your administrator to change the model attachment limit.\",\n    \"hint\": \"For usage details, call the \\\"Help.Implementation.Get\\\" message type with subject \\\"LLM.Prompt.Ask\\\". Always read the help before calling a message type.\"\n  },\n  \"providerCalled\": false,\n  \"firstConsumed\": true,\n  \"cleanupVerified\": true,\n  \"status\": \"Success\"\n}"
+      }
+    ]
+  },
+  "body": {
+    "company": "CRONUS International Ltd.",
+    "messageType": "Test.LLM116.Probe",
+    "promptResponse": {
+      "status": "Error",
+      "code": "LimitExceeded",
+      "error": "The total attachment size exceeds the language model limit.",
+      "parameter": "attachments",
+      "received": "19",
+      "expected": "at most 1 bytes",
+      "nextStep": "Send smaller files or ask your administrator to change the model attachment limit.",
+      "hint": "For usage details, call the \"Help.Implementation.Get\" message type with subject \"LLM.Prompt.Ask\". Always read the help before calling a message type."
+    },
+    "providerCalled": false,
+    "firstConsumed": true,
+    "cleanupVerified": true,
+    "status": "Success"
+  }
+}

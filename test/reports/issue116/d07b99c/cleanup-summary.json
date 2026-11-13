@@ -1,0 +1,26 @@
+{
+  "sha": "d07b99ca29f6cb7c4b8777b016c6463f8824d877",
+  "verified": true,
+  "at": "2026-11-13T09:03:24.610288+00:00",
+  "syntheticForeignRowsDeleted": 1,
+  "allTaskStagingRowsRemaining": 0,
+  "modelsRemaining": 0,
+  "installerSeedRowsRemaining": 0,
+  "emptyUiSecretRegistrationsDeleted": 2,
+  "uiSecretRegistrationsRemaining": 0,
+  "languageRestored": 1033,
+  "testApp": "uninstalled with deleteExtensionData, then unpublished; read-back confirms absent",
+  "restoredApps": [
+    {
+      "name": "Bifrost Attachments",
+      "installed": true,
+      "version": "28.3.2.0"
+    },
+    {
+      "name": "Bifrost Attachments - Tests",
+      "installed": true,
+      "version": "28.3.2.0"
+    }
+  ],
+  "environment": "Persistent assigned worker6 local BC29 tenant w129-16; no COSMO used. Current candidate product remains installed for related work; Foundation own source3b4351b12e789989c8b0f4901b7c5ca8046be64a version28.0.13.0 retained."
+}
