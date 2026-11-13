@@ -139,12 +139,14 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
         Parameter: JsonObject;
         Children: JsonArray;
     begin
         Parameters.Add(ContractMgt.Parameter('question', 'string', true, 'The question the model answers. Required, a non-empty JSON string.'));
         Parameters.Add(ContractMgt.Parameter('context', 'string', false, 'Optional data the model may use, as a string or a JSON object (written compactly), at most 1,000,000 characters; a larger context is refused before any provider call. It is sent in the user message under CONTEXT, never in the system text.'));
         Parameters.Add(ContractMgt.Parameter('instructions', 'string', false, 'Optional extra instructions, added to the system text after HEADLESS MODE.'));
+        StagingFiles.AddParameter(Parameters);
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
 
         Parameter := ContractMgt.Parameter('subject', 'object', false, 'Optional record to look at. It is passed to the model as RECORD CONTEXT; the record itself is read only by the model''s tools.');
@@ -211,6 +213,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, AskDeniedErr, AskDeniedWhenTxt, AskDeniedNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, MissingQuestionErr, MissingQuestionWhenTxt, QuestionNextStepTxt));
@@ -223,6 +226,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ContextTooLargeErr, MaxContextChars()), ContextTooLargeWhenTxt, ContextTooLargeNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HtmlMissingTxt, HtmlWhenTxt, HtmlNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
+        StagingFiles.AddErrors(Errors);
         exit(true);
     end;
 
@@ -237,7 +241,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Preconditions.Add('A language model whose provider runs tools in separate steps is set up, with its API key; Copilot is refused.');
         Preconditions.Add('Outbound HttpClient requests are allowed for the app.');
         Effect.Add('effect', 'read');
-        Effect.Add('changes', 'Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, and the deletion of the blobs this run created.');
+        Effect.Add('changes', 'Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, the deletion of the blobs this run created, and consumption of caller-owned staging uploads supplied in attachments.');
         Effect.Add('idempotent', false);
         Effect.Add('permissionSet', 'BIFROST Chat ori; BIFROST LLM Chat ori');
         Effect.Add('preconditions', Preconditions);
@@ -258,9 +262,11 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     procedure GetRelated(var Related: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
     begin
         Related.Add(ContractMgt.RelatedEntry('LLM.Prompt.Complete', 'The sibling without tools: one prompt, one answer, when the prompt already holds the data.'));
         Related.Add(ContractMgt.RelatedEntry('Data.Records.Get', 'Read the data yourself and send it as context when the question needs no lookup.'));
+        StagingFiles.AddRelated(Related);
         exit(true);
     end;
 
@@ -330,9 +336,11 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         SessionTime: Codeunit "LLM Session Time ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
         Runner: Codeunit "LLM Ask Runner ori";
         AskTelemetry: Codeunit "LLM Ask Telemetry ori";
         Provider: Interface "Bifrost LangModel Provider ori";
+        StagedFiles: JsonArray;
         RequestJson: JsonObject;
         CallerTools: JsonObject;
         Limits: JsonObject;
@@ -496,10 +504,14 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
 
+        if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
+            exit;
+
         if HtmlMode and HasSchema then
             HasSchema := false;
         Runner.Initialize(Provider, CallerTools, RequestedToolCalls, RequestedRounds, RequestedResultChars, Schema, HasSchema, IncludeTrace);
         Runner.SetHtmlMode(HtmlMode);
+        Runner.SetFiles(StagedFiles);
         if HtmlMode and RequestJson.Contains('responseSchema') then
             Runner.AddWarning('responseSchemaIgnored');
         if HasSchema then

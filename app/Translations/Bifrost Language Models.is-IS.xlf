@@ -117,6 +117,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Valinn veitandi hefur ekki sjálfgefið hæfniefni.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Method ImportDefaultSkillResult - NamedType NoDefaultSkillErr</note>
         </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 1907623871 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the maximum total bytes of staged attachments per prompt. 0 uses 100 MB.</source>
+          <target>Tilgreinir hámarksheildarstærð viðhengja úr biðgeymslu í hverri kvaðningu í bætum. 0 notar 100 MB.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hámarksheildarstærð viðhengja úr biðgeymslu í hverri kvaðningu í bætum. 0 notar 100 MB.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Attachment Limit Bytes - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 1907623871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Attachment Limit Bytes</source>
+          <target>Stærðarmörk viðhengja í bætum</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stærðarmörk viðhengja í bætum</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Attachment Limit Bytes - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3650785778 - Field 2517242498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Base URL</source>
           <target>Grunnslóð</target>
@@ -1340,6 +1352,78 @@
           <target>Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1168347065" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an array of objects with stagingId</source>
+          <target>fylki hluta með stagingId</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=fylki hluta með stagingId</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType ArrayExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3023610385" size-unit="char" translate="yes" xml:space="preserve">
+          <source>at most %1 bytes</source>
+          <target>í mesta lagi %1 bæti</target>
+          <note from="Developer" annotates="general" priority="2">%1 = model byte limit, is-IS=í mesta lagi %1 bæti</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType BytesExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1468028954" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The attachment must contain one stagingId GUID.</source>
+          <target>Viðhengið verður að innihalda eitt stagingId GUID.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Viðhengið verður að innihalda eitt stagingId GUID.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType FormatErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 860338395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a stagingId GUID</source>
+          <target>stagingId GUID</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=stagingId GUID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType GuidExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 2034178160" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The attachment content type is not supported.</source>
+          <target>Efnisgerð viðhengisins er ekki studd.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Efnisgerð viðhengisins er ekki studd.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InvalidTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 2836870124" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The total attachment size exceeds the language model limit.</source>
+          <target>Heildarstærð viðhengja er yfir mörkum mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Heildarstærð viðhengja er yfir mörkum mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType LimitErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1180543310" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send smaller files or ask your administrator to change the model attachment limit.</source>
+          <target>Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType LimitNextTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1830439019" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The staged upload was not found.</source>
+          <target>Upphlaðna skjalið fannst ekki í biðgeymslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Upphlaðna skjalið fannst ekki í biðgeymslu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType MissingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3534312869" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an object with stagingId GUID</source>
+          <target>hlutur með stagingId GUID</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=hlutur með stagingId GUID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType ObjectExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1419390715" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an unused stagingId owned by the caller</source>
+          <target>ónotað stagingId í eigu kallandans</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=ónotað stagingId í eigu kallandans</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType OwnedExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1668614503" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The attachment contains an unknown parameter.</source>
+          <target>Viðhengið inniheldur óþekkta færibreytu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Viðhengið inniheldur óþekkta færibreytu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType UnknownErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1341749541" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload the file again and send its new stagingId.</source>
+          <target>Hladdu skránni upp aftur og sendu nýtt stagingId hennar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hladdu skránni upp aftur og sendu nýtt stagingId hennar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType UploadAgainTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1571639434 - NamedType 1415688405" size-unit="char" translate="yes" xml:space="preserve">
           <source>Get key from OpenAI Platform</source>

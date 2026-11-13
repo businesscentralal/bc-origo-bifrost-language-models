@@ -84,6 +84,11 @@ page 10035343 "Bifrost LangModel Card ori"
                     BlankZero = true;
                     Enabled = HasExternalEndpoint;
                 }
+                field("Attachment Limit Bytes"; Rec."Attachment Limit Bytes")
+                {
+                    ApplicationArea = All;
+                    BlankZero = true;
+                }
                 field("Chat Path"; Rec."Chat Path")
                 {
                     ApplicationArea = All;

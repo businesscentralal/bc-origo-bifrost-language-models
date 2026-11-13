@@ -63,6 +63,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         SystemPrompt := BuildSystemPrompt(PayloadObject, Argument);
         ParseMessages(PayloadObject, Messages);
+        ProviderBase.AttachFilesToMessages(PayloadObject, Messages);
 
         if SystemPrompt <> '' then
             AddSystemMessage(Messages, SystemPrompt);
@@ -591,6 +592,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             AddResponsesInputItem(Input, 'system', SystemPrompt);
         foreach MessageToken in Messages do
             AppendChatMessageToResponsesInput(Input, MessageToken);
+        AttachFilesToResponsesInput(PayloadObject, Input);
 
         HasAllowedTools := AskPolicy.ReadAllowedTools(PayloadObject, AllowedTools);
         BuildResponsesToolDefinitions(ResponsesTools);
@@ -808,6 +810,49 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         Item.Add('role', Role);
         Item.Add('content', Content);
         Input.Add(Item);
+    end;
+
+    [NonDebuggable]
+    local procedure AttachFilesToResponsesInput(Payload: JsonObject; var Input: JsonArray)
+    var
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        LastToken: JsonToken;
+        LastMessage: JsonObject;
+        FileObject: JsonObject;
+        Block: JsonObject;
+        Content: JsonArray;
+        MimeType: Text;
+        LastIndex: Integer;
+    begin
+        if not Payload.Get('files', FilesToken) then
+            exit;
+        if FilesToken.AsArray().Count() = 0 then
+            exit;
+        LastIndex := Input.Count() - 1;
+        if LastIndex < 0 then
+            exit;
+        Input.Get(LastIndex, LastToken);
+        LastMessage := LastToken.AsObject();
+        Block.Add('type', 'input_text');
+        Block.Add('text', GetTextProperty(LastMessage, 'content'));
+        Content.Add(Block);
+        foreach FileToken in FilesToken.AsArray() do begin
+            FileObject := FileToken.AsObject();
+            MimeType := GetTextProperty(FileObject, 'mimeType');
+            Clear(Block);
+            if MimeType.StartsWith('image/') then begin
+                Block.Add('type', 'input_image');
+                Block.Add('image_url', 'data:' + MimeType + ';base64,' + GetTextProperty(FileObject, 'data'));
+            end else begin
+                Block.Add('type', 'input_file');
+                Block.Add('filename', GetTextProperty(FileObject, 'fileName'));
+                Block.Add('file_data', 'data:' + MimeType + ';base64,' + GetTextProperty(FileObject, 'data'));
+            end;
+            Content.Add(Block);
+        end;
+        LastMessage.Replace('content', Content);
+        Input.Set(LastIndex, LastMessage);
     end;
 
     local procedure AppendChatMessageToResponsesInput(var Input: JsonArray; MessageToken: JsonToken)

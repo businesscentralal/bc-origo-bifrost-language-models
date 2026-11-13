@@ -116,12 +116,14 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     procedure GetParameters(var Parameters: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
         FileParameter: JsonObject;
         FilesParameter: JsonObject;
         AttachmentParameter: JsonObject;
     begin
         Parameters.Add(ContractMgt.Parameter('prompt', 'string', true, 'The user prompt sent to the language model. A value that is not a JSON string is refused with InvalidParameterFormat; an empty one with MissingParameter.'));
         Parameters.Add(ContractMgt.Parameter('system', 'string', false, 'Optional system prompt. No Bootstrap or skill is injected, but every call starts the system text with one fresh SESSION TIME block from Foundation (now in UTC, the user''s time zone, today with its weekday and, when it differs, the work date), followed by one empty line and this text. A SESSION TIME block already inside this text is replaced by the fresh one, never doubled. There is no opt-out.'));
+        StagingFiles.AddParameter(Parameters);
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
         FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the prompt; takes precedence over files and attachment. A value that is not a JSON object is ignored, and files and attachment are then ignored too.');
         FileParameter.Add('children', FileChildren());
@@ -162,6 +164,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
     begin
         // The rows share their labels with the live answers; Msg Contract Mgt ori builds the chapters in English.
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PermissionDenied, PromptDeniedErr, PromptDeniedWhenTxt, PromptDeniedNextStepTxt));
@@ -170,6 +173,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, NoProviderErr, NoProviderWhenTxt, NoProviderNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, InvalidPromptErr, InvalidPromptWhenTxt, MissingPromptNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
+        StagingFiles.AddErrors(Errors);
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::BusinessCentralError, 'Business Central''s own error text',
             'An error the type does not catch is raised before the provider is called, for example a message version other than 1.0.',
             'Read the text and correct the request. Nothing was sent to the provider and nothing was changed.'));
@@ -188,7 +192,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Preconditions.Add('A language model with a usable chat provider is set up: the one in roleCode, otherwise the caller''s own or the default language model, with its API key where the provider needs one.');
         Preconditions.Add('Outbound HttpClient requests are allowed for the app; otherwise the call is refused with PreconditionFailed.');
         Effect.Add('effect', 'read');
-        Effect.Add('changes', 'Sends the prompt, the system prompt and any file to the selected external language model provider and returns its answer; the data sent cannot be recalled and the answer can differ between calls. No Business Central business data is changed. The only write is the Last Used On stamp of the language model''s API key, at most once a day, after the provider has answered. The type itself does not commit.');
+        Effect.Add('changes', 'Sends the prompt, the system prompt and any file to the selected external language model provider and returns its answer; the data sent cannot be recalled and the answer can differ between calls. No Business Central business data is changed. Staged uploads supplied in attachments are consumed in the call transaction. The other write is the Last Used On stamp of the language model''s API key, at most once a day, after the provider has answered. The type itself does not commit.');
         Effect.Add('idempotent', false);
         Effect.Add('permissionSet', 'BIFROST Chat ori; BIFROST LLM Chat ori for non-Copilot providers');
         Effect.Add('preconditions', Preconditions);
@@ -209,9 +213,11 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     procedure GetRelated(var Related: JsonArray): Boolean
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
     begin
         Related.Add(ContractMgt.RelatedEntry('Data.Records.Get', 'Read Business Central data first, then use the returned values in the prompt.'));
         Related.Add(ContractMgt.RelatedEntry('Data.Records.Set', 'Use the completion as input for structured record updates only after validating the generated values.'));
+        StagingFiles.AddRelated(Related);
         exit(true);
     end;
 
@@ -307,6 +313,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         LangModelSecrets: Codeunit "LangModel Secrets ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         SessionTime: Codeunit "LLM Session Time ori";
+        StagingFiles: Codeunit "LLM Staging Files ori";
+        StagedFiles: JsonArray;
         PromptToken: JsonToken;
         Provider: Interface "Bifrost LangModel Provider ori";
         RequestJson: JsonObject;
@@ -368,6 +376,9 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
             exit;
         end;
 
+        if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
+            exit;
+
         SystemPrompt := GetTextValue(RequestJson, 'system');
         // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
         // sent without a stale caller-supplied block and the response says so.
@@ -381,6 +392,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         MessagesArray.Add(MessageObj);
         PayloadJson.Add('messages', MessagesArray);
         AddFileContent(RequestJson, PayloadJson);
+        AppendStagedFiles(PayloadJson, StagedFiles);
 
         PayloadJson.WriteTo(ResponseText);
         TempChatArg.SetPayload(ResponseText);
@@ -446,6 +458,24 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Token: JsonToken;
     begin
         exit(Source.Get(PropertyName, Token));
+    end;
+
+    local procedure AppendStagedFiles(var Payload: JsonObject; StagedFiles: JsonArray)
+    var
+        Existing: JsonToken;
+        FileToken: JsonToken;
+        Files: JsonArray;
+    begin
+        if StagedFiles.Count() = 0 then
+            exit;
+        if Payload.Get('files', Existing) then
+            Files := Existing.AsArray();
+        foreach FileToken in StagedFiles do
+            Files.Add(FileToken);
+        if Payload.Contains('files') then
+            Payload.Replace('files', Files)
+        else
+            Payload.Add('files', Files);
     end;
 
     local procedure AddFileContent(RequestJson: JsonObject; var PayloadJson: JsonObject)

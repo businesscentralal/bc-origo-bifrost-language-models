@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-13) - installed storage path in prompt help (#116)
+
+- Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name. The registry stand-in is injected through `AddRelatedFromTypes`, so the test extension no longer duplicates the Attachments enum registration and can coexist with it.
+
+### Added (2026-11-12) - staged prompt attachments (#116)
+
+- #116: `LLM.Prompt.Ask` and `LLM.Prompt.Complete` accept ordered caller-owned Foundation staging attachments, with MIME validation, coded errors and a per-model total byte limit. Related help names installed storage-to-staging types only. Adds codeunit 10035435 and field 27 on table 10035335; updates pages/permissions, Ask runner 10035433 and prompt implementations 10035432/10035396. Requires Foundation 28.0.13. Existing Complete file inputs remain compatible. Test codeunit 96071 covers staged attachments. Test-only table 96170, permission set 96172 and installer 96171 seed a synthetic foreign creator for both prompt types without creating users or credentials; the live two-user check remains NOT_RUN per Architect 1794519937.523119.
+
 ### Added (2026-11-11) - telemetry events for LLM.Prompt.Ask without content (#102)
 
 - **Added:** codeunit 10035434 `LLM Ask Telemetry ori` (Internal, X in `BIFROST LLM Chat ori`), the place that emits the Ask events with `Session.LogMessage` (`SystemMetadata`, scope `ExtensionPublisher`) and the only place that chooses dimension values (`BuildDimensions`). Events: `ORI-LM-ASK-0001` started (Normal), `-0002` completed (Normal; stopReason completed or schemaInvalid), `-0003` limitHit (Warning; maxToolCalls or maxRounds), `-0004` denied (Warning; once per run, a count), `-0005` providerError (Error), `-0006` providerNotSupported (Warning; Copilot or no split tool execution). A run that started ends in exactly one of 0002, 0003 or 0005; there is no per-tool-call event.
