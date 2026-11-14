@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-14) - inline file and files on LLM.Prompt.Ask (#127)
+
+- `LLM.Prompt.Ask` accepts optional inline `file` (one object) or `files` (array) of `{data, mimeType, fileName}`, the same shape as `LLM.Prompt.Complete`, so a playbook can send a PDF or picture produced by an earlier step. They can be combined with `attachments`; staged files come first, then inline files. `file` wins over `files`. Additive: existing callers are unaffected.
+- Refusals before any provider call: `InvalidParameterFormat` (`file` / `files` / an entry has the wrong shape), `MissingParameter` (`file.data`), `InvalidParameter` (`file.mimeType`, `files[n].mimeType`: only text/*, PDF, PNG, JPEG), `LimitExceeded` on `files` (more than 10 files in all, or staged and inline bytes together over the model Attachment Limit Bytes; 0 uses 100 MB). Each has a `nextStep`.
+- Provider handling is unchanged and shared: Anthropic sends PDF/PNG/JPEG as document/image blocks; xAI uploads documents to Responses for each round and deletes them after the request, including on failure, and re-uploads on continuation from the local input.
+- Codeunit 10035435 `LLM Staging Files ori` gains `ResolveInline`, `MaxFilesPerCall`, `AddInlineParameters`, `AddInlineErrors`; no new object. Contract parameters, errors and notes of `LLM.Prompt.Ask` updated; is-IS in sync.
+- Tests: new codeunit **96075** `LLM Ask Inline Files Tests` (16 mock-only tests, 1033 and 1039): request shapes, order, precedence, combined staged and inline, count and size caps, refusals, xAI upload/delete, Anthropic document block, contract.
+
 ### Fixed (2026-11-14) - Anthropic Ask provider failures keep their status (#125 AC03)
 
 - The Anthropic tool loop (`LLM.Prompt.Ask`) now returns the HTTP status, a sanitised provider error type and, for a non-authentication 4xx, the redacted reason, as `LLM.Prompt.Complete` already did. Before, a provider 4xx reached the caller without `received`. Authentication bodies and other provider text stay private. Adds the internal test hook `OnBeforeMessagesPostWithStatus` on codeunit 10035417 and test codeunit **96073** `LLM 126 Anthropic Err Tests` (mock-only, no credentials). Live Anthropic checks in 1033 and 1039 are recorded on #125 and #126.
