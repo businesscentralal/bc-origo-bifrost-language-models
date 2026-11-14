@@ -147,6 +147,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Parameters.Add(ContractMgt.Parameter('context', 'string', false, 'Optional data the model may use, as a string or a JSON object (written compactly), at most 1,000,000 characters; a larger context is refused before any provider call. It is sent in the user message under CONTEXT, never in the system text.'));
         Parameters.Add(ContractMgt.Parameter('instructions', 'string', false, 'Optional extra instructions, added to the system text after HEADLESS MODE.'));
         StagingFiles.AddParameter(Parameters);
+        StagingFiles.AddInlineParameters(Parameters);
         Parameters.Add(ContractMgt.Parameter('roleCode', 'string', false, 'Optional code of a Bifrost Language Model (at most 20 characters). When omitted, the caller''s own language model is used, and then the default model.'));
 
         Parameter := ContractMgt.Parameter('subject', 'object', false, 'Optional record to look at. It is passed to the model as RECORD CONTEXT; the record itself is read only by the model''s tools.');
@@ -227,6 +228,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HtmlMissingTxt, HtmlWhenTxt, HtmlNextStepTxt));
         ProviderBase.AddPromptErrors(Errors);
         StagingFiles.AddErrors(Errors);
+        StagingFiles.AddInlineErrors(Errors);
         exit(true);
     end;
 
@@ -311,7 +313,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         AskSetup.GetSetup();
         Notes := 'Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. ' +
             StrSubstNo(CompanyCapsTxt, Format(AskSetup."Ask Default Tool Calls", 0, 9), Format(AskSetup."Ask Max Tool Calls Cap", 0, 9), Format(AskSetup."Ask Default Rounds", 0, 9), Format(AskSetup."Ask Max Rounds Cap", 0, 9), Format(AskSetup."Ask Default Result Chars", 0, 9), Format(AskSetup."Ask Max Result Chars Cap", 0, 9)) +
-            ' At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported. xAI documents are uploaded to its Responses API for each round and deleted after the request; images remain inline. xAI provider 4xx errors retain HTTP metadata and may include a redacted reason containing only diagnostic vocabulary and protocol field names. Authentication bodies and other tokens are discarded.';
+            ' At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported. xAI documents are uploaded to its Responses API for each round and deleted after the request; images remain inline. xAI provider 4xx errors retain HTTP metadata and may include a redacted reason containing only diagnostic vocabulary and protocol field names. Authentication bodies and other tokens are discarded. Inline file or files (a PDF or picture from an earlier step) work like attachments: up to 10 files in all, within the model attachment limit; any file a provider uploads for the call is deleted after it, and every round uploads again from the local input.';
         exit(true);
     end;
 
@@ -505,6 +507,8 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         end;
 
         if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
+            exit;
+        if not StagingFiles.ResolveInline(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
             exit;
 
         if HtmlMode and HasSchema then
