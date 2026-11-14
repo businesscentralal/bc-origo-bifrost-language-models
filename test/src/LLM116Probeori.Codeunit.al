@@ -82,8 +82,12 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             FixtureBody := XaiTests.ProviderReply(Request.GetBoolean('html'), Request.GetBoolean('withFile'));
             if FixtureStatus <> 200 then
                 FixtureBody := '{"error":{"code":"invalid_request","message":"Unsupported field file_data. Use file_id instead. xai125-fixture-Z9Q7"}}';
-            Result := XaiTests.RunScenario(Tools.GetText(Request, 'type') = 'LLM.Prompt.Ask',
-                Request.GetBoolean('html'), Request.GetBoolean('withFile'), GlobalLanguage(), FixtureStatus, FixtureBody);
+            if Request.Contains('textFile') and Request.GetBoolean('textFile') then
+                Result := XaiTests.RunFileScenario(Tools.GetText(Request, 'type') = 'LLM.Prompt.Ask',
+                    Request.GetBoolean('html'), Request.GetBoolean('withFile'), GlobalLanguage(), FixtureStatus, FixtureBody, 'fixture.txt', 'text/plain', 'hello inline note')
+            else
+                Result := XaiTests.RunScenario(Tools.GetText(Request, 'type') = 'LLM.Prompt.Ask',
+                    Request.GetBoolean('html'), Request.GetBoolean('withFile'), GlobalLanguage(), FixtureStatus, FixtureBody);
             Result.Add('status', 'Success');
             Argument.SetResponseJson(Result);
             Argument."Content Type" := Argument.GetContentTypeJson();
