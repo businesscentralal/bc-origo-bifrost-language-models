@@ -49,6 +49,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
         NotBase64KindTok: Label 'notBase64', Locked = true;
         WrongTypeKindTok: Label 'wrongType', Locked = true;
         ProviderParameterTok: Label 'provider', Locked = true;
+        UploadStageTok: Label 'upload', Locked = true;
+        UploadStageReceivedTxt: Label 'file upload', Locked = true;
         FileParameterTok: Label 'file', Locked = true;
         FilesParameterTok: Label 'files', Locked = true;
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
@@ -65,6 +67,13 @@ codeunit 10035410 "LangModel Prov. Base ori"
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean; ProviderErrorCode: Text) Response: JsonObject
     begin
         Response := BuildPromptError(HttpStatus, HttpBlocked, ProviderErrorCode, '');
+    end;
+
+    /// <summary>Marks a prompt failure as raised by the provider file upload, so the cause is visible to the caller. The marker is a fixed token, never provider text.</summary>
+    procedure MarkUploadStage(var Response: JsonObject)
+    begin
+        if not Response.Contains('providerStage') then
+            Response.Add('providerStage', UploadStageTok);
     end;
 
     /// <summary>Preserves only allowlisted diagnostic words from a non-authentication provider 4xx reason.</summary>
@@ -103,6 +112,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ParameterName: Text;
         ProviderReason: Text;
         ReasonToken: JsonToken;
+        StageToken: JsonToken;
+        FromUpload: Boolean;
     begin
         if IsSafeFileContentRefusal(Response, ParameterName, ReceivedText, ErrorCode) then begin
             if ErrorCode = "Bifrost Error Code ori"::InvalidParameter then
@@ -132,11 +143,19 @@ codeunit 10035410 "LangModel Prov. Base ori"
             ProviderErrorCode := '';
         end;
         GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
+        FromUpload := Response.Get('providerStage', StageToken) and (JsonValueText(StageToken) = UploadStageTok);
         if (HttpStatus >= 100) and (HttpStatus <= 599) then begin
             ParameterName := ProviderParameterTok;
             ReceivedText := Format(HttpStatus, 0, 9);
             if ProviderErrorCode <> '' then
                 ReceivedText += ' ' + ProviderErrorCode;
+        end;
+        if FromUpload then begin
+            ParameterName := ProviderParameterTok;
+            if ReceivedText = '' then
+                ReceivedText := UploadStageReceivedTxt
+            else
+                ReceivedText := UploadStageReceivedTxt + ' ' + ReceivedText;
         end;
         if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
             if Response.Get('providerReason', ReasonToken) then begin
@@ -324,7 +343,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     local procedure AppendDiagnosticWord(Word: Text; var Result: Text; var HasDiagnostic: Boolean)
     var
-        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
+        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
     begin
         if Word in ['invalid', 'unsupported', 'unknown', 'unrecognized', 'missing', 'required', 'expected', 'exceeds', 'cannot', 'not'] then
             HasDiagnostic := true;

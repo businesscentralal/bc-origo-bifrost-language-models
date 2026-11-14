@@ -23,6 +23,7 @@ codeunit 10035429 "LangModel File Handling ori"
         FilesPathTok: Label '/v1/files', Locked = true;
         DataUriTok: Label 'data:%1;base64,%2', Locked = true;
         IdUnreadOutcomeTok: Label 'id unread', Locked = true;
+        InlineTextTxt: Label 'Attached file %1:', Locked = true;
 
     /// <summary>Default decoded size cap, 20 MB, before any provider HTTP call.</summary>
     procedure MaxDecodedFileBytes(): Integer
@@ -64,6 +65,15 @@ codeunit 10035429 "LangModel File Handling ori"
     begin
         Normalized := NormalizeMimeType(MimeType);
         exit((Normalized = 'image/png') or (Normalized = 'image/jpeg'));
+    end;
+
+    /// <summary>True when the MIME type is text sent inline as an input_text block in a Responses request instead of a provider file upload.</summary>
+    procedure IsInlineTextMime(MimeType: Text): Boolean
+    var
+        Normalized: Text;
+    begin
+        Normalized := NormalizeMimeType(MimeType);
+        exit(Normalized.StartsWith('text/') or (Normalized = 'application/json'));
     end;
 
     /// <summary>True when the MIME type is an image the shared policy refuses before HTTP.</summary>
@@ -278,6 +288,7 @@ codeunit 10035429 "LangModel File Handling ori"
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         ApiClient: Codeunit "LangModel API Client ori";
+        Base64Convert: Codeunit "Base64 Convert";
         FilesToken: JsonToken;
         FileToken: JsonToken;
         FileObj: JsonObject;
@@ -286,6 +297,7 @@ codeunit 10035429 "LangModel File Handling ori"
         MimeType: Text;
         FileId: Text;
         BaseUrl: Text;
+        NewLine: Text[2];
     begin
         if not AcceptFiles(PayloadObject, ResultText) then
             exit(false);
@@ -304,27 +316,36 @@ codeunit 10035429 "LangModel File Handling ori"
             if IsInlineImageMime(MimeType) then begin
                 FileBlock.Add('type', 'input_image');
                 FileBlock.Add('image_url', StrSubstNo(DataUriTok, NormalizeMimeType(MimeType), GetJsonText(FileObj, 'data')));
-            end else begin
-                UploadResponse := ApiClient.UploadProviderFile(
-                    ProviderBase.JoinEndpointUrl(BaseUrl, FilesPathTok),
-                    AuthHeaderName, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000),
-                    GetJsonText(FileObj, 'fileName'), MimeType, GetJsonText(FileObj, 'data'));
-                if UploadResponse.Contains('storedWithoutId') then
-                    LogFileCleanupIssue(ProviderName, IdUnreadOutcomeTok, '', '');
-                if UploadResponse.Contains('error') then begin
-                    UploadResponse.WriteTo(ResultText);
-                    exit(false);
+            end else
+                if IsInlineTextMime(MimeType) then begin
+                    FileBlock.Add('type', 'input_text');
+                    NewLine[1] := 13;
+                    NewLine[2] := 10;
+                    FileBlock.Add('text', StrSubstNo(InlineTextTxt, GetJsonText(FileObj, 'fileName')) + NewLine + Base64Convert.FromBase64(GetJsonText(FileObj, 'data')));
+                end else begin
+                    UploadResponse := ApiClient.UploadProviderFile(
+                        ProviderBase.JoinEndpointUrl(BaseUrl, FilesPathTok),
+                        AuthHeaderName, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000),
+                        GetJsonText(FileObj, 'fileName'), MimeType, GetJsonText(FileObj, 'data'));
+                    if UploadResponse.Contains('storedWithoutId') then
+                        LogFileCleanupIssue(ProviderName, IdUnreadOutcomeTok, '', '');
+                    if UploadResponse.Contains('error') then begin
+                        ProviderBase.MarkUploadStage(UploadResponse);
+                        UploadResponse.WriteTo(ResultText);
+                        exit(false);
+                    end;
+                    FileId := ProviderBase.NormalizeProviderFileId(GetJsonText(UploadResponse, 'id'));
+                    if FileId = '' then begin
+                        LogFileCleanupIssue(ProviderName, IdUnreadOutcomeTok, '', '');
+                        UploadResponse := ProviderBase.BuildPromptError(-1, false);
+                        ProviderBase.MarkUploadStage(UploadResponse);
+                        UploadResponse.WriteTo(ResultText);
+                        exit(false);
+                    end;
+                    UploadedFileIds.Add(FileId);
+                    FileBlock.Add('type', 'input_file');
+                    FileBlock.Add('file_id', FileId);
                 end;
-                FileId := ProviderBase.NormalizeProviderFileId(GetJsonText(UploadResponse, 'id'));
-                if FileId = '' then begin
-                    LogFileCleanupIssue(ProviderName, IdUnreadOutcomeTok, '', '');
-                    ProviderBase.BuildPromptError(-1, false).WriteTo(ResultText);
-                    exit(false);
-                end;
-                UploadedFileIds.Add(FileId);
-                FileBlock.Add('type', 'input_file');
-                FileBlock.Add('file_id', FileId);
-            end;
             ContentArray.Add(FileBlock);
         end;
         exit(true);
