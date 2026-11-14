@@ -325,6 +325,58 @@ codeunit 96066 "LLM Ask Html Tests"
     end;
 
     [Test]
+    procedure Html_UserMessage_EndsWithHtmlReminder()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        Payload: Text;
+    begin
+        // [SCENARIO #125] html without context or attachment: the user message itself restates the HTML requirement
+        Initialize();
+        MockProvider.EnqueueAnswer(Reply(DocumentTok));
+
+        ResponseJson := Execute(Request('{"question":"What is the capital of Iceland?","outputFormat":"html"}'), 1033);
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Payload := MockProvider.GetLastSendPayload();
+        Assert.IsTrue(Payload.Contains('ANSWER FORMAT: answer with one complete HTML document only'), 'the user message restates the html requirement');
+        Assert.IsTrue(Payload.Contains('HTML OUTPUT'), 'the system rules stay in place');
+    end;
+
+    [Test]
+    procedure Html_UserMessage_ReminderFollowsUntrustedContext()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+        Payload: Text;
+    begin
+        // [SCENARIO #125] the reminder sits after END UNTRUSTED CONTEXT, outside the data block
+        Initialize();
+        MockProvider.EnqueueAnswer(Reply(DocumentTok));
+
+        ResponseJson := Execute(Request('{"question":"Q","outputFormat":"html","context":"CTX-125"}'), 1033);
+
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Payload := MockProvider.GetLastSendPayload();
+        Assert.IsTrue(Payload.IndexOf('END UNTRUSTED CONTEXT') > 0, 'context is closed with a delimiter');
+        Assert.IsTrue(Payload.IndexOf('ANSWER FORMAT:') > Payload.IndexOf('END UNTRUSTED CONTEXT'), 'the reminder follows the context block');
+    end;
+
+    [Test]
+    procedure Text_UserMessage_HasNoHtmlReminder()
+    var
+        MockProvider: Codeunit "Mock Bifrost Chat Provider";
+        ResponseJson: JsonObject;
+    begin
+        // [SCENARIO #125] text mode keeps the earlier user message
+        Initialize();
+        MockProvider.EnqueueAnswer(Reply('ok'));
+        ResponseJson := Execute(Request('{"question":"Q"}'), 1033);
+        Assert.AreEqual('Success', ResponseJson.GetText('status'), Describe(ResponseJson));
+        Assert.IsFalse(MockProvider.GetLastSendPayload().Contains('ANSWER FORMAT:'), 'no html reminder in text mode');
+    end;
+
+    [Test]
     procedure Html_Injection_WriteToolIsDeniedAndNothingRuns()
     var
         MockProvider: Codeunit "Mock Bifrost Chat Provider";

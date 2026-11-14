@@ -13,6 +13,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         PromptAuthErr: Label 'The language model provider refused authentication.', Comment = 'is-IS=Veitandi mállíkansins hafnaði auðkenningu.';
         PromptRetryErr: Label 'The language model provider is temporarily unavailable.', Comment = 'is-IS=Veitandi mállíkansins er tímabundið ekki tiltækur.';
         PromptProviderErr: Label 'The language model provider could not complete the prompt.', Comment = 'is-IS=Veitandi mállíkansins gat ekki unnið kvaðninguna.';
+        PromptReasonTxt: Label '%1 Provider reason: %2', Comment = '%1 = localized failure, %2 = redacted provider diagnostic, is-IS=%1 Ástæða veitanda: %2';
         PromptAnswerExpectedTxt: Label 'an answer from the language model', Comment = 'is-IS=svar frá mállíkaninu';
         PromptSetupNextStepTxt: Label 'Check the Base URL, model and API key setup on the Bifrost Language Model card; use Bifrost App Secrets to set the API key, then try Test Connection.', Comment = 'is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.';
         PromptRetryNextStepTxt: Label 'Wait and retry. If the failure persists, check the provider status and the limits on the Bifrost Language Model card.', Comment = 'is-IS=Bíddu og reyndu aftur. Ef villan kemur aftur skaltu athuga stöðu veitandans og takmarkanir á spjaldi Bifröst mállíkans.';
@@ -49,6 +50,12 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     /// <summary>Builds a safe prompt failure and keeps only a sanitised provider error code.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean; ProviderErrorCode: Text) Response: JsonObject
+    begin
+        Response := BuildPromptError(HttpStatus, HttpBlocked, ProviderErrorCode, '');
+    end;
+
+    /// <summary>Preserves only allowlisted diagnostic words from a non-authentication provider 4xx reason.</summary>
+    procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean; ProviderErrorCode: Text; ProviderReason: Text) Response: JsonObject
     var
         ErrorCode: Enum "Bifrost Error Code ori";
         MessageText: Text;
@@ -62,6 +69,11 @@ codeunit 10035410 "LangModel Prov. Base ori"
         SafeCode := AcceptProviderCodeToken(ProviderErrorCode);
         if SafeCode <> '' then
             Response.Add('providerErrorCode', SafeCode);
+        if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then begin
+            ProviderReason := RedactProviderReason(ProviderReason);
+            if ProviderReason <> '' then
+                Response.Add('providerReason', ProviderReason);
+        end;
     end;
 
     /// <summary>Returns a coded, localized prompt failure without reflecting provider-controlled text.</summary>
@@ -76,6 +88,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ReceivedMime: Text;
         ReceivedText: Text;
         ParameterName: Text;
+        ProviderReason: Text;
+        ReasonToken: JsonToken;
     begin
         if IsSafeTotalOversizeRefusal(Response, ReceivedText) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TotalOversizeErr, ReceivedText, Response.GetText('capBytes')), FilesParameterTok, ReceivedText, StrSubstNo(TotalOversizeExpectedTxt, Response.GetText('capBytes')), TotalOversizeNextStepTxt);
@@ -103,6 +117,12 @@ codeunit 10035410 "LangModel Prov. Base ori"
             if ProviderErrorCode <> '' then
                 ReceivedText += ' ' + ProviderErrorCode;
         end;
+        if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
+            if Response.Get('providerReason', ReasonToken) then begin
+                ProviderReason := RedactProviderReason(JsonValueText(ReasonToken));
+                if ProviderReason <> '' then
+                    MessageText := StrSubstNo(PromptReasonTxt, MessageText, ProviderReason);
+            end;
         Argument.RespondWithError(ErrorCode, MessageText, ParameterName, ReceivedText, PromptAnswerExpectedTxt, NextStep);
     end;
 
@@ -180,6 +200,75 @@ codeunit 10035410 "LangModel Prov. Base ori"
             if Root.Get('type', CodeToken) then
                 Candidate := JsonValueText(CodeToken);
         exit(AcceptProviderCodeToken(Candidate));
+    end;
+
+    /// <summary>Reads only a JSON provider reason; arbitrary text and other response fields are discarded.</summary>
+    [NonDebuggable]
+    procedure ReadProviderReason(ResponseText: Text): Text
+    var
+        Root: JsonObject;
+        ErrorToken: JsonToken;
+        MessageToken: JsonToken;
+    begin
+        if not Root.ReadFrom(ResponseText) then
+            exit('');
+        if Root.Get('error', ErrorToken) then
+            if ErrorToken.IsObject() then begin
+                if ErrorToken.AsObject().Get('message', MessageToken) then
+                    exit(RedactProviderReason(JsonValueText(MessageToken)));
+            end else
+                exit(RedactProviderReason(JsonValueText(ErrorToken)));
+        if Root.Get('message', MessageToken) then
+            exit(RedactProviderReason(JsonValueText(MessageToken)));
+    end;
+
+    /// <summary>
+    /// Fail-closed redaction: keeps a fixed diagnostic vocabulary and protocol field names only.
+    /// All other tokens (including names, keys, fragments, URLs and prompt/file content) become [redacted].
+    /// Authentication bodies are not passed here by the transport.
+    /// </summary>
+    [NonDebuggable]
+    procedure RedactProviderReason(Reason: Text) Result: Text
+    var
+        Index: Integer;
+        Word: Text;
+        Character: Char;
+        HasDiagnostic: Boolean;
+    begin
+        if (Reason = '') or (StrLen(Reason) > 8192) then
+            exit('');
+        for Index := 1 to StrLen(Reason) + 1 do begin
+            Character := ' ';
+            if Index <= StrLen(Reason) then
+                Character := Reason[Index];
+            if IsLatinLetter(Character) or IsDigit(Character) or (Character = '_') or (Character = '-') then
+                Word += Format(Character)
+            else
+                if Word <> '' then begin
+                    AppendDiagnosticWord(LowerCase(Word), Result, HasDiagnostic);
+                    Word := '';
+                end;
+            if StrLen(Result) > 300 then
+                break;
+        end;
+        if not HasDiagnostic then
+            exit('');
+        exit(CopyStr(Result, 1, 300));
+    end;
+
+    local procedure AppendDiagnosticWord(Word: Text; var Result: Text; var HasDiagnostic: Boolean)
+    var
+        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
+    begin
+        if Word in ['invalid', 'unsupported', 'unknown', 'unrecognized', 'missing', 'required', 'expected', 'exceeds', 'cannot', 'not'] then
+            HasDiagnostic := true;
+        if not VocabularyTok.Contains('|' + Word + '|') or (Word = 'redacted') then
+            Word := '[redacted]';
+        if (Word = '[redacted]') and Result.EndsWith(Word) then
+            exit;
+        if Result <> '' then
+            Result += ' ';
+        Result += Word;
     end;
 
     /// <summary>Returns the file id when it can be placed in a URL path, otherwise empty.</summary>

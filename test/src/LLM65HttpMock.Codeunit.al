@@ -2,7 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost.LanguageModels;
 
-/// <summary>Manually bound HTTP interception for issue 65 and 93; never receives provider credentials.</summary>
+/// <summary>Manually bound HTTP interception for issues 65, 93 and 125; never receives provider credentials.</summary>
 codeunit 96033 "LLM 65 HTTP Mock"
 {
     Access = Internal;
@@ -187,6 +187,18 @@ codeunit 96033 "LLM 65 HTTP Mock"
     procedure GetDeleteFailureFileId(): Text
     begin
         exit(LastDeleteFailureFileId);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel API Client ori", 'OnBeforeChatPost', '', false, false)]
+    local procedure OnBeforeChatPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
+    var
+        Sent: Boolean;
+        HttpStatus: Integer;
+        HttpBlocked: Boolean;
+    begin
+        OnBeforePromptPost(Url, RequestBody, Handled, Sent, HttpStatus, HttpBlocked, ResponseText);
+        if not Sent or HttpBlocked or (HttpStatus < 200) or (HttpStatus > 299) then
+            Error('Synthetic chat transport failure.');
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel API Client ori", 'OnBeforePromptPost', '', false, false)]

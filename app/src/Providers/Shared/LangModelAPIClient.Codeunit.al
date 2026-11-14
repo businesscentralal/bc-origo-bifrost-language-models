@@ -14,6 +14,7 @@ codeunit 10035411 "LangModel API Client ori"
     Access = Internal;
 
     var
+        LastProviderReason: Text;
         LastOperation: Text[50];
         LastHttpMethod: Text[10];
         LastRequestUrl: Text;
@@ -135,6 +136,7 @@ codeunit 10035411 "LangModel API Client ori"
         Sent: Boolean;
     begin
         HasPendingLog := false;
+        LastProviderReason := '';
         if not ProviderBase.CanSendHttpRequests() then
             exit(ProviderBase.BuildPromptError(0, true));
         if not TryPostPrompt(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
@@ -144,7 +146,7 @@ codeunit 10035411 "LangModel API Client ori"
         if HttpBlocked or not Sent then
             exit(ProviderBase.BuildPromptError(0, HttpBlocked));
         if (HttpStatus < 200) or (HttpStatus > 299) then
-            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
             exit(ProviderBase.BuildPromptError(-1, false));
         if Response.Contains('error') then
@@ -197,6 +199,8 @@ codeunit 10035411 "LangModel API Client ori"
             // Read only long enough to keep a sanitised error code. The body itself is discarded.
             HttpResponse.Content.ReadAs(FailureText);
             ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(FailureText);
+            if (HttpResponse.HttpStatusCode() >= 400) and (HttpResponse.HttpStatusCode() < 500) and not (HttpResponse.HttpStatusCode() in [401, 403]) then
+                LastProviderReason := ProviderBase.ReadProviderReason(FailureText);
             ResponseText := '';
         end;
     end;
@@ -208,6 +212,8 @@ codeunit 10035411 "LangModel API Client ori"
     begin
         if (HttpStatus < 200) or (HttpStatus > 299) then begin
             ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
+            if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
+                LastProviderReason := ProviderBase.ReadProviderReason(ResponseText);
             ResponseText := '';
         end;
     end;
@@ -234,6 +240,7 @@ codeunit 10035411 "LangModel API Client ori"
         HttpBlocked: Boolean;
         Sent: Boolean;
     begin
+        LastProviderReason := '';
         if not ProviderBase.CanSendHttpRequests() then
             exit(ProviderBase.BuildPromptError(0, true));
         if not TryUploadProviderFile(FilesUrl, AuthHeaderName, ApiKey, TimeoutMs, FileName, MimeType, ContentBase64, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
@@ -243,7 +250,7 @@ codeunit 10035411 "LangModel API Client ori"
         if HttpBlocked or not Sent then
             exit(ProviderBase.BuildPromptError(0, HttpBlocked));
         if (HttpStatus < 200) or (HttpStatus > 299) then
-            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
             exit(StoredWithoutIdError(ProviderBase));
         if Response.Contains('error') then
@@ -263,6 +270,7 @@ codeunit 10035411 "LangModel API Client ori"
         HttpBlocked: Boolean;
         Sent: Boolean;
     begin
+        LastProviderReason := '';
         if not ProviderBase.CanSendHttpRequests() then
             exit(ProviderBase.BuildPromptError(0, true));
         if not TryDeleteProviderFile(FileUrl, AuthHeaderName, ApiKey, TimeoutMs, Sent, HttpStatus, HttpBlocked, ResponseText, ProviderErrorCode) then begin
@@ -272,7 +280,7 @@ codeunit 10035411 "LangModel API Client ori"
         if HttpBlocked or not Sent then
             exit(ProviderBase.BuildPromptError(0, HttpBlocked));
         if (HttpStatus < 200) or (HttpStatus > 299) then
-            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode));
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
     end;
 
     /// <summary>Writes a multipart file upload body. Purpose is written before the file bytes.</summary>
@@ -391,6 +399,8 @@ codeunit 10035411 "LangModel API Client ori"
         else begin
             HttpResponse.Content.ReadAs(FailureText);
             ProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(FailureText);
+            if (HttpResponse.HttpStatusCode() >= 400) and (HttpResponse.HttpStatusCode() < 500) and not (HttpResponse.HttpStatusCode() in [401, 403]) then
+                LastProviderReason := ProviderBase.ReadProviderReason(FailureText);
             ResponseText := '';
         end;
     end;
