@@ -161,6 +161,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         UserText: Text;
         MimeType: Text;
         LastIndex: Integer;
+        Base64Convert: Codeunit "Base64 Convert";
     begin
         if not PayloadObject.Get('files', FilesToken) then
             exit;
@@ -183,9 +184,16 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             FileObj := FileToken.AsObject();
             MimeType := GetText(FileObj, 'mimeType');
             Clear(Source);
-            Source.Add('type', 'base64');
-            Source.Add('media_type', MimeType);
-            Source.Add('data', GetText(FileObj, 'data'));
+            if MimeType.StartsWith('text/') then begin
+                // Anthropic accepts plain text documents only as a text source (media_type text/plain), never base64.
+                Source.Add('type', 'text');
+                Source.Add('media_type', 'text/plain');
+                Source.Add('data', Base64Convert.FromBase64(GetText(FileObj, 'data')));
+            end else begin
+                Source.Add('type', 'base64');
+                Source.Add('media_type', MimeType);
+                Source.Add('data', GetText(FileObj, 'data'));
+            end;
             Clear(FileBlock);
             if MimeType.StartsWith('image/') then
                 FileBlock.Add('type', 'image')
@@ -294,7 +302,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
         Reply := ExtractText(Response);
         // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
-        if TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+        // Not in a headless Ask run (it carries allowedTools): nobody reads the follow-up, and its answer would replace the
+        // requested answer, for example an HTML document whose CSS holds numbers (#125).
+        if not HasAllowedTools and TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
             Clear(VerifyMessage);
             VerifyMessage.Add('role', 'user');
             VerifyMessage.Add('content', TurnGuard.GetVerifyFiguresPrompt());

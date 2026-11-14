@@ -226,7 +226,9 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         Reply := GetTextProperty(MessageObject, 'content');
         // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
-        if TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+        // Not in a headless Ask run (it carries allowedTools): nobody reads the follow-up, and its answer would replace the
+        // requested answer, for example an HTML document whose CSS holds numbers (#125).
+        if not HasAllowedTools and TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
             AddUserMessage(Messages, TurnGuard.GetVerifyFiguresPrompt());
             exit(CallModelOnce(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Messages, OpenAITools, Model, ExtraRequestFields));
         end;
@@ -754,7 +756,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             exit(BuildResponsesToolCallsResponse(ToolCalls, Input, Model, UsageObject, GetTextProperty(Response, 'status')));
 
         Reply := ReplyBuilder.ToText();
-        if TurnGuard.NeedsFigureCheck(Input, Reply) then begin
+        if not HasAllowedTools and TurnGuard.NeedsFigureCheck(Input, Reply) then begin
             AddUserMessage(Input, TurnGuard.GetVerifyFiguresPrompt());
             exit(CallResponsesOnce(ApiClient, Url, AuthHeaderName, ApiKey, TimeoutMs, MaxTokens, ContextTokens, Input, ResponsesTools, Model, ExtraRequestFields));
         end;
