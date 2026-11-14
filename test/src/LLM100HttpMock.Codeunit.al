@@ -11,12 +11,21 @@ codeunit 96044 "LLM 100 HTTP Mock"
     var
         ResponseBody: Text;
         Bodies: List of [Text];
+        ResponseStatus: Integer;
 
     /// <summary>Configures the synthetic provider answer and clears the captured request bodies.</summary>
     procedure Configure(NewResponseBody: Text)
     begin
         ResponseBody := NewResponseBody;
+        ResponseStatus := 0;
         Clear(Bodies);
+    end;
+
+    /// <summary>Answers the Anthropic messages post with this HTTP status and synthetic body (#125 AC03).</summary>
+    procedure ConfigureStatus(NewStatus: Integer; NewResponseBody: Text)
+    begin
+        Configure(NewResponseBody);
+        ResponseStatus := NewStatus;
     end;
 
     /// <summary>Number of requests captured since Configure.</summary>
@@ -62,7 +71,17 @@ codeunit 96044 "LLM 100 HTTP Mock"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Anthropic LangModel Proxy ori", 'OnBeforeMessagesPost', '', false, false)]
     local procedure OnBeforeMessagesPost(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
     begin
+        if ResponseStatus = 0 then
+            Capture(RequestBody, Handled, ResponseText);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Anthropic LangModel Proxy ori", 'OnBeforeMessagesPostWithStatus', '', false, false)]
+    local procedure OnBeforeMessagesPostWithStatus(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var HttpStatus: Integer; var ResponseText: Text)
+    begin
+        if ResponseStatus = 0 then
+            exit;
         Capture(RequestBody, Handled, ResponseText);
+        HttpStatus := ResponseStatus;
     end;
 
     local procedure Capture(RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)

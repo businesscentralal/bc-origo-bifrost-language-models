@@ -114,14 +114,34 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
     local procedure DoSendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
+        Payload: JsonObject;
+        Extras: JsonObject;
+        Failure: Text;
     begin
+        LangModelChatProxy.UseXaiTransport(Argument);
+        if Payload.ReadFrom(Argument.GetPayload()) then
+            if HasFiles(Payload) then begin
+                if not FileHandling.AcceptFiles(Payload, Failure) then
+                    exit(Failure);
+                Payload.WriteTo(Failure);
+                Extras.Add('store', false);
+                exit(LangModelChatProxy.SendChatMessageResponses(Argument, Failure, AuthHeaderNameTok, Extras));
+            end;
         exit(LangModelChatProxy.SendChatMessage(Argument, Argument.GetPayload(), AuthHeaderNameTok));
     end;
 
     local procedure DoContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
+        State: JsonObject;
+        Extras: JsonObject;
     begin
+        LangModelChatProxy.UseXaiTransport(Argument);
+        if State.ReadFrom(Argument.GetConversationState()) then
+            if State.Contains('input') then begin
+                Extras.Add('store', false);
+                exit(LangModelChatProxy.ContinueWithToolResultsResponses(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok, Extras));
+            end;
         exit(LangModelChatProxy.ContinueWithToolResults(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok));
     end;
 
@@ -165,7 +185,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         RequestBody.Add('max_completion_tokens', ProviderBase.GetMaxTokens(Argument, 16384));
         RequestBody.Add('messages', Messages);
 
-        ChatUrl := ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok) + '/v1/chat/completions';
+        ChatUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/chat/completions');
         Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
         if Response.Contains('error') then begin
@@ -242,6 +262,94 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
 
         ResponseObj.Add('reply', ExtractResponsesText(Response));
         ResponseObj.WriteTo(ResultText);
+    end;
+
+    /// <summary>
+    /// Sends one agentic Responses round. Documents are uploaded only for this round and
+    /// always cleaned up. The caller's input keeps local bytes, never expired provider ids.
+    /// </summary>
+    [NonDebuggable]
+    procedure SendResponseRound(var Argument: Record "Bifrost Chat Argument ori" temporary; RequestBody: JsonObject) Response: JsonObject
+    var
+        UploadedIds: JsonArray;
+    begin
+        if not TrySendResponseRound(Argument, RequestBody.Clone().AsObject(), UploadedIds, Response) then begin
+            ClearLastError();
+            Response := ProviderBase.BuildPromptError(0, false);
+        end;
+        FileHandling.DeleteUploadedFiles(Argument, UploadedIds, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TrySendResponseRound(var Argument: Record "Bifrost Chat Argument ori" temporary; RequestBody: JsonObject; var UploadedIds: JsonArray; var Response: JsonObject)
+    var
+        ApiClient: Codeunit "LangModel API Client ori";
+        Input: JsonArray;
+        MessageToken: JsonToken;
+        ContentToken: JsonToken;
+        MessageObject: JsonObject;
+        Content: JsonArray;
+        Failure: Text;
+        Index: Integer;
+    begin
+        Input := RequestBody.GetArray('input');
+        for Index := 0 to Input.Count() - 1 do begin
+            Input.Get(Index, MessageToken);
+            if MessageToken.IsObject() then begin
+                MessageObject := MessageToken.AsObject();
+                if MessageObject.Get('content', ContentToken) then
+                    if ContentToken.IsArray() then begin
+                        if not UploadInputDocuments(Argument, ContentToken.AsArray(), Content, UploadedIds, Failure) then begin
+                            Response.ReadFrom(Failure);
+                            exit;
+                        end;
+                        MessageObject.Replace('content', Content);
+                        Input.Set(Index, MessageObject);
+                    end;
+            end;
+        end;
+        RequestBody.Replace('input', Input);
+        Response := ApiClient.SendPromptToEndpoint(
+            ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/responses'),
+            AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
+    end;
+
+    [NonDebuggable]
+    local procedure UploadInputDocuments(var Argument: Record "Bifrost Chat Argument ori" temporary; OriginalContent: JsonArray; var Content: JsonArray; var UploadedIds: JsonArray; var Failure: Text): Boolean
+    var
+        BlockToken: JsonToken;
+        Block: JsonObject;
+        FileObject: JsonObject;
+        Payload: JsonObject;
+        Files: JsonArray;
+        DataUri: Text;
+        Separator: Integer;
+    begin
+        Clear(Content);
+        foreach BlockToken in OriginalContent do begin
+            Block := BlockToken.AsObject();
+            if (GetJsonText(Block, 'type') = 'input_file') and Block.Contains('file_data') then begin
+                DataUri := Block.GetText('file_data');
+                Separator := StrPos(DataUri, ';base64,');
+                if (not DataUri.StartsWith('data:')) or (Separator < 6) then begin
+                    Failure := WriteTransportError();
+                    exit(false);
+                end;
+                Clear(FileObject);
+                Clear(Files);
+                Clear(Payload);
+                FileObject.Add('fileName', GetJsonText(Block, 'filename'));
+                FileObject.Add('mimeType', CopyStr(DataUri, 6, Separator - 6));
+                FileObject.Add('data', CopyStr(DataUri, Separator + 8));
+                Files.Add(FileObject);
+                Payload.Add('files', Files);
+                if not FileHandling.AddResponseFiles(Argument, Payload, Content, UploadedIds, Failure, ProviderNameTok, AuthHeaderNameTok, DefaultBaseUrlTok) then
+                    exit(false);
+            end else
+                Content.Add(BlockToken);
+        end;
+        exit(true);
     end;
 
     local procedure WriteTransportError() ResultText: Text

@@ -38,6 +38,7 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
     var
         Model: Record "Bifrost Language Model ori";
         Tools: Codeunit "LangModel Test Tools";
+        XaiTests: Codeunit "LLM 125 xAI Tests";
         Mock: Codeunit "Mock Bifrost Chat Provider";
         Staging: Codeunit "Blob Staging ori";
         Blob: Codeunit "Temp Blob";
@@ -60,6 +61,8 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         MessageId: Guid;
         ModelCode: Code[20];
         Scenario: Text;
+        FixtureBody: Text;
+        FixtureStatus: Integer;
         ContentType: Text;
         ResponseText: Text;
         ResponseTime: Duration;
@@ -72,6 +75,20 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             exit;
         Request := Argument.GetRequestJson();
         Scenario := Tools.GetText(Request, 'scenario');
+        if Scenario = 'xai125' then begin
+            FixtureStatus := 200;
+            if Request.Contains('httpStatus') then
+                FixtureStatus := Request.GetInteger('httpStatus');
+            FixtureBody := XaiTests.ProviderReply(Request.GetBoolean('html'), Request.GetBoolean('withFile'));
+            if FixtureStatus <> 200 then
+                FixtureBody := '{"error":{"code":"invalid_request","message":"Unsupported field file_data. Use file_id instead. xai125-fixture-Z9Q7"}}';
+            Result := XaiTests.RunScenario(Tools.GetText(Request, 'type') = 'LLM.Prompt.Ask',
+                Request.GetBoolean('html'), Request.GetBoolean('withFile'), GlobalLanguage(), FixtureStatus, FixtureBody);
+            Result.Add('status', 'Success');
+            Argument.SetResponseJson(Result);
+            Argument."Content Type" := Argument.GetContentTypeJson();
+            exit;
+        end;
         if Scenario = 'cleanupForeign' then begin
             CleanupForeignFixture(Argument);
             exit;

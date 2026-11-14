@@ -9,7 +9,7 @@ using System.TestLibraries.Utilities;
 /// does not match a declared PDF, PNG or JPEG type, is a typed refusal about the file, never a model-setup hint.
 /// Mock provider only; no credentials and no live calls.
 /// </summary>
-codeunit 96072 "LM 128 File Validation Tests"
+codeunit 96074 "LM 128 File Validation Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
