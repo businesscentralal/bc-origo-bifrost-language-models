@@ -150,6 +150,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
     local procedure AttachFilesToAnthropicMessages(PayloadObject: JsonObject; var Messages: JsonArray)
     var
+        Base64Convert: Codeunit "Base64 Convert";
         FilesToken: JsonToken;
         FilesArray: JsonArray;
         FileToken: JsonToken;
@@ -164,7 +165,6 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         UserText: Text;
         MimeType: Text;
         LastIndex: Integer;
-        Base64Convert: Codeunit "Base64 Convert";
     begin
         if not PayloadObject.Get('files', FilesToken) then
             exit;
