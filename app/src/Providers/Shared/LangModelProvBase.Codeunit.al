@@ -35,7 +35,22 @@ codeunit 10035410 "LangModel Prov. Base ori"
         TotalOversizeWhenTxt: Label 'The decoded size of all attached files together is larger than the total file size cap.', Comment = 'is-IS=Afkóðuð stærð allra viðhengdra skráa saman er stærri en heildarstærðartakmörkin.';
         TotalOversizeExpectedTxt: Label 'at most %1 bytes in total', Comment = 'is-IS=í mesta lagi %1 bæti samtals';
         TotalOversizeNextStepTxt: Label 'Remove or reduce files so the total decoded size is within the cap. No request was sent.', Comment = 'is-IS=Fjarlægðu eða minnkaðu skrár svo heildarstærðin sé innan hámarksins. Engin beiðni var send.';
+        NotBase64Err: Label 'The file data is not valid Base64.', Comment = 'is-IS=Gögn skrárinnar eru ekki gilt Base64.';
+        NotBase64WhenTxt: Label 'The file data cannot be decoded as Base64.', Comment = 'is-IS=Ekki er hægt að afkóða gögn skrárinnar sem Base64.';
+        NotBase64ReceivedTok: Label 'not base64', Locked = true;
+        NotBase64ExpectedTxt: Label 'the file content, Base64-encoded', Comment = 'is-IS=efni skrárinnar, Base64-kóðað';
+        NotBase64NextStepTxt: Label 'Send the file content as standard Base64 in data (no line breaks, no data: prefix). No request was sent.', Comment = 'is-IS=Sendu efni skrárinnar sem venjulegt Base64 í data (án línuskila og án data: forskeytis). Engin beiðni var send.';
+        WrongTypeErr: Label 'The file content does not match its mimeType.', Comment = 'is-IS=Efni skrárinnar passar ekki við mimeType hennar.';
+        WrongTypeWhenTxt: Label 'The decoded file does not start with the signature of the declared PDF, PNG or JPEG type.', Comment = 'is-IS=Afkóðuð skráin byrjar ekki á auðkenni uppgefinnar PDF-, PNG- eða JPEG-gerðar.';
+        WrongTypeReceivedTok: Label 'content is not %1', Locked = true;
+        WrongTypeExpectedTxt: Label 'content that matches the declared mimeType', Comment = 'is-IS=efni sem passar við uppgefna mimeType';
+        WrongTypeNextStepTxt: Label 'Send a file whose content is of the declared type, or correct mimeType. No request was sent.', Comment = 'is-IS=Sendu skrá sem er af uppgefinni gerð, eða leiðréttu mimeType. Engin beiðni var send.';
+        FileIndexTok: Label 'files[%1]', Locked = true;
+        NotBase64KindTok: Label 'notBase64', Locked = true;
+        WrongTypeKindTok: Label 'wrongType', Locked = true;
         ProviderParameterTok: Label 'provider', Locked = true;
+        UploadStageTok: Label 'upload', Locked = true;
+        UploadStageReceivedTxt: Label 'file upload', Comment = 'is-IS=skráarupphleðsla';
         FileParameterTok: Label 'file', Locked = true;
         FilesParameterTok: Label 'files', Locked = true;
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
@@ -52,6 +67,13 @@ codeunit 10035410 "LangModel Prov. Base ori"
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean; ProviderErrorCode: Text) Response: JsonObject
     begin
         Response := BuildPromptError(HttpStatus, HttpBlocked, ProviderErrorCode, '');
+    end;
+
+    /// <summary>Marks a prompt failure as raised by the provider file upload, so the cause is visible to the caller. The marker is a fixed token, never provider text.</summary>
+    procedure MarkUploadStage(var Response: JsonObject)
+    begin
+        if not Response.Contains('providerStage') then
+            Response.Add('providerStage', UploadStageTok);
     end;
 
     /// <summary>Preserves only allowlisted diagnostic words from a non-authentication provider 4xx reason.</summary>
@@ -90,7 +112,17 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ParameterName: Text;
         ProviderReason: Text;
         ReasonToken: JsonToken;
+        StageToken: JsonToken;
+        FromUpload: Boolean;
     begin
+        if IsSafeFileContentRefusal(Response, ParameterName, ReceivedText, ErrorCode) then begin
+            if ErrorCode = "Bifrost Error Code ori"::InvalidParameter then
+                if Response.GetText('refusalKind') = NotBase64KindTok then
+                    Argument.RespondWithError(ErrorCode, NotBase64Err, ParameterName, ReceivedText, NotBase64ExpectedTxt, NotBase64NextStepTxt)
+                else
+                    Argument.RespondWithError(ErrorCode, WrongTypeErr, ParameterName, ReceivedText, WrongTypeExpectedTxt, WrongTypeNextStepTxt);
+            exit;
+        end;
         if IsSafeTotalOversizeRefusal(Response, ReceivedText) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(TotalOversizeErr, ReceivedText, Response.GetText('capBytes')), FilesParameterTok, ReceivedText, StrSubstNo(TotalOversizeExpectedTxt, Response.GetText('capBytes')), TotalOversizeNextStepTxt);
             exit;
@@ -111,11 +143,19 @@ codeunit 10035410 "LangModel Prov. Base ori"
             ProviderErrorCode := '';
         end;
         GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
+        FromUpload := Response.Get('providerStage', StageToken) and (JsonValueText(StageToken) = UploadStageTok);
         if (HttpStatus >= 100) and (HttpStatus <= 599) then begin
             ParameterName := ProviderParameterTok;
             ReceivedText := Format(HttpStatus, 0, 9);
             if ProviderErrorCode <> '' then
                 ReceivedText += ' ' + ProviderErrorCode;
+        end;
+        if FromUpload then begin
+            ParameterName := ProviderParameterTok;
+            if ReceivedText = '' then
+                ReceivedText := UploadStageReceivedTxt
+            else
+                ReceivedText := UploadStageReceivedTxt + ' ' + ReceivedText;
         end;
         if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
             if Response.Get('providerReason', ReasonToken) then begin
@@ -138,6 +178,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, UnsupportedImageWhenTxt, UnsupportedImageNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, OversizeFileWhenTxt, OversizeFileNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, TotalOversizeErr, TotalOversizeWhenTxt, TotalOversizeNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, NotBase64Err, NotBase64WhenTxt, NotBase64NextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, WrongTypeErr, WrongTypeWhenTxt, WrongTypeNextStepTxt));
     end;
 
     /// <summary>Builds the local unsupported-image refusal. No provider call is made for this answer.</summary>
@@ -155,6 +197,49 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Response.Add('error', OversizeFileErr);
         Response.Add('safeRefusal', true);
         Response.Add('refusalKind', OversizeKindTok);
+    end;
+
+    /// <summary>Builds the local refusal for file data that is not Base64. No provider call is made for this answer.</summary>
+    procedure BuildNotBase64Refusal(FileIndex: Integer; FileCount: Integer) Response: JsonObject
+    begin
+        Response.Add('error', NotBase64Err);
+        Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', NotBase64KindTok);
+        Response.Add('parameter', FileParameterName(FileIndex, FileCount));
+        Response.Add('received', NotBase64ReceivedTok);
+    end;
+
+    /// <summary>Builds the local refusal for file content that does not match its declared type. No provider call is made.</summary>
+    procedure BuildWrongTypeRefusal(FileIndex: Integer; FileCount: Integer; MimeType: Text) Response: JsonObject
+    begin
+        Response.Add('error', WrongTypeErr);
+        Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', WrongTypeKindTok);
+        Response.Add('parameter', FileParameterName(FileIndex, FileCount));
+        Response.Add('received', StrSubstNo(WrongTypeReceivedTok, SanitizeMimeType(MimeType)));
+    end;
+
+    local procedure FileParameterName(FileIndex: Integer; FileCount: Integer): Text
+    begin
+        if FileCount > 1 then
+            exit(StrSubstNo(FileIndexTok, Format(FileIndex, 0, 9)));
+        exit(FileParameterTok);
+    end;
+
+    local procedure IsSafeFileContentRefusal(Response: JsonObject; var ParameterName: Text; var ReceivedText: Text; var ErrorCode: Enum "Bifrost Error Code ori"): Boolean
+    begin
+        ParameterName := '';
+        ReceivedText := '';
+        if not (IsSafeRefusalKind(Response, NotBase64KindTok) or IsSafeRefusalKind(Response, WrongTypeKindTok)) then
+            exit(false);
+        if Response.Contains('parameter') then
+            ParameterName := Response.GetText('parameter');
+        if not ((ParameterName = FileParameterTok) or ParameterName.StartsWith('files[')) then
+            ParameterName := FileParameterTok;
+        if Response.Contains('received') then
+            ReceivedText := Response.GetText('received');
+        ErrorCode := "Bifrost Error Code ori"::InvalidParameter;
+        exit(true);
     end;
 
     /// <summary>Builds the local total-size refusal. The error names the measured total and the cap. No provider call is made.</summary>
@@ -258,7 +343,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     local procedure AppendDiagnosticWord(Word: Text; var Result: Text; var HasDiagnostic: Boolean)
     var
-        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
+        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
     begin
         if Word in ['invalid', 'unsupported', 'unknown', 'unrecognized', 'missing', 'required', 'expected', 'exceeds', 'cannot', 'not'] then
             HasDiagnostic := true;

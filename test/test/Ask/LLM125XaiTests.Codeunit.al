@@ -174,7 +174,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         TempArgument."Base URL" := 'https://xai125.invalid/v1';
         TempArgument.Model := 'fixture-model';
         TempArgument.SetApiKey(FakeKey());
-        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.txt","mimeType":"text/plain","data":"aGVsbG8="}],"allowedTools":["who_am_i"]}');
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.pdf","mimeType":"application/pdf","data":"JVBERi0xLjQgaGVsbG8="}],"allowedTools":["who_am_i"]}');
         TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
         Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
         Mock.Configure(200, '{"status":"completed","output":[{"type":"function_call","call_id":"call125","name":"who_am_i","arguments":"{}"}]}', false, false);
@@ -185,7 +185,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         Assert.AreEqual('tool_calls', Response.GetText('type'), 'The real xAI builder returns a continuation.');
         State := Response.GetText('conversationState');
         Assert.IsFalse(State.Contains('file_llm65'), 'Deleted ids never enter the next round.');
-        Assert.IsTrue(State.Contains('aGVsbG8='), 'Owned input bytes remain available locally.');
+        Assert.IsTrue(State.Contains('JVBERi0xLjQgaGVsbG8='), 'Owned input bytes remain available locally.');
         Assert.AreEqual(1, Mock.GetDeleteCount(), 'First round cleaned up.');
         TempArgument.SetConversationState(State);
         TempArgument.SetToolResults('[{"id":"call125","result":"fixture identity"}]');
@@ -241,7 +241,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         TempArgument."Base URL" := 'https://xai125.invalid';
         TempArgument.Model := 'fixture-model';
         TempArgument.SetApiKey(FakeKey());
-        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.txt","mimeType":"text/plain","data":"aGVsbG8="}]}');
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.pdf","mimeType":"application/pdf","data":"JVBERi0xLjQgaGVsbG8="}]}');
         TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
         Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
         Mock.Configure(0, '', false, true);
@@ -267,7 +267,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         TempArgument."Base URL" := 'https://xai125.invalid';
         TempArgument.Model := 'fixture-model';
         TempArgument.SetApiKey(FakeKey());
-        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.png","mimeType":" Image/PNG; charset=binary ","data":"aGVsbG8="}]}');
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.png","mimeType":" Image/PNG; charset=binary ","data":"iVBORw0KGgo="}]}');
         TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
         Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
         Mock.Configure(200, ProviderReply(false, true), false, false);
@@ -276,13 +276,78 @@ codeunit 96072 "LLM 125 xAI Tests"
         UnbindSubscription(Mock);
         Response.ReadFrom(TempArgument.GetResultText());
         Assert.AreEqual('OK', Response.GetText('reply'), 'Accepted PNG.');
-        Assert.IsTrue(Mock.GetRequestBody().Contains('data:image/png;base64,aGVsbG8='), 'Normalized inline image.');
+        Assert.IsTrue(Mock.GetRequestBody().Contains('data:image/png;base64,iVBORw0KGgo='), 'Normalized inline image.');
         Assert.AreEqual(0, Mock.GetUploadCount(), 'Images are never uploaded.');
     end;
 
     local procedure FakeKey() Result: SecretText
     begin
         Result := Format(FakeKeyTok);
+    end;
+
+    /// <summary>A text attachment is sent inline as input_text on Responses: no provider file upload, in both message types and both locales.</summary>
+    [Test]
+    procedure Scenario_AC02_TextAttachment_SentInlineWithoutUpload()
+    var
+        Result: JsonObject;
+        Response: JsonObject;
+        Body: Text;
+        Index: Integer;
+        IsAsk: Boolean;
+        Locale: Integer;
+    begin
+        // Story #125 AC02 | Time: none | Risk: xAI Files API refusing text uploads.
+        for Index := 0 to 3 do begin
+            IsAsk := Index < 2;
+            Locale := 1033;
+            if (Index mod 2) = 1 then
+                Locale := 1039;
+            Result := RunFileScenario(IsAsk, true, true, Locale, 200, ProviderReply(true, true), 'fixture.txt', 'text/plain', 'hello inline note');
+            Response := Result.GetObject('response');
+            Response.WriteTo(Body);
+            Assert.AreEqual('Success', Response.GetText('status'), Body);
+            Body := Result.GetText('request');
+            Assert.IsTrue(Result.GetText('url').EndsWith('/v1/responses'), 'Files use Responses.');
+            Assert.IsTrue(Body.Contains('input_text'), 'Text is an input_text block.');
+            Assert.IsTrue(Body.Contains('hello inline note'), 'Decoded text is sent.');
+            Assert.IsTrue(Body.Contains('fixture.txt'), 'File name labels the text.');
+            Assert.IsFalse(Body.Contains('input_file'), 'No file reference.');
+            Assert.IsFalse(Body.Contains('file_data'), 'No inline document.');
+            Assert.AreEqual(0, Result.GetInteger('uploads'), 'No provider upload.');
+            Assert.AreEqual(0, Result.GetInteger('deletes'), 'Nothing to clean up.');
+            Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+        end;
+    end;
+
+    /// <summary>A failed document upload says it came from the file upload and keeps the redacted reason.</summary>
+    [Test]
+    procedure Scenario_AC03_UploadRefusal_NamesUploadStage()
+    var
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        Mock: Codeunit "LLM 65 HTTP Mock";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        Provider: Interface "Bifrost LangModel Provider ori";
+        Response: JsonObject;
+    begin
+        // Story #125 AC03 | Time: none | Risk: generic failure hides which hop was rejected.
+        TempArgument."Base URL" := 'https://xai125.invalid/v1';
+        TempArgument.Model := 'fixture-model';
+        TempArgument.SetApiKey(FakeKey());
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.pdf","mimeType":"application/pdf","data":"JVBERi0xLjQgaGVsbG8="}]}');
+        TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
+        Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
+        Mock.Configure(200, ProviderReply(false, true), false, false);
+        Mock.ConfigureUpload(400, '{"error":{"code":"invalid_request","message":"Unsupported purpose value. xai125-fixture-Z9Q7"}}');
+        BindSubscription(Mock);
+        Provider.Execute(TempArgument);
+        UnbindSubscription(Mock);
+        Response.ReadFrom(TempArgument.GetResultText());
+        Assert.AreEqual('upload', Response.GetText('providerStage'), 'Failure is marked as the upload hop.');
+        Assert.AreEqual(400, Response.GetInteger('providerStatus'), 'Status kept.');
+        Assert.IsTrue(Response.GetText('providerReason').Contains('unsupported purpose'), 'Redacted reason kept.');
+        Assert.IsFalse(TempArgument.GetResultText().Contains('Z9Q7'), 'No credential fragments.');
+        Assert.AreEqual(0, Mock.GetCallCount(), 'No prompt request after a refused upload.');
+        Assert.IsTrue(ProviderBase.RedactProviderReason('Unsupported purpose value') <> '', 'Vocabulary covers purpose.');
     end;
 
     local procedure VerifySuccess(IsAsk: Boolean; HtmlMode: Boolean; WithFile: Boolean)
@@ -319,7 +384,7 @@ codeunit 96072 "LLM 125 xAI Tests"
                 Assert.IsTrue(Result.GetText('url').EndsWith('/v1/responses'), 'Files use Responses.');
                 Assert.IsTrue(Body.Contains('file_llm65'), 'Uploaded id is sent.');
                 Assert.IsFalse(Body.Contains('file_data'), 'No inline document sent.');
-                Assert.IsFalse(Body.Contains('aGVsbG8='), 'No document bytes in prompt.');
+                Assert.IsFalse(Body.Contains('JVBERi0xLjQgaGVsbG8='), 'No document bytes in prompt.');
                 Assert.AreEqual(1, Result.GetInteger('uploads'), 'One upload.');
                 Assert.AreEqual(1, Result.GetInteger('deletes'), 'One cleanup.');
             end else
@@ -330,6 +395,12 @@ codeunit 96072 "LLM 125 xAI Tests"
 
     /// <summary>Runs an owned mock-only fixture through the actual message dispatcher; also used by the MCP probe.</summary>
     procedure RunScenario(IsAsk: Boolean; HtmlMode: Boolean; WithFile: Boolean; Locale: Integer; HttpStatus: Integer; ProviderBody: Text) Result: JsonObject
+    begin
+        Result := RunFileScenario(IsAsk, HtmlMode, WithFile, Locale, HttpStatus, ProviderBody, 'fixture.pdf', 'application/pdf', '%PDF-1.4 hello');
+    end;
+
+    /// <summary>Same as RunScenario with the staged file name, MIME type and content chosen by the caller.</summary>
+    procedure RunFileScenario(IsAsk: Boolean; HtmlMode: Boolean; WithFile: Boolean; Locale: Integer; HttpStatus: Integer; ProviderBody: Text; FileName: Text; FileMime: Text; FileContent: Text) Result: JsonObject
     var
         Model: Record "Bifrost Language Model ori";
         Secrets: Codeunit "LangModel Secrets ori";
@@ -368,9 +439,9 @@ codeunit 96072 "LLM 125 xAI Tests"
         end;
         if WithFile then begin
             Blob.CreateOutStream(Output, TextEncoding::UTF8);
-            Output.WriteText('hello');
+            Output.WriteText(FileContent);
             Blob.CreateInStream(Input);
-            StagingId := Staging.Create(Input, 'fixture.txt', 'text/plain', 'LM125 owned fixture');
+            StagingId := Staging.Create(Input, FileName, FileMime, 'LM125 owned fixture');
             Attachment.Add('stagingId', Format(StagingId, 0, 4));
             Attachments.Add(Attachment);
             Request.Add('attachments', Attachments);

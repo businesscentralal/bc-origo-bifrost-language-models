@@ -4,6 +4,7 @@ using Microsoft.EServices.EDocument;
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
 using System.TestLibraries.Utilities;
+using System.Text;
 
 /// <summary>Issue 65 prompt dispatch regressions across six providers, failure classes, inputs and attachments.</summary>
 codeunit 96034 "LLM 65 Prompt Tests"
@@ -551,7 +552,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
     [Test]
     procedure AC01_xAI_Jpeg_InlineImageDisablesStore()
     begin
-        VerifyInlineImage('image/jpeg', '/9j/4AAQ=', 'data:image/jpeg;base64,/9j/4AAQ=');
+        VerifyInlineImage('image/jpeg', '/9j/4AAQ', 'data:image/jpeg;base64,/9j/4AAQ');
     end;
 
     /// <summary>xAI deletes an uploaded PDF even when the prompt returns a provider error.</summary>
@@ -628,7 +629,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'Nothing was uploaded to delete.');
         Assert.AreEqual('upload;', HttpMock.GetOperationSequence(), 'Only the upload ran.');
         AssertCodedError(Response, 'PreconditionFailed');
-        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The upload status and code are returned.');
+        Assert.AreEqual('file upload 400 invalid_request_error', Response.GetText('received'), 'The upload stage, status and code are returned.');
         AssertSecretAbsent(Response);
         Model.Delete(true);
     end;
@@ -752,7 +753,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Response := ExecuteStored('png', 930001, HttpMock, Attachment, true);
         Assert.AreEqual('Success', Response.GetText('status'), 'Stored PNG completion');
         Assert.IsTrue(HttpMock.GetRequestBody().Contains('input_image'), 'Stored PNG is an image.');
-        Assert.IsTrue(HttpMock.GetRequestBody().Contains('data:image/png;base64,aGVsbG8='), 'Stored PNG bytes are inline.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('data:image/png;base64,iVBORw0KGgo='), 'Stored PNG bytes are inline.');
         Assert.AreEqual(0, HttpMock.GetUploadCount(), 'PNG is not uploaded.');
         Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'PNG has nothing to delete.');
         Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'Stored PNG uses the Responses API.');
@@ -769,11 +770,11 @@ codeunit 96034 "LLM 65 Prompt Tests"
     begin
         Response := ExecuteStored('pdf', 930002, HttpMock, Attachment, true);
         Assert.AreEqual('Success', Response.GetText('status'), 'Stored PDF completion');
-        Assert.IsFalse(HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Stored PDF bytes stay out of the prompt.');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('JVBERi0xLjQK'), 'Stored PDF bytes stay out of the prompt.');
         Assert.IsTrue(HttpMock.GetRequestBody().Contains('file_llm65'), 'The prompt references the uploaded id.');
         Assert.AreEqual('ZZTEST93.pdf', HttpMock.GetUploadFileName(), 'The stored file name is uploaded.');
         Assert.AreEqual('application/pdf', HttpMock.GetUploadMime(), 'The stored MIME type is uploaded.');
-        Assert.IsTrue(HttpMock.GetUploadContent().Contains('aGVsbG8='), 'Stored PDF bytes are uploaded.');
+        Assert.IsTrue(HttpMock.GetUploadContent().Contains('JVBERi0xLjQK'), 'Stored PDF bytes are uploaded.');
         Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Stored PDF is deleted afterwards.');
         Attachment.Delete(false);
     end;
@@ -1187,6 +1188,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Model: Record "Bifrost Language Model ori";
         Attachment: Record "Incoming Document Attachment";
         HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Base64Convert: Codeunit "Base64 Convert";
         RequestJson: JsonObject;
         AttachmentJson: JsonObject;
         Response: JsonObject;
@@ -1200,7 +1202,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Attachment.Name := 'ZZTEST65';
         Attachment."File Extension" := 'pdf';
         Attachment.Content.CreateOutStream(ContentStream);
-        ContentStream.WriteText('hello');
+        Base64Convert.FromBase64('JVBERi0xLjQK', ContentStream);
         Attachment.Insert(false);
         RequestJson.ReadFrom(Request(Model.Code, false, false));
         AttachmentJson.Add('table', 'Incoming Document Attachment');
@@ -1212,7 +1214,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Response := Execute(RequestText);
         UnbindSubscription(HttpMock);
         Assert.AreEqual('Success', Response.GetText('status'), 'Stored file completion');
-        Assert.IsTrue(HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Stored content reaches provider.');
+        Assert.IsTrue(HttpMock.GetRequestBody().Contains('JVBERi0xLjQK'), 'Stored content reaches provider.');
         Attachment.Delete(false);
         Model.Delete(true);
     end;
@@ -1306,7 +1308,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         if (ProviderType = "Bifrost LangModel Prov. ori"::xAI) and WithFile then
             AssertXaiDocumentUpload(HttpMock)
         else begin
-            Assert.AreEqual(WithFile, HttpMock.GetRequestBody().Contains('aGVsbG8='), 'Optional file content.');
+            Assert.AreEqual(WithFile, HttpMock.GetRequestBody().Contains('JVBERi0xLjQK'), 'Optional file content.');
             Assert.AreEqual(0, HttpMock.GetUploadCount(), 'This provider keeps the file inline.');
             Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'This provider does not upload then delete.');
         end;
@@ -1324,14 +1326,14 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.IsTrue(RequestBody.ReadFrom(HttpMock.GetRequestBody()), 'The xAI prompt body is JSON.');
         Assert.IsFalse(RequestBody.GetBoolean('store'), 'xAI file calls set store to false.');
         Assert.IsFalse(HttpMock.GetRequestBody().Contains('file_data'), 'xAI documents are not inline file_data.');
-        Assert.IsFalse(HttpMock.GetRequestBody().Contains('aGVsbG8='), 'PDF bytes stay out of the prompt body.');
+        Assert.IsFalse(HttpMock.GetRequestBody().Contains('JVBERi0xLjQK'), 'PDF bytes stay out of the prompt body.');
         Assert.IsTrue(HttpMock.GetRequestBody().Contains('file_llm65'), 'The prompt references the uploaded file id.');
         Assert.IsTrue(HttpMock.GetRequestUrl().EndsWith('/responses'), 'xAI file endpoint');
         Assert.AreEqual(1, HttpMock.GetUploadCount(), 'The PDF is uploaded once.');
         Assert.AreEqual(1, HttpMock.GetDeleteCount(), 'The uploaded PDF is deleted.');
         Assert.AreEqual('issue65.pdf', HttpMock.GetUploadFileName(), 'The upload keeps the file name.');
         Assert.AreEqual('application/pdf', HttpMock.GetUploadMime(), 'The upload keeps the PDF MIME type.');
-        Assert.IsTrue(HttpMock.GetUploadContent().Contains('aGVsbG8='), 'The uploaded bytes match the file.');
+        Assert.IsTrue(HttpMock.GetUploadContent().Contains('JVBERi0xLjQK'), 'The uploaded bytes match the file.');
         Assert.IsTrue(HttpMock.GetUploadUrl().EndsWith('/v1/files'), 'The upload uses the Files endpoint.');
         Assert.IsTrue(HttpMock.GetDeleteUrl().EndsWith('/v1/files/file_llm65'), 'Delete uses the uploaded id.');
         Assert.AreEqual('upload;prompt;delete;', HttpMock.GetOperationSequence(), 'Upload, then prompt, then delete.');
@@ -1444,6 +1446,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
     local procedure ExecuteStored(FileExtension: Text; EntryNo: Integer; var HttpMock: Codeunit "LLM 65 HTTP Mock"; var Attachment: Record "Incoming Document Attachment"; ExpectSuccess: Boolean) Response: JsonObject
     var
         Model: Record "Bifrost Language Model ori";
+        Base64Convert: Codeunit "Base64 Convert";
         RequestJson: JsonObject;
         AttachmentJson: JsonObject;
         ContentStream: OutStream;
@@ -1460,7 +1463,10 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Attachment.Name := 'ZZTEST93';
         Attachment."File Extension" := CopyStr(FileExtension, 1, MaxStrLen(Attachment."File Extension"));
         Attachment.Content.CreateOutStream(ContentStream);
-        ContentStream.WriteText('hello');
+        if FileExtension = 'png' then
+            Base64Convert.FromBase64('iVBORw0KGgo=', ContentStream)
+        else
+            Base64Convert.FromBase64('JVBERi0xLjQK', ContentStream);
         Attachment.Insert(false);
         RequestJson.Add('prompt', 'Hello from issue 93');
         RequestJson.Add('roleCode', Model.Code);
@@ -1546,13 +1552,9 @@ codeunit 96034 "LLM 65 Prompt Tests"
         if ExpectSuccess then begin
             Assert.AreEqual('Success', Response.GetText('status'), Format(ProviderType) + ' accepts a total within the cap.');
             Assert.AreEqual(1, HttpMock.GetCallCount(), Format(ProviderType) + ' sends one prompt.');
-            if ProviderType = "Bifrost LangModel Prov. ori"::xAI then begin
-                Assert.AreEqual(2, HttpMock.GetUploadCount(), 'xAI uploads each document.');
-                Assert.AreEqual(2, HttpMock.GetDeleteCount(), 'xAI deletes each uploaded document.');
-            end else begin
-                Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' keeps the files inline.');
-                Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' has nothing to delete.');
-            end;
+            // Text files stay inline for every provider, xAI included (input_text); documents are uploaded elsewhere (96034 PDF, 96072).
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' keeps the text files inline.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' has nothing to delete.');
         end else begin
             Assert.AreEqual(0, HttpMock.GetCallCount(), Format(ProviderType) + ' sends no prompt over the total cap.');
             Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' uploads nothing over the total cap.');
@@ -1571,7 +1573,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
     local procedure FileObject(FileName: Text; FileData: Text) FileJson: JsonObject
     begin
         FileJson.Add('fileName', FileName);
-        FileJson.Add('mimeType', 'application/pdf');
+        FileJson.Add('mimeType', 'text/plain');
         FileJson.Add('data', FileData);
     end;
 
@@ -1587,7 +1589,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         if WithFile then begin
             FileJson.Add('fileName', 'issue65.pdf');
             FileJson.Add('mimeType', 'application/pdf');
-            FileJson.Add('data', 'aGVsbG8=');
+            FileJson.Add('data', 'JVBERi0xLjQK');
             RequestJson.Add('file', FileJson);
         end;
         RequestJson.WriteTo(RequestText);
