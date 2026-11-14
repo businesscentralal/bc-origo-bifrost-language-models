@@ -723,6 +723,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 219726121" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file data is not valid Base64.</source>
+          <target>Gögn skrárinnar eru ekki gilt Base64.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gögn skrárinnar eru ekki gilt Base64.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType NotBase64Err</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1180305688" size-unit="char" translate="yes" xml:space="preserve">
+          <source>the file content, Base64-encoded</source>
+          <target>efni skrárinnar, Base64-kóðað</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=efni skrárinnar, Base64-kóðað</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType NotBase64ExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2399551913" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the file content as standard Base64 in data (no line breaks, no data: prefix). No request was sent.</source>
+          <target>Sendu efni skrárinnar sem venjulegt Base64 í data (án línuskila og án data: forskeytis). Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu efni skrárinnar sem venjulegt Base64 í data (án línuskila og án data: forskeytis). Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType NotBase64NextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1997870122" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file data cannot be decoded as Base64.</source>
+          <target>Ekki er hægt að afkóða gögn skrárinnar sem Base64.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Ekki er hægt að afkóða gögn skrárinnar sem Base64.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType NotBase64WhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 855164644" size-unit="char" translate="yes" xml:space="preserve">
           <source>The file is larger than the language model file size limit.</source>
           <target>Skráin er stærri en stærðartakmörk mállíkansins.</target>
@@ -860,6 +884,30 @@
           <target>mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3089784978" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The file content does not match its mimeType.</source>
+          <target>Efni skrárinnar passar ekki við mimeType hennar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Efni skrárinnar passar ekki við mimeType hennar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType WrongTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1806252479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>content that matches the declared mimeType</source>
+          <target>efni sem passar við uppgefna mimeType</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=efni sem passar við uppgefna mimeType</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType WrongTypeExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 4097163698" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send a file whose content is of the declared type, or correct mimeType. No request was sent.</source>
+          <target>Sendu skrá sem er af uppgefinni gerð, eða leiðréttu mimeType. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu skrá sem er af uppgefinni gerð, eða leiðréttu mimeType. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType WrongTypeNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 381938641" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The decoded file does not start with the signature of the declared PDF, PNG or JPEG type.</source>
+          <target>Afkóðuð skráin byrjar ekki á auðkenni uppgefinnar PDF-, PNG- eða JPEG-gerðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Afkóðuð skráin byrjar ekki á auðkenni uppgefinnar PDF-, PNG- eða JPEG-gerðar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType WrongTypeWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1319966414 - NamedType 1281857675" size-unit="char" translate="yes" xml:space="preserve">
           <source>A language model code must be specified before an API key can be stored.</source>

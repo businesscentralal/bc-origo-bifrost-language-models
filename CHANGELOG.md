@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-14) - validate inline files before the provider call (#128)
+
+- **Fixed:** the shared pre-HTTP file gate (`LangModel File Handling ori`, codeunit 10035429, used by OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI) now also refuses file data that is not standard Base64 and a PDF, PNG or JPEG whose content does not start with its signature (`%PDF-`, the PNG signature, `FF D8 FF`). The refusal is `InvalidParameter` with `parameter` `file` (or `files[n]`, counted from 0, when several files are sent), `received` `not base64` or `content is not <type>`, and a next step about the file ("... No request was sent."); no provider call is made, so the misleading model-setup hint no longer appears. Applies to `LLM.Prompt.Complete` file, files and stored/staged attachments, and reaches `LLM.Prompt.Ask` once #127 sends files through the same gate. Other document types (for example `text/plain`) are not content-checked. New refusal builders and contract error entries in codeunit 10035410; is-IS translations in sync.
+- Tests: new codeunit 96072 `LM 128 File Validation Tests` (not Base64, bad padding, empty data, text labelled PDF, PDF labelled PNG, PNG labelled JPEG, `files[1]`, valid PDF/PNG/JPEG unchanged, all six providers; 1033 and 1039; mock provider only). Existing fixtures that sent non-PDF bytes labelled as PDF or a truncated JPEG now use valid signatures (96034, 96041).
+
 ### Fixed (2026-11-13) - installed storage path in prompt help (#116)
 
 - Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name. The registry stand-in is injected through `AddRelatedFromTypes`, so the test extension no longer duplicates the Attachments enum registration and can coexist with it.

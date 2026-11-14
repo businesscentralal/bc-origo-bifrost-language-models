@@ -51,7 +51,7 @@ codeunit 96041 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::xAI, ' image/JPEG ', 'data:image/jpeg;base64,/9j/4AAQ=', '/9j/4AAQ=', false);
+        AssertSentMime("Bifrost LangModel Prov. ori"::xAI, ' image/JPEG ', 'data:image/jpeg;base64,/9j/4AAQ', '/9j/4AAQ', false);
     end;
 
     [Test]
@@ -67,7 +67,7 @@ codeunit 96041 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::"Azure OpenAI", 'image/jpeg; charset=binary', 'data:image/jpeg;base64,/9j/4AAQ=', '/9j/4AAQ=', false);
+        AssertSentMime("Bifrost LangModel Prov. ori"::"Azure OpenAI", 'image/jpeg; charset=binary', 'data:image/jpeg;base64,/9j/4AAQ', '/9j/4AAQ', false);
     end;
 
     [Test]
@@ -83,7 +83,7 @@ codeunit 96041 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::Anthropic, 'Image/JPEG; charset=binary', 'image/jpeg', '/9j/4AAQ=', false);
+        AssertSentMime("Bifrost LangModel Prov. ori"::Anthropic, 'Image/JPEG; charset=binary', 'image/jpeg', '/9j/4AAQ', false);
     end;
 
     [Test]
@@ -99,7 +99,7 @@ codeunit 96041 "LM 96 MIME Tests"
     begin
         // Story #96, AC02 | Time: none | Risk: None
         Initialize();
-        AssertSentMime("Bifrost LangModel Prov. ori"::xAI, ' Application/PDF; charset=binary ', 'application/pdf', 'aGVsbG8=', true);
+        AssertSentMime("Bifrost LangModel Prov. ori"::xAI, ' Application/PDF; charset=binary ', 'application/pdf', 'JVBERi0xLjQK', true);
     end;
 
     [Test]

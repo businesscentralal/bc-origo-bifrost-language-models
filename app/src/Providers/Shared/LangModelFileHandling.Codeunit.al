@@ -1,4 +1,6 @@
 namespace Origo.Bifrost.LanguageModels;
+using System.Text;
+using System.Utilities;
 
 /// <summary>
 /// Shared prompt-file policy for every file-accepting language-model provider.
@@ -117,7 +119,7 @@ codeunit 10035429 "LangModel File Handling ori"
 
     /// <summary>
     /// Shared pre-HTTP gate for every file-accepting provider.
-    /// Normalizes each file MIME type first, then refuses a non-PNG/JPEG image, a single oversize file, and a total over the resolved cap. Does not upload.
+    /// Normalizes each file MIME type first, then refuses a non-PNG/JPEG image, a single oversize file, data that is not Base64, content that does not match its declared PDF/PNG/JPEG type, and a total over the resolved cap. Does not upload.
     /// </summary>
     [NonDebuggable]
     procedure AcceptFiles(PayloadObject: JsonObject; var ResultText: Text): Boolean
@@ -137,6 +139,8 @@ codeunit 10035429 "LangModel File Handling ori"
             ProviderBase.BuildOversizeRefusal().WriteTo(ResultText);
             exit(false);
         end;
+        if not CheckFileContent(PayloadObject, ResultText) then
+            exit(false);
         if FindTotalOversize(PayloadObject, TotalBytes, CapBytes) then begin
             ProviderBase.BuildTotalOversizeRefusal(TotalBytes, CapBytes).WriteTo(ResultText);
             exit(false);
@@ -144,9 +148,130 @@ codeunit 10035429 "LangModel File Handling ori"
         exit(true);
     end;
 
+    /// <summary>True when the text is standard Base64: only the Base64 alphabet, padding only at the end (at most two =), and a length divisible by four.</summary>
+    [NonDebuggable]
+    procedure IsValidBase64(Data: Text): Boolean
+    var
+        Rest: Text;
+        PadCount: Integer;
+        Length: Integer;
+    begin
+        Length := StrLen(Data);
+        if (Length = 0) or ((Length mod 4) <> 0) then
+            exit(false);
+        Rest := DelChr(Data, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/');
+        PadCount := StrLen(Rest);
+        if PadCount = 0 then
+            exit(true);
+        if (PadCount > 2) or (DelChr(Rest, '=', '=') <> '') then
+            exit(false);
+        exit(CopyStr(Data, Length - PadCount + 1) = Rest);
+    end;
+
+    /// <summary>
+    /// True when valid Base64 data starts with the signature of the declared type.
+    /// Only PDF (%PDF-), PNG and JPEG are checked; any other type is not judged here.
+    /// </summary>
+    [NonDebuggable]
+    procedure MatchesDeclaredType(ContentBase64: Text; MimeType: Text): Boolean
+    var
+        Normalized: Text;
+        Head: List of [Integer];
+    begin
+        Normalized := NormalizeMimeType(MimeType);
+        if not ((Normalized = 'application/pdf') or (Normalized = 'image/png') or (Normalized = 'image/jpeg')) then
+            exit(true);
+        ReadHead(ContentBase64, Head);
+        case Normalized of
+            'application/pdf':
+                exit(HeadStartsWith(Head, '37,80,68,70,45'));
+            'image/png':
+                exit(HeadStartsWith(Head, '137,80,78,71,13,10,26,10'));
+            'image/jpeg':
+                exit(HeadStartsWith(Head, '255,216,255'));
+        end;
+    end;
+
+    [NonDebuggable]
+    local procedure CheckFileContent(PayloadObject: JsonObject; var ResultText: Text): Boolean
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        FileObj: JsonObject;
+        Data: Text;
+        MimeType: Text;
+        FileIndex: Integer;
+        FileCount: Integer;
+    begin
+        if not PayloadObject.Get('files', FilesToken) then
+            exit(true);
+        if not FilesToken.IsArray() then
+            exit(true);
+        FileCount := FilesToken.AsArray().Count();
+        FileIndex := 0;
+        foreach FileToken in FilesToken.AsArray() do begin
+            if FileToken.IsObject() then begin
+                FileObj := FileToken.AsObject();
+                Data := GetJsonText(FileObj, 'data');
+                MimeType := GetJsonText(FileObj, 'mimeType');
+                if not IsValidBase64(Data) then begin
+                    ProviderBase.BuildNotBase64Refusal(FileIndex, FileCount).WriteTo(ResultText);
+                    exit(false);
+                end;
+                if not MatchesDeclaredType(Data, MimeType) then begin
+                    ProviderBase.BuildWrongTypeRefusal(FileIndex, FileCount, NormalizeMimeType(MimeType)).WriteTo(ResultText);
+                    exit(false);
+                end;
+            end;
+            FileIndex += 1;
+        end;
+        exit(true);
+    end;
+
+    /// <summary>Decodes only the first twelve Base64 characters (nine bytes) of valid Base64.</summary>
+    [NonDebuggable]
+    local procedure ReadHead(ContentBase64: Text; var Head: List of [Integer])
+    var
+        TempBlob: Codeunit "Temp Blob";
+        Base64Convert: Codeunit "Base64 Convert";
+        OutStr: OutStream;
+        InStr: InStream;
+        Prefix: Text;
+        ByteValue: Byte;
+    begin
+        Prefix := CopyStr(ContentBase64, 1, 12);
+        TempBlob.CreateOutStream(OutStr);
+        Base64Convert.FromBase64(Prefix, OutStr);
+        TempBlob.CreateInStream(InStr);
+        while not InStr.EOS() do begin
+            InStr.Read(ByteValue);
+            Head.Add(ByteValue);
+        end;
+    end;
+
+    local procedure HeadStartsWith(Head: List of [Integer]; Signature: Text): Boolean
+    var
+        Parts: List of [Text];
+        Part: Text;
+        Index: Integer;
+        Expected: Integer;
+    begin
+        Parts := Signature.Split(',');
+        if Head.Count() < Parts.Count() then
+            exit(false);
+        foreach Part in Parts do begin
+            Index += 1;
+            Evaluate(Expected, Part);
+            if Head.Get(Index) <> Expected then
+                exit(false);
+        end;
+        exit(true);
+    end;
+
     /// <summary>
     /// Adds inline images and uploaded document references to a Responses-style content array.
-    /// Refuses unsupported images and oversize files before any HTTP call.
+    /// Refuses unsupported images, oversize files, data that is not Base64 and content that does not match PDF, PNG or JPEG before any HTTP call.
     /// </summary>
     [NonDebuggable]
     procedure AddResponseFiles(var Argument: Record "Bifrost Chat Argument ori" temporary; PayloadObject: JsonObject; var ContentArray: JsonArray; var UploadedFileIds: JsonArray; var ResultText: Text; ProviderName: Text; AuthHeaderName: Text; DefaultBaseUrl: Text): Boolean
