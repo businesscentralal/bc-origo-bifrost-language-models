@@ -139,7 +139,7 @@ codeunit 96075 "LLM Ask Inline Files Tests"
         Model.Modify();
         Data := AskData();
         Data.Add('attachments', StagedItems(Upload('four', 'staged.txt', 'text/plain')));
-        // Eight Base64 characters decode to six bytes, so four staged plus six inline bytes pass 8.
+        // Eight Base64 characters decode to six bytes, so four staged plus six inline bytes make 10, over the limit of 8.
         Data.Add('file', InlineFile('big.txt', 'text/plain', 'QUJDREVG'));
         VerifyRefusal(Run(Data, 1033), 'LimitExceeded', 'files');
     end;
@@ -175,6 +175,38 @@ codeunit 96075 "LLM Ask Inline Files Tests"
         Item.Add('mimeType', 'application/pdf');
         Item.Add('fileName', 'a.pdf');
         VerifyRefusal(ExecuteFile(Item, 1033), 'MissingParameter', 'file.data');
+    end;
+
+    [Test]
+    procedure Scenario_AC02_NonStringData_MissingParameter()
+    var
+        Item: JsonObject;
+        Null: JsonValue;
+    begin
+        Initialize();
+        Null.SetValueToNull();
+        Item.Add('data', Null);
+        Item.Add('mimeType', 'application/pdf');
+        VerifyRefusal(ExecuteFile(Item, 1033), 'MissingParameter', 'file.data');
+        Clear(Item);
+        Item.Add('data', 12345);
+        Item.Add('mimeType', 'application/pdf');
+        VerifyRefusal(ExecuteFile(Item, 1039), 'MissingParameter', 'file.data');
+        Clear(Item);
+        Item.Add('data', true);
+        Item.Add('mimeType', 'application/pdf');
+        VerifyRefusal(ExecuteFile(Item, 1033), 'MissingParameter', 'file.data');
+    end;
+
+    [Test]
+    procedure Scenario_AC02_NonStringMimeType_Refused()
+    var
+        Item: JsonObject;
+    begin
+        Initialize();
+        Item.Add('data', PdfBase64Tok);
+        Item.Add('mimeType', 42);
+        VerifyRefusal(ExecuteFile(Item, 1033), 'InvalidParameter', 'file.mimeType');
     end;
 
     [Test]

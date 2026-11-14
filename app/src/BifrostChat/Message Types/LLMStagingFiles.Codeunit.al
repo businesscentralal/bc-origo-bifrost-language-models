@@ -229,12 +229,16 @@ codeunit 10035435 "LLM Staging Files ori"
     local procedure TextValue(Source: JsonToken; PropertyName: Text): Text
     var
         Property: JsonToken;
+        JsonText: Text;
     begin
         if not Source.IsObject() then
             exit('');
         if not Source.AsObject().Get(PropertyName, Property) then
             exit('');
         if not Property.IsValue() then
+            exit('');
+        Property.WriteTo(JsonText);
+        if not JsonText.StartsWith('"') then
             exit('');
         exit(Property.AsValue().AsText());
     end;
