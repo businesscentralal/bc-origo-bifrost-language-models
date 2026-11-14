@@ -113,6 +113,48 @@ codeunit 96065 "LLM Ask Request Builder Tests"
         Assert.AreEqual('incomplete', Reply.GetText('stopReason'), 'The incomplete status is retained.');
     end;
 
+    [Test]
+    procedure Ask_ReplyWithFigures_IsNotFollowedByVerifyPrompt()
+    var
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        ChatProxy: Codeunit "LangModel Chat Proxy ori";
+        AnthropicProxy: Codeunit "Anthropic LangModel Proxy ori";
+        Mock: Codeunit "LLM 100 HTTP Mock";
+        Builder: Integer;
+        ReplyText: Text;
+        Extras: JsonObject;
+        Reply: JsonObject;
+    begin
+        // [SCENARIO #125 AC01] a headless Ask round (allowedTools present) returns an answer with figures as is on every
+        // provider format: the #40 verify follow-up would replace it, e.g. an HTML page whose CSS holds numbers
+        for Builder := 1 to 3 do begin
+            Clear(Mock);
+            SetUpArgument(TempArgument);
+            case Builder of
+                1:
+                    Mock.Configure('{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"width 1200px 1.5"}}]}');
+                2:
+                    Mock.Configure('{"output":[{"type":"message","content":[{"type":"output_text","text":"width 1200px 1.5"}]}]}');
+                3:
+                    Mock.Configure('{"stop_reason":"end_turn","content":[{"type":"text","text":"width 1200px 1.5"}]}');
+            end;
+            BindSubscription(Mock);
+            case Builder of
+                1:
+                    ReplyText := ChatProxy.SendChatMessage(TempArgument, AskPayload(false, false), 'Authorization');
+                2:
+                    ReplyText := ChatProxy.SendChatMessageResponses(TempArgument, AskPayload(false, false), 'Authorization', Extras);
+                3:
+                    ReplyText := AnthropicProxy.SendChatMessage(TempArgument, AskPayload(false, false));
+            end;
+            UnbindSubscription(Mock);
+            Assert.AreEqual(1, Mock.GetCallCount(), 'No verification follow-up is sent in format ' + Format(Builder));
+            Clear(Reply);
+            Assert.IsTrue(Reply.ReadFrom(ReplyText), ReplyText);
+            Assert.AreEqual('width 1200px 1.5', Reply.GetText('reply'), 'The answer is returned as is in format ' + Format(Builder));
+        end;
+    end;
+
     local procedure VerifyStopReason(Builder: Integer; ProviderResponse: Text; ExpectedReason: Text)
     var
         TempArgument: Record "Bifrost Chat Argument ori" temporary;

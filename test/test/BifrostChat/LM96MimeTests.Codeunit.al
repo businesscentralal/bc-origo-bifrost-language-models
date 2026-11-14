@@ -116,6 +116,32 @@ codeunit 96041 "LM 96 MIME Tests"
         AssertRefused("Bifrost LangModel Prov. ori"::xAI, 'IMAGE/WEBP', 'image/webp');
     end;
 
+    [Test]
+    procedure Scenario_Anthropic_PlainText_SendsTextSourceNotBase64()
+    var
+        Model: Record "Bifrost Language Model ori";
+        HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Response: JsonObject;
+        RequestBody: Text;
+    begin
+        // Story #125, AC02 | Time: none | Risk: None
+        // [SCENARIO] Anthropic rejects base64 text documents, so a text/plain file is sent as a text source
+        Initialize();
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::Anthropic);
+        HttpMock.Configure(200, SuccessBody("Bifrost LangModel Prov. ori"::Anthropic, true), false, false);
+        BindSubscription(HttpMock);
+
+        Response := Execute(RequestText(Model.Code, 'text/plain', 'aGVsbG8='));
+        UnbindSubscription(HttpMock);
+
+        Assert.AreEqual('Success', Response.GetText('status'), 'Plain text file is accepted.');
+        RequestBody := HttpMock.GetRequestBody();
+        Assert.IsTrue(RequestBody.Contains('"media_type":"text/plain"'), 'The text source names text/plain.');
+        Assert.IsTrue(RequestBody.Contains('"data":"hello"'), 'The decoded text is sent.');
+        Assert.IsFalse(RequestBody.Contains('aGVsbG8='), 'The base64 form is not sent.');
+        Model.Delete(true);
+    end;
+
     local procedure Initialize()
     begin
         if IsInitialized then

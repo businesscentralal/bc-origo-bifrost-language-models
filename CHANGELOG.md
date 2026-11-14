@@ -4,6 +4,19 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-14) - Anthropic Ask provider failures keep their status (#125 AC03)
+
+- The Anthropic tool loop (`LLM.Prompt.Ask`) now returns the HTTP status, a sanitised provider error type and, for a non-authentication 4xx, the redacted reason, as `LLM.Prompt.Complete` already did. Before, a provider 4xx reached the caller without `received`. Authentication bodies and other provider text stay private. Adds the internal test hook `OnBeforeMessagesPostWithStatus` on codeunit 10035417 and test codeunit **96073** `LLM 126 Anthropic Err Tests` (mock-only, no credentials). Live Anthropic checks in 1033 and 1039 are recorded on #125 and #126.
+
+### Fixed (2026-11-13) - xAI prompt attachments and provider diagnostics (#125)
+
+- Ask persists consumed staging uploads before its provider/tool loop, so a fresh MCP bootstrap can run without an open staging write transaction.
+- xAI Ask sends documents through Responses using uploaded file IDs. Each round uploads from the caller-owned input and deletes those files after the request, including failures; continuation state keeps local bytes instead of deleted IDs. PNG/JPEG remain inline and shared MIME/size validation runs before transport. HTML remains a prompt instruction, with existing complete-document validation.
+- xAI Ask retains structured HTTP failure metadata. Ask and Complete can show a redacted non-authentication 4xx reason: only a fixed diagnostic vocabulary and protocol field names are retained; unknown tokens are replaced, authentication bodies remain private, and raw error text is never logged by the prompt transport. Complete joins a base URL ending in `/v1` without duplicating that segment.
+- The #40 figure-verification follow-up no longer runs in a headless `LLM.Prompt.Ask` round (all providers; the request carries `allowedTools`). It replaced the requested answer with the model's "nothing to verify" text whenever the answer held a number of four digits or a decimal, so `outputFormat` html failed with "holds no complete HTML document" for any styled page. Found by the live Anthropic check (AC01 repro: html-only). Test `Ask_ReplyWithFigures_IsNotFollowedByVerifyPrompt` in `LLM Ask Request Builder Tests`.
+- Anthropic Ask and Complete send a `text/*` attachment as a `text` document source (`media_type` `text/plain`, decoded UTF-8) instead of base64, which Anthropic rejects with 400 `invalid_request_error`. Found by the live Anthropic check (Hanarr, worker-38, 14.11.2026); PDF, PNG and JPEG were already correct. Test `Scenario_Anthropic_PlainText_SendsTextSourceNotBase64` in codeunit 96041 `LM 96 MIME Tests`. No object IDs added.
+- Adds test codeunit **96072** `LLM 125 xAI Tests`: real-provider request shapes through both message types, both locales, HTML/file combinations, text regression, continuation upload cleanup, transport failures, image validation, and redacted errors. The existing test-only staging probe can run these owned synthetic xAI fixtures over MCP. No production object IDs or message types added. Live reproduction and post-deploy UAT remain separate acceptance work.
+
 ### Fixed (2026-11-13) - installed storage path in prompt help (#116)
 
 - Codeunit 10035435 now advertises the registered `Storage.File.CopyToStaging` path in Ask and Complete related help. Test codeunit 96071 verifies the shipped name and excludes the unshipped `Storage.File.ReadToStaging` name. The registry stand-in is injected through `AddRelatedFromTypes`, so the test extension no longer duplicates the Attachments enum registration and can coexist with it.

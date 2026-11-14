@@ -21,6 +21,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         AskPolicy: Codeunit "LLM Ask Tool Policy ori";
         AllowedTools: List of [Text];
         HasAllowedTools: Boolean;
+        LastHttpStatus: Integer;
+        LastProviderErrorCode: Text;
+        LastProviderReason: Text;
         AnthropicVersionTok: Label '2023-06-01', Locked = true;
         MessagesPathTok: Label '%1/v1/messages', Locked = true;
         ModelsPathTok: Label '%1/v1/models?limit=100', Locked = true;
@@ -147,6 +150,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
     local procedure AttachFilesToAnthropicMessages(PayloadObject: JsonObject; var Messages: JsonArray)
     var
+        Base64Convert: Codeunit "Base64 Convert";
         FilesToken: JsonToken;
         FilesArray: JsonArray;
         FileToken: JsonToken;
@@ -183,9 +187,16 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
             FileObj := FileToken.AsObject();
             MimeType := GetText(FileObj, 'mimeType');
             Clear(Source);
-            Source.Add('type', 'base64');
-            Source.Add('media_type', MimeType);
-            Source.Add('data', GetText(FileObj, 'data'));
+            if MimeType.StartsWith('text/') then begin
+                // Anthropic accepts plain text documents only as a text source (media_type text/plain), never base64.
+                Source.Add('type', 'text');
+                Source.Add('media_type', 'text/plain');
+                Source.Add('data', Base64Convert.FromBase64(GetText(FileObj, 'data')));
+            end else begin
+                Source.Add('type', 'base64');
+                Source.Add('media_type', MimeType);
+                Source.Add('data', GetText(FileObj, 'data'));
+            end;
             Clear(FileBlock);
             if MimeType.StartsWith('image/') then
                 FileBlock.Add('type', 'image')
@@ -274,8 +285,14 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         if AnthropicTools.Count() > 0 then
             RequestBody.Add('tools', AnthropicTools);
 
-        if not TrySendMessages(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response) then
+        if not TrySendMessages(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response) then begin
+            // #125 AC03: an HTTP failure keeps its status, a sanitised error code and a redacted 4xx reason, as Complete does.
+            if LastHttpStatus <> 0 then begin
+                ClearLastError();
+                exit(BuildPromptFailure());
+            end;
             exit(BuildErrorResponse(GetLastErrorText()));
+        end;
 
         if not Response.Get('content', ContentToken) then
             exit(BuildErrorResponse('Empty response from AI model.'));
@@ -294,7 +311,9 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
         Reply := ExtractText(Response);
         // Figures stated without a tool call in this turn get one follow-up asking the model to verify them (#40).
-        if TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+        // Not in a headless Ask run (it carries allowedTools): nobody reads the follow-up, and its answer would replace the
+        // requested answer, for example an HTML document whose CSS holds numbers (#125).
+        if not HasAllowedTools and TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
             Clear(VerifyMessage);
             VerifyMessage.Add('role', 'user');
             VerifyMessage.Add('content', TurnGuard.GetVerifyFiguresPrompt());
@@ -307,6 +326,27 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
     [IntegrationEvent(false, false)]
     local procedure OnBeforeMessagesPost(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
     begin
+    end;
+
+    /// <summary>Raised before the Messages post so tests can answer with an HTTP status; nothing leaves the service then.</summary>
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeMessagesPostWithStatus(BaseUrl: Text; RequestBody: JsonObject; var Handled: Boolean; var HttpStatus: Integer; var ResponseText: Text)
+    begin
+    end;
+
+    local procedure BuildPromptFailure() ResponseJson: Text
+    begin
+        ProviderBase.BuildPromptError(LastHttpStatus, false, LastProviderErrorCode, LastProviderReason).WriteTo(ResponseJson);
+    end;
+
+    /// <summary>Keeps only the status, a sanitised error code and, for a non-authentication 4xx, a redacted reason.</summary>
+    [NonDebuggable]
+    local procedure KeepSafeFailure(HttpStatus: Integer; ResponseText: Text)
+    begin
+        LastHttpStatus := HttpStatus;
+        LastProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
+        if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
+            LastProviderReason := ProviderBase.ReadProviderReason(ResponseText);
     end;
 
     [TryFunction]
@@ -329,10 +369,24 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         ResponseText: Text;
         StartTime: DateTime;
         Handled: Boolean;
+        HttpStatus: Integer;
     begin
+        LastHttpStatus := 0;
+        LastProviderErrorCode := '';
+        LastProviderReason := '';
         // A subscriber (tests) can answer the request instead of the provider; nothing leaves the service then.
         OnBeforeMessagesPost(BaseUrl, RequestBody, Handled, ResponseText);
         if Handled then begin
+            if not Response.ReadFrom(ResponseText) then
+                Error(InvalidResponseErr);
+            exit;
+        end;
+        OnBeforeMessagesPostWithStatus(BaseUrl, RequestBody, Handled, HttpStatus, ResponseText);
+        if Handled then begin
+            if (HttpStatus < 200) or (HttpStatus > 299) then begin
+                KeepSafeFailure(HttpStatus, ResponseText);
+                Error(ApiStatusErr, Format(HttpStatus), '');
+            end;
             if not Response.ReadFrom(ResponseText) then
                 Error(InvalidResponseErr);
             exit;
@@ -356,8 +410,10 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
 
         HttpResponse.Content.ReadAs(ResponseText);
 
-        if not HttpResponse.IsSuccessStatusCode() then
+        if not HttpResponse.IsSuccessStatusCode() then begin
+            KeepSafeFailure(HttpResponse.HttpStatusCode(), ResponseText);
             Error(ApiStatusErr, Format(HttpResponse.HttpStatusCode()), GetErrorDetail(ResponseText));
+        end;
 
         if not Response.ReadFrom(ResponseText) then
             Error(InvalidResponseErr);
