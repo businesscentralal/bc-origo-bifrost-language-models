@@ -1437,6 +1437,60 @@
           <note from="Developer" annotates="general" priority="2">is-IS=stagingId GUID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType GuidExpectedTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3207440409" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Too many files: inline files and staged attachments together exceed the limit.</source>
+          <target>Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu samanlagt fara yfir mörkin.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu samanlagt fara yfir mörkin.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineCountErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 345945864" size-unit="char" translate="yes" xml:space="preserve">
+          <source>at most %1 files in total</source>
+          <target>í mesta lagi %1 skrár samtals</target>
+          <note from="Developer" annotates="general" priority="2">%1 = file count limit, is-IS=í mesta lagi %1 skrár samtals</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineCountExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 1274616935" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send fewer files. No request was sent.</source>
+          <target>Sendu færri skrár. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu færri skrár. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineCountNextTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3198771708" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send file or files with data, mimeType and fileName, or use attachments with a stagingId.</source>
+          <target>Sendu file eða files með data, mimeType og fileName, eða notaðu attachments með stagingId.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu file eða files með data, mimeType og fileName, eða notaðu attachments með stagingId.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineFileFixTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3855697639" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The inline file must be an object with data (Base64), mimeType and fileName.</source>
+          <target>Innbyggða skráin verður að vera hlutur með data (Base64), mimeType og fileName.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Innbyggða skráin verður að vera hlutur með data (Base64), mimeType og fileName.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineFileShapeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3811459866" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an object with data, mimeType and fileName</source>
+          <target>hlutur með data, mimeType og fileName</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=hlutur með data, mimeType og fileName</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineFileShapeExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3100095391" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an array of objects with data, mimeType and fileName</source>
+          <target>fylki hluta með data, mimeType og fileName</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=fylki hluta með data, mimeType og fileName</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineFilesShapeExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 3923048344" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The inline file content type is not supported.</source>
+          <target>Efnisgerð innbyggðu skrárinnar er ekki studd.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Efnisgerð innbyggðu skrárinnar er ekki studd.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2679071487 - NamedType 2174712346" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send text, PDF, PNG or JPEG. No request was sent.</source>
+          <target>Sendu texta, PDF, PNG eða JPEG. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu texta, PDF, PNG eða JPEG. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineTypeNextTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 2034178160" size-unit="char" translate="yes" xml:space="preserve">
           <source>The attachment content type is not supported.</source>
           <target>Efnisgerð viðhengisins er ekki studd.</target>
