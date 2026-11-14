@@ -149,6 +149,7 @@ codeunit 10035411 "LangModel API Client ori"
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
             exit(ProviderBase.BuildPromptError(-1, false));
+        DropNullError(Response);
         if Response.Contains('error') then
             exit(ProviderBase.BuildPromptError(-1, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
         // Prompt calls deliberately do not buffer provider text: even a nominally
@@ -253,6 +254,7 @@ codeunit 10035411 "LangModel API Client ori"
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
             exit(StoredWithoutIdError(ProviderBase));
+        DropNullError(Response);
         if Response.Contains('error') then
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
         if not TryReadUploadedFileId(Response, FileId) then
@@ -403,6 +405,22 @@ codeunit 10035411 "LangModel API Client ori"
                 LastProviderReason := ProviderBase.ReadProviderReason(FailureText);
             ResponseText := '';
         end;
+    end;
+
+    /// <summary>
+    /// Removes a top-level "error": null from a successful provider body. Responses-style APIs
+    /// (xAI, OpenAI) return that field on every reply; only a non-null error is a failure (#125).
+    /// </summary>
+    local procedure DropNullError(var Response: JsonObject)
+    var
+        ErrorToken: JsonToken;
+    begin
+        if not Response.Get('error', ErrorToken) then
+            exit;
+        if not ErrorToken.IsValue() then
+            exit;
+        if ErrorToken.AsValue().IsNull() then
+            Response.Remove('error');
     end;
 
     local procedure StoredWithoutIdError(var ProviderBase: Codeunit "LangModel Prov. Base ori") Response: JsonObject
