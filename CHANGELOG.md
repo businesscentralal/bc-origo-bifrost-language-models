@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-14) - Anthropic Ask provider failures keep their status (#125 AC03)
+
+- The Anthropic tool loop (`LLM.Prompt.Ask`) now returns the HTTP status, a sanitised provider error type and, for a non-authentication 4xx, the redacted reason, as `LLM.Prompt.Complete` already did. Before, a provider 4xx reached the caller without `received`. Authentication bodies and other provider text stay private. Adds the internal test hook `OnBeforeMessagesPostWithStatus` on codeunit 10035417 and test codeunit **96073** `LLM 126 Anthropic Err Tests` (mock-only, no credentials). Live Anthropic checks in 1033 and 1039 are recorded on #125 and #126.
+
 ### Fixed (2026-11-13) - xAI prompt attachments and provider diagnostics (#125)
 
 - Ask persists consumed staging uploads before its provider/tool loop, so a fresh MCP bootstrap can run without an open staging write transaction.
