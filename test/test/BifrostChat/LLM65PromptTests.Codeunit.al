@@ -629,7 +629,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.AreEqual(0, HttpMock.GetDeleteCount(), 'Nothing was uploaded to delete.');
         Assert.AreEqual('upload;', HttpMock.GetOperationSequence(), 'Only the upload ran.');
         AssertCodedError(Response, 'PreconditionFailed');
-        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The upload status and code are returned.');
+        Assert.AreEqual('file upload 400 invalid_request_error', Response.GetText('received'), 'The upload stage, status and code are returned.');
         AssertSecretAbsent(Response);
         Model.Delete(true);
     end;
@@ -1552,13 +1552,9 @@ codeunit 96034 "LLM 65 Prompt Tests"
         if ExpectSuccess then begin
             Assert.AreEqual('Success', Response.GetText('status'), Format(ProviderType) + ' accepts a total within the cap.');
             Assert.AreEqual(1, HttpMock.GetCallCount(), Format(ProviderType) + ' sends one prompt.');
-            if ProviderType = "Bifrost LangModel Prov. ori"::xAI then begin
-                Assert.AreEqual(2, HttpMock.GetUploadCount(), 'xAI uploads each document.');
-                Assert.AreEqual(2, HttpMock.GetDeleteCount(), 'xAI deletes each uploaded document.');
-            end else begin
-                Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' keeps the files inline.');
-                Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' has nothing to delete.');
-            end;
+            // Text files stay inline for every provider, xAI included (input_text); documents are uploaded elsewhere (96034 PDF, 96072).
+            Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' keeps the text files inline.');
+            Assert.AreEqual(0, HttpMock.GetDeleteCount(), Format(ProviderType) + ' has nothing to delete.');
         end else begin
             Assert.AreEqual(0, HttpMock.GetCallCount(), Format(ProviderType) + ' sends no prompt over the total cap.');
             Assert.AreEqual(0, HttpMock.GetUploadCount(), Format(ProviderType) + ' uploads nothing over the total cap.');

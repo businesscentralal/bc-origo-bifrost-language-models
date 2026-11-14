@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-14) - xAI text attachments and upload failure visibility (#125, folded into #129)
+
+- xAI `LLM.Prompt.Ask` and `LLM.Prompt.Complete` now send a `text/*` or `application/json` attachment inline as an `input_text` block on Responses ("Attached file NAME:" followed by the decoded UTF-8 text) instead of uploading it to `/v1/files`. The Origo Demo UAT failed exactly there (text/plain attachment, with and without html output). PDF documents still use the upload and are deleted after the call; PNG/JPEG stay inline images. Not verified against live GROK from this branch (no GROK model on the worker tenant); Tester re-runs AC05 (a)(b)(c) after deploy.
+- AC03: a refused document upload is marked as the upload hop: the error `received` reads `file upload 400 <code>` (or `file upload` when the provider answered 2xx without a readable file id). The redacted-reason vocabulary now also covers upload words (purpose, upload, multipart, form, bytes, size, empty, name, extension, mime, encoding, attachment). Tests: 96072 gains the inline-text and upload-stage scenarios; 96034 expectations updated for the inline text path.
+
 ### Fixed (2026-11-14) - validate inline files before the provider call (#128)
 
 - **Fixed:** the shared pre-HTTP file gate (`LangModel File Handling ori`, codeunit 10035429, used by OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google and xAI) now also refuses file data that is not standard Base64 and a PDF, PNG or JPEG whose content does not start with its signature (`%PDF-`, the PNG signature, `FF D8 FF`). The refusal is `InvalidParameter` with `parameter` `file` (or `files[n]`, counted from 0, when several files are sent), `received` `not base64` or `content is not <type>`, and a next step about the file ("... No request was sent."); no provider call is made, so the misleading model-setup hint no longer appears. Applies to `LLM.Prompt.Complete` file, files and stored/staged attachments, and reaches `LLM.Prompt.Ask` once #127 sends files through the same gate. Other document types (for example `text/plain`) are not content-checked. New refusal builders and contract error entries in codeunit 10035410; is-IS translations in sync.
