@@ -50,7 +50,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         WrongTypeKindTok: Label 'wrongType', Locked = true;
         ProviderParameterTok: Label 'provider', Locked = true;
         UploadStageTok: Label 'upload', Locked = true;
-        UploadStageReceivedTxt: Label 'file upload', Locked = true;
+        UploadStageReceivedTxt: Label 'file upload', Comment = 'is-IS=skráarupphleðsla';
         FileParameterTok: Label 'file', Locked = true;
         FilesParameterTok: Label 'files', Locked = true;
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;

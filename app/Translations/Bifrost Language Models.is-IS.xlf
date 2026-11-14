@@ -891,6 +891,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=mimeType skráarinnar er mynd sem er hvorki image/png né image/jpeg.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedImageWhenTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1933364924" size-unit="char" translate="yes" xml:space="preserve">
+          <source>file upload</source>
+          <target>skráarupphleðsla</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=skráarupphleðsla</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UploadStageReceivedTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 3089784978" size-unit="char" translate="yes" xml:space="preserve">
           <source>The file content does not match its mimeType.</source>
           <target>Efni skrárinnar passar ekki við mimeType hennar.</target>
