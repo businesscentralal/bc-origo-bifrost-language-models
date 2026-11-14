@@ -267,7 +267,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         TempArgument."Base URL" := 'https://xai125.invalid';
         TempArgument.Model := 'fixture-model';
         TempArgument.SetApiKey(FakeKey());
-        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.png","mimeType":" Image/PNG; charset=binary ","data":"aGVsbG8="}]}');
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"fixture.png","mimeType":" Image/PNG; charset=binary ","data":"iVBORw0KGgo="}]}');
         TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
         Provider := Enum::"Bifrost LangModel Prov. ori"::xAI;
         Mock.Configure(200, ProviderReply(false, true), false, false);
@@ -276,7 +276,7 @@ codeunit 96072 "LLM 125 xAI Tests"
         UnbindSubscription(Mock);
         Response.ReadFrom(TempArgument.GetResultText());
         Assert.AreEqual('OK', Response.GetText('reply'), 'Accepted PNG.');
-        Assert.IsTrue(Mock.GetRequestBody().Contains('data:image/png;base64,aGVsbG8='), 'Normalized inline image.');
+        Assert.IsTrue(Mock.GetRequestBody().Contains('data:image/png;base64,iVBORw0KGgo='), 'Normalized inline image.');
         Assert.AreEqual(0, Mock.GetUploadCount(), 'Images are never uploaded.');
     end;
 
