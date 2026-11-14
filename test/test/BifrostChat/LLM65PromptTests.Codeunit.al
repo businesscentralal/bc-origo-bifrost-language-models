@@ -1188,11 +1188,11 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Model: Record "Bifrost Language Model ori";
         Attachment: Record "Incoming Document Attachment";
         HttpMock: Codeunit "LLM 65 HTTP Mock";
+        Base64Convert: Codeunit "Base64 Convert";
         RequestJson: JsonObject;
         AttachmentJson: JsonObject;
         Response: JsonObject;
         ContentStream: OutStream;
-        Base64Convert: Codeunit "Base64 Convert";
         RequestText: Text;
     begin
         CreateModel(Model, "Bifrost LangModel Prov. ori"::OpenAI);
@@ -1446,10 +1446,10 @@ codeunit 96034 "LLM 65 Prompt Tests"
     local procedure ExecuteStored(FileExtension: Text; EntryNo: Integer; var HttpMock: Codeunit "LLM 65 HTTP Mock"; var Attachment: Record "Incoming Document Attachment"; ExpectSuccess: Boolean) Response: JsonObject
     var
         Model: Record "Bifrost Language Model ori";
+        Base64Convert: Codeunit "Base64 Convert";
         RequestJson: JsonObject;
         AttachmentJson: JsonObject;
         ContentStream: OutStream;
-        Base64Convert: Codeunit "Base64 Convert";
         RequestText: Text;
     begin
         CreateModel(Model, "Bifrost LangModel Prov. ori"::xAI);
