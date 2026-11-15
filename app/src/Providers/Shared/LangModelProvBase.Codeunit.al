@@ -58,6 +58,29 @@ codeunit 10035410 "LangModel Prov. Base ori"
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
         OversizeKindTok: Label 'oversize', Locked = true;
         TotalOversizeKindTok: Label 'totalOversize', Locked = true;
+        CopilotNotRegisteredErr: Label 'The Bifrost Copilot capability is not registered in this environment.', Comment = 'is-IS=Bifröst Copilot-getan er ekki skráð í þessu umhverfi.';
+        CopilotNotRegisteredWhenTxt: Label 'The language model''s provider is Copilot and the Bifrost Copilot capability is missing from the Copilot & agent capabilities page. No request was sent.', Comment = 'is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot-getuna vantar á síðuna Copilot og eiginleikar fulltrúa. Engin beiðni var send.';
+        CopilotNotRegisteredNextStepTxt: Label 'Ask an administrator to reinstall Bifrost Language Models so the Bifrost Copilot capability is registered, then set it to Active on the Copilot & agent capabilities page.', Comment = 'is-IS=Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo Bifröst Copilot-getan skráist og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.';
+        CopilotNotActiveErr: Label 'The Bifrost Copilot capability is not active.', Comment = 'is-IS=Bifröst Copilot-getan er ekki virk.';
+        CopilotNotActiveWhenTxt: Label 'The language model''s provider is Copilot and Bifrost Copilot is not active on the Copilot & agent capabilities page. No request was sent.', Comment = 'is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot er ekki virkt á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.';
+        CopilotNotActiveNextStepTxt: Label 'Ask an administrator to set Bifrost Copilot to Active on the Copilot & agent capabilities page, then retry.', Comment = 'is-IS=Biddu kerfisstjóra um að stilla Bifröst Copilot á Virkt á síðunni Copilot og eiginleikar fulltrúa og reyndu síðan aftur.';
+        CopilotCapabilityExpectedTxt: Label 'an active Bifrost Copilot capability', Comment = 'is-IS=virk Bifröst Copilot-geta';
+        CopilotSessionErr: Label 'Copilot cannot run in this session. Business Central runs Microsoft-managed Copilot only in an interactive client session, not over MCP, API, OData or web services, and not in a background session.', Comment = 'is-IS=Copilot getur ekki keyrt í þessari lotu. Business Central keyrir Copilot í umsjá Microsoft aðeins í gagnvirkri biðlaralotu, ekki um MCP, API, OData eða vefþjónustur og ekki í bakgrunnslotu.';
+        CopilotSessionWhenTxt: Label 'The language model''s provider is Copilot and the call runs over MCP, API, OData or web services, in the job queue or in another background session. No request was sent.', Comment = 'is-IS=Veitandi mállíkansins er Copilot og kallið keyrir um MCP, API, OData eða vefþjónustur, í verkbiðröð eða í annarri bakgrunnslotu. Engin beiðni var send.';
+        CopilotSessionExpectedTxt: Label 'an interactive Business Central client session', Comment = 'is-IS=gagnvirk biðlaralota í Business Central';
+        CopilotSessionNextStepTxt: Label 'Send roleCode with a language model whose provider is not Copilot (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google or xAI), or use the Copilot language model from Bifrost Chat in the Business Central client.', Comment = 'is-IS=Sendu roleCode með mállíkani þar sem veitandinn er ekki Copilot (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google eða xAI), eða notaðu Copilot-mállíkanið úr Bifröst spjalli í biðlara Business Central.';
+        CopilotCallErr: Label 'The Copilot service could not complete the prompt.', Comment = 'is-IS=Copilot-þjónustan gat ekki unnið kvaðninguna.';
+        CopilotCallWhenTxt: Label 'Business Central''s managed Azure OpenAI call for Copilot fails or is refused. The answer keeps the status and a redacted reason.', Comment = 'is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið heldur stöðunni og ritskoðaðri ástæðu.';
+        CopilotCallNextStepTxt: Label 'Check that Bifrost Copilot is active on the Copilot & agent capabilities page and that the prompt carries no file, then retry. If it still fails, use a language model with another provider.', Comment = 'is-IS=Athugaðu að Bifröst Copilot sé virkt á síðunni Copilot og eiginleikar fulltrúa og að kvaðningin hafi enga skrá og reyndu síðan aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.';
+        CopilotRetryNextStepTxt: Label 'Wait and retry. If the failure persists, use a language model with another provider.', Comment = 'is-IS=Bíddu og reyndu aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.';
+        CopilotRetryWhenTxt: Label 'Business Central''s managed Azure OpenAI call for Copilot returns HTTP 408, 429 or 5xx.', Comment = 'is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot skilar HTTP 408, 429 eða 5xx.';
+        CopilotNotRegisteredKindTok: Label 'copilotNotRegistered', Locked = true;
+        CopilotNotActiveKindTok: Label 'copilotNotActive', Locked = true;
+        CopilotSessionKindTok: Label 'copilotSession', Locked = true;
+        CopilotCallKindTok: Label 'copilotCall', Locked = true;
+        CopilotReceivedTok: Label 'copilot', Locked = true;
+        CopilotSessionTokensTok: Label '|api|odata|odatav4|soap|management|background|', Locked = true;
+        RoleCodeParameterTok: Label 'roleCode', Locked = true;
 
     /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
@@ -172,6 +195,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, 'mimeType', ReceivedMime, UnsupportedImageExpectedTxt, UnsupportedImageNextStepTxt);
             exit;
         end;
+        if RespondCopilotFailure(Argument, Response) then
+            exit;
         HttpStatus := -1;
         if not TryReadPromptFailure(Response, HttpStatus, HttpBlocked, ProviderErrorCode) then begin
             ClearLastError();
@@ -225,6 +250,153 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, TotalOversizeErr, TotalOversizeWhenTxt, TotalOversizeNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, NotBase64Err, NotBase64WhenTxt, NotBase64NextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, WrongTypeErr, WrongTypeWhenTxt, WrongTypeNextStepTxt));
+    end;
+
+    /// <summary>
+    /// Adds the coded Copilot provider failures (#132) to a message type contract, with the same labels as execution.
+    /// </summary>
+    procedure AddCopilotErrors(var Errors: JsonArray)
+    var
+        ContractMgt: Codeunit "Msg Contract Mgt ori";
+    begin
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, CopilotNotRegisteredErr, CopilotNotRegisteredWhenTxt, CopilotNotRegisteredNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, CopilotNotActiveErr, CopilotNotActiveWhenTxt, CopilotNotActiveNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, CopilotSessionErr, CopilotSessionWhenTxt, CopilotSessionNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, CopilotCallErr, CopilotCallWhenTxt, CopilotCallNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::Retryable, CopilotCallErr, CopilotRetryWhenTxt, CopilotRetryNextStepTxt));
+    end;
+
+    /// <summary>
+    /// Returns the Copilot blocker kind for a capability and session state, or empty when Copilot can be called.
+    /// The capability is checked first, then the session (#132).
+    /// </summary>
+    procedure GetCopilotBlockerKind(Registered: Boolean; Active: Boolean; SessionToken: Text): Text
+    begin
+        if not Registered then
+            exit(CopilotNotRegisteredKindTok);
+        if not Active then
+            exit(CopilotNotActiveKindTok);
+        if SessionToken <> '' then
+            exit(CopilotSessionKindTok);
+        exit('');
+    end;
+
+    /// <summary>
+    /// Returns a fixed session token when Business Central refuses Microsoft-managed Copilot in a session of this
+    /// client type (API, OData, SOAP, Management, or any session without a UI), otherwise empty. Mirrors the
+    /// System Application Azure OpenAI client-type check so the refusal is coded instead of thrown (#132).
+    /// </summary>
+    procedure GetCopilotSessionToken(SessionClientType: ClientType; IsGuiAllowed: Boolean): Text
+    begin
+        case SessionClientType of
+            ClientType::Api:
+                exit('api');
+            ClientType::OData:
+                exit('odata');
+            ClientType::ODataV4:
+                exit('odatav4');
+            ClientType::SOAP:
+                exit('soap');
+            ClientType::Management:
+                exit('management');
+        end;
+        if not IsGuiAllowed then
+            exit('background');
+        exit('');
+    end;
+
+    /// <summary>
+    /// Builds a Copilot provider failure. Only fixed tokens, a status and a redacted reason are kept; the message
+    /// is a label of this app, never provider text (#132).
+    /// </summary>
+    procedure BuildCopilotFailure(Kind: Text; SessionToken: Text; StatusCode: Integer; Reason: Text) Response: JsonObject
+    begin
+        case Kind of
+            CopilotNotRegisteredKindTok:
+                Response.Add('error', CopilotNotRegisteredErr);
+            CopilotNotActiveKindTok:
+                Response.Add('error', CopilotNotActiveErr);
+            CopilotSessionKindTok:
+                Response.Add('error', CopilotSessionErr);
+            else begin
+                Kind := CopilotCallKindTok;
+                Response.Add('error', CopilotCallErr);
+            end;
+        end;
+        Response.Add('copilotFailure', Kind);
+        if (Kind = CopilotSessionKindTok) and CopilotSessionTokensTok.Contains('|' + SessionToken + '|') then
+            Response.Add('copilotSession', SessionToken);
+        if Kind <> CopilotCallKindTok then
+            exit;
+        if (StatusCode >= 100) and (StatusCode <= 599) then
+            Response.Add('providerStatus', StatusCode);
+        if not (StatusCode in [401, 403]) then begin
+            Reason := RedactProviderReason(Reason);
+            if Reason <> '' then
+                Response.Add('providerReason', Reason);
+        end;
+    end;
+
+    local procedure RespondCopilotFailure(var Argument: Record "Message Argument ori"; Response: JsonObject): Boolean
+    var
+        KindToken: JsonToken;
+        Token: JsonToken;
+        ErrorCode: Enum "Bifrost Error Code ori";
+        Kind: Text;
+        SessionToken: Text;
+        Reason: Text;
+        ReceivedText: Text;
+        MessageText: Text;
+        NextStep: Text;
+        StatusCode: Integer;
+    begin
+        if not Response.Get('copilotFailure', KindToken) then
+            exit(false);
+        Kind := JsonValueText(KindToken);
+        case Kind of
+            CopilotNotRegisteredKindTok:
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, CopilotNotRegisteredErr, RoleCodeParameterTok, CopilotReceivedTok, CopilotCapabilityExpectedTxt, CopilotNotRegisteredNextStepTxt);
+            CopilotNotActiveKindTok:
+                Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, CopilotNotActiveErr, RoleCodeParameterTok, CopilotReceivedTok, CopilotCapabilityExpectedTxt, CopilotNotActiveNextStepTxt);
+            CopilotSessionKindTok:
+                begin
+                    ReceivedText := CopilotReceivedTok;
+                    if Response.Get('copilotSession', Token) then begin
+                        SessionToken := JsonValueText(Token);
+                        if CopilotSessionTokensTok.Contains('|' + SessionToken + '|') then
+                            ReceivedText += ' ' + SessionToken;
+                    end;
+                    Argument.RespondWithError("Bifrost Error Code ori"::PreconditionFailed, CopilotSessionErr, ProviderParameterTok, ReceivedText, CopilotSessionExpectedTxt, CopilotSessionNextStepTxt);
+                end;
+            CopilotCallKindTok:
+                begin
+                    StatusCode := -1;
+                    if Response.Get('providerStatus', Token) then
+                        if Token.IsValue() then
+                            if not Token.AsValue().IsNull() then
+                                if Evaluate(StatusCode, JsonValueText(Token), 9) then;
+                    ErrorCode := "Bifrost Error Code ori"::PreconditionFailed;
+                    MessageText := CopilotCallErr;
+                    NextStep := CopilotCallNextStepTxt;
+                    if StatusCode in [408, 429, 500 .. 599] then begin
+                        ErrorCode := "Bifrost Error Code ori"::Retryable;
+                        NextStep := CopilotRetryNextStepTxt;
+                    end;
+                    ReceivedText := CopilotReceivedTok;
+                    if (StatusCode >= 100) and (StatusCode <= 599) then
+                        ReceivedText += ' ' + Format(StatusCode, 0, 9);
+                    if not (StatusCode in [401, 403]) then
+                        if Response.Get('providerReason', Token) then begin
+                            Reason := RedactProviderReason(JsonValueText(Token));
+                            if Reason <> '' then
+                                MessageText := StrSubstNo(PromptReasonTxt, MessageText, Reason);
+                        end;
+                    Argument.RespondWithError(ErrorCode, MessageText, ProviderParameterTok, ReceivedText, PromptAnswerExpectedTxt, NextStep);
+                end;
+            else
+                exit(false);
+        end;
+        exit(true);
     end;
 
     /// <summary>Builds the local unsupported-image refusal. No provider call is made for this answer.</summary>
@@ -388,7 +560,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     local procedure AppendDiagnosticWord(Word: Text; var Result: Text; var HasDiagnostic: Boolean)
     var
-        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|redacted|', Locked = true;
+        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|authorized|billing|capability|capabilities|background|session|sessions|service|services|web|api|odata|copilot|microsoft|enabled|configured|authentication|resources|resource|usage|deployment|quota|rate|exceeded|content_filter|filter|policy|redacted|', Locked = true;
     begin
         if Word in ['invalid', 'unsupported', 'unknown', 'unrecognized', 'missing', 'required', 'expected', 'exceeds', 'cannot', 'not'] then
             HasDiagnostic := true;

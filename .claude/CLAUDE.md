@@ -86,6 +86,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Issue #101: **96063** `LLM Prompt Ask Tests`, **96064** `LLM Prompt Ask Perm Tests`, **96065** `LLM Ask Request Builder Tests`.
   Issue #120: table **10035434** `LangModel Ask Setup ori` (fields 1-7), test codeunit **96067** `LLM Ask Setup Tests`.
   Issue #125: **96072** `LLM 125 xAI Tests` (mock-only provider request shapes, error redaction and per-round cleanup).
+  Issue #132: **96076** `LLM 132 Copilot Tests` (coded Copilot capability, session and managed-call failures).
   Reserved in Claude-owned PR #66: **96032** `LLM Prompt Compl Perm Tests`. Free: 96005-96008, 96035-96199.
 
 ### Testing the chat of every provider

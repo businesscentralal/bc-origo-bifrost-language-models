@@ -489,12 +489,6 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Bifröst spjallgetan er ekki skráð. Prófaðu að setja viðbótina upp aftur.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot LangModel Prov. ori - Method DoTestConnection - NamedType NotRegisteredErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3872182412 - Method 4153045249 - NamedType 907600227" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The Copilot model returned an error.</source>
-          <target>Copilot-líkanið skilaði villu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-líkanið skilaði villu.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot LangModel Prov. ori - Method GetErrorOrFallback - NamedType FallbackErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 2691301688 - NamedType 1651073791" size-unit="char" translate="yes" xml:space="preserve">
           <source>Enter the API key for your LLM endpoint.</source>
           <target>Sláðu inn API-lykilinn fyrir LLM-endapunktinn þinn.</target>
@@ -716,6 +710,102 @@
           <target>Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Notaðu spjald Bifröst mállíkansins eða uppsetningarsíðu Bifröst mállíkana til að breyta slóðarreitunum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Field Restrict ori - NamedType EndpointFieldsHintTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2987691047" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Copilot service could not complete the prompt.</source>
+          <target>Copilot-þjónustan gat ekki unnið kvaðninguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-þjónustan gat ekki unnið kvaðninguna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1867917415" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check that Bifrost Copilot is active on the Copilot &amp; agent capabilities page and that the prompt carries no file, then retry. If it still fails, use a language model with another provider.</source>
+          <target>Athugaðu að Bifröst Copilot sé virkt á síðunni Copilot og eiginleikar fulltrúa og að kvaðningin hafi enga skrá og reyndu síðan aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að Bifröst Copilot sé virkt á síðunni Copilot og eiginleikar fulltrúa og að kvaðningin hafi enga skrá og reyndu síðan aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 786989544" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central's managed Azure OpenAI call for Copilot fails or is refused. The answer keeps the status and a redacted reason.</source>
+          <target>Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið heldur stöðunni og ritskoðaðri ástæðu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið heldur stöðunni og ritskoðaðri ástæðu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1989417480" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an active Bifrost Copilot capability</source>
+          <target>virk Bifröst Copilot-geta</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=virk Bifröst Copilot-geta</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCapabilityExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 173344674" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Bifrost Copilot capability is not active.</source>
+          <target>Bifröst Copilot-getan er ekki virk.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Copilot-getan er ekki virk.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotActiveErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2471699394" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to set Bifrost Copilot to Active on the Copilot &amp; agent capabilities page, then retry.</source>
+          <target>Biddu kerfisstjóra um að stilla Bifröst Copilot á Virkt á síðunni Copilot og eiginleikar fulltrúa og reyndu síðan aftur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að stilla Bifröst Copilot á Virkt á síðunni Copilot og eiginleikar fulltrúa og reyndu síðan aftur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotActiveNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 603677729" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model's provider is Copilot and Bifrost Copilot is not active on the Copilot &amp; agent capabilities page. No request was sent.</source>
+          <target>Veitandi mállíkansins er Copilot og Bifröst Copilot er ekki virkt á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot er ekki virkt á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotActiveWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2266001486" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Bifrost Copilot capability is not registered in this environment.</source>
+          <target>Bifröst Copilot-getan er ekki skráð í þessu umhverfi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Copilot-getan er ekki skráð í þessu umhverfi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotRegisteredErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1795014174" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ask an administrator to reinstall Bifrost Language Models so the Bifrost Copilot capability is registered, then set it to Active on the Copilot &amp; agent capabilities page.</source>
+          <target>Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo Bifröst Copilot-getan skráist og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo Bifröst Copilot-getan skráist og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotRegisteredNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3525771997" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model's provider is Copilot and the Bifrost Copilot capability is missing from the Copilot &amp; agent capabilities page. No request was sent.</source>
+          <target>Veitandi mállíkansins er Copilot og Bifröst Copilot-getuna vantar á síðuna Copilot og eiginleikar fulltrúa. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot-getuna vantar á síðuna Copilot og eiginleikar fulltrúa. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotRegisteredWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1447736185" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Wait and retry. If the failure persists, use a language model with another provider.</source>
+          <target>Bíddu og reyndu aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bíddu og reyndu aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotRetryNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 520414394" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Business Central's managed Azure OpenAI call for Copilot returns HTTP 408, 429 or 5xx.</source>
+          <target>Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot skilar HTTP 408, 429 eða 5xx.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot skilar HTTP 408, 429 eða 5xx.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotRetryWhenTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3973474795" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot cannot run in this session. Business Central runs Microsoft-managed Copilot only in an interactive client session, not over MCP, API, OData or web services, and not in a background session.</source>
+          <target>Copilot getur ekki keyrt í þessari lotu. Business Central keyrir Copilot í umsjá Microsoft aðeins í gagnvirkri biðlaralotu, ekki um MCP, API, OData eða vefþjónustur og ekki í bakgrunnslotu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot getur ekki keyrt í þessari lotu. Business Central keyrir Copilot í umsjá Microsoft aðeins í gagnvirkri biðlaralotu, ekki um MCP, API, OData eða vefþjónustur og ekki í bakgrunnslotu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotSessionErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 205654174" size-unit="char" translate="yes" xml:space="preserve">
+          <source>an interactive Business Central client session</source>
+          <target>gagnvirk biðlaralota í Business Central</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=gagnvirk biðlaralota í Business Central</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotSessionExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3668616299" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send roleCode with a language model whose provider is not Copilot (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google or xAI), or use the Copilot language model from Bifrost Chat in the Business Central client.</source>
+          <target>Sendu roleCode með mállíkani þar sem veitandinn er ekki Copilot (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google eða xAI), eða notaðu Copilot-mállíkanið úr Bifröst spjalli í biðlara Business Central.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu roleCode með mállíkani þar sem veitandinn er ekki Copilot (OpenAI, Azure OpenAI, Custom LLM, Anthropic, Google eða xAI), eða notaðu Copilot-mállíkanið úr Bifröst spjalli í biðlara Business Central.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotSessionNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3734232748" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model's provider is Copilot and the call runs over MCP, API, OData or web services, in the job queue or in another background session. No request was sent.</source>
+          <target>Veitandi mállíkansins er Copilot og kallið keyrir um MCP, API, OData eða vefþjónustur, í verkbiðröð eða í annarri bakgrunnslotu. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er Copilot og kallið keyrir um MCP, API, OData eða vefþjónustur, í verkbiðröð eða í annarri bakgrunnslotu. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotSessionWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1304087324" size-unit="char" translate="yes" xml:space="preserve">
           <source>HttpClient calls are blocked in this environment. An administrator must allow AL HttpClient requests.</source>
@@ -1288,9 +1378,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed.</source>
-          <target>Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf.</note>
+          <source>Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed. Copilot language models are refused.</source>
+          <target>Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 2403977524" size-unit="char" translate="yes" xml:space="preserve">
@@ -1414,9 +1504,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data.</source>
-          <target>Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central.</note>
+          <source>Read-only. Generates a text response from a prompt without tools, record context or conversation state; nothing is remembered between calls. Use a dedicated message type when one exists, and Data.Records.Get first when the prompt needs Business Central data. A Copilot language model answers only in an interactive Business Central client session, never over MCP, API or in the background; use another provider there.</source>
+          <target>Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central. Copilot-mállíkan svarar aðeins í gagnvirkri biðlaralotu í Business Central, aldrei um MCP, API eða í bakgrunni; notaðu annan veitanda þar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Býr til textasvar úr kvaðningu án verkfæra, færslusamhengis eða samtalsstöðu; ekkert er munað milli kalla. Notaðu sérstaka skilaboðategund þegar hún er til og Data.Records.Get fyrst þegar kvaðningin þarf gögn úr Business Central. Copilot-mállíkan svarar aðeins í gagnvirkri biðlaralotu í Business Central, aldrei um MCP, API eða í bakgrunni; notaðu annan veitanda þar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 1168347065" size-unit="char" translate="yes" xml:space="preserve">
