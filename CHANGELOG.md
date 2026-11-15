@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
+
+- Root cause: `LLM.Prompt.Complete` and `LLM.Prompt.Ask` read Foundation's SESSION TIME block after the staged uploads had been taken. Taking a staged upload writes in the call transaction, and Foundation cannot supply the block while a write transaction is open, so every staged call answered `sessionTimeUnavailable` instead of `sessionTime`. Inline files and calls without attachments were not affected.
+- Both message types now read the block first, before `LLM Staging Files ori` takes the uploads. No new objects, no change to the one-shot consumption or to the fail-open rule.
+- Tests (mock only): 96071 `LLM Staging Files Tests` gains Ask and Complete scenarios with a clock that fails once the staged upload is gone; the seam `LLM Session Time Seam` (96062) gains `FailAfterStagingTaken`.
+
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
 - Root cause of the Origo Demo UAT failure on 28.0.3.91 (staged `text/plain` attachment, alone and with html, on GROK): the xAI Responses API returns `"error": null` in every successful response body, as OpenAI does. `LangModel API Client ori` (codeunit 10035411) treated the presence of the `error` key as a failure and returned a prompt error with status -1, so every Ask or Complete that went through Responses (any file) came back as the generic `PreconditionFailed` "could not complete the prompt" with no status or reason. Html-only passed because it uses Chat Completions, which has no `error` key; SONNET passed because Anthropic has its own path. The mocks did not reproduce it because their success fixture had no `error` key.
