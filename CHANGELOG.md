@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-15) - text attachments on LLM.Prompt.Complete chat completions (#133)
+
+- OpenAI chat completions accept only `application/pdf` as a `file` part. `LLM.Prompt.Complete` on OpenAI, Azure OpenAI and Custom LLM sent `text/plain` (and any other non-image) as `type: file` / `file_data`, so GPT-6.1 and an OpenAI-compatible Custom model (KAPPI) answered 400. Those types are now a `text` content part: `Attached file <name>:` and the decoded text. PDF stays a `file` part. PNG and JPEG stay `image_url`. No new objects.
+- `LLM.Prompt.Ask` is unchanged. A reasoning model still sends text on the Responses API as `input_file`, which accepts `text/plain`. Ask on chat completions still uses the previous file part.
+- Tests: codeunit **96076** `LLM 133 Text File Tests` (inline and staged text on OpenAI, Azure OpenAI and Custom LLM, 1033 and 1039; non-PDF types never a file part; PDF still a file part; text beside a PDF; invalid Base64 refused before HTTP; Ask Responses and Ask chat completions unchanged). Mock HTTP only in the suite. Live OpenAI and KAPPI calls are recorded on the PR.
+
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
 - Root cause of the Origo Demo UAT failure on 28.0.3.91 (staged `text/plain` attachment, alone and with html, on GROK): the xAI Responses API returns `"error": null` in every successful response body, as OpenAI does. `LangModel API Client ori` (codeunit 10035411) treated the presence of the `error` key as a failure and returned a prompt error with status -1, so every Ask or Complete that went through Responses (any file) came back as the generic `PreconditionFailed` "could not complete the prompt" with no status or reason. Html-only passed because it uses Chat Completions, which has no `error` key; SONNET passed because Anthropic has its own path. The mocks did not reproduce it because their success fixture had no `error` key.
