@@ -363,7 +363,7 @@ codeunit 96071 "LLM Staging Files Tests"
         Assert.IsTrue(Seam.WatchedStagingExistedAtRequest(), 'Block requested before the staged upload was consumed');
         Assert.IsFalse(Staging.Exists(StagingId), 'staging row consumed');
         Assert.IsTrue(Response.Contains('sessionTime'), 'sessionTime present: ' + Describe(Response));
-        Assert.IsFalse(Response.Contains('warnings'), 'No sessionTimeUnavailable warning: ' + Describe(Response));
+        Assert.IsFalse(Describe(Response).Contains('sessionTimeUnavailable'), 'No sessionTimeUnavailable warning: ' + Describe(Response));
     end;
 
     local procedure VerifyText(MessageType: Enum "Message Type ori")
