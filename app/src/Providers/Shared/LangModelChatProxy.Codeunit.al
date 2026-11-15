@@ -191,7 +191,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             end;
         end;
         ApiClient.LogLastRequest();
-        if XaiTransport and Response.Contains('error') then begin
+        if XaiTransport and ProviderBaseHasError(Response) then begin
             Response.WriteTo(Reply);
             exit(Reply);
         end;
@@ -517,6 +517,13 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         ResponseObject.WriteTo(ResponseJson);
     end;
 
+    local procedure ProviderBaseHasError(Response: JsonObject): Boolean
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        exit(ProviderBase.HasProviderError(Response));
+    end;
+
     local procedure BuildErrorResponse(ErrorMessage: Text) ResponseJson: Text
     var
         ErrorObject: JsonObject;
@@ -709,7 +716,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             exit(BuildErrorResponse(GetLastErrorText()));
         end;
         ApiClient.LogLastRequest();
-        if XaiTransport and Response.Contains('error') then begin
+        if XaiTransport and ProviderBaseHasError(Response) then begin
             Response.WriteTo(Reply);
             exit(Reply);
         end;

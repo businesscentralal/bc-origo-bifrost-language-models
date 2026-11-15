@@ -350,6 +350,160 @@ codeunit 96072 "LLM 125 xAI Tests"
         Assert.IsTrue(ProviderBase.RedactProviderReason('Unsupported purpose value') <> '', 'Vocabulary covers purpose.');
     end;
 
+    /// <summary>A staged text attachment, alone and with html, succeeds when the Responses body carries "error": null as xAI and OpenAI return on success (#125 AC05 b/c).</summary>
+    [Test]
+    procedure Scenario_AC02_StagedTextNullError_AskSucceeds()
+    var
+        Result: JsonObject;
+        Response: JsonObject;
+        Body: Text;
+        Expected: Text;
+        Index: Integer;
+        HtmlMode: Boolean;
+        Locale: Integer;
+    begin
+        // Story #125 AC02/AC04 | Time: none | Risk: a successful Responses body read as a failure because error is present but null.
+        for Index := 0 to 3 do begin
+            HtmlMode := Index >= 2;
+            Locale := 1033;
+            if (Index mod 2) = 1 then
+                Locale := 1039;
+            Result := RunFileScenario(true, HtmlMode, true, Locale, 200, NullErrorReply(HtmlMode), 'note.txt', 'text/plain', 'staged inline note');
+            Response := Result.GetObject('response');
+            Response.WriteTo(Body);
+            Assert.AreEqual('Success', Response.GetText('status'), Body);
+            Expected := 'OK';
+            if HtmlMode then begin
+                Expected := DocumentTok;
+                Assert.AreEqual(DocumentTok, Response.GetText('html'), 'HTML document.');
+            end;
+            Assert.AreEqual(Expected, Response.GetText('answer'), 'Ask answer.');
+            Assert.AreEqual('completed', Response.GetText('stopReason'), 'Completed.');
+            Body := Result.GetText('request');
+            Assert.IsTrue(Result.GetText('url').EndsWith('/v1/responses'), 'Files use Responses.');
+            Assert.IsTrue(Body.Contains('input_text'), 'Text is an input_text block.');
+            Assert.IsTrue(Body.Contains('staged inline note'), 'Decoded text is sent.');
+            Assert.IsFalse(Body.Contains('file_data'), 'No inline document.');
+            Assert.AreEqual(0, Result.GetInteger('uploads'), 'No provider upload.');
+            Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+        end;
+    end;
+
+    /// <summary>Complete with a staged text attachment also reads "error": null as success.</summary>
+    [Test]
+    procedure Scenario_AC02_StagedTextNullError_CompleteSucceeds()
+    var
+        Result: JsonObject;
+        Response: JsonObject;
+        Body: Text;
+    begin
+        // Story #125 AC02/AC04 | Time: none | Risk: the Complete Responses path shares the null-error check.
+        Result := RunFileScenario(false, false, true, 1033, 200, NullErrorReply(false), 'note.txt', 'text/plain', 'staged inline note');
+        Response := Result.GetObject('response');
+        Response.WriteTo(Body);
+        Assert.AreEqual('Success', Response.GetText('status'), Body);
+        Assert.AreEqual('OK', Response.GetText('reply'), 'Complete reply.');
+        Assert.AreEqual(0, Result.GetInteger('uploads'), 'No provider upload.');
+        Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+    end;
+
+    /// <summary>A refused Responses request names the responses hop with the provider status, safe code and redacted reason, in both locales.</summary>
+    [Test]
+    procedure Scenario_AC03_ResponsesRefusal_NamesResponsesStage()
+    var
+        Result: JsonObject;
+        Response: JsonObject;
+        Body: Text;
+        Index: Integer;
+        Locale: Integer;
+    begin
+        // Story #125 AC03 | Time: none | Risk: the caller cannot tell the upload hop from the responses hop.
+        for Index := 0 to 1 do begin
+            Locale := 1033;
+            if Index = 1 then
+                Locale := 1039;
+            Result := RunFileScenario(true, false, true, Locale, 400,
+                '{"error":{"code":"invalid_request","message":"Unsupported field input_text. xai125-fixture-Z9Q7"}}', 'note.txt', 'text/plain', 'staged inline note');
+            Response := Result.GetObject('response');
+            Response.WriteTo(Body);
+            Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Body);
+            Assert.AreEqual('provider', Response.GetText('parameter'), 'Provider parameter.');
+            if Locale = 1039 then
+                Assert.AreEqual('svarbeiðni 400 invalid_request', Response.GetText('received'), 'Icelandic hop, status and code.')
+            else
+                Assert.AreEqual('responses request 400 invalid_request', Response.GetText('received'), 'Hop, status and code.');
+            Assert.IsTrue(Body.Contains('unsupported field input_text'), 'Redacted reason kept.');
+            Assert.IsFalse(Body.Contains('Z9Q7'), 'No credential fragments.');
+            Assert.AreEqual(0, Result.GetInteger('uploads'), 'Text was not uploaded.');
+            Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+        end;
+    end;
+
+    /// <summary>A 2xx body with a real (non-null) error object still fails, and the status is visible.</summary>
+    [Test]
+    procedure Scenario_AC03_InBodyError_FailsWithStatus()
+    var
+        Result: JsonObject;
+        Response: JsonObject;
+        Body: Text;
+    begin
+        // Story #125 AC03 | Time: none | Risk: the null-error fix must not accept a real in-body error.
+        Result := RunFileScenario(true, false, true, 1033, 200,
+            '{"status":"failed","error":{"code":"server_error","message":"private-customer Z9Q7"},"output":[]}', 'note.txt', 'text/plain', 'staged inline note');
+        Response := Result.GetObject('response');
+        Response.WriteTo(Body);
+        Assert.AreEqual('Error', Response.GetText('status'), Body);
+        Assert.AreEqual('PreconditionFailed', Response.GetText('code'), 'Coded refusal.');
+        Assert.AreEqual('responses request 200 server_error', Response.GetText('received'), 'Hop, status and safe code.');
+        Assert.IsFalse(Body.Contains('private-customer'), 'No provider prose.');
+        Assert.IsFalse(Body.Contains('Z9Q7'), 'No credential fragments.');
+        Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+    end;
+
+    /// <summary>The shared null-error rule: absent and null are no error; an object or text is an error. A file upload with "error": null keeps its id.</summary>
+    [Test]
+    procedure Scenario_AC02_NullErrorRule_SharedHelpers()
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        ApiClient: Codeunit "LangModel API Client ori";
+        Mock: Codeunit "LLM 65 HTTP Mock";
+        Sample: JsonObject;
+        Upload: JsonObject;
+    begin
+        // Story #125 AC02/AC04 | Time: none | Risk: shared providers misread a null error.
+        Sample.ReadFrom('{"status":"completed"}');
+        Assert.IsFalse(ProviderBase.HasProviderError(Sample), 'Absent error.');
+        Sample.ReadFrom('{"error":null}');
+        Assert.IsFalse(ProviderBase.HasProviderError(Sample), 'Null error is success.');
+        ProviderBase.RemoveNullError(Sample);
+        Assert.IsFalse(Sample.Contains('error'), 'Null error removed.');
+        Sample.ReadFrom('{"error":{"message":"x"}}');
+        Assert.IsTrue(ProviderBase.HasProviderError(Sample), 'Object error.');
+        ProviderBase.RemoveNullError(Sample);
+        Assert.IsTrue(Sample.Contains('error'), 'Real error kept.');
+        Sample.ReadFrom('{"error":"bad"}');
+        Assert.IsTrue(ProviderBase.HasProviderError(Sample), 'Text error.');
+
+        Mock.Configure(200, NullErrorReply(false), false, false);
+        Mock.ConfigureUpload(200, '{"id":"file_llm65","object":"file","error":null}');
+        BindSubscription(Mock);
+        Upload := ApiClient.UploadProviderFile('https://xai125.invalid/v1/files', 'Authorization', FakeKey(), 1000, 'fixture.pdf', 'application/pdf', 'JVBERi0xLjQgaGVsbG8=');
+        UnbindSubscription(Mock);
+        Assert.IsFalse(Upload.Contains('error'), 'Upload with null error succeeds.');
+        Assert.AreEqual('file_llm65', Upload.GetText('id'), 'File id read.');
+    end;
+
+    /// <summary>A Responses success body in the real wire shape, including "error": null and "incomplete_details": null.</summary>
+    local procedure NullErrorReply(HtmlMode: Boolean): Text
+    var
+        Reply: Text;
+    begin
+        Reply := 'OK';
+        if HtmlMode then
+            Reply := DocumentTok;
+        exit('{"id":"resp_lm125","object":"response","status":"completed","error":null,"incomplete_details":null,"output":[{"type":"message","role":"assistant","status":"completed","content":[{"type":"output_text","text":"' + Reply + '","annotations":[]}]}],"usage":{"input_tokens":5,"output_tokens":1,"total_tokens":6}}');
+    end;
+
     local procedure VerifySuccess(IsAsk: Boolean; HtmlMode: Boolean; WithFile: Boolean)
     var
         Result: JsonObject;

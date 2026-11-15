@@ -188,7 +188,7 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         ChatUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/chat/completions');
         Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        if Response.Contains('error') then begin
+        if ProviderBase.HasProviderError(Response) then begin
             Response.WriteTo(ResultText);
             exit(ResultText);
         end;
@@ -255,7 +255,8 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         ResponsesUrl := ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/responses');
         Response := ApiClient.SendPromptToEndpoint(ResponsesUrl, AuthHeaderNameTok, Argument.GetApiKey(),
             ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
-        if Response.Contains('error') then begin
+        if ProviderBase.HasProviderError(Response) then begin
+            ProviderBase.MarkResponsesStage(Response);
             Response.WriteTo(ResultText);
             exit;
         end;
@@ -313,6 +314,8 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
         Response := ApiClient.SendPromptToEndpoint(
             ProviderBase.JoinEndpointUrl(ProviderBase.GetBaseUrl(Argument, DefaultBaseUrlTok), '/v1/responses'),
             AuthHeaderNameTok, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000), RequestBody);
+        if ProviderBase.HasProviderError(Response) then
+            ProviderBase.MarkResponsesStage(Response);
     end;
 
     [NonDebuggable]

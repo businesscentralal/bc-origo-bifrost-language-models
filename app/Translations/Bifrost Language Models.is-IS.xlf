@@ -843,6 +843,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu grunnslóð, líkan og uppsetningu API-lykils á spjaldi Bifröst mállíkans. Stilltu API-lykilinn í leyndarmálum forrita Bifröst og veldu síðan Prófa tengingu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType PromptSetupNextStepTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 4294049501" size-unit="char" translate="yes" xml:space="preserve">
+          <source>responses request</source>
+          <target>svarbeiðni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=svarbeiðni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ResponsesStageReceivedTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 3800681336" size-unit="char" translate="yes" xml:space="preserve">
           <source>The attached files total %1 bytes, which is over the %2 byte cap.</source>
           <target>Viðhengdu skrárnar eru samtals %1 bæti, sem er yfir hámarkinu %2 bæti.</target>
