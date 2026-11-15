@@ -182,12 +182,12 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             // Resend once with reasoning_effort "none"; a model that does not know the parameter never receives it.
             // The setting stays on ExtraRequestFields, so later rounds of this turn send it on the first try.
             if not NeedsReasoningOff(RequestBody, GetLastErrorText()) then
-                exit(BuildErrorResponse(GetLastErrorText()));
+                exit(BuildChatFailureResponse(ApiClient, GetLastErrorText()));
             RequestBody.Add('reasoning_effort', 'none');
             RememberReasoningOff(ExtraRequestFields);
             if not TrySendToModel(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
                 ApiClient.LogLastRequest();
-                exit(BuildErrorResponse(GetLastErrorText()));
+                exit(BuildChatFailureResponse(ApiClient, GetLastErrorText()));
             end;
         end;
         ApiClient.LogLastRequest();
@@ -524,6 +524,25 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         exit(ProviderBase.HasProviderError(Response));
     end;
 
+    /// <summary>
+    /// The error answer of a failed chat request. Besides the error text it keeps the HTTP status and the redacted provider
+    /// reason under their own keys, which only the image refusal of LLM.Prompt.* reads (#135).
+    /// </summary>
+    local procedure BuildChatFailureResponse(var ApiClient: Codeunit "LangModel API Client ori"; ErrorMessage: Text) ResponseJson: Text
+    var
+        ErrorObject: JsonObject;
+        HttpStatus: Integer;
+        ProviderReason: Text;
+    begin
+        ErrorObject.Add('error', ErrorMessage);
+        if ApiClient.GetLastChatFailure(HttpStatus, ProviderReason) then begin
+            ErrorObject.Add('chatProviderStatus', HttpStatus);
+            if ProviderReason <> '' then
+                ErrorObject.Add('chatProviderReason', ProviderReason);
+        end;
+        ErrorObject.WriteTo(ResponseJson);
+    end;
+
     local procedure BuildErrorResponse(ErrorMessage: Text) ResponseJson: Text
     var
         ErrorObject: JsonObject;
@@ -713,7 +732,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         if not TrySendToModel(ApiClient, Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
             ApiClient.LogLastRequest();
-            exit(BuildErrorResponse(GetLastErrorText()));
+            exit(BuildChatFailureResponse(ApiClient, GetLastErrorText()));
         end;
         ApiClient.LogLastRequest();
         if XaiTransport and ProviderBaseHasError(Response) then begin

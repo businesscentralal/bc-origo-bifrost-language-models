@@ -4,6 +4,21 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-16) - LLM.Prompt.*: an image sent to a model that cannot read images gets a coded refusal (#135)
+
+- `LLM.Prompt.Complete` and `LLM.Prompt.Ask`: when the request carries an image and the provider answers HTTP 4xx because the
+  model cannot read images (for example KAPPI qwen3:8b: "Multimodal data provided, but model does not support multimodal
+  requests."), the answer is now `InvalidParameter` on `roleCode`: "The language model <code> (<model>) cannot read images."
+  with a nextStep that suggests up to three other language model codes whose provider takes images (OpenAI, Azure OpenAI,
+  Anthropic, Google, xAI), or names those providers when there is none. Before, the generic PreconditionFailed provider
+  error with a mostly redacted reason was returned.
+- Image support is not a field on the language model card (Known Ambiguity 1, resolved: map the provider error). Detection
+  reads only the HTTP status (4xx except 401, 403, 408, 429) and the redacted reason (an image, vision or multimodal word with
+  a negation). The errors chapter of both message types documents this in en-US and is-IS.
+- The provider-reason vocabulary keeps `multimodal`, `vision`, `images`, `support`, `supports` and `requests`.
+- `LangModel Prov. Base ori` (10035410): new `RespondImageNotSupported`, `HasImageFile`, `IsImageNotSupportedFailure`,
+  `GetImageCapableRoleCodes`. Tests: codeunit **96077** `LLM 135 Image Refusal Tests`.
+
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
 - Root cause of the Origo Demo UAT failure on 28.0.3.91 (staged `text/plain` attachment, alone and with html, on GROK): the xAI Responses API returns `"error": null` in every successful response body, as OpenAI does. `LangModel API Client ori` (codeunit 10035411) treated the presence of the `error` key as a failure and returned a prompt error with status -1, so every Ask or Complete that went through Responses (any file) came back as the generic `PreconditionFailed` "could not complete the prompt" with no status or reason. Html-only passed because it uses Chat Completions, which has no `error` key; SONNET passed because Anthropic has its own path. The mocks did not reproduce it because their success fixture had no `error` key.
