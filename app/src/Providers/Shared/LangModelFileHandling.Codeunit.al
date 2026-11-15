@@ -329,7 +329,7 @@ codeunit 10035429 "LangModel File Handling ori"
                         GetJsonText(FileObj, 'fileName'), MimeType, GetJsonText(FileObj, 'data'));
                     if UploadResponse.Contains('storedWithoutId') then
                         LogFileCleanupIssue(ProviderName, IdUnreadOutcomeTok, '', '');
-                    if UploadResponse.Contains('error') then begin
+                    if ProviderBase.HasProviderError(UploadResponse) then begin
                         ProviderBase.MarkUploadStage(UploadResponse);
                         UploadResponse.WriteTo(ResultText);
                         exit(false);
@@ -374,7 +374,7 @@ codeunit 10035429 "LangModel File Handling ori"
             DeleteResponse := ApiClient.DeleteProviderFile(
                 ProviderBase.JoinEndpointUrl(BaseUrl, FilesPathTok + '/' + FileId),
                 AuthHeaderName, Argument.GetApiKey(), ProviderBase.GetTimeoutMs(Argument, 120000));
-            if DeleteResponse.Contains('error') then
+            if ProviderBase.HasProviderError(DeleteResponse) then
                 LogFileCleanupIssue(FileId, DeleteResponse, ProviderName);
         end;
     end;

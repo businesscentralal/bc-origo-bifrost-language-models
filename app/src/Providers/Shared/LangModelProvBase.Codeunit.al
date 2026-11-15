@@ -51,6 +51,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ProviderParameterTok: Label 'provider', Locked = true;
         UploadStageTok: Label 'upload', Locked = true;
         UploadStageReceivedTxt: Label 'file upload', Comment = 'is-IS=skráarupphleðsla';
+        ResponsesStageTok: Label 'responses', Locked = true;
+        ResponsesStageReceivedTxt: Label 'responses request', Comment = 'is-IS=svarbeiðni';
         FileParameterTok: Label 'file', Locked = true;
         FilesParameterTok: Label 'files', Locked = true;
         UnsupportedImageKindTok: Label 'unsupportedImage', Locked = true;
@@ -74,6 +76,40 @@ codeunit 10035410 "LangModel Prov. Base ori"
     begin
         if not Response.Contains('providerStage') then
             Response.Add('providerStage', UploadStageTok);
+    end;
+
+    /// <summary>Marks a prompt failure as raised by the provider Responses request (the prompt hop, not the file upload). A stage already set is kept. The marker is a fixed token, never provider text.</summary>
+    procedure MarkResponsesStage(var Response: JsonObject)
+    begin
+        if not Response.Contains('providerStage') then
+            Response.Add('providerStage', ResponsesStageTok);
+    end;
+
+    /// <summary>
+    /// True when a provider response carries an error. A JSON null error is not an error: the OpenAI-style
+    /// Responses API (xAI included) returns "error": null in every successful response (#125).
+    /// </summary>
+    procedure HasProviderError(Response: JsonObject): Boolean
+    var
+        ErrorToken: JsonToken;
+    begin
+        if not Response.Get('error', ErrorToken) then
+            exit(false);
+        if ErrorToken.IsValue() then
+            exit(not ErrorToken.AsValue().IsNull());
+        exit(true);
+    end;
+
+    /// <summary>Removes a JSON null error from a successful provider response so every caller reads it as a success (#125).</summary>
+    procedure RemoveNullError(var Response: JsonObject)
+    var
+        ErrorToken: JsonToken;
+    begin
+        if not Response.Get('error', ErrorToken) then
+            exit;
+        if ErrorToken.IsValue() then
+            if ErrorToken.AsValue().IsNull() then
+                Response.Remove('error');
     end;
 
     /// <summary>Preserves only allowlisted diagnostic words from a non-authentication provider 4xx reason.</summary>
@@ -114,6 +150,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         ReasonToken: JsonToken;
         StageToken: JsonToken;
         FromUpload: Boolean;
+        FromResponses: Boolean;
     begin
         if IsSafeFileContentRefusal(Response, ParameterName, ReceivedText, ErrorCode) then begin
             if ErrorCode = "Bifrost Error Code ori"::InvalidParameter then
@@ -144,6 +181,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         end;
         GetPromptFailure(HttpStatus, HttpBlocked, ErrorCode, MessageText, NextStep);
         FromUpload := Response.Get('providerStage', StageToken) and (JsonValueText(StageToken) = UploadStageTok);
+        FromResponses := Response.Get('providerStage', StageToken) and (JsonValueText(StageToken) = ResponsesStageTok);
         if (HttpStatus >= 100) and (HttpStatus <= 599) then begin
             ParameterName := ProviderParameterTok;
             ReceivedText := Format(HttpStatus, 0, 9);
@@ -156,6 +194,13 @@ codeunit 10035410 "LangModel Prov. Base ori"
                 ReceivedText := UploadStageReceivedTxt
             else
                 ReceivedText := UploadStageReceivedTxt + ' ' + ReceivedText;
+        end;
+        if FromResponses then begin
+            ParameterName := ProviderParameterTok;
+            if ReceivedText = '' then
+                ReceivedText := ResponsesStageReceivedTxt
+            else
+                ReceivedText := ResponsesStageReceivedTxt + ' ' + ReceivedText;
         end;
         if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
             if Response.Get('providerReason', ReasonToken) then begin

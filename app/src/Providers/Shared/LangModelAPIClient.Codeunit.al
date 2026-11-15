@@ -148,9 +148,11 @@ codeunit 10035411 "LangModel API Client ori"
         if (HttpStatus < 200) or (HttpStatus > 299) then
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
-            exit(ProviderBase.BuildPromptError(-1, false));
-        if Response.Contains('error') then
-            exit(ProviderBase.BuildPromptError(-1, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
+            exit(ProviderBase.BuildPromptError(HttpStatus, false));
+        // Responses API bodies carry "error": null on success (#125); only a non-null error is a failure.
+        if ProviderBase.HasProviderError(Response) then
+            exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
+        ProviderBase.RemoveNullError(Response);
         // Prompt calls deliberately do not buffer provider text: even a nominally
         // successful provider body may contain authentication diagnostics.
     end;
@@ -253,8 +255,9 @@ codeunit 10035411 "LangModel API Client ori"
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderErrorCode, LastProviderReason));
         if not Response.ReadFrom(ResponseText) then
             exit(StoredWithoutIdError(ProviderBase));
-        if Response.Contains('error') then
+        if ProviderBase.HasProviderError(Response) then
             exit(ProviderBase.BuildPromptError(HttpStatus, false, ProviderBase.SanitizeProviderErrorCode(ResponseText)));
+        ProviderBase.RemoveNullError(Response);
         if not TryReadUploadedFileId(Response, FileId) then
             exit(StoredWithoutIdError(ProviderBase));
     end;

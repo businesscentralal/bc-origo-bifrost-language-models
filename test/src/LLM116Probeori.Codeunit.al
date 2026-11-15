@@ -80,6 +80,9 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             if Request.Contains('httpStatus') then
                 FixtureStatus := Request.GetInteger('httpStatus');
             FixtureBody := XaiTests.ProviderReply(Request.GetBoolean('html'), Request.GetBoolean('withFile'));
+            if Request.Contains('nullError') then
+                if Request.GetBoolean('nullError') then
+                    FixtureBody := XaiTests.NullErrorReply(Request.GetBoolean('html'));
             if FixtureStatus <> 200 then
                 FixtureBody := '{"error":{"code":"invalid_request","message":"Unsupported field file_data. Use file_id instead. xai125-fixture-Z9Q7"}}';
             if Request.Contains('textFile') and Request.GetBoolean('textFile') then

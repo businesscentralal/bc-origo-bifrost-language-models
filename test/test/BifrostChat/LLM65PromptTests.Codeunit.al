@@ -576,7 +576,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.IsTrue(HttpMock.GetDeleteUrl().EndsWith('/v1/files/file_llm65'), 'Delete targets the uploaded id.');
         AssertCodedError(Response, 'PreconditionFailed');
         Assert.AreEqual('provider', Response.GetText('parameter'), 'The provider parameter names the transport.');
-        Assert.AreEqual('400 invalid_request_error', Response.GetText('received'), 'The safe code follows the HTTP status.');
+        Assert.AreEqual('responses request 400 invalid_request_error', Response.GetText('received'), 'The xAI Responses hop, then the HTTP status and safe code (#125).');
         Assert.IsTrue(Response.GetText('error').Contains('could not complete the prompt'), 'The public error stays generic.');
         AssertSecretAbsent(Response);
         Model.Delete(true);
