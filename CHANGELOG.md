@@ -17,7 +17,12 @@ All notable changes to Bifrost Language Models are documented here.
   a negation). The errors chapter of both message types documents this in en-US and is-IS.
 - The provider-reason vocabulary keeps `multimodal`, `vision`, `images`, `support`, `supports` and `requests`.
 - `LangModel Prov. Base ori` (10035410): new `RespondImageNotSupported`, `HasImageFile`, `IsImageNotSupportedFailure`,
-  `GetImageCapableRoleCodes`. Tests: codeunit **96077** `LLM 135 Image Refusal Tests`.
+  `GetImageCapableRoleCodes`. `LangModel API Client ori` (10035411) remembers the status and redacted reason of a failed
+  chat request (`GetLastChatFailure`) and has a test hook `OnBeforeChatPostWithStatus`; `LangModel Chat Proxy ori` adds
+  them to its failure answer as `chatProviderStatus`/`chatProviderReason`, read only by the image check, so the Ask path
+  (tool loop over chat completions) maps the same refusal. Other Ask and Bifrost Chat failure answers are unchanged.
+  Tests: codeunit **96077** `LLM 135 Image Refusal Tests` (Complete and Ask, 1033 and 1039, non-image and non-matching
+  refusals stay provider errors, 401 is never mapped, help in both languages).
 
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
