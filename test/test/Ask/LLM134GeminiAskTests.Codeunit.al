@@ -201,7 +201,8 @@ codeunit 96076 "LLM 134 Gemini Ask Tests"
         Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Body);
         Assert.AreEqual('401', Response.GetText('received'), 'No provider code and no reason.');
         Assert.IsFalse(Body.Contains(MarkerTok), 'The marker is not returned.');
-        Assert.IsFalse(Body.Contains('API key'), 'The authentication body is not returned.');
+        Assert.IsFalse(Body.Contains('is invalid'), 'The authentication sentence is not returned.');
+        Assert.IsFalse(Response.GetText('error').Contains('API key'), 'The provider sentence is not the caller error.');
     end;
 
     /// <summary>A document Ask can continue a tool round on generateContent.</summary>
