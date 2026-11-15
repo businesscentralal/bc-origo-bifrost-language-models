@@ -2,6 +2,7 @@ namespace Origo.Bifrost.LanguageModels.Test;
 
 using Origo.Bifrost;
 using Origo.Bifrost.LanguageModels;
+using System.Text;
 using System.Utilities;
 
 /// <summary>Self-contained MCP fixture probe for issue 116. Dispatches the real prompt types and cleans its own model and uploads.</summary>
@@ -96,6 +97,14 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             Argument."Content Type" := Argument.GetContentTypeJson();
             exit;
         end;
+        if Scenario = 'stage136' then begin
+            StageFiles136(Argument, Request);
+            exit;
+        end;
+        if Scenario = 'unstage136' then begin
+            UnstageFiles136(Argument, Request);
+            exit;
+        end;
         if Scenario = 'cleanupForeign' then begin
             CleanupForeignFixture(Argument);
             exit;
@@ -175,6 +184,60 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         Argument.SetResponseJson(Result);
         Argument."Content Type" := Argument.GetContentTypeJson();
     end;
+    /// <summary>Issue 136: stages the caller's own small files and commits, as an upload session does, so a later call consumes them.</summary>
+    local procedure StageFiles136(var Argument: Record "Message Argument ori"; Request: JsonObject)
+    var
+        Staging: Codeunit "Blob Staging ori";
+        Base64: Codeunit "Base64 Convert";
+        Blob: Codeunit "Temp Blob";
+        Output: OutStream;
+        Input: InStream;
+        Result: JsonObject;
+        Ids: JsonArray;
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        StagingId: Guid;
+    begin
+        Request.Get('files', FilesToken);
+        foreach FileToken in FilesToken.AsArray() do begin
+            Clear(Blob);
+            Blob.CreateOutStream(Output);
+            Base64.FromBase64(FileToken.AsObject().GetText('base64'), Output);
+            Blob.CreateInStream(Input);
+            StagingId := Staging.Create(Input, FileToken.AsObject().GetText('name'), FileToken.AsObject().GetText('mimeType'), 'LM136 live');
+            Ids.Add(Format(StagingId, 0, 4));
+        end;
+        Commit();
+        Result.Add('stagingIds', Ids);
+        Result.Add('status', 'Success');
+        Argument.SetResponseJson(Result);
+        Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure UnstageFiles136(var Argument: Record "Message Argument ori"; Request: JsonObject)
+    var
+        Staging: Codeunit "Blob Staging ori";
+        Blob: Codeunit "Temp Blob";
+        Result: JsonObject;
+        Remaining: Integer;
+        IdsToken: JsonToken;
+        IdToken: JsonToken;
+        StagingId: Guid;
+    begin
+        Request.Get('stagingIds', IdsToken);
+        foreach IdToken in IdsToken.AsArray() do begin
+            Evaluate(StagingId, IdToken.AsValue().AsText());
+            if Staging.Exists(StagingId) then
+                Staging.Take(StagingId, Blob);
+            if Staging.Exists(StagingId) then
+                Remaining += 1;
+        end;
+        Result.Add('remaining', Remaining);
+        Result.Add('status', 'Success');
+        Argument.SetResponseJson(Result);
+        Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
     local procedure ForeignFixtureId(): Guid
     var
         Rows: RecordRef;
