@@ -493,8 +493,8 @@ codeunit 96072 "LLM 125 xAI Tests"
         Assert.AreEqual('file_llm65', Upload.GetText('id'), 'File id read.');
     end;
 
-    /// <summary>A Responses success body in the real wire shape, including "error": null and "incomplete_details": null.</summary>
-    local procedure NullErrorReply(HtmlMode: Boolean): Text
+    /// <summary>A Responses success body in the real wire shape, including "error": null and "incomplete_details": null; also used by the MCP probe.</summary>
+    procedure NullErrorReply(HtmlMode: Boolean): Text
     var
         Reply: Text;
     begin
