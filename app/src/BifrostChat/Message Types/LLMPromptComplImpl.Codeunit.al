@@ -376,13 +376,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
             exit;
         end;
 
+        // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
+        // sent without a stale caller-supplied block and the response says so. Read it before staged uploads are
+        // consumed: consuming them writes, and Foundation cannot supply the block inside a write transaction (#136).
+        SessionTime.GetBlock(SessionTimeBlock);
+
         if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
             exit;
 
         SystemPrompt := GetTextValue(RequestJson, 'system');
-        // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
-        // sent without a stale caller-supplied block and the response says so.
-        SessionTime.GetBlock(SessionTimeBlock);
         SystemPrompt := SessionTime.ForSystemPrompt(SystemPrompt, SessionTimeBlock);
         if SystemPrompt <> '' then
             PayloadJson.Add('systemPrompt', SystemPrompt);

@@ -356,6 +356,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Instructions: Text;
         RoleCodeText: Text;
         SessionTimeBlock: Text;
+        SessionTimeAvailable: Boolean;
         BadKey: Text;
         RoleCode: Code[20];
         RequestedToolCalls: Integer;
@@ -506,6 +507,9 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
 
+        // Read the SESSION TIME block before staged uploads are consumed: consuming them writes, and Foundation
+        // cannot supply the block inside a write transaction (#136).
+        SessionTimeAvailable := SessionTime.GetBlock(SessionTimeBlock);
         if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
             exit;
         if not StagingFiles.ResolveInline(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
@@ -520,7 +524,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             Runner.AddWarning('responseSchemaIgnored');
         if HasSchema then
             Runner.CheckSchemaKeywords(Schema);
-        if not SessionTime.GetBlock(SessionTimeBlock) then
+        if not SessionTimeAvailable then
             Runner.AddWarning('sessionTimeUnavailable');
 
         // Persist one-shot staging consumption before bootstrap/tools use Boolean Codeunit.Run.

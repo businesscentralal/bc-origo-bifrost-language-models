@@ -325,6 +325,47 @@ codeunit 96071 "LLM Staging Files Tests"
         Rows.Close();
     end;
 
+    [Test]
+    procedure Scenario_136_AskStaged_SessionTimeBeforeConsumption()
+    begin
+        VerifySessionTime(Enum::"Message Type ori"::"LLM.Prompt.Ask");
+    end;
+
+    [Test]
+    procedure Scenario_136_CompleteStaged_SessionTimeBeforeConsumption()
+    begin
+        VerifySessionTime(Enum::"Message Type ori"::"LLM.Prompt.Complete");
+    end;
+
+    local procedure VerifySessionTime(MessageType: Enum "Message Type ori")
+    var
+        Staging: Codeunit "Blob Staging ori";
+        Seam: Codeunit "LLM Session Time Seam";
+        Blocks: List of [Text];
+        Response: JsonObject;
+        StagingId: Guid;
+        EmptyId: Guid;
+        LineFeed: Char;
+    begin
+        // [GIVEN] A staged upload and a Foundation seam that records whether the upload is still unconsumed (#136).
+        Initialize();
+        LineFeed := 10;
+        Blocks.Add('SESSION TIME (test)' + Format(LineFeed) + '- Now UTC: 2026-11-15T10:00:00Z' + Format(LineFeed) + '- Today: 2026-11-15 Sunday');
+        Seam.Serve(Blocks);
+        StagingId := Upload('hello staged world', 'hello.txt', 'text/plain');
+        Seam.WatchStaging(StagingId);
+        BindSubscription(Seam);
+        // [WHEN] The message runs with the staged attachment.
+        Response := Execute(MessageType, Request(StagingId, EmptyId));
+        UnbindSubscription(Seam);
+        // [THEN] The block was requested before the upload was consumed, so sessionTime is present and no warning is added.
+        Assert.AreEqual('Success', Response.GetText('status'), Describe(Response));
+        Assert.IsTrue(Seam.WatchedStagingExistedAtRequest(), 'Block requested before the staged upload was consumed');
+        Assert.IsFalse(Staging.Exists(StagingId), 'staging row consumed');
+        Assert.IsTrue(Response.Contains('sessionTime'), 'sessionTime present: ' + Describe(Response));
+        Assert.IsFalse(Response.Contains('warnings'), 'No sessionTimeUnavailable warning: ' + Describe(Response));
+    end;
+
     local procedure VerifyText(MessageType: Enum "Message Type ori")
     var
         Staging: Codeunit "Blob Staging ori";
