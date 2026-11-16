@@ -325,6 +325,42 @@ codeunit 96071 "LLM Staging Files Tests"
         Rows.Close();
     end;
 
+    [Test]
+    procedure Scenario_136_AskStaged_ReturnsSessionTimeWithoutWarning()
+    begin
+        VerifySessionTime(Enum::"Message Type ori"::"LLM.Prompt.Ask");
+    end;
+
+    [Test]
+    procedure Scenario_136_CompleteStaged_ReturnsSessionTimeWithoutWarning()
+    begin
+        VerifySessionTime(Enum::"Message Type ori"::"LLM.Prompt.Complete");
+    end;
+
+    local procedure VerifySessionTime(MessageType: Enum "Message Type ori")
+    var
+        Seam: Codeunit "LLM Session Time Seam";
+        Response: JsonObject;
+        SessionTime: JsonObject;
+        StagingId: Guid;
+        EmptyId: Guid;
+    begin
+        // [GIVEN] A staged upload, and a clock that fails once the upload has been taken (the open write transaction of #136).
+        Initialize();
+        StagingId := Upload('hello staged world', 'hello.txt', 'text/plain');
+        Seam.FailAfterStagingTaken(StagingId);
+        BindSubscription(Seam);
+        // [WHEN] The message is dispatched with the staged attachment.
+        Response := Execute(MessageType, Request(StagingId, EmptyId));
+        UnbindSubscription(Seam);
+        // [THEN] The block was read before staging was taken: sessionTime is present and there is no warning.
+        Assert.AreEqual('Success', Response.GetText('status'), Describe(Response));
+        Assert.IsTrue(Response.Contains('sessionTime'), 'sessionTime present: ' + Describe(Response));
+        Assert.IsFalse(Describe(Response).Contains('sessionTimeUnavailable'), 'no sessionTimeUnavailable warning: ' + Describe(Response));
+        SessionTime := Response.GetObject('sessionTime');
+        Assert.IsTrue(SessionTime.Contains('nowUtc'), 'nowUtc');
+    end;
+
     local procedure VerifyText(MessageType: Enum "Message Type ori")
     var
         Staging: Codeunit "Blob Staging ori";

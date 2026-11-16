@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
+
+- Root cause: `LLM.Prompt.Complete` and `LLM.Prompt.Ask` read Foundation's SESSION TIME block after the staged uploads had been taken. Taking a staged upload writes in the call transaction, and Foundation cannot supply the block while a write transaction is open, so every staged call answered `sessionTimeUnavailable` instead of `sessionTime`. Inline files and calls without attachments were not affected.
+- Both message types now read the block first, before `LLM Staging Files ori` takes the uploads. No new objects, no change to the one-shot consumption or to the fail-open rule.
+- Tests (mock only): 96071 `LLM Staging Files Tests` gains Ask and Complete scenarios with a clock that fails once the staged upload is gone; the seam `LLM Session Time Seam` (96062) gains `FailAfterStagingTaken`.
+
 ### Fixed (2026-11-15) - Gemini Ask answers about text and PDF documents (#134)
 
 - `LLM.Prompt.Ask` with a Google (Gemini) model card sent text and PDF documents as OpenAI `file` parts to the OpenAI-compatible chat endpoint. That endpoint rejects them, and the failure came back as a generic `PreconditionFailed` with no HTTP status and no provider reason. PNG and JPEG already used `image_url` and worked. `LLM.Prompt.Complete` already used native `generateContent`.
