@@ -152,7 +152,7 @@ codeunit 10035414 "Azure OAI LangModel Prov. ori" implements "Bifrost LangModel 
             Messages.Add(SystemMsg);
         end;
         AppendPayloadMessages(PayloadObject, Messages);
-        ProviderBase.AttachFilesToMessages(PayloadObject, Messages);
+        ProviderBase.AttachCompletionFilesToMessages(PayloadObject, Messages);
 
         RequestBody.Add('model', ProviderBase.GetModel(Argument, ''));
         RequestBody.Add('max_completion_tokens', ProviderBase.GetMaxTokens(Argument, 16384));

@@ -1,5 +1,6 @@
 namespace Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
+using System.Text;
 
 /// <summary>
 /// Shared helper procedures for Bifrost Chat language-model providers: config resolution,
@@ -844,9 +845,26 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     /// <summary>
     /// If the payload contains a files array, converts the last user message
-    /// from plain text to a multi-modal content array (OpenAI format).
+    /// from plain text to a multi-modal content array (OpenAI chat format).
+    /// Ask keeps this path. LLM.Prompt.Complete uses AttachCompletionFilesToMessages,
+    /// which does not send a non-PDF type as a file part.
     /// </summary>
     procedure AttachFilesToMessages(PayloadObject: JsonObject; var Messages: JsonArray)
+    begin
+        AttachFilesToMessagesInternal(PayloadObject, Messages, false);
+    end;
+
+    /// <summary>
+    /// Chat-completions parts for LLM.Prompt.Complete on OpenAI, Azure OpenAI and Custom LLM.
+    /// OpenAI chat completions accept only application/pdf as a file part, so every other
+    /// non-image type is a text content part (file name and decoded text) and never a file part.
+    /// </summary>
+    procedure AttachCompletionFilesToMessages(PayloadObject: JsonObject; var Messages: JsonArray)
+    begin
+        AttachFilesToMessagesInternal(PayloadObject, Messages, true);
+    end;
+
+    local procedure AttachFilesToMessagesInternal(PayloadObject: JsonObject; var Messages: JsonArray; InlineNonPdf: Boolean)
     var
         FilesToken: JsonToken;
         FilesArray: JsonArray;
@@ -883,7 +901,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
         foreach FileToken in FilesArray do
             if FileToken.IsObject() then begin
-                FileBlock := BuildOpenAIFileBlock(FileToken.AsObject());
+                FileBlock := BuildOpenAIFileBlock(FileToken.AsObject(), InlineNonPdf);
                 ContentArray.Add(FileBlock);
                 Clear(FileBlock);
             end;
@@ -895,27 +913,48 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Messages.Add(NewMessage);
     end;
 
-    local procedure BuildOpenAIFileBlock(FileObj: JsonObject) Block: JsonObject
+    local procedure BuildOpenAIFileBlock(FileObj: JsonObject; InlineNonPdf: Boolean) Block: JsonObject
     var
+        FileHandling: Codeunit "LangModel File Handling ori";
+        Base64Convert: Codeunit "Base64 Convert";
         DataUriTok: Label 'data:%1;base64,%2', Locked = true;
+        InlineTextTxt: Label 'Attached file %1:', Locked = true;
         ImageUrl: JsonObject;
         FileContent: JsonObject;
         MimeType: Text;
+        SentMime: Text;
         DataUri: Text;
+        NewLine: Text[2];
     begin
         MimeType := GetJsonTextInternal(FileObj, 'mimeType');
-        DataUri := StrSubstNo(DataUriTok, MimeType, GetJsonTextInternal(FileObj, 'data'));
+        // Ask keeps the historical chat-completions part. Complete normalises and refuses a non-PDF file part.
+        if InlineNonPdf then
+            SentMime := FileHandling.NormalizeMimeType(MimeType)
+        else
+            SentMime := MimeType;
+        DataUri := StrSubstNo(DataUriTok, SentMime, GetJsonTextInternal(FileObj, 'data'));
 
-        if MimeType.StartsWith('image/') then begin
+        if InlineNonPdf and FileHandling.IsInlineImageMime(SentMime) then begin
             ImageUrl.Add('url', DataUri);
             Block.Add('type', 'image_url');
             Block.Add('image_url', ImageUrl);
-        end else begin
-            FileContent.Add('filename', GetJsonTextInternal(FileObj, 'fileName'));
-            FileContent.Add('file_data', DataUri);
-            Block.Add('type', 'file');
-            Block.Add('file', FileContent);
-        end;
+        end else
+            if (not InlineNonPdf) and MimeType.StartsWith('image/') then begin
+                ImageUrl.Add('url', DataUri);
+                Block.Add('type', 'image_url');
+                Block.Add('image_url', ImageUrl);
+            end else
+                if InlineNonPdf and (SentMime <> 'application/pdf') then begin
+                    NewLine[1] := 13;
+                    NewLine[2] := 10;
+                    Block.Add('type', 'text');
+                    Block.Add('text', StrSubstNo(InlineTextTxt, GetJsonTextInternal(FileObj, 'fileName')) + NewLine + Base64Convert.FromBase64(GetJsonTextInternal(FileObj, 'data')));
+                end else begin
+                    FileContent.Add('filename', GetJsonTextInternal(FileObj, 'fileName'));
+                    FileContent.Add('file_data', DataUri);
+                    Block.Add('type', 'file');
+                    Block.Add('file', FileContent);
+                end;
     end;
 
     local procedure GetJsonTextInternal(JObject: JsonObject; PropertyName: Text): Text
