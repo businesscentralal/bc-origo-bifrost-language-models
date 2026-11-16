@@ -317,13 +317,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
     begin
         if not Root.ReadFrom(ResponseText) then
             exit('');
-        if Root.Get('error', ErrorToken) and ErrorToken.IsObject() then begin
-            if ErrorToken.AsObject().Get('code', CodeToken) then
-                Candidate := JsonValueText(CodeToken);
-            if Candidate = '' then
-                if ErrorToken.AsObject().Get('type', CodeToken) then
-                    Candidate := JsonValueText(CodeToken);
-        end;
+        if Root.Get('error', ErrorToken) and ErrorToken.IsObject() then
+            Candidate := ProviderErrorCodeFromObject(ErrorToken.AsObject());
         if Candidate = '' then
             if Root.Get('code', CodeToken) then
                 Candidate := JsonValueText(CodeToken);
@@ -331,6 +326,27 @@ codeunit 10035410 "LangModel Prov. Base ori"
             if Root.Get('type', CodeToken) then
                 Candidate := JsonValueText(CodeToken);
         exit(AcceptProviderCodeToken(Candidate));
+    end;
+
+    /// <summary>
+    /// Reads a provider code from an error object. A Google status such as INVALID_ARGUMENT is kept as invalid_argument.
+    /// A numeric HTTP code and an uppercase token are not copied. Messages are never copied.
+    /// </summary>
+    [NonDebuggable]
+    local procedure ProviderErrorCodeFromObject(ErrorObject: JsonObject): Text
+    var
+        CodeToken: JsonToken;
+        Candidate: Text;
+    begin
+        if ErrorObject.Get('code', CodeToken) then
+            Candidate := AcceptProviderCodeToken(JsonValueText(CodeToken));
+        if Candidate = '' then
+            if ErrorObject.Get('type', CodeToken) then
+                Candidate := AcceptProviderCodeToken(JsonValueText(CodeToken));
+        if Candidate = '' then
+            if ErrorObject.Get('status', CodeToken) then
+                Candidate := AcceptProviderCodeToken(LowerCase(JsonValueText(CodeToken)));
+        exit(Candidate);
     end;
 
     /// <summary>Reads only a JSON provider reason; arbitrary text and other response fields are discarded.</summary>

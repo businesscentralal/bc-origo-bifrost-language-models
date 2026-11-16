@@ -8,7 +8,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 - OpenAI chat completions accept only `application/pdf` as a `file` part. `LLM.Prompt.Complete` on OpenAI, Azure OpenAI and Custom LLM sent `text/plain` (and any other non-image) as `type: file` / `file_data`, so GPT-6.1 and an OpenAI-compatible Custom model (KAPPI) answered 400. Those types are now a `text` content part: `Attached file <name>:` and the decoded text. PDF stays a `file` part. PNG and JPEG stay `image_url`. No new objects.
 - `LLM.Prompt.Ask` is unchanged. A reasoning model still sends text on the Responses API as `input_file`, which accepts `text/plain`. Ask on chat completions still uses the previous file part.
-- Tests: codeunit **96076** `LLM 133 Text File Tests` (inline and staged text on OpenAI, Azure OpenAI and Custom LLM, 1033 and 1039; non-PDF types never a file part; PDF still a file part; text beside a PDF; invalid Base64 refused before HTTP; Ask Responses and Ask chat completions unchanged). Mock HTTP only in the suite. Live OpenAI and KAPPI calls are recorded on the PR.
+- Tests: codeunit **96077** `LLM 133 Text File Tests` (inline and staged text on OpenAI, Azure OpenAI and Custom LLM, 1033 and 1039; non-PDF types never a file part; PDF still a file part; text beside a PDF; invalid Base64 refused before HTTP; Ask Responses and Ask chat completions unchanged). Mock HTTP only in the suite. Live OpenAI and KAPPI calls are recorded on the PR.
+
+### Fixed (2026-11-15) - Gemini Ask answers about text and PDF documents (#134)
+
+- `LLM.Prompt.Ask` with a Google (Gemini) model card sent text and PDF documents as OpenAI `file` parts to the OpenAI-compatible chat endpoint. That endpoint rejects them, and the failure came back as a generic `PreconditionFailed` with no HTTP status and no provider reason. PNG and JPEG already used `image_url` and worked. `LLM.Prompt.Complete` already used native `generateContent`.
+- Ask now sends a text or PDF document, inline or staged, through `generateContent` as `inline_data`, the same shape Complete uses. PNG and JPEG stay on the OpenAI-compatible chat endpoint. A later tool round stays on `generateContent` when the conversation holds a document. The shared file gate runs before that request, so a PDF whose bytes are not a PDF is refused with no provider call.
+- A Google provider error on Ask, with or without a document, keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. `SanitizeProviderErrorCode` on codeunit 10035410 reads a Google `error.status` such as `INVALID_ARGUMENT` as `invalid_argument`. Authentication bodies stay private.
+- No new production objects. Test codeunit **96076** `LLM 134 Gemini Ask Tests` covers text and PDF inline, staged text, PNG staying on chat completions, a bad PDF signature, a 400 with a redacted reason, a 401 that keeps the body private, and a document tool round. Locales 1033 and 1039 are covered where the acceptance criterion names both. The tests use the HTTP mock only.
 
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
