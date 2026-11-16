@@ -3,8 +3,8 @@ using Microsoft.Utilities;
 using Origo.Bifrost;
 
 /// <summary>
-/// Google Gemini provider. Uses OpenAI-compatible endpoint for text chat
-/// and native generateContent API for file/document processing.
+/// Google Gemini provider. Text chat and PNG/JPEG use the OpenAI-compatible endpoint.
+/// Text and PDF documents use native generateContent inline data, for Ask and for Complete.
 /// </summary>
 codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Provider ori"
 {
@@ -114,11 +114,25 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         exit(ConfigText);
     end;
 
-    // Chat uses Google's OpenAI-compatible endpoint
+    // Text and PNG/JPEG use Google's OpenAI-compatible chat endpoint.
+    // Text and PDF documents use native generateContent; that endpoint rejects OpenAI file parts (#134).
     local procedure DoSendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
+        FileHandling: Codeunit "LangModel File Handling ori";
+        Payload: JsonObject;
+        PayloadText: Text;
+        Failure: Text;
     begin
+        LangModelChatProxy.UseGeminiSafeTransport(Argument);
+        if Payload.ReadFrom(Argument.GetPayload()) then
+            if HasDocumentFiles(Payload) then begin
+                if not FileHandling.AcceptFiles(Payload, Failure) then
+                    exit(Failure);
+                Payload.WriteTo(PayloadText);
+                LangModelChatProxy.UseGeminiDocumentTransport(Argument);
+                exit(LangModelChatProxy.SendChatMessage(Argument, PayloadText, AuthHeaderNameTok));
+            end;
         Argument."Base URL" := CopyStr(GetOpenAICompatBaseUrl(Argument), 1, MaxStrLen(Argument."Base URL"));
         exit(LangModelChatProxy.SendChatMessage(Argument, Argument.GetPayload(), AuthHeaderNameTok));
     end;
@@ -126,8 +140,22 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
     local procedure DoContinueWithToolResults(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
+        State: JsonObject;
+        Token: JsonToken;
+        DocumentRound: Boolean;
     begin
-        Argument."Base URL" := CopyStr(GetOpenAICompatBaseUrl(Argument), 1, MaxStrLen(Argument."Base URL"));
+        DocumentRound := false;
+        if State.ReadFrom(Argument.GetConversationState()) then
+            if State.Get('geminiDocuments', Token) then
+                if Token.IsValue() then
+                    if not Token.AsValue().IsNull() then
+                        DocumentRound := Token.AsValue().AsBoolean();
+        if DocumentRound then
+            LangModelChatProxy.UseGeminiDocumentTransport(Argument)
+        else begin
+            LangModelChatProxy.UseGeminiSafeTransport(Argument);
+            Argument."Base URL" := CopyStr(GetOpenAICompatBaseUrl(Argument), 1, MaxStrLen(Argument."Base URL"));
+        end;
         exit(LangModelChatProxy.ContinueWithToolResults(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok));
     end;
 
@@ -344,6 +372,25 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         if ModelName.StartsWith('models/') then
             exit(CopyStr(ModelName, 8));
         exit(ModelName);
+    end;
+
+    local procedure HasDocumentFiles(PayloadObject: JsonObject): Boolean
+    var
+        FileHandling: Codeunit "LangModel File Handling ori";
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        FileObj: JsonObject;
+    begin
+        if not HasFiles(PayloadObject) then
+            exit(false);
+        PayloadObject.Get('files', FilesToken);
+        foreach FileToken in FilesToken.AsArray() do
+            if FileToken.IsObject() then begin
+                FileObj := FileToken.AsObject();
+                if not FileHandling.IsInlineImageMime(GetJsonText(FileObj, 'mimeType')) then
+                    exit(true);
+            end;
+        exit(false);
     end;
 
     local procedure HasFiles(PayloadObject: JsonObject): Boolean
