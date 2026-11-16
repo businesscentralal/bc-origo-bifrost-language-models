@@ -113,19 +113,19 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
     [NonDebuggable]
     local procedure DoCompletePrompt(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
-        AzureOpenAI: Codeunit "Azure OpenAI";
-        AOAIDeployments: Codeunit "AOAI Deployments";
         AOAIChatMessages: Codeunit "AOAI Chat Messages";
-        AOAIChatCompletionParams: Codeunit "AOAI Chat Completion Params";
         AOAIOperationResponse: Codeunit "AOAI Operation Response";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
         PayloadObject: JsonObject;
+        Failure: JsonObject;
         SystemPrompt: Text;
         UserPrompt: Text;
         ResponseObj: JsonObject;
         ResultText: Text;
     begin
-        if not CheckIsConfigured() then begin
-            Argument.SetResultText(BuildErrorJson(CopilotNotEnabledLbl));
+        if GetBlockerResponse(Failure) then begin
+            Failure.WriteTo(ResultText);
+            Argument.SetResultText(ResultText);
             exit;
         end;
 
@@ -133,9 +133,6 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
             Argument.SetResultText(BuildErrorJson('Invalid payload JSON.'));
             exit;
         end;
-
-        AzureOpenAI.SetCopilotCapability(Enum::"Copilot Capability"::"Bifrost Chat ori");
-        AzureOpenAI.SetManagedResourceAuthorization(Enum::"AOAI Model Type"::"Chat Completions", AOAIDeployments.GetGPT41Latest());
 
         SystemPrompt := GetPayloadText(PayloadObject, 'systemPrompt');
         if SystemPrompt <> '' then
@@ -147,18 +144,66 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
             exit;
         end;
         AOAIChatMessages.AddUserMessage(UserPrompt);
-        AOAIChatCompletionParams.SetMaxTokens(4096);
 
-        AzureOpenAI.GenerateChatCompletion(AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse);
+        // Business Central throws for a refused managed call; the error is kept as a redacted reason (#132).
+        ClearLastError();
+        if not TryGenerateCompletion(AOAIChatMessages, AOAIOperationResponse) then begin
+            Failure := ProviderBase.BuildCopilotFailure('', '', -1, GetLastErrorText());
+            ClearLastError();
+            Failure.WriteTo(ResultText);
+            Argument.SetResultText(ResultText);
+            exit;
+        end;
 
         if not AOAIOperationResponse.IsSuccess() then begin
-            Argument.SetResultText(BuildErrorJson(GetErrorOrFallback(AOAIOperationResponse)));
+            Failure := ProviderBase.BuildCopilotFailure('', '', AOAIOperationResponse.GetStatusCode(), AOAIOperationResponse.GetError());
+            Failure.WriteTo(ResultText);
+            Argument.SetResultText(ResultText);
             exit;
         end;
 
         ResponseObj.Add('reply', AOAIChatMessages.GetLastMessage());
         ResponseObj.WriteTo(ResultText);
         Argument.SetResultText(ResultText);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TryGenerateCompletion(var AOAIChatMessages: Codeunit "AOAI Chat Messages"; var AOAIOperationResponse: Codeunit "AOAI Operation Response")
+    var
+        AzureOpenAI: Codeunit "Azure OpenAI";
+        AOAIDeployments: Codeunit "AOAI Deployments";
+        AOAIChatCompletionParams: Codeunit "AOAI Chat Completion Params";
+    begin
+        AzureOpenAI.SetCopilotCapability(Enum::"Copilot Capability"::"Bifrost Chat ori");
+        AzureOpenAI.SetManagedResourceAuthorization(Enum::"AOAI Model Type"::"Chat Completions", AOAIDeployments.GetGPT41Latest());
+        AOAIChatCompletionParams.SetMaxTokens(4096);
+        AzureOpenAI.GenerateChatCompletion(AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse);
+    end;
+
+    /// <summary>
+    /// Fills a coded Copilot failure when the Bifrost Copilot capability is not registered or not active, or when
+    /// this session cannot run Microsoft-managed Copilot (MCP, API, OData, web services, background). True when
+    /// Copilot cannot be called; no request is sent then (#132).
+    /// </summary>
+    procedure GetBlockerResponse(var Response: JsonObject): Boolean
+    var
+        CopilotCapability: Codeunit "Copilot Capability";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        Registered: Boolean;
+        Active: Boolean;
+        SessionToken: Text;
+        Kind: Text;
+    begin
+        Registered := CopilotCapability.IsCapabilityRegistered(Enum::"Copilot Capability"::"Bifrost Chat ori");
+        if Registered then
+            Active := CopilotCapability.IsCapabilityActive(Enum::"Copilot Capability"::"Bifrost Chat ori");
+        SessionToken := ProviderBase.GetCopilotSessionToken(CurrentClientType(), GuiAllowed());
+        Kind := ProviderBase.GetCopilotBlockerKind(Registered, Active, SessionToken);
+        if Kind = '' then
+            exit(false);
+        Response := ProviderBase.BuildCopilotFailure(Kind, SessionToken, -1, '');
+        exit(true);
     end;
 
     local procedure GetPayloadText(PayloadObject: JsonObject; PropertyName: Text): Text
@@ -194,17 +239,6 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
         if not PayloadObject.Get('files', FilesToken) then
             exit(false);
         exit(FilesToken.IsArray() and (FilesToken.AsArray().Count() > 0));
-    end;
-
-    local procedure GetErrorOrFallback(var AOAIOperationResponse: Codeunit "AOAI Operation Response"): Text
-    var
-        ErrorText: Text;
-        FallbackErr: Label 'The Copilot model returned an error.', Comment = 'is-IS=Copilot-líkanið skilaði villu.';
-    begin
-        ErrorText := AOAIOperationResponse.GetError();
-        if ErrorText = '' then
-            exit(FallbackErr);
-        exit(ErrorText);
     end;
 
     local procedure DoTestConnection(var Argument: Record "Bifrost Chat Argument ori" temporary)
