@@ -15,6 +15,8 @@ codeunit 10035411 "LangModel API Client ori"
 
     var
         LastProviderReason: Text;
+        LastChatFailureReason: Text;
+        LastChatFailureStatus: Integer;
         LastOperation: Text[50];
         LastHttpMethod: Text[10];
         LastRequestUrl: Text;
@@ -70,10 +72,19 @@ codeunit 10035411 "LangModel API Client ori"
         ResponseText: Text;
         StartTime: DateTime;
         Handled: Boolean;
+        MockStatus: Integer;
     begin
         HasPendingLog := false;
+        LastChatFailureStatus := 0;
+        LastChatFailureReason := '';
         // A subscriber (tests) can answer the chat request instead of the provider; nothing leaves the service then.
-        OnBeforeChatPost(ChatUrl, RequestBody, Handled, ResponseText);
+        OnBeforeChatPostWithStatus(ChatUrl, RequestBody, Handled, MockStatus, ResponseText);
+        if Handled and ((MockStatus < 200) or (MockStatus > 299)) then begin
+            RememberChatFailure(MockStatus, ResponseText);
+            Error(ApiStatusErr, Format(MockStatus), GetErrorDetail(ResponseText));
+        end;
+        if not Handled then
+            OnBeforeChatPost(ChatUrl, RequestBody, Handled, ResponseText);
         if Handled then begin
             if not Response.ReadFrom(ResponseText) then
                 Error(InvalidResponseErr);
@@ -105,6 +116,7 @@ codeunit 10035411 "LangModel API Client ori"
         if not HttpResponse.IsSuccessStatusCode() then begin
             BufferLog('chat/completions', 'POST', ChatUrl, RequestText, ResponseText,
                 GetErrorDetail(ResponseText), HttpResponse.HttpStatusCode(), CurrentDateTime() - StartTime, false);
+            RememberChatFailure(HttpResponse.HttpStatusCode(), ResponseText);
             Error(ApiStatusErr, Format(HttpResponse.HttpStatusCode()), GetErrorDetail(ResponseText));
         end;
 
@@ -113,6 +125,28 @@ codeunit 10035411 "LangModel API Client ori"
 
         if not Response.ReadFrom(ResponseText) then
             Error(InvalidResponseErr);
+    end;
+
+    /// <summary>
+    /// Returns the HTTP status and the redacted provider reason of the last failed SendToEndpoint call (#135), so a
+    /// caller can recognise a provider refusal without the provider body. False when the last call did not fail with a status.
+    /// </summary>
+    procedure GetLastChatFailure(var HttpStatus: Integer; var ProviderReason: Text): Boolean
+    begin
+        HttpStatus := LastChatFailureStatus;
+        ProviderReason := LastChatFailureReason;
+        exit(HttpStatus <> 0);
+    end;
+
+    [NonDebuggable]
+    local procedure RememberChatFailure(HttpStatus: Integer; ResponseText: Text)
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+    begin
+        LastChatFailureStatus := HttpStatus;
+        LastChatFailureReason := '';
+        if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
+            LastChatFailureReason := ProviderBase.ReadProviderReason(ResponseText);
     end;
 
     /// <summary>Sends a one-shot prompt with safe failure metadata and no provider error text.</summary>
@@ -222,6 +256,12 @@ codeunit 10035411 "LangModel API Client ori"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeChatPost(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var ResponseText: Text)
+    begin
+    end;
+
+    /// <summary>Test hook (#135): answers a chat request with an HTTP status and body instead of the provider.</summary>
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeChatPostWithStatus(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var HttpStatus: Integer; var ResponseText: Text)
     begin
     end;
 

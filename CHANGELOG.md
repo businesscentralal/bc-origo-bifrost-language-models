@@ -16,6 +16,26 @@ All notable changes to Bifrost Language Models are documented here.
 - Ask now sends a text or PDF document, inline or staged, through `generateContent` as `inline_data`, the same shape Complete uses. PNG and JPEG stay on the OpenAI-compatible chat endpoint. A later tool round stays on `generateContent` when the conversation holds a document. The shared file gate runs before that request, so a PDF whose bytes are not a PDF is refused with no provider call.
 - A Google provider error on Ask, with or without a document, keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. `SanitizeProviderErrorCode` on codeunit 10035410 reads a Google `error.status` such as `INVALID_ARGUMENT` as `invalid_argument`. Authentication bodies stay private.
 - No new production objects. Test codeunit **96076** `LLM 134 Gemini Ask Tests` covers text and PDF inline, staged text, PNG staying on chat completions, a bad PDF signature, a 400 with a redacted reason, a 401 that keeps the body private, and a document tool round. Locales 1033 and 1039 are covered where the acceptance criterion names both. The tests use the HTTP mock only.
+### Fixed (2026-11-16) - LLM.Prompt.*: an image sent to a model that cannot read images gets a coded refusal (#135)
+
+- `LLM.Prompt.Complete` and `LLM.Prompt.Ask`: when the request carries an image and the provider answers HTTP 4xx because the
+  model cannot read images (for example KAPPI qwen3:8b: "Multimodal data provided, but model does not support multimodal
+  requests."), the answer is now `InvalidParameter` on `roleCode`: "The language model <code> (<model>) cannot read images."
+  with a nextStep that suggests up to three other language model codes whose provider takes images (OpenAI, Azure OpenAI,
+  Anthropic, Google, xAI), or names those providers when there is none. Before, the generic PreconditionFailed provider
+  error with a mostly redacted reason was returned.
+- Image support is not a field on the language model card (Known Ambiguity 1, resolved: map the provider error). Detection
+  reads only the HTTP status (4xx except 401, 403, 408, 429) and the redacted reason: a negation plus multimodal, vision or
+  "only supported by", or an image word together with "model". A refusal of the image itself ("valid", "format", for example
+  "The image is not valid." or "Unsupported image format.") is never mapped (review AMEND 1). The errors chapter of both message types documents this in en-US and is-IS.
+- The provider-reason vocabulary keeps `multimodal`, `vision`, `images`, `support`, `supports` and `requests`.
+- `LangModel Prov. Base ori` (10035410): new `RespondImageNotSupported`, `HasImageFile`, `IsImageNotSupportedFailure`,
+  `GetImageCapableRoleCodes`. `LangModel API Client ori` (10035411) remembers the status and redacted reason of a failed
+  chat request (`GetLastChatFailure`) and has a test hook `OnBeforeChatPostWithStatus`; `LangModel Chat Proxy ori` adds
+  them to its failure answer as `chatProviderStatus`/`chatProviderReason`, read only by the image check, so the Ask path
+  (tool loop over chat completions) maps the same refusal. Other Ask and Bifrost Chat failure answers are unchanged.
+  Tests: codeunit **96077** `LLM 135 Image Refusal Tests` (Complete and Ask, 1033 and 1039, non-image and non-matching
+  refusals stay provider errors, 401 is never mapped, help in both languages).
 
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
