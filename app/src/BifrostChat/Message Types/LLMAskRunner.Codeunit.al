@@ -60,7 +60,7 @@ codeunit 10035433 "LLM Ask Runner ori"
         BeginUntrustedTxt: Label '--- BEGIN UNTRUSTED CONTEXT ---', Locked = true;
         EndUntrustedTxt: Label '--- END UNTRUSTED CONTEXT ---', Locked = true;
         HtmlReminderTxt: Label 'ANSWER FORMAT: answer with one complete HTML document only, from <!DOCTYPE html> or <html> to </html>, even when the answer is short. Follow the HTML OUTPUT rules of the system text.', Locked = true;
-        HtmlIncompleteErr: Label 'The answer was cut short (stop reason %1), so no complete HTML document was produced.', Comment = '%1 = stop reason, is-IS=Svarið var stytt (ástæða stöðvunar %1) og því varð ekki til heilt HTML-skjal.';
+        HtmlIncompleteErr: Label 'The answer was cut short (stop reason %1), so no complete HTML document was produced.', Comment = '%1 = stop reason, is-IS=Svarið var stytt (stöðvunarástæða %1) og því varð ekki til heilt HTML-skjal.';
         HtmlMissingErr: Label 'The answer holds no complete HTML document.', Comment = 'is-IS=Svarið inniheldur ekkert heilt HTML-skjal.';
 
     /// <summary>

@@ -27,7 +27,7 @@ table 10035434 "LangModel Ask Setup ori"
         field(2; "Ask Max Tool Calls Cap"; Integer)
         {
             Caption = 'Ask Max Tool Calls Cap', Comment = 'is-IS=Hámark verkfærakalla í spurningu';
-            ToolTip = 'Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.', Comment = 'is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.';
+            ToolTip = 'Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.', Comment = 'is-IS=Tilgreinir mesta fjölda verkfærakalla sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað niður í þetta gildi með viðvöruninni clamped:maxToolCalls.';
             InitValue = 40;
 
             trigger OnValidate()
@@ -39,7 +39,7 @@ table 10035434 "LangModel Ask Setup ori"
         field(3; "Ask Max Rounds Cap"; Integer)
         {
             Caption = 'Ask Max Rounds Cap', Comment = 'is-IS=Hámark umferða í spurningu';
-            ToolTip = 'Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.', Comment = 'is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.';
+            ToolTip = 'Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.', Comment = 'is-IS=Tilgreinir mesta fjölda beiðna til veitanda (umferða) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað niður í þetta gildi með viðvöruninni clamped:maxRounds.';
             InitValue = 20;
 
             trigger OnValidate()
@@ -51,7 +51,7 @@ table 10035434 "LangModel Ask Setup ori"
         field(4; "Ask Max Result Chars Cap"; Integer)
         {
             Caption = 'Ask Max Result Chars Cap', Comment = 'is-IS=Hámark stafa í verkfæraniðurstöðu';
-            ToolTip = 'Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.', Comment = 'is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.';
+            ToolTip = 'Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.', Comment = 'is-IS=Tilgreinir mesta fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað niður í þetta gildi með viðvöruninni clamped:maxResultChars.';
             InitValue = 20000;
 
             trigger OnValidate()
@@ -63,8 +63,8 @@ table 10035434 "LangModel Ask Setup ori"
         }
         field(5; "Ask Default Tool Calls"; Integer)
         {
-            Caption = 'Ask Default Tool Calls', Comment = 'is-IS=Sjálfgefin verkfærakköll í spurningu';
-            ToolTip = 'Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.', Comment = 'is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.';
+            Caption = 'Ask Default Tool Calls', Comment = 'is-IS=Sjálfgefinn fjöldi verkfærakalla í spurningu';
+            ToolTip = 'Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.', Comment = 'is-IS=Tilgreinir fjölda verkfærakalla sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxToolCalls. Gildið má ekki vera hærra en Hámark verkfærakalla í spurningu.';
             InitValue = 15;
 
             trigger OnValidate()
@@ -76,8 +76,8 @@ table 10035434 "LangModel Ask Setup ori"
         }
         field(6; "Ask Default Rounds"; Integer)
         {
-            Caption = 'Ask Default Rounds', Comment = 'is-IS=Sjálfgefnar umferðir í spurningu';
-            ToolTip = 'Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.', Comment = 'is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.';
+            Caption = 'Ask Default Rounds', Comment = 'is-IS=Sjálfgefinn fjöldi umferða í spurningu';
+            ToolTip = 'Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.', Comment = 'is-IS=Tilgreinir fjölda beiðna til veitanda (umferða) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxRounds. Gildið má ekki vera hærra en Hámark umferða í spurningu.';
             InitValue = 10;
 
             trigger OnValidate()
@@ -89,8 +89,8 @@ table 10035434 "LangModel Ask Setup ori"
         }
         field(7; "Ask Default Result Chars"; Integer)
         {
-            Caption = 'Ask Default Result Chars', Comment = 'is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu';
-            ToolTip = 'Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.', Comment = 'is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.';
+            Caption = 'Ask Default Result Chars', Comment = 'is-IS=Sjálfgefinn fjöldi stafa í verkfæraniðurstöðu';
+            ToolTip = 'Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.', Comment = 'is-IS=Tilgreinir fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekki limits.maxResultChars. Gildið má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.';
             InitValue = 8000;
 
             trigger OnValidate()

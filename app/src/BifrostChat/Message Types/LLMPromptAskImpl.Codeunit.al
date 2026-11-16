@@ -33,7 +33,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         ContextTooLargeExpectedTxt: Label 'at most 1,000,000 characters of text', Comment = 'is-IS=í mesta lagi 1.000.000 stafir af texta';
         ContextTooLargeNextStepTxt: Label 'Send a shorter context, for example only the part the question needs.', Comment = 'is-IS=Sendu styttra samhengi, til dæmis aðeins þann hluta sem spurningin þarf.';
         HtmlWhenTxt: Label 'outputFormat is html and the run was cut short (stop reason other than completed) or the answer holds no complete HTML document.', Comment = 'is-IS=outputFormat er html og keyrslan var stytt (stöðvunarástæða önnur en completed) eða svarið inniheldur ekkert heilt HTML-skjal.';
-        HtmlExpectedTxt: Label 'a completed run whose answer holds one HTML document', Comment = 'is-IS=lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal';
+        HtmlExpectedTxt: Label 'a completed run whose answer holds one HTML document', Comment = 'is-IS=lokin keyrsla þar sem svarið inniheldur eitt HTML-skjal';
         HtmlNextStepTxt: Label 'Ask again with a smaller question or higher limits, or use outputFormat text.', Comment = 'is-IS=Spyrðu aftur með minni spurningu eða hærri mörkum, eða notaðu outputFormat text.';
         HtmlMissingTxt: Label 'The answer holds no complete HTML document.', Comment = 'is-IS=Svarið inniheldur ekkert heilt HTML-skjal.';
         InvalidLimitErr: Label 'The limit %1 must be 1 or more.', Comment = '%1 = limit name, is-IS=Mörkin %1 verða að vera 1 eða meira.';
@@ -88,7 +88,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     /// </summary>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering', Comment = 'is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind án notanda, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum';
+        KeywordsLbl: Label 'ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering', Comment = 'is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum';
     begin
         exit(KeywordsLbl);
     end;
@@ -98,7 +98,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     /// </summary>
     procedure GetSelectionDescription(): Text
     var
-        SelectionDescriptionLbl: Label 'Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed. Copilot language models are refused.', Comment = 'is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.';
+        SelectionDescriptionLbl: Label 'Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed. Copilot language models are refused.', Comment = 'is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með hámarki á verkfærakalla og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.';
     begin
         exit(SelectionDescriptionLbl);
     end;
