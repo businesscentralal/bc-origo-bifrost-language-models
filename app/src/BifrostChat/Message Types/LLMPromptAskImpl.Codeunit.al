@@ -554,6 +554,8 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
         if not Completed then begin
+            if ProviderBase.RespondImageNotSupported(Argument, Runner.GetProviderFailure(), StagedFiles, BifrostLanguageModel) then
+                exit;
             ProviderBase.RespondPromptError(Argument, Runner.GetProviderFailure());
             exit;
         end;

@@ -414,6 +414,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         end;
 
         if HasProperty(ResponseJson, 'error') then begin
+            if ProviderBase.RespondImageNotSupported(Argument, ResponseJson, GetPayloadFiles(PayloadJson), BifrostLanguageModel) then
+                exit;
             ProviderBase.RespondPromptError(Argument, ResponseJson);
             exit;
         end;
@@ -460,6 +462,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Token: JsonToken;
     begin
         exit(Source.Get(PropertyName, Token));
+    end;
+
+    local procedure GetPayloadFiles(Payload: JsonObject) Files: JsonArray
+    var
+        FilesToken: JsonToken;
+    begin
+        if Payload.Get('files', FilesToken) then
+            if FilesToken.IsArray() then
+                Files := FilesToken.AsArray();
     end;
 
     local procedure AppendStagedFiles(var Payload: JsonObject; StagedFiles: JsonArray)
