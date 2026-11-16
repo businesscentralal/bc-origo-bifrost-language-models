@@ -813,6 +813,36 @@
           <note from="Developer" annotates="general" priority="2">is-IS=HttpClient-köll eru lokuð í þessu umhverfi. Kerfisstjóri þarf að leyfa AL HttpClient-beiðnir.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType HttpClientBlockedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2348877991" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a language model with a vision model from OpenAI, Azure OpenAI, Anthropic, Google or xAI</source>
+          <target>mállíkan með sjónlíkani frá OpenAI, Azure OpenAI, Anthropic, Google eða xAI</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=mállíkan með sjónlíkani frá OpenAI, Azure OpenAI, Anthropic, Google eða xAI</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedAnyModelTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3067605939" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model %1 (%2) cannot read images.</source>
+          <target>Mállíkanið %1 (%2) getur ekki lesið myndir.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = language model code, %2 = model name, is-IS=Mállíkanið %1 (%2) getur ekki lesið myndir.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 4095110534" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a language model that accepts images</source>
+          <target>mállíkan sem tekur við myndum</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=mállíkan sem tekur við myndum</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 2617626147" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send roleCode with a language model that accepts images, for example %1, or send the content as text or PDF instead of an image.</source>
+          <target>Sendu roleCode með mállíkani sem tekur við myndum, til dæmis %1, eða sendu efnið sem texta eða PDF í stað myndar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = language model codes or a provider description, is-IS=Sendu roleCode með mállíkani sem tekur við myndum, til dæmis %1, eða sendu efnið sem texta eða PDF í stað myndar.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1001140644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>An image is attached and the provider refuses it because the model cannot read images. Image support is not stored on the language model card: Bifrost recognises the refusal in the provider answer (HTTP 4xx that names image, vision or multimodal input as not supported) and returns this error instead of the provider failure.</source>
+          <target>Mynd fylgir og veitandinn hafnar henni því líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða mörgum miðlum sé ekki stutt) og skilar þessari villu í stað villu veitandans.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mynd fylgir og veitandinn hafnar henni því líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða mörgum miðlum sé ekki stutt) og skilar þessari villu í stað villu veitandans.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 219726121" size-unit="char" translate="yes" xml:space="preserve">
           <source>The file data is not valid Base64.</source>
           <target>Gögn skrárinnar eru ekki gilt Base64.</target>

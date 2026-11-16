@@ -81,6 +81,13 @@ codeunit 10035410 "LangModel Prov. Base ori"
         CopilotReceivedTok: Label 'copilot', Locked = true;
         CopilotSessionTokensTok: Label '|api|odata|odatav4|soap|management|background|', Locked = true;
         RoleCodeParameterTok: Label 'roleCode', Locked = true;
+        ImageNotSupportedErr: Label 'The language model %1 (%2) cannot read images.', Comment = '%1 = language model code, %2 = model name, is-IS=Mállíkanið %1 (%2) getur ekki lesið myndir.';
+        ImageNotSupportedWhenTxt: Label 'An image is attached and the provider refuses it because the model cannot read images. Image support is not stored on the language model card: Bifrost recognises the refusal in the provider answer (HTTP 4xx that names image, vision or multimodal input as not supported) and returns this error instead of the provider failure.', Comment = 'is-IS=Mynd fylgir og veitandinn hafnar henni því líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða mörgum miðlum sé ekki stutt) og skilar þessari villu í stað villu veitandans.';
+        ImageNotSupportedExpectedTxt: Label 'a language model that accepts images', Comment = 'is-IS=mállíkan sem tekur við myndum';
+        ImageNotSupportedNextStepTxt: Label 'Send roleCode with a language model that accepts images, for example %1, or send the content as text or PDF instead of an image.', Comment = '%1 = language model codes or a provider description, is-IS=Sendu roleCode með mállíkani sem tekur við myndum, til dæmis %1, eða sendu efnið sem texta eða PDF í stað myndar.';
+        ImageNotSupportedAnyModelTxt: Label 'a language model with a vision model from OpenAI, Azure OpenAI, Anthropic, Google or xAI', Comment = 'is-IS=mállíkan með sjónlíkani frá OpenAI, Azure OpenAI, Anthropic, Google eða xAI';
+        RoleCodeListSeparatorTok: Label ', ', Locked = true;
+        RoleCodeParamTok: Label 'roleCode', Locked = true;
 
     /// <summary>Builds a safe prompt failure from transport metadata, never a provider body or exception.</summary>
     procedure BuildPromptError(HttpStatus: Integer; HttpBlocked: Boolean) Response: JsonObject
@@ -250,6 +257,104 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, TotalOversizeErr, TotalOversizeWhenTxt, TotalOversizeNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, NotBase64Err, NotBase64WhenTxt, NotBase64NextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, WrongTypeErr, WrongTypeWhenTxt, WrongTypeNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, ImageNotSupportedErr, ImageNotSupportedWhenTxt, ImageNotSupportedNextStepTxt));
+    end;
+
+    /// <summary>
+    /// Answers a provider failure with the coded image refusal (#135) when the request carried an image and the provider
+    /// refused it because the model cannot read images. The error names the language model and suggests other
+    /// language models that can take images. Returns false (nothing answered) for any other failure.
+    /// </summary>
+    procedure RespondImageNotSupported(var Argument: Record "Message Argument ori"; Response: JsonObject; Files: JsonArray; BifrostLanguageModel: Record "Bifrost Language Model ori"): Boolean
+    var
+        ModelText: Text;
+    begin
+        if not HasImageFile(Files) then
+            exit(false);
+        if not IsImageNotSupportedFailure(Response) then
+            exit(false);
+        ModelText := BifrostLanguageModel.Model;
+        if ModelText = '' then
+            ModelText := Format(BifrostLanguageModel."Chat Provider");
+        Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(ImageNotSupportedErr, BifrostLanguageModel.Code, ModelText), RoleCodeParamTok, BifrostLanguageModel.Code, ImageNotSupportedExpectedTxt, StrSubstNo(ImageNotSupportedNextStepTxt, GetImageCapableRoleCodes(BifrostLanguageModel.Code)));
+        exit(true);
+    end;
+
+    /// <summary>True when one of the files sent with the prompt is an image (mimeType image/...).</summary>
+    procedure HasImageFile(Files: JsonArray): Boolean
+    var
+        FileToken: JsonToken;
+        MimeToken: JsonToken;
+    begin
+        foreach FileToken in Files do
+            if FileToken.IsObject() then
+                if FileToken.AsObject().Get('mimeType', MimeToken) then
+                    if LowerCase(JsonValueText(MimeToken)).Trim().StartsWith('image/') then
+                        exit(true);
+        exit(false);
+    end;
+
+    /// <summary>
+    /// True when a prompt failure is a provider 4xx whose redacted reason says image, vision or multimodal input is not
+    /// supported (for example "Multimodal data provided, but model does not support multimodal requests", or "image_url is
+    /// only supported by certain models"). The Ask chat path carries the same facts as chatProviderStatus/chatProviderReason. Only the
+    /// redacted diagnostic words are read; authentication, rate-limit and timeout failures never match, and neither does a
+    /// refusal of the image itself ("The image is not valid.", "Unsupported image format.").
+    /// </summary>
+    procedure IsImageNotSupportedFailure(Response: JsonObject): Boolean
+    var
+        Token: JsonToken;
+        HttpStatus: Integer;
+        Reason: Text;
+    begin
+        if IsSafeRefusalKind(Response, UnsupportedImageKindTok) then
+            exit(false);
+        if not Response.Get('providerStatus', Token) then
+            if not Response.Get('chatProviderStatus', Token) then
+                exit(false);
+        if not Evaluate(HttpStatus, JsonValueText(Token), 9) then
+            exit(false);
+        if (HttpStatus < 400) or (HttpStatus > 499) or (HttpStatus in [401, 403, 408, 429]) then
+            exit(false);
+        if not Response.Get('providerReason', Token) then
+            if not Response.Get('chatProviderReason', Token) then
+                exit(false);
+        Reason := ' ' + LowerCase(RedactProviderReason(JsonValueText(Token))) + ' ';
+        // A problem with the image itself (not valid, wrong format) is not a model capability refusal.
+        if Reason.Contains(' valid ') or Reason.Contains(' format ') then
+            exit(false);
+        if not (Reason.Contains(' not ') or Reason.Contains(' unsupported ') or Reason.Contains(' cannot ') or Reason.Contains(' only supported by ')) then
+            exit(false);
+        if Reason.Contains(' multimodal ') or Reason.Contains(' vision ') or Reason.Contains(' only supported by ') then
+            exit(true);
+        // An image word alone is not enough: the refusal must be about the model.
+        if not (Reason.Contains(' image ') or Reason.Contains(' images ') or Reason.Contains(' image_url ') or Reason.Contains(' input_image ')) then
+            exit(false);
+        exit(Reason.Contains(' model '));
+    end;
+
+    /// <summary>
+    /// Returns up to three other language model codes whose provider takes images (OpenAI, Azure OpenAI, Anthropic, Google,
+    /// xAI), or a provider description when there is none. Custom LLM, Copilot and None are never suggested.
+    /// </summary>
+    procedure GetImageCapableRoleCodes(ExcludeCode: Code[20]) Result: Text
+    var
+        Candidate: Record "Bifrost Language Model ori";
+        Found: Integer;
+    begin
+        Candidate.SetFilter("Chat Provider", '%1|%2|%3|%4|%5', Candidate."Chat Provider"::OpenAI, Candidate."Chat Provider"::"Azure OpenAI", Candidate."Chat Provider"::Anthropic, Candidate."Chat Provider"::xAI, Candidate."Chat Provider"::Google);
+        if ExcludeCode <> '' then
+            Candidate.SetFilter(Code, '<>%1', ExcludeCode);
+        if Candidate.ReadPermission() then
+            if Candidate.FindSet() then
+                repeat
+                    if Result <> '' then
+                        Result += RoleCodeListSeparatorTok;
+                    Result += Candidate.Code;
+                    Found += 1;
+                until (Candidate.Next() = 0) or (Found >= 3);
+        if Result = '' then
+            Result := ImageNotSupportedAnyModelTxt;
     end;
 
     /// <summary>
@@ -576,7 +681,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
 
     local procedure AppendDiagnosticWord(Word: Text; var Result: Text; var HasDiagnostic: Boolean)
     var
-        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|authorized|billing|capability|capabilities|background|session|sessions|service|services|web|api|odata|copilot|microsoft|enabled|configured|authentication|resources|resource|usage|deployment|quota|rate|exceeded|content_filter|filter|policy|redacted|', Locked = true;
+        VocabularyTok: Label '|a|an|the|is|are|was|be|must|not|only|and|or|for|in|of|to|with|this|that|as|at|by|on|from|cannot|does|do|has|have|please|use|instead|provided|received|valid|invalid|unsupported|supported|unknown|unrecognized|missing|required|expected|allowed|not_allowed|too|large|long|exceeds|maximum|minimum|limit|request|parameter|parameters|field|fields|value|type|format|content|message|messages|input|output|model|file|files|image|document|text|html|json|object|array|string|number|boolean|null|file_data|file_id|purpose|upload|uploaded|multipart|form|form-data|bytes|size|empty|name|extension|mime|encoding|attachment|attachments|file_url|filename|input_file|input_image|input_text|image_url|response_format|max_tokens|max_completion_tokens|max_output_tokens|instructions|tools|tool_choice|function|functions|role|user|system|assistant|store|reasoning_effort|authorized|billing|capability|capabilities|background|session|sessions|service|services|web|api|odata|copilot|microsoft|enabled|configured|authentication|resources|resource|usage|deployment|quota|rate|exceeded|content_filter|filter|policy|redacted|multimodal|vision|images|support|supports|requests|', Locked = true;
     begin
         if Word in ['invalid', 'unsupported', 'unknown', 'unrecognized', 'missing', 'required', 'expected', 'exceeds', 'cannot', 'not'] then
             HasDiagnostic := true;

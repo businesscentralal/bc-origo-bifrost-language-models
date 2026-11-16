@@ -383,13 +383,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
             exit;
         end;
 
+        // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
+        // sent without a stale caller-supplied block and the response says so. Read it before staging is taken:
+        // taking a staged upload writes in this transaction, and Foundation cannot supply the block while a write
+        // transaction is open (#136).
+        SessionTime.GetBlock(SessionTimeBlock);
         if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
             exit;
 
         SystemPrompt := GetTextValue(RequestJson, 'system');
-        // Every request carries one fresh block (D9/D11). Fail open (A3): without Foundation's block the prompt is
-        // sent without a stale caller-supplied block and the response says so.
-        SessionTime.GetBlock(SessionTimeBlock);
         SystemPrompt := SessionTime.ForSystemPrompt(SystemPrompt, SessionTimeBlock);
         if SystemPrompt <> '' then
             PayloadJson.Add('systemPrompt', SystemPrompt);
@@ -419,6 +421,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         end;
 
         if HasProperty(ResponseJson, 'error') then begin
+            if ProviderBase.RespondImageNotSupported(Argument, ResponseJson, GetPayloadFiles(PayloadJson), BifrostLanguageModel) then
+                exit;
             ProviderBase.RespondPromptError(Argument, ResponseJson);
             exit;
         end;
@@ -465,6 +469,15 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Token: JsonToken;
     begin
         exit(Source.Get(PropertyName, Token));
+    end;
+
+    local procedure GetPayloadFiles(Payload: JsonObject) Files: JsonArray
+    var
+        FilesToken: JsonToken;
+    begin
+        if Payload.Get('files', FilesToken) then
+            if FilesToken.IsArray() then
+                Files := FilesToken.AsArray();
     end;
 
     local procedure AppendStagedFiles(var Payload: JsonObject; StagedFiles: JsonArray)

@@ -356,6 +356,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Instructions: Text;
         RoleCodeText: Text;
         SessionTimeBlock: Text;
+        SessionTimeAvailable: Boolean;
         BadKey: Text;
         RoleCode: Code[20];
         RequestedToolCalls: Integer;
@@ -506,6 +507,9 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
 
+        // Read Foundation's block before staging is taken: taking a staged upload writes in this transaction, and
+        // Foundation cannot supply the block while a write transaction is open (#136).
+        SessionTimeAvailable := SessionTime.GetBlock(SessionTimeBlock);
         if not StagingFiles.Resolve(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
             exit;
         if not StagingFiles.ResolveInline(Argument, RequestJson, BifrostLanguageModel, StagedFiles) then
@@ -520,7 +524,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             Runner.AddWarning('responseSchemaIgnored');
         if HasSchema then
             Runner.CheckSchemaKeywords(Schema);
-        if not SessionTime.GetBlock(SessionTimeBlock) then
+        if not SessionTimeAvailable then
             Runner.AddWarning('sessionTimeUnavailable');
 
         // Persist one-shot staging consumption before bootstrap/tools use Boolean Codeunit.Run.
@@ -550,6 +554,8 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
         if not Completed then begin
+            if ProviderBase.RespondImageNotSupported(Argument, Runner.GetProviderFailure(), StagedFiles, BifrostLanguageModel) then
+                exit;
             ProviderBase.RespondPromptError(Argument, Runner.GetProviderFailure());
             exit;
         end;

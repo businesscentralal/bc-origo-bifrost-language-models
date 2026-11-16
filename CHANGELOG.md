@@ -4,13 +4,19 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
+
+- Root cause: `LLM.Prompt.Complete` and `LLM.Prompt.Ask` read Foundation's SESSION TIME block after the staged uploads had been taken. Taking a staged upload writes in the call transaction, and Foundation cannot supply the block while a write transaction is open, so every staged call answered `sessionTimeUnavailable` instead of `sessionTime`. Inline files and calls without attachments were not affected.
+- Both message types now read the block first, before `LLM Staging Files ori` takes the uploads. No new objects, no change to the one-shot consumption or to the fail-open rule.
+- Tests (mock only): 96071 `LLM Staging Files Tests` gains Ask and Complete scenarios with a clock that fails once the staged upload is gone; the seam `LLM Session Time Seam` (96062) gains `FailAfterStagingTaken`.
+
 ### Fixed (2026-11-15) - LLM.Prompt.Complete with a Copilot language model: coded failures instead of the generic provider error (#132)
 
 - Root cause of the Origo Demo UAT failure (COPILOT card over MCP, capability Active, UI chat working): Business Central's System Application refuses Microsoft-managed Azure OpenAI (the resource the Copilot provider uses) in API, OData, SOAP and Management sessions and in any session without a UI (`AzureOpenAIImpl.GuiCheck`: "Microsoft Copilot Capabilities are not allowed in API and OData Web Services sessions" / "... in the background"). An MCP call runs in such a session, so it can never reach Copilot. The error was thrown inside the provider, caught by `TryCompletePrompt` and cleared, so the caller got the generic `PreconditionFailed` with the Base URL/API key next step. The UI chat works because it runs in the interactive web client. This is a platform limit, not a setup error.
 - `Copilot LangModel Prov. ori` (codeunit 10035385) now checks the capability and the session before it calls Copilot and answers a coded failure; a thrown System.AI error and a failed managed call keep their HTTP status and a redacted reason. New procedure `GetBlockerResponse`; the unused `GetErrorOrFallback` is removed (local).
 - `LangModel Prov. Base ori` (codeunit 10035410) gains `BuildCopilotFailure`, `GetCopilotBlockerKind`, `GetCopilotSessionToken` and `AddCopilotErrors`; `RespondPromptError` maps them to distinct coded errors: capability not registered / not active (`PreconditionFailed`, `parameter` `roleCode`, `received` `copilot`, next step names the Copilot & agent capabilities page); session refused (`PreconditionFailed`, `parameter` `provider`, `received` `copilot api|odata|odatav4|soap|management|background`, next step: another provider, or Bifrost Chat in the client; no request is sent); managed call failed (`received` `copilot <status>`, redacted reason, 408/429/5xx `Retryable`; no reason for 401/403). The redaction vocabulary gains platform words (capability, session, background, api, odata, web, service, billing, authorized, quota, ...). `LLM.Prompt.Complete` answers the capability refusal also when the Copilot model is not configured, instead of "No language model with a chat provider".
 - Help: the `LLM.Prompt.Complete` notes, errors chapter and selection description, and the `LLM.Prompt.Ask` notes and selection description, state that Complete is the only LLM.Prompt.* type that accepts Copilot and only in an interactive Business Central client session; Ask refuses Copilot. is-IS in sync. No new app objects.
-- Tests: new codeunit **96077** `LLM 132 Copilot Tests` (14 tests, 1033 and 1039, no provider call): each coded failure, capability-before-session order, the client-type mirror of the platform check, an unknown session token, 400 with redacted reason, a thrown platform error, 429 retryable, 401 without reason, Complete with a Copilot card never answering the generic failure, and the contract text. The test codeunit was renumbered from 96076 to 96077 when merging main, because #134 took 96076.
+- Tests: new codeunit **96079** `LLM 132 Copilot Tests` (14 tests, 1033 and 1039, no provider call): each coded failure, capability-before-session order, the client-type mirror of the platform check, an unknown session token, 400 with redacted reason, a thrown platform error, 429 retryable, 401 without reason, Complete with a Copilot card never answering the generic failure, and the contract text. The test codeunit was renumbered to 96079 when merging main: #134 uses 96076, #135 uses 96077, and open PR #139 reserves 96078.
 
 ### Fixed (2026-11-15) - Gemini Ask answers about text and PDF documents (#134)
 
@@ -18,6 +24,26 @@ All notable changes to Bifrost Language Models are documented here.
 - Ask now sends a text or PDF document, inline or staged, through `generateContent` as `inline_data`, the same shape Complete uses. PNG and JPEG stay on the OpenAI-compatible chat endpoint. A later tool round stays on `generateContent` when the conversation holds a document. The shared file gate runs before that request, so a PDF whose bytes are not a PDF is refused with no provider call.
 - A Google provider error on Ask, with or without a document, keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. `SanitizeProviderErrorCode` on codeunit 10035410 reads a Google `error.status` such as `INVALID_ARGUMENT` as `invalid_argument`. Authentication bodies stay private.
 - No new production objects. Test codeunit **96076** `LLM 134 Gemini Ask Tests` covers text and PDF inline, staged text, PNG staying on chat completions, a bad PDF signature, a 400 with a redacted reason, a 401 that keeps the body private, and a document tool round. Locales 1033 and 1039 are covered where the acceptance criterion names both. The tests use the HTTP mock only.
+### Fixed (2026-11-16) - LLM.Prompt.*: an image sent to a model that cannot read images gets a coded refusal (#135)
+
+- `LLM.Prompt.Complete` and `LLM.Prompt.Ask`: when the request carries an image and the provider answers HTTP 4xx because the
+  model cannot read images (for example KAPPI qwen3:8b: "Multimodal data provided, but model does not support multimodal
+  requests."), the answer is now `InvalidParameter` on `roleCode`: "The language model <code> (<model>) cannot read images."
+  with a nextStep that suggests up to three other language model codes whose provider takes images (OpenAI, Azure OpenAI,
+  Anthropic, Google, xAI), or names those providers when there is none. Before, the generic PreconditionFailed provider
+  error with a mostly redacted reason was returned.
+- Image support is not a field on the language model card (Known Ambiguity 1, resolved: map the provider error). Detection
+  reads only the HTTP status (4xx except 401, 403, 408, 429) and the redacted reason: a negation plus multimodal, vision or
+  "only supported by", or an image word together with "model". A refusal of the image itself ("valid", "format", for example
+  "The image is not valid." or "Unsupported image format.") is never mapped (review AMEND 1). The errors chapter of both message types documents this in en-US and is-IS.
+- The provider-reason vocabulary keeps `multimodal`, `vision`, `images`, `support`, `supports` and `requests`.
+- `LangModel Prov. Base ori` (10035410): new `RespondImageNotSupported`, `HasImageFile`, `IsImageNotSupportedFailure`,
+  `GetImageCapableRoleCodes`. `LangModel API Client ori` (10035411) remembers the status and redacted reason of a failed
+  chat request (`GetLastChatFailure`) and has a test hook `OnBeforeChatPostWithStatus`; `LangModel Chat Proxy ori` adds
+  them to its failure answer as `chatProviderStatus`/`chatProviderReason`, read only by the image check, so the Ask path
+  (tool loop over chat completions) maps the same refusal. Other Ask and Bifrost Chat failure answers are unchanged.
+  Tests: codeunit **96077** `LLM 135 Image Refusal Tests` (Complete and Ask, 1033 and 1039, non-image and non-matching
+  refusals stay provider errors, 401 is never mapped, help in both languages).
 
 ### Fixed (2026-11-15) - xAI Responses success read as a failure: staged attachments on GROK (#125 AC05 b/c fix-forward)
 
