@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
+
+- Root cause: `LLM.Prompt.Complete` and `LLM.Prompt.Ask` read Foundation's SESSION TIME block after the staged uploads had been taken. Taking a staged upload writes in the call transaction, and Foundation cannot supply the block while a write transaction is open, so every staged call answered `sessionTimeUnavailable` instead of `sessionTime`. Inline files and calls without attachments were not affected.
+- Both message types now read the block first, before `LLM Staging Files ori` takes the uploads. No new objects, no change to the one-shot consumption or to the fail-open rule.
+- Tests (mock only): 96071 `LLM Staging Files Tests` gains Ask and Complete scenarios with a clock that fails once the staged upload is gone; the seam `LLM Session Time Seam` (96062) gains `FailAfterStagingTaken`.
 ### Fixed (2026-11-15) - text attachments on LLM.Prompt.Complete chat completions (#133)
 
 - OpenAI chat completions accept only `application/pdf` as a `file` part. `LLM.Prompt.Complete` on OpenAI, Azure OpenAI and Custom LLM sent `text/plain` (and any other non-image) as `type: file` / `file_data`, so GPT-6.1 and an OpenAI-compatible Custom model (KAPPI) answered 400. Those types are now a `text` content part: `Attached file <name>:` and the decoded text. PDF stays a `file` part. PNG and JPEG stay `image_url`. No new objects.
