@@ -4,6 +4,12 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-15) - Gemini Ask answers about text and PDF documents (#134)
+
+- `LLM.Prompt.Ask` with a Google (Gemini) model card sent text and PDF documents as OpenAI `file` parts to the OpenAI-compatible chat endpoint. That endpoint rejects them, and the failure came back as a generic `PreconditionFailed` with no HTTP status and no provider reason. PNG and JPEG already used `image_url` and worked. `LLM.Prompt.Complete` already used native `generateContent`.
+- Ask now sends a text or PDF document, inline or staged, through `generateContent` as `inline_data`, the same shape Complete uses. PNG and JPEG stay on the OpenAI-compatible chat endpoint. A later tool round stays on `generateContent` when the conversation holds a document. The shared file gate runs before that request, so a PDF whose bytes are not a PDF is refused with no provider call.
+- A Google provider error on Ask, with or without a document, keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. `SanitizeProviderErrorCode` on codeunit 10035410 reads a Google `error.status` such as `INVALID_ARGUMENT` as `invalid_argument`. Authentication bodies stay private.
+- No new production objects. Test codeunit **96076** `LLM 134 Gemini Ask Tests` covers text and PDF inline, staged text, PNG staying on chat completions, a bad PDF signature, a 400 with a redacted reason, a 401 that keeps the body private, and a document tool round. Locales 1033 and 1039 are covered where the acceptance criterion names both. The tests use the HTTP mock only.
 ### Fixed (2026-11-16) - LLM.Prompt.*: an image sent to a model that cannot read images gets a coded refusal (#135)
 
 - `LLM.Prompt.Complete` and `LLM.Prompt.Ask`: when the request carries an image and the provider answers HTTP 4xx because the
