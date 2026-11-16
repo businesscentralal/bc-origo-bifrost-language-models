@@ -87,6 +87,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Issue #120: table **10035434** `LangModel Ask Setup ori` (fields 1-7), test codeunit **96067** `LLM Ask Setup Tests`.
   Issue #125: **96072** `LLM 125 xAI Tests` (mock-only provider request shapes, error redaction and per-round cleanup).
   Issue #134: **96076** `LLM 134 Gemini Ask Tests` (Gemini Ask documents on generateContent, and provider status plus a redacted reason).
+  Issue #135: **96077** `LLM 135 Image Refusal Tests` (an image refused by a model that cannot read images is a coded InvalidParameter naming the model and a roleCode that takes images).
   Reserved in Claude-owned PR #66: **96032** `LLM Prompt Compl Perm Tests`. Free: 96005-96008, 96035-96199.
 
 ### Testing the chat of every provider
