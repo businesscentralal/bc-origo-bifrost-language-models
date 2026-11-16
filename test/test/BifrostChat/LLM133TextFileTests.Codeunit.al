@@ -10,7 +10,7 @@ using System.Utilities;
 /// Issue 133: LLM.Prompt.Complete sends text as a chat-completions text part, never as a file part.
 /// Ask keeps its current wire format.
 /// </summary>
-codeunit 96077 "LLM 133 Text File Tests"
+codeunit 96078 "LLM 133 Text File Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;
