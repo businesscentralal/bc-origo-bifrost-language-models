@@ -10,7 +10,7 @@ using System.TestLibraries.Utilities;
 /// a session where Business Central refuses Microsoft-managed Copilot (MCP, API, background) is refused before any
 /// request; a failed managed Azure OpenAI call keeps its status and a redacted reason. No provider is called.
 /// </summary>
-codeunit 96076 "LLM 132 Copilot Tests"
+codeunit 96077 "LLM 132 Copilot Tests"
 {
     Subtype = Test;
     TestPermissions = Disabled;

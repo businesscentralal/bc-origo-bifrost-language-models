@@ -15,6 +15,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
     var
         TempXaiArgument: Record "Bifrost Chat Argument ori" temporary;
+        TempGeminiArgument: Record "Bifrost Chat Argument ori" temporary;
         ToolServer: Codeunit "MCP Tool Server ori";
         SessionTime: Codeunit "LLM Session Time ori";
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
@@ -23,6 +24,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         AllowedTools: List of [Text];
         HasAllowedTools: Boolean;
         XaiTransport: Boolean;
+        GeminiSafeTransport: Boolean;
+        GeminiDocumentTransport: Boolean;
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=Gervigreindarlíkanið skilaði vali án "message"-reits. Sýnishorn af svari: %1';
 
     /// <summary>Uses safe prompt failures and per-round xAI document uploads for this proxy instance.</summary>
@@ -32,6 +35,26 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         TempXaiArgument := Argument;
         TempXaiArgument.SetApiKey(Argument.GetApiKey());
         XaiTransport := true;
+    end;
+
+    /// <summary>Returns Gemini chat failures as safe prompt errors (HTTP status and a redacted reason) instead of a thrown text.</summary>
+    [NonDebuggable]
+    procedure UseGeminiSafeTransport(var Argument: Record "Bifrost Chat Argument ori" temporary)
+    begin
+        TempGeminiArgument := Argument;
+        TempGeminiArgument.SetApiKey(Argument.GetApiKey());
+        GeminiSafeTransport := true;
+    end;
+
+    /// <summary>
+    /// Sends this Gemini round through native generateContent. Text and PDF documents are inline_data.
+    /// PNG and JPEG stay on the OpenAI-compatible chat endpoint.
+    /// </summary>
+    [NonDebuggable]
+    procedure UseGeminiDocumentTransport(var Argument: Record "Bifrost Chat Argument ori" temporary)
+    begin
+        UseGeminiSafeTransport(Argument);
+        GeminiDocumentTransport := true;
     end;
 
     /// <summary>
@@ -176,6 +199,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             if ExtraRequestFields.Get(ExtraKey, ExtraToken) then
                 RequestBody.Add(ExtraKey, ExtraToken);
 
+        // Text and PDF documents are not accepted as OpenAI file parts on Gemini's chat endpoint (#134).
+        if GeminiDocumentTransport then
+            exit(CallGeminiGenerateContent(ApiClient, ApiKey, TimeoutMs, Messages, OpenAITools, Model, MaxTokens, ExtraRequestFields));
+
         if not TrySendToModel(ApiClient, ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
             ApiClient.LogLastRequest();
             // A reasoning model (e.g. Azure OpenAI gpt-6-sol) refuses function tools unless reasoning is off and says so.
@@ -191,7 +218,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             end;
         end;
         ApiClient.LogLastRequest();
-        if XaiTransport and ProviderBaseHasError(Response) then begin
+        // Gemini chat uses the safe prompt error (status and a redacted reason) instead of a thrown text (#134).
+        if (XaiTransport or GeminiSafeTransport) and ProviderBaseHasError(Response) then begin
             Response.WriteTo(Reply);
             exit(Reply);
         end;
@@ -419,7 +447,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             else
                 Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
         end else
-            Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
+            if GeminiSafeTransport then
+                Response := ApiClient.SendPromptToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody)
+            else
+                Response := ApiClient.SendToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
     end;
 
     local procedure ParseMessages(PayloadObject: JsonObject; var Messages: JsonArray)
@@ -491,6 +522,8 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         StateObject.Add('messages', Messages);
         StateObject.Add('model', Model);
+        if GeminiDocumentTransport then
+            StateObject.Add('geminiDocuments', true);
         StoreReasoningEffort(ExtraRequestFields, StateObject);
         if HasAllowedTools then
             AskPolicy.WriteAllowedTools(AllowedTools, StateObject);
@@ -960,5 +993,625 @@ codeunit 10035412 "LangModel Chat Proxy ori"
             ResultText := ChatUtils.TruncateContent(GetTextProperty(ResultObj, 'result'), 0);
             AddResponsesFunctionCallOutput(Input, GetTextProperty(ResultObj, 'id'), ResultText);
         end;
+    end;
+
+    /// <summary>
+    /// Sends one Gemini generateContent round. Text and PDF documents are inline_data. A provider failure keeps its HTTP status.
+    /// </summary>
+    [NonDebuggable]
+    local procedure CallGeminiGenerateContent(var ApiClient: Codeunit "LangModel API Client ori"; ApiKey: SecretText; TimeoutMs: Integer; var Messages: JsonArray; OpenAITools: JsonArray; Model: Text; MaxTokens: Integer; ExtraRequestFields: JsonObject): Text
+    var
+        RequestBody: JsonObject;
+        Response: JsonObject;
+        ApiKeyHeaderTok: Label 'x-goog-api-key', Locked = true;
+    begin
+        RequestBody := BuildGeminiRequest(Messages, OpenAITools, MaxTokens);
+        Response := ApiClient.SendPromptToEndpoint(GeminiGenerateContentUrl(Model), ApiKeyHeaderTok, ApiKey, TimeoutMs, RequestBody);
+        exit(MapGeminiResponse(ApiClient, ApiKey, TimeoutMs, Messages, OpenAITools, Model, MaxTokens, ExtraRequestFields, Response));
+    end;
+
+    local procedure GeminiGenerateContentUrl(Model: Text): Text
+    var
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        BaseUrl: Text;
+        DefaultBaseUrlTok: Label 'https://generativelanguage.googleapis.com/v1beta', Locked = true;
+        DefaultModelTok: Label 'gemini-2.5-flash', Locked = true;
+        OpenAISuffixTok: Label '/openai', Locked = true;
+        ModelsPrefixTok: Label 'models/', Locked = true;
+        GenerateUrlTok: Label '%1/models/%2:generateContent', Locked = true;
+    begin
+        BaseUrl := ProviderBase.GetBaseUrl(TempGeminiArgument, DefaultBaseUrlTok);
+        if BaseUrl.EndsWith(OpenAISuffixTok) then
+            BaseUrl := CopyStr(BaseUrl, 1, StrLen(BaseUrl) - StrLen(OpenAISuffixTok));
+        if Model = '' then
+            Model := DefaultModelTok;
+        if Model.StartsWith(ModelsPrefixTok) then
+            Model := CopyStr(Model, StrLen(ModelsPrefixTok) + 1);
+        exit(StrSubstNo(GenerateUrlTok, BaseUrl, Model));
+    end;
+
+    local procedure BuildGeminiRequest(Messages: JsonArray; OpenAITools: JsonArray; MaxTokens: Integer) RequestBody: JsonObject
+    var
+        Contents: JsonArray;
+        SystemText: Text;
+        GenerationConfig: JsonObject;
+        Tools: JsonArray;
+    begin
+        AppendGeminiContents(Messages, Contents, SystemText);
+        RequestBody.Add('contents', Contents);
+        if SystemText <> '' then
+            RequestBody.Add('systemInstruction', GeminiSystemInstruction(SystemText));
+        if MaxTokens > 0 then begin
+            GenerationConfig.Add('maxOutputTokens', MaxTokens);
+            RequestBody.Add('generationConfig', GenerationConfig);
+        end;
+        Tools := GeminiFunctionDeclarations(OpenAITools);
+        if Tools.Count() > 0 then
+            RequestBody.Add('tools', Tools);
+    end;
+
+    local procedure GeminiSystemInstruction(SystemText: Text) Instruction: JsonObject
+    var
+        Parts: JsonArray;
+        Part: JsonObject;
+    begin
+        Part.Add('text', SystemText);
+        Parts.Add(Part);
+        Instruction.Add('parts', Parts);
+    end;
+
+    local procedure AppendGeminiContents(Messages: JsonArray; var Contents: JsonArray; var SystemText: Text)
+    var
+        MessageToken: JsonToken;
+        MessageObject: JsonObject;
+        PendingToolParts: JsonArray;
+        Role: Text;
+        Piece: Text;
+    begin
+        foreach MessageToken in Messages do begin
+            if not MessageToken.IsObject() then
+                continue;
+            MessageObject := MessageToken.AsObject();
+            Role := GetTextProperty(MessageObject, 'role');
+            if Role = 'tool' then begin
+                AddGeminiFunctionResponse(MessageObject, Messages, PendingToolParts);
+                continue;
+            end;
+            FlushGeminiToolResponses(PendingToolParts, Contents);
+            if Role = 'system' then begin
+                Piece := GetTextProperty(MessageObject, 'content');
+                if Piece <> '' then begin
+                    if SystemText <> '' then
+                        SystemText += ' ';
+                    SystemText += Piece;
+                end;
+            end else
+                if (Role = 'assistant') and MessageObject.Contains('tool_calls') then
+                    AddGeminiFunctionCallTurn(MessageObject, Contents)
+                else
+                    if Role = 'assistant' then
+                        AddGeminiTextTurn(Contents, 'model', GetTextProperty(MessageObject, 'content'))
+                    else
+                        AppendGeminiUserContent(MessageObject, Contents);
+        end;
+        FlushGeminiToolResponses(PendingToolParts, Contents);
+        if Contents.Count() = 0 then
+            AddGeminiTextTurn(Contents, 'user', '');
+    end;
+
+    local procedure AppendGeminiUserContent(MessageObject: JsonObject; var Contents: JsonArray)
+    var
+        ContentToken: JsonToken;
+        PartToken: JsonToken;
+        PartObject: JsonObject;
+        InlineParts: JsonArray;
+        Collected: Text;
+        Piece: Text;
+    begin
+        if not MessageObject.Get('content', ContentToken) then begin
+            AddGeminiTextTurn(Contents, 'user', '');
+            exit;
+        end;
+        if ContentToken.IsValue() then begin
+            AddGeminiTextTurn(Contents, 'user', JsonTokenText(ContentToken));
+            exit;
+        end;
+        if not ContentToken.IsArray() then begin
+            AddGeminiTextTurn(Contents, 'user', '');
+            exit;
+        end;
+        foreach PartToken in ContentToken.AsArray() do begin
+            if not PartToken.IsObject() then
+                continue;
+            PartObject := PartToken.AsObject();
+            case GetTextProperty(PartObject, 'type') of
+                'text':
+                    begin
+                        Piece := GetTextProperty(PartObject, 'text');
+                        if Piece <> '' then begin
+                            if Collected <> '' then
+                                Collected += ' ';
+                            Collected += Piece;
+                        end;
+                    end;
+                'image_url', 'file':
+                    AddGeminiInlineDataPart(PartObject, InlineParts);
+            end;
+        end;
+        AddGeminiUserTurn(Contents, InlineParts, Collected);
+    end;
+
+    local procedure AddGeminiInlineDataPart(PartObject: JsonObject; var InlineParts: JsonArray)
+    var
+        InlineData: JsonObject;
+        FilePart: JsonObject;
+        Source: Text;
+        MimeType: Text;
+        Data: Text;
+    begin
+        Source := GeminiDataUri(PartObject);
+        if not TrySplitDataUri(Source, MimeType, Data) then
+            exit;
+        InlineData.Add('mime_type', MimeType);
+        InlineData.Add('data', Data);
+        FilePart.Add('inline_data', InlineData);
+        InlineParts.Add(FilePart);
+    end;
+
+    local procedure GeminiDataUri(PartObject: JsonObject): Text
+    var
+        Token: JsonToken;
+        FileToken: JsonToken;
+    begin
+        if GetTextProperty(PartObject, 'type') = 'image_url' then begin
+            if not PartObject.Get('image_url', Token) then
+                exit('');
+            if Token.IsObject() then
+                exit(GetTextProperty(Token.AsObject(), 'url'));
+            exit(JsonTokenText(Token));
+        end;
+        if not PartObject.Get('file', FileToken) then
+            exit('');
+        if not FileToken.IsObject() then
+            exit('');
+        exit(GetTextProperty(FileToken.AsObject(), 'file_data'));
+    end;
+
+    local procedure TrySplitDataUri(DataUri: Text; var MimeType: Text; var Data: Text): Boolean
+    var
+        PrefixTok: Label 'data:', Locked = true;
+        MarkerTok: Label ';base64,', Locked = true;
+        MarkerAt: Integer;
+    begin
+        MimeType := '';
+        Data := '';
+        if not DataUri.StartsWith(PrefixTok) then
+            exit(false);
+        MarkerAt := StrPos(DataUri, MarkerTok);
+        if MarkerAt <= StrLen(PrefixTok) then
+            exit(false);
+        MimeType := CopyStr(DataUri, StrLen(PrefixTok) + 1, MarkerAt - StrLen(PrefixTok) - 1);
+        Data := CopyStr(DataUri, MarkerAt + StrLen(MarkerTok));
+        exit((MimeType <> '') and (Data <> ''));
+    end;
+
+    local procedure AddGeminiUserTurn(var Contents: JsonArray; InlineParts: JsonArray; TextValue: Text)
+    var
+        Parts: JsonArray;
+        Part: JsonObject;
+        PartToken: JsonToken;
+        Content: JsonObject;
+    begin
+        foreach PartToken in InlineParts do
+            Parts.Add(PartToken);
+        Part.Add('text', TextValue);
+        Parts.Add(Part);
+        Content.Add('role', 'user');
+        Content.Add('parts', Parts);
+        Contents.Add(Content);
+    end;
+
+    local procedure AddGeminiTextTurn(var Contents: JsonArray; Role: Text; TextValue: Text)
+    var
+        InlineParts: JsonArray;
+        Parts: JsonArray;
+        Part: JsonObject;
+        Content: JsonObject;
+    begin
+        if Role = 'user' then begin
+            AddGeminiUserTurn(Contents, InlineParts, TextValue);
+            exit;
+        end;
+        Part.Add('text', TextValue);
+        Parts.Add(Part);
+        Content.Add('role', Role);
+        Content.Add('parts', Parts);
+        Contents.Add(Content);
+    end;
+
+    local procedure AddGeminiFunctionCallTurn(MessageObject: JsonObject; var Contents: JsonArray)
+    var
+        ToolCallsToken: JsonToken;
+        CallToken: JsonToken;
+        CallObject: JsonObject;
+        FunctionToken: JsonToken;
+        FunctionObject: JsonObject;
+        ArgsObject: JsonObject;
+        CallPart: JsonObject;
+        FunctionCall: JsonObject;
+        Parts: JsonArray;
+        Content: JsonObject;
+        ArgumentsText: Text;
+        TextValue: Text;
+    begin
+        TextValue := GetTextProperty(MessageObject, 'content');
+        if TextValue <> '' then
+            AddGeminiTextPart(Parts, TextValue);
+        if MessageObject.Get('tool_calls', ToolCallsToken) then
+            if ToolCallsToken.IsArray() then
+                foreach CallToken in ToolCallsToken.AsArray() do begin
+                    if not CallToken.IsObject() then
+                        continue;
+                    CallObject := CallToken.AsObject();
+                    if not CallObject.Get('function', FunctionToken) then
+                        continue;
+                    if not FunctionToken.IsObject() then
+                        continue;
+                    FunctionObject := FunctionToken.AsObject();
+                    ArgumentsText := GetTextProperty(FunctionObject, 'arguments');
+                    Clear(ArgsObject);
+                    if not ArgsObject.ReadFrom(ArgumentsText) then
+                        Clear(ArgsObject);
+                    Clear(FunctionCall);
+                    FunctionCall.Add('name', GeminiFunctionName(GetTextProperty(FunctionObject, 'name')));
+                    FunctionCall.Add('args', ArgsObject);
+                    Clear(CallPart);
+                    CallPart.Add('functionCall', FunctionCall);
+                    Parts.Add(CallPart);
+                end;
+        if Parts.Count() = 0 then
+            AddGeminiTextPart(Parts, '');
+        Content.Add('role', 'model');
+        Content.Add('parts', Parts);
+        Contents.Add(Content);
+    end;
+
+    local procedure AddGeminiTextPart(var Parts: JsonArray; TextValue: Text)
+    var
+        Part: JsonObject;
+    begin
+        Part.Add('text', TextValue);
+        Parts.Add(Part);
+    end;
+
+    local procedure AddGeminiFunctionResponse(MessageObject: JsonObject; Messages: JsonArray; var PendingParts: JsonArray)
+    var
+        ResponseObject: JsonObject;
+        Wrapper: JsonObject;
+        Part: JsonObject;
+        ContentText: Text;
+    begin
+        ContentText := GetTextProperty(MessageObject, 'content');
+        if not ResponseObject.ReadFrom(ContentText) then begin
+            Clear(ResponseObject);
+            ResponseObject.Add('result', ContentText);
+        end;
+        Wrapper.Add('name', GeminiToolName(Messages, GetTextProperty(MessageObject, 'tool_call_id')));
+        Wrapper.Add('response', ResponseObject);
+        Part.Add('functionResponse', Wrapper);
+        PendingParts.Add(Part);
+    end;
+
+    local procedure FlushGeminiToolResponses(var PendingParts: JsonArray; var Contents: JsonArray)
+    var
+        Content: JsonObject;
+    begin
+        if PendingParts.Count() = 0 then
+            exit;
+        Content.Add('role', 'user');
+        Content.Add('parts', PendingParts);
+        Contents.Add(Content);
+        Clear(PendingParts);
+    end;
+
+    local procedure GeminiToolName(Messages: JsonArray; CallId: Text): Text
+    var
+        MessageToken: JsonToken;
+        MessageObject: JsonObject;
+        ToolCallsToken: JsonToken;
+        CallToken: JsonToken;
+        CallObject: JsonObject;
+        FunctionToken: JsonToken;
+        Name: Text;
+    begin
+        if CallId <> '' then
+            foreach MessageToken in Messages do begin
+                if not MessageToken.IsObject() then
+                    continue;
+                MessageObject := MessageToken.AsObject();
+                if GetTextProperty(MessageObject, 'role') <> 'assistant' then
+                    continue;
+                if not MessageObject.Get('tool_calls', ToolCallsToken) then
+                    continue;
+                if not ToolCallsToken.IsArray() then
+                    continue;
+                foreach CallToken in ToolCallsToken.AsArray() do begin
+                    if not CallToken.IsObject() then
+                        continue;
+                    CallObject := CallToken.AsObject();
+                    if GetTextProperty(CallObject, 'id') <> CallId then
+                        continue;
+                    if not CallObject.Get('function', FunctionToken) then
+                        continue;
+                    if not FunctionToken.IsObject() then
+                        continue;
+                    Name := GetTextProperty(FunctionToken.AsObject(), 'name');
+                    if Name <> '' then
+                        exit(Name);
+                end;
+            end;
+        exit('tool');
+    end;
+
+    local procedure GeminiFunctionName(Name: Text): Text
+    begin
+        if Name = '' then
+            exit('tool');
+        exit(Name);
+    end;
+
+    local procedure GeminiFunctionDeclarations(OpenAITools: JsonArray) Tools: JsonArray
+    var
+        ToolToken: JsonToken;
+        ToolObject: JsonObject;
+        FunctionToken: JsonToken;
+        Declaration: JsonObject;
+        Declarations: JsonArray;
+        Wrapper: JsonObject;
+    begin
+        foreach ToolToken in OpenAITools do begin
+            if not ToolToken.IsObject() then
+                continue;
+            ToolObject := ToolToken.AsObject();
+            if GetTextProperty(ToolObject, 'type') <> 'function' then
+                continue;
+            if not ToolObject.Get('function', FunctionToken) then
+                continue;
+            if not FunctionToken.IsObject() then
+                continue;
+            Clear(Declaration);
+            CopyGeminiFunctionDeclaration(FunctionToken.AsObject(), Declaration);
+            Declarations.Add(Declaration);
+        end;
+        if Declarations.Count() = 0 then
+            exit;
+        Wrapper.Add('functionDeclarations', Declarations);
+        Tools.Add(Wrapper);
+    end;
+
+    local procedure CopyGeminiFunctionDeclaration(FunctionObject: JsonObject; var Declaration: JsonObject)
+    var
+        SchemaToken: JsonToken;
+    begin
+        Declaration.Add('name', GeminiFunctionName(GetTextProperty(FunctionObject, 'name')));
+        Declaration.Add('description', GetTextProperty(FunctionObject, 'description'));
+        if FunctionObject.Get('parameters', SchemaToken) then
+            Declaration.Add('parameters', SchemaToken);
+    end;
+
+    [NonDebuggable]
+    local procedure MapGeminiResponse(var ApiClient: Codeunit "LangModel API Client ori"; ApiKey: SecretText; TimeoutMs: Integer; var Messages: JsonArray; OpenAITools: JsonArray; Model: Text; MaxTokens: Integer; ExtraRequestFields: JsonObject; Response: JsonObject): Text
+    var
+        FirstCandidate: JsonToken;
+        ContentToken: JsonToken;
+        PartsToken: JsonToken;
+        PartToken: JsonToken;
+        PartObject: JsonObject;
+        CallToken: JsonToken;
+        Candidate: JsonObject;
+        Usage: JsonObject;
+        AssistantMessage: JsonObject;
+        ToolCalls: JsonArray;
+        Reply: Text;
+        Piece: Text;
+        FinishReason: Text;
+        CallIndex: Integer;
+    begin
+        if ProviderBaseHasError(Response) or Response.Contains('providerStatus') then begin
+            Response.WriteTo(Reply);
+            exit(Reply);
+        end;
+        if not TryFirstGeminiCandidate(Response, FirstCandidate) then
+            exit(BuildErrorResponse('Empty response from AI model.'));
+        Candidate := FirstCandidate.AsObject();
+        FinishReason := MapGeminiFinishReason(FirstGeminiText(Candidate, 'finishReason', 'finish_reason'));
+        ReadGeminiUsage(Response, Usage);
+        if not Candidate.Get('content', ContentToken) then
+            exit(BuildSuccessResponse('', Usage, FinishReason));
+        if not ContentToken.IsObject() then
+            exit(BuildSuccessResponse('', Usage, FinishReason));
+        if ContentToken.AsObject().Get('parts', PartsToken) then
+            if PartsToken.IsArray() then
+                foreach PartToken in PartsToken.AsArray() do begin
+                    if not PartToken.IsObject() then
+                        continue;
+                    PartObject := PartToken.AsObject();
+                    if TryGeminiFunctionCall(PartObject, CallToken) then begin
+                        CallIndex += 1;
+                        ToolCalls.Add(GeminiOpenAIToolCall(PartObject, CallToken.AsObject(), CallIndex));
+                    end else begin
+                        Piece := GetTextProperty(PartObject, 'text');
+                        if Piece <> '' then
+                            Reply += Piece;
+                    end;
+                end;
+        if ToolCalls.Count() > 0 then begin
+            AssistantMessage.Add('role', 'assistant');
+            AssistantMessage.Add('content', Reply);
+            AssistantMessage.Add('tool_calls', ToolCalls);
+            Messages.Add(AssistantMessage);
+            exit(BuildToolCallsResponse(ToolCalls, Messages, Model, Usage, ExtraRequestFields));
+        end;
+        Clear(AssistantMessage);
+        AssistantMessage.Add('role', 'assistant');
+        AssistantMessage.Add('content', Reply);
+        Messages.Add(AssistantMessage);
+        if not HasAllowedTools and TurnGuard.NeedsFigureCheck(Messages, Reply) then begin
+            AddUserMessage(Messages, TurnGuard.GetVerifyFiguresPrompt());
+            exit(CallGeminiGenerateContent(ApiClient, ApiKey, TimeoutMs, Messages, OpenAITools, Model, MaxTokens, ExtraRequestFields));
+        end;
+        exit(BuildSuccessResponse(Reply, Usage, FinishReason));
+    end;
+
+    local procedure TryFirstGeminiCandidate(Response: JsonObject; var FirstCandidate: JsonToken): Boolean
+    var
+        CandidatesToken: JsonToken;
+    begin
+        if not Response.Get('candidates', CandidatesToken) then
+            exit(false);
+        if not CandidatesToken.IsArray() then
+            exit(false);
+        if CandidatesToken.AsArray().Count() = 0 then
+            exit(false);
+        CandidatesToken.AsArray().Get(0, FirstCandidate);
+        exit(FirstCandidate.IsObject());
+    end;
+
+    local procedure TryGeminiFunctionCall(PartObject: JsonObject; var CallToken: JsonToken): Boolean
+    begin
+        if PartObject.Get('functionCall', CallToken) then
+            if CallToken.IsObject() then
+                exit(true);
+        if PartObject.Get('function_call', CallToken) then
+            exit(CallToken.IsObject());
+        exit(false);
+    end;
+
+    local procedure GeminiOpenAIToolCall(PartObject: JsonObject; CallObject: JsonObject; CallIndex: Integer) ToolCall: JsonObject
+    var
+        FunctionObject: JsonObject;
+        ArgsToken: JsonToken;
+        CallId: Text;
+        ArgumentsText: Text;
+        FoundArgs: Boolean;
+        CallIdTok: Label 'call_%1', Locked = true;
+    begin
+        CallId := GetTextProperty(PartObject, 'id');
+        if CallId = '' then
+            CallId := GetTextProperty(CallObject, 'id');
+        if CallId = '' then
+            CallId := StrSubstNo(CallIdTok, Format(CallIndex, 0, 9));
+        FoundArgs := CallObject.Get('args', ArgsToken);
+        if not FoundArgs then
+            FoundArgs := CallObject.Get('arguments', ArgsToken);
+        ArgumentsText := '{}';
+        if FoundArgs then
+            ArgumentsText := GeminiArgumentsText(ArgsToken);
+        if ArgumentsText = '' then
+            ArgumentsText := '{}';
+        FunctionObject.Add('name', GeminiFunctionName(GetTextProperty(CallObject, 'name')));
+        FunctionObject.Add('arguments', ArgumentsText);
+        ToolCall.Add('id', CallId);
+        ToolCall.Add('type', 'function');
+        ToolCall.Add('function', FunctionObject);
+    end;
+
+    local procedure GeminiArgumentsText(ArgsToken: JsonToken): Text
+    var
+        ArgsText: Text;
+    begin
+        if ArgsToken.IsObject() then begin
+            ArgsToken.AsObject().WriteTo(ArgsText);
+            exit(ArgsText);
+        end;
+        if ArgsToken.IsValue() then
+            exit(JsonTokenText(ArgsToken));
+        exit('{}');
+    end;
+
+    local procedure FirstGeminiText(Source: JsonObject; FirstName: Text; SecondName: Text): Text
+    var
+        Value: Text;
+    begin
+        Value := GetTextProperty(Source, FirstName);
+        if Value <> '' then
+            exit(Value);
+        exit(GetTextProperty(Source, SecondName));
+    end;
+
+    local procedure ReadGeminiUsage(Response: JsonObject; var Usage: JsonObject)
+    var
+        Meta: JsonObject;
+        PromptTokens: Integer;
+        CompletionTokens: Integer;
+    begin
+        if not TryGeminiUsageObject(Response, Meta) then
+            exit;
+        PromptTokens := FirstGeminiInteger(Meta, 'promptTokenCount', 'prompt_token_count');
+        CompletionTokens := FirstGeminiInteger(Meta, 'candidatesTokenCount', 'candidates_token_count');
+        if PromptTokens <> 0 then
+            Usage.Add('prompt_tokens', PromptTokens);
+        if CompletionTokens <> 0 then
+            Usage.Add('completion_tokens', CompletionTokens);
+    end;
+
+    local procedure TryGeminiUsageObject(Response: JsonObject; var Meta: JsonObject): Boolean
+    var
+        Token: JsonToken;
+    begin
+        if Response.Get('usageMetadata', Token) then
+            if Token.IsObject() then begin
+                Meta := Token.AsObject();
+                exit(true);
+            end;
+        if Response.Get('usage_metadata', Token) then
+            if Token.IsObject() then begin
+                Meta := Token.AsObject();
+                exit(true);
+            end;
+        exit(false);
+    end;
+
+    local procedure FirstGeminiInteger(Source: JsonObject; FirstName: Text; SecondName: Text): Integer
+    var
+        Value: Integer;
+    begin
+        if TryReadJsonInteger(Source, FirstName, Value) then
+            if Value <> 0 then
+                exit(Value);
+        if TryReadJsonInteger(Source, SecondName, Value) then
+            exit(Value);
+        exit(0);
+    end;
+
+    [TryFunction]
+    local procedure TryReadJsonInteger(Source: JsonObject; Name: Text; var Value: Integer)
+    var
+        Token: JsonToken;
+    begin
+        Source.Get(Name, Token);
+        Value := Token.AsValue().AsInteger();
+    end;
+
+    local procedure MapGeminiFinishReason(Raw: Text): Text
+    begin
+        case UpperCase(Raw) of
+            'STOP':
+                exit('stop');
+            'MAX_TOKENS':
+                exit('length');
+            'SAFETY':
+                exit('content_filter');
+        end;
+        exit(LowerCase(Raw));
+    end;
+
+    local procedure JsonTokenText(Token: JsonToken): Text
+    begin
+        if not Token.IsValue() then
+            exit('');
+        if Token.AsValue().IsNull() then
+            exit('');
+        exit(Token.AsValue().AsText());
     end;
 }
