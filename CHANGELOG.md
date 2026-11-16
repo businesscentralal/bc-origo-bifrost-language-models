@@ -13,8 +13,9 @@ All notable changes to Bifrost Language Models are documented here.
   Anthropic, Google, xAI), or names those providers when there is none. Before, the generic PreconditionFailed provider
   error with a mostly redacted reason was returned.
 - Image support is not a field on the language model card (Known Ambiguity 1, resolved: map the provider error). Detection
-  reads only the HTTP status (4xx except 401, 403, 408, 429) and the redacted reason (an image, vision or multimodal word with
-  a negation). The errors chapter of both message types documents this in en-US and is-IS.
+  reads only the HTTP status (4xx except 401, 403, 408, 429) and the redacted reason: a negation plus multimodal, vision or
+  "only supported by", or an image word together with "model". A refusal of the image itself ("valid", "format", for example
+  "The image is not valid." or "Unsupported image format.") is never mapped (review AMEND 1). The errors chapter of both message types documents this in en-US and is-IS.
 - The provider-reason vocabulary keeps `multimodal`, `vision`, `images`, `support`, `supports` and `requests`.
 - `LangModel Prov. Base ori` (10035410): new `RespondImageNotSupported`, `HasImageFile`, `IsImageNotSupportedFailure`,
   `GetImageCapableRoleCodes`. `LangModel API Client ori` (10035411) remembers the status and redacted reason of a failed

@@ -22,6 +22,9 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
         PdfTok: Label 'JVBERi0xLjQK', Locked = true;
         MultimodalBodyTok: Label '{"error":{"message":"{\"error\":{\"code\":400,\"message\":\"Multimodal data provided, but model does not support multimodal requests.\",\"type\":\"invalid_request_error\"}}","type":"invalid_request_error","param":null,"code":null}}', Locked = true;
         OpenAIImageBodyTok: Label '{"error":{"message":"Invalid content type. image_url is only supported by certain models.","type":"invalid_request_error","param":"messages.[0].content.[1].type","code":null}}', Locked = true;
+        InvalidImageBodyTok: Label '{"error":{"message":"The image is not valid.","type":"invalid_request_error","param":null,"code":null}}', Locked = true;
+        ImageFormatBodyTok: Label '{"error":{"message":"Unsupported image format.","type":"invalid_request_error","param":null,"code":null}}', Locked = true;
+        ChatBody: Text;
         UnrelatedBodyTok: Label '{"error":{"message":"max_completion_tokens is too large for this model.","type":"invalid_request_error","param":null,"code":null}}', Locked = true;
 
     [Test]
@@ -133,6 +136,10 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
         Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(500, 'This model does not support vision input.')), 'server error');
         Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'The image is too large.')), 'image without a negation');
         Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'The model does not exist.')), 'negation without image');
+        Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'The image is not valid.')), 'invalid image data');
+        Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'Unsupported image format.')), 'unsupported image format');
+        Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'Image is not supported in this request.')), 'image refusal that does not name the model');
+        Assert.IsTrue(ProviderBase.IsImageNotSupportedFailure(Failure(400, 'This model does not support image input.')), 'model image refusal');
         Assert.IsFalse(ProviderBase.IsImageNotSupportedFailure(ProviderBase.BuildUnsupportedImageRefusal('image/gif')), 'local image refusal keeps its own answer');
         Assert.IsFalse(ProviderBase.HasImageFile(Files), 'no files');
         FileJson.Add('mimeType', ' IMAGE/PNG ');
@@ -146,6 +153,58 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
         // Story #135, AC2: the contract of both message types says how image support is determined, in both languages
         VerifyHelp(1033, 'cannot read images', 'Image support is not stored on the language model card');
         VerifyHelp(1039, 'getur ekki lesið myndir', 'Myndstuðningur er ekki skráður á spjaldi mállíkansins');
+    end;
+
+    [Test]
+    procedure Scenario_AC1_Complete_InvalidOrUnsupportedImage_StaysProviderError()
+    var
+        Model: Record "Bifrost Language Model ori";
+        Response: JsonObject;
+    begin
+        // Story #135, AC1 invalid input (review AMEND 1): a refusal of the image itself is not model incapability
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::"Custom LLM", 'vision-model');
+        Response := RunComplete(Model.Code, PngTok, 'image/png', 400, InvalidImageBodyTok, 1033);
+        Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Describe(Response));
+        Assert.AreEqual('provider', Response.GetText('parameter'), Describe(Response));
+        Response := RunComplete(Model.Code, PngTok, 'image/png', 400, ImageFormatBodyTok, 1039);
+        Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Describe(Response));
+        Assert.AreEqual('provider', Response.GetText('parameter'), Describe(Response));
+        Model.Delete(true);
+    end;
+
+    [Test]
+    procedure Scenario_AC1_Ask_InvalidOrUnsupportedImage_StaysProviderError()
+    begin
+        // Story #135, AC1 invalid input (review AMEND 1): the Ask path does not map an image-data refusal either
+        VerifyAskNotMapped(InvalidImageBodyTok, 1033);
+        VerifyAskNotMapped(ImageFormatBodyTok, 1039);
+    end;
+
+    local procedure VerifyAskNotMapped(Body: Text; LanguageId: Integer)
+    var
+        Model: Record "Bifrost Language Model ori";
+        ChatMock: Codeunit "LLM 135 Image Refusal Tests";
+        Data: JsonObject;
+        Response: JsonObject;
+    begin
+        CreateModel(Model, "Bifrost LangModel Prov. ori"::"Custom LLM", 'vision-model');
+        Data.Add('roleCode', Model.Code);
+        Data.Add('question', 'What is in the picture?');
+        Data.Add('file', FileObject(PngTok, 'image/png'));
+        Commit();
+        ChatMock.SetChatBody(Body);
+        BindSubscription(ChatMock);
+        Response := Dispatch("Message Type ori"::"LLM.Prompt.Ask", Data, LanguageId);
+        UnbindSubscription(ChatMock);
+        Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Describe(Response));
+        Assert.IsFalse(Response.Contains('parameter'), 'The generic Ask provider failure is unchanged: ' + Describe(Response));
+        Model.Delete(true);
+    end;
+
+    /// <summary>Sets the body the manual chat subscriber answers with; the default is the KAPPI multimodal refusal.</summary>
+    procedure SetChatBody(NewBody: Text)
+    begin
+        ChatBody := NewBody;
     end;
 
     local procedure VerifyCompleteRefusal(LanguageId: Integer; ProviderBody: Text)
@@ -298,7 +357,9 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
     begin
         Handled := true;
         HttpStatus := 400;
-        ResponseText := MultimodalBodyTok;
+        ResponseText := ChatBody;
+        if ResponseText = '' then
+            ResponseText := MultimodalBodyTok;
     end;
 
     local procedure Describe(Response: JsonObject) Result: Text

@@ -273,7 +273,8 @@ codeunit 10035410 "LangModel Prov. Base ori"
     /// True when a prompt failure is a provider 4xx whose redacted reason says image, vision or multimodal input is not
     /// supported (for example "Multimodal data provided, but model does not support multimodal requests", or "image_url is
     /// only supported by certain models"). The Ask chat path carries the same facts as chatProviderStatus/chatProviderReason. Only the
-    /// redacted diagnostic words are read; authentication, rate-limit and timeout failures never match.
+    /// redacted diagnostic words are read; authentication, rate-limit and timeout failures never match, and neither does a
+    /// refusal of the image itself ("The image is not valid.", "Unsupported image format.").
     /// </summary>
     procedure IsImageNotSupportedFailure(Response: JsonObject): Boolean
     var
@@ -294,9 +295,17 @@ codeunit 10035410 "LangModel Prov. Base ori"
             if not Response.Get('chatProviderReason', Token) then
                 exit(false);
         Reason := ' ' + LowerCase(RedactProviderReason(JsonValueText(Token))) + ' ';
-        if not (Reason.Contains(' image ') or Reason.Contains(' images ') or Reason.Contains(' image_url ') or Reason.Contains(' input_image ') or Reason.Contains(' vision ') or Reason.Contains(' multimodal ')) then
+        // A problem with the image itself (not valid, wrong format) is not a model capability refusal.
+        if Reason.Contains(' valid ') or Reason.Contains(' format ') then
             exit(false);
-        exit(Reason.Contains(' not ') or Reason.Contains(' unsupported ') or Reason.Contains(' cannot ') or Reason.Contains(' only supported by '));
+        if not (Reason.Contains(' not ') or Reason.Contains(' unsupported ') or Reason.Contains(' cannot ') or Reason.Contains(' only supported by ')) then
+            exit(false);
+        if Reason.Contains(' multimodal ') or Reason.Contains(' vision ') or Reason.Contains(' only supported by ') then
+            exit(true);
+        // An image word alone is not enough: the refusal must be about the model.
+        if not (Reason.Contains(' image ') or Reason.Contains(' images ') or Reason.Contains(' image_url ') or Reason.Contains(' input_image ')) then
+            exit(false);
+        exit(Reason.Contains(' model '));
     end;
 
     /// <summary>
