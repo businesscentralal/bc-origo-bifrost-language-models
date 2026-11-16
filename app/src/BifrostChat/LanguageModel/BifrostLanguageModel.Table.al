@@ -65,13 +65,28 @@ table 10035335 "Bifrost Language Model ori"
             var
                 TempArg: Record "Bifrost Chat Argument ori" temporary;
                 Provider: Interface "Bifrost LangModel Provider ori";
+                PreviousProvider: Interface "Bifrost LangModel Provider ori";
                 ProcType: Enum "Bifrost Chat Proc. Type ori";
+                PreviousBaseUrl: Text;
             begin
                 Provider := "Chat Provider";
                 TempArg.Init();
                 TempArg."Procedure Type" := ProcType::HasExternalEndpoint;
                 Provider.Execute(TempArg);
                 if TempArg."Result Boolean" then begin
+                    // Replace an inherited endpoint on a provider change; preserve configured proxies (#60).
+                    if "Chat Provider" <> xRec."Chat Provider" then begin
+                        PreviousProvider := xRec."Chat Provider";
+                        TempArg."Procedure Type" := ProcType::GetDefaultBaseUrl;
+                        PreviousProvider.Execute(TempArg);
+                        PreviousBaseUrl := TempArg.GetResultText();
+                        if xRec."Chat Provider" = xRec."Chat Provider"::OpenAI then
+                            PreviousBaseUrl := 'https://api.openai.com/';
+                        if (PreviousBaseUrl <> '') and
+                           ("Base URL".Trim().TrimEnd('/') = PreviousBaseUrl.Trim().TrimEnd('/'))
+                        then
+                            "Base URL" := '';
+                    end;
                     if "Base URL" = '' then begin
                         TempArg."Procedure Type" := ProcType::GetDefaultBaseUrl;
                         Provider.Execute(TempArg);
