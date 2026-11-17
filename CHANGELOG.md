@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Changed (2026-11-16) - Icelandic review of the texts changed since 28.0.2 (#144)
+
+- Reviewed the 148 is-IS units added or changed since 28.0.2 against their English source and the Foundation terms (mállíkan, veitandi, kvaðning, viðhengi). Corrected wrong plural (`verkfærakköll` to `verkfæraköll`), the mistranslated "redacted" (`ritskoðaðri` to a plain description), a wrong participle (`lokið keyrsla` to `lokin keyrsla`), and awkward phrasing in the Ask limit captions and tooltips, the Copilot and file errors, the staging texts and the Ask help. Wording only: no new objects, no change to keys, placeholders, JSON names or Locked labels, no en-US file.
+- The `is-IS=` comments in AL and `Bifrost Language Models.is-IS.xlf` are in sync (`Test-IcelandicXlfInSync`).
+
 ### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
 
 - Root cause: `LLM.Prompt.Complete` and `LLM.Prompt.Ask` read Foundation's SESSION TIME block after the staged uploads had been taken. Taking a staged upload writes in the call transaction, and Foundation cannot supply the block while a write transaction is open, so every staged call answered `sessionTimeUnavailable` instead of `sessionTime`. Inline files and calls without attachments were not affected.

@@ -119,8 +119,8 @@
         </trans-unit>
         <trans-unit id="Table 3650785778 - Field 1907623871 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the maximum total bytes of staged attachments per prompt. 0 uses 100 MB.</source>
-          <target>Tilgreinir hámarksheildarstærð viðhengja úr biðgeymslu í hverri kvaðningu í bætum. 0 notar 100 MB.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hámarksheildarstærð viðhengja úr biðgeymslu í hverri kvaðningu í bætum. 0 notar 100 MB.</note>
+          <target>Tilgreinir hámarksstærð allra viðhengja úr biðgeymslu í hverri kvaðningu, í bætum. 0 notar 100 MB.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hámarksstærð allra viðhengja úr biðgeymslu í hverri kvaðningu, í bætum. 0 notar 100 MB.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Attachment Limit Bytes - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 3650785778 - Field 1907623871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -251,44 +251,44 @@
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2485161220 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.</source>
-          <target>Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
+          <target>Tilgreinir fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekki limits.maxResultChars. Gildið má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekki limits.maxResultChars. Gildið má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Result Chars - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2485161220 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Result Chars</source>
-          <target>Sjálfgefnir stafir í verkfæraniðurstöðu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu</note>
+          <target>Sjálfgefinn fjöldi stafa í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi stafa í verkfæraniðurstöðu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Result Chars - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 354121853 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.</source>
-          <target>Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</note>
+          <target>Tilgreinir fjölda beiðna til veitanda (umferða) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxRounds. Gildið má ekki vera hærra en Hámark umferða í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda beiðna til veitanda (umferða) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxRounds. Gildið má ekki vera hærra en Hámark umferða í spurningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Rounds - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 354121853 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Rounds</source>
-          <target>Sjálfgefnar umferðir í spurningu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnar umferðir í spurningu</note>
+          <target>Sjálfgefinn fjöldi umferða í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi umferða í spurningu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Rounds - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 353724477 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.</source>
-          <target>Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
+          <target>Tilgreinir fjölda verkfærakalla sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxToolCalls. Gildið má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda verkfærakalla sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxToolCalls. Gildið má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Tool Calls - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 353724477 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Tool Calls</source>
-          <target>Sjálfgefin verkfærakköll í spurningu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefin verkfærakköll í spurningu</note>
+          <target>Sjálfgefinn fjöldi verkfærakalla í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi verkfærakalla í spurningu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Default Tool Calls - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2587341783 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.</source>
-          <target>Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
+          <target>Tilgreinir mesta fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað niður í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað niður í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Result Chars Cap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2587341783 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -299,8 +299,8 @@
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 4271818946 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.</source>
-          <target>Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</note>
+          <target>Tilgreinir mesta fjölda beiðna til veitanda (umferða) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað niður í þetta gildi með viðvöruninni clamped:maxRounds.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda beiðna til veitanda (umferða) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað niður í þetta gildi með viðvöruninni clamped:maxRounds.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Rounds Cap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 4271818946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -311,8 +311,8 @@
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2220255682 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.</source>
-          <target>Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
+          <target>Tilgreinir mesta fjölda verkfærakalla sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað niður í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda verkfærakalla sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað niður í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Ask Max Tool Calls Cap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Table 1492395099 - Field 2220255682 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -713,20 +713,20 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 2987691047" size-unit="char" translate="yes" xml:space="preserve">
           <source>The Copilot service could not complete the prompt.</source>
-          <target>Copilot-þjónustan gat ekki unnið kvaðninguna.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-þjónustan gat ekki unnið kvaðninguna.</note>
+          <target>Copilot-þjónustan gat ekki afgreitt kvaðninguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-þjónustan gat ekki afgreitt kvaðninguna.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1867917415" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check that Bifrost Copilot is active on the Copilot &amp; agent capabilities page and that the prompt carries no file, then retry. If it still fails, use a language model with another provider.</source>
-          <target>Athugaðu að Bifröst Copilot sé virkt á síðunni Copilot og eiginleikar fulltrúa og að kvaðningin hafi enga skrá og reyndu síðan aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu að Bifröst Copilot sé virkt á síðunni Copilot og eiginleikar fulltrúa og að kvaðningin hafi enga skrá og reyndu síðan aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</note>
+          <target>Athugaðu hvort Bifröst Copilot-getan sé virk á síðunni Copilot og eiginleikar fulltrúa og að kvaðningunni fylgi engin skrá, og reyndu síðan aftur. Ef villan er viðvarandi skaltu nota mállíkan frá öðrum veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Athugaðu hvort Bifröst Copilot-getan sé virk á síðunni Copilot og eiginleikar fulltrúa og að kvaðningunni fylgi engin skrá, og reyndu síðan aftur. Ef villan er viðvarandi skaltu nota mállíkan frá öðrum veitanda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 786989544" size-unit="char" translate="yes" xml:space="preserve">
           <source>Business Central's managed Azure OpenAI call for Copilot fails or is refused. The answer keeps the status and a redacted reason.</source>
-          <target>Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið heldur stöðunni og ritskoðaðri ástæðu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið heldur stöðunni og ritskoðaðri ástæðu.</note>
+          <target>Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið geymir stöðukóðann og ástæðu þar sem viðkvæmar upplýsingar hafa verið fjarlægðar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kall Business Central í Azure OpenAI í umsjá Microsoft fyrir Copilot mistekst eða er hafnað. Svarið geymir stöðukóðann og ástæðu þar sem viðkvæmar upplýsingar hafa verið fjarlægðar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotCallWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1989417480" size-unit="char" translate="yes" xml:space="preserve">
@@ -749,8 +749,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 603677729" size-unit="char" translate="yes" xml:space="preserve">
           <source>The language model's provider is Copilot and Bifrost Copilot is not active on the Copilot &amp; agent capabilities page. No request was sent.</source>
-          <target>Veitandi mállíkansins er Copilot og Bifröst Copilot er ekki virkt á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot er ekki virkt á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</note>
+          <target>Veitandi mállíkansins er Copilot og Bifröst Copilot-getan er ekki virk á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi mállíkansins er Copilot og Bifröst Copilot-getan er ekki virk á síðunni Copilot og eiginleikar fulltrúa. Engin beiðni var send.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotActiveWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 2266001486" size-unit="char" translate="yes" xml:space="preserve">
@@ -761,8 +761,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1795014174" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask an administrator to reinstall Bifrost Language Models so the Bifrost Copilot capability is registered, then set it to Active on the Copilot &amp; agent capabilities page.</source>
-          <target>Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo Bifröst Copilot-getan skráist og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo Bifröst Copilot-getan skráist og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</note>
+          <target>Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo að Bifröst Copilot-getan skráist, og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Biddu kerfisstjóra um að setja Bifröst mállíkön upp aftur svo að Bifröst Copilot-getan skráist, og stilla hana síðan á Virkt á síðunni Copilot og eiginleikar fulltrúa.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotNotRegisteredNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 3525771997" size-unit="char" translate="yes" xml:space="preserve">
@@ -773,8 +773,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1447736185" size-unit="char" translate="yes" xml:space="preserve">
           <source>Wait and retry. If the failure persists, use a language model with another provider.</source>
-          <target>Bíddu og reyndu aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Bíddu og reyndu aftur. Ef villan helst skaltu nota mállíkan með öðrum veitanda.</note>
+          <target>Bíddu og reyndu aftur. Ef villan er viðvarandi skaltu nota mállíkan frá öðrum veitanda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bíddu og reyndu aftur. Ef villan er viðvarandi skaltu nota mállíkan frá öðrum veitanda.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType CopilotRetryNextStepTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 520414394" size-unit="char" translate="yes" xml:space="preserve">
@@ -839,8 +839,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1001140644" size-unit="char" translate="yes" xml:space="preserve">
           <source>An image is attached and the provider refuses it because the model cannot read images. Image support is not stored on the language model card: Bifrost recognises the refusal in the provider answer (HTTP 4xx that names image, vision or multimodal input as not supported) and returns this error instead of the provider failure.</source>
-          <target>Mynd fylgir og veitandinn hafnar henni því líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða mörgum miðlum sé ekki stutt) og skilar þessari villu í stað villu veitandans.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Mynd fylgir og veitandinn hafnar henni því líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða mörgum miðlum sé ekki stutt) og skilar þessari villu í stað villu veitandans.</note>
+          <target>Mynd er meðfylgjandi og veitandinn hafnar henni vegna þess að líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða fleiri miðlunarleiðum (multimodal) sé ekki stutt) og skilar þessari villu í stað villu veitandans.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mynd er meðfylgjandi og veitandinn hafnar henni vegna þess að líkanið getur ekki lesið myndir. Myndstuðningur er ekki skráður á spjaldi mállíkansins: Bifröst þekkir höfnunina í svari veitandans (HTTP 4xx sem segir að inntak með mynd, sjón eða fleiri miðlunarleiðum (multimodal) sé ekki stutt) og skilar þessari villu í stað villu veitandans.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType ImageNotSupportedWhenTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 219726121" size-unit="char" translate="yes" xml:space="preserve">
@@ -1127,8 +1127,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 464800612 - NamedType 3662413714" size-unit="char" translate="yes" xml:space="preserve">
           <source>The answer was cut short (stop reason %1), so no complete HTML document was produced.</source>
-          <target>Svarið var stytt (ástæða stöðvunar %1) og því varð ekki til heilt HTML-skjal.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = stop reason, is-IS=Svarið var stytt (ástæða stöðvunar %1) og því varð ekki til heilt HTML-skjal.</note>
+          <target>Svarið var stytt (stöðvunarástæða %1) og því varð ekki til heilt HTML-skjal.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = stop reason, is-IS=Svarið var stytt (stöðvunarástæða %1) og því varð ekki til heilt HTML-skjal.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Runner ori - NamedType HtmlIncompleteErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 464800612 - NamedType 4129010640" size-unit="char" translate="yes" xml:space="preserve">
@@ -1223,8 +1223,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 3496736229" size-unit="char" translate="yes" xml:space="preserve">
           <source>a completed run whose answer holds one HTML document</source>
-          <target>lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=lokið keyrsla þar sem svarið inniheldur eitt HTML-skjal</note>
+          <target>lokin keyrsla þar sem svarið inniheldur eitt HTML-skjal</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=lokin keyrsla þar sem svarið inniheldur eitt HTML-skjal</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - NamedType HtmlExpectedTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - NamedType 938893459" size-unit="char" translate="yes" xml:space="preserve">
@@ -1403,14 +1403,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering</source>
-          <target>spyrja gervigreind, spyrja mállíkan, gervigreind án notanda, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind án notanda, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</note>
+          <target>spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
           <source>Read-only. Lets the model look up Business Central data with read-only tools before it answers, with caps on tool calls and rounds and no timeout. Use LLM.Prompt.Complete when the prompt already holds all the data and no tools are needed. Copilot language models are refused.</source>
-          <target>Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með þaki á verkfæraköll og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</note>
+          <target>Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með hámarki á verkfærakalla og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Eingöngu lestur. Leyfir líkaninu að fletta upp gögnum í Business Central með verkfærum sem aðeins lesa áður en það svarar, með hámarki á verkfærakalla og umferðir og án tímamarka. Notaðu LLM.Prompt.Complete þegar kvaðningin inniheldur öll gögnin og engin verkfæri þarf. Copilot-mállíkönum er hafnað.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetSelectionDescription - NamedType SelectionDescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - NamedType 2403977524" size-unit="char" translate="yes" xml:space="preserve">
@@ -1565,8 +1565,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 3207440409" size-unit="char" translate="yes" xml:space="preserve">
           <source>Too many files: inline files and staged attachments together exceed the limit.</source>
-          <target>Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu samanlagt fara yfir mörkin.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu samanlagt fara yfir mörkin.</note>
+          <target>Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu eru samanlagt yfir mörkunum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu eru samanlagt yfir mörkunum.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType InlineCountErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 345945864" size-unit="char" translate="yes" xml:space="preserve">
@@ -1637,8 +1637,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 1830439019" size-unit="char" translate="yes" xml:space="preserve">
           <source>The staged upload was not found.</source>
-          <target>Upphlaðna skjalið fannst ekki í biðgeymslu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Upphlaðna skjalið fannst ekki í biðgeymslu.</note>
+          <target>Upphleðsla fannst ekki í biðgeymslu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Upphleðsla fannst ekki í biðgeymslu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType MissingErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2679071487 - NamedType 3534312869" size-unit="char" translate="yes" xml:space="preserve">
@@ -2123,8 +2123,8 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 471598665 - Property 1968111052" size-unit="char" translate="yes" xml:space="preserve">
           <source>The caps bound every LLM.Prompt.Ask run in this company: a request limit above a cap is cut to the cap with a clamped warning. The defaults are used when a request sends no limit. Every tool call is still a Bifrost message that counts against the monthly quota, and the tools stay read-only.</source>
-          <target>Hámörkin takmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Hámörkin takmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</note>
+          <target>Hámörkin afmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð niður í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst-skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Hámörkin afmarka hverja LLM.Prompt.Ask keyrslu í þessu fyrirtæki: mörk í beiðni sem eru hærri en hámark eru lækkuð niður í hámarkið með clamped viðvörun. Sjálfgefnu gildin eru notuð þegar beiðni sendir engin mörk. Hvert verkfærakall er áfram Bifröst-skilaboð sem telst til mánaðarlegs kvóta og verkfærin eru áfram aðeins til lestrar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskLimits - Property InstructionalText</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 471598665 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2135,44 +2135,44 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 588808764 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the characters of one tool result LLM.Prompt.Ask sends to the model when the request sends no limits.maxResultChars. It cannot be above Ask Max Result Chars Cap.</source>
-          <target>Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekkert limits.maxResultChars. Það má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
+          <target>Tilgreinir fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekki limits.maxResultChars. Gildið má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu þegar beiðnin sendir ekki limits.maxResultChars. Gildið má ekki vera hærra en Hámark stafa í verkfæraniðurstöðu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultResultChars - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 588808764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Result Chars</source>
-          <target>Sjálfgefnir stafir í verkfæraniðurstöðu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnir stafir í verkfæraniðurstöðu</note>
+          <target>Sjálfgefinn fjöldi stafa í verkfæraniðurstöðu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi stafa í verkfæraniðurstöðu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultResultChars - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 358416549 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the provider requests (rounds) an LLM.Prompt.Ask request may use when it sends no limits.maxRounds. It cannot be above Ask Max Rounds Cap.</source>
-          <target>Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir beiðnir til veitanda (umferðir) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxRounds. Það má ekki vera hærra en Hámark umferða í spurningu.</note>
+          <target>Tilgreinir fjölda beiðna til veitanda (umferða) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxRounds. Gildið má ekki vera hærra en Hámark umferða í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda beiðna til veitanda (umferða) sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxRounds. Gildið má ekki vera hærra en Hámark umferða í spurningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultRounds - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 358416549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Rounds</source>
-          <target>Sjálfgefnar umferðir í spurningu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefnar umferðir í spurningu</note>
+          <target>Sjálfgefinn fjöldi umferða í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi umferða í spurningu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultRounds - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 39258301 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the tool calls an LLM.Prompt.Ask request may use when it sends no limits.maxToolCalls. It cannot be above Ask Max Tool Calls Cap.</source>
-          <target>Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verkfærakköllin sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekkert limits.maxToolCalls. Það má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
+          <target>Tilgreinir fjölda verkfærakalla sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxToolCalls. Gildið má ekki vera hærra en Hámark verkfærakalla í spurningu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda verkfærakalla sem LLM.Prompt.Ask beiðni má nota þegar hún sendir ekki limits.maxToolCalls. Gildið má ekki vera hærra en Hámark verkfærakalla í spurningu.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultToolCalls - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 39258301 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ask Default Tool Calls</source>
-          <target>Sjálfgefin verkfærakköll í spurningu</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefin verkfærakköll í spurningu</note>
+          <target>Sjálfgefinn fjöldi verkfærakalla í spurningu</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sjálfgefinn fjöldi verkfærakalla í spurningu</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskDefaultToolCalls - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1202210991 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most characters of one tool result that LLM.Prompt.Ask sends to the model, 1 or more. A higher limits.maxResultChars is cut to this value with a clamped:maxResultChars warning.</source>
-          <target>Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flesta stafi einnar verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
+          <target>Tilgreinir mesta fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað niður í þetta gildi með viðvöruninni clamped:maxResultChars.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda stafa í hverri verkfæraniðurstöðu sem LLM.Prompt.Ask sendir líkaninu, 1 eða fleiri. Hærra limits.maxResultChars er lækkað niður í þetta gildi með viðvöruninni clamped:maxResultChars.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxResultCharsCap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1202210991 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2183,8 +2183,8 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1200911322 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most provider requests (rounds) one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxRounds is cut to this value with a clamped:maxRounds warning.</source>
-          <target>Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flestar beiðnir til veitanda (umferðir) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað í þetta gildi með viðvöruninni clamped:maxRounds.</note>
+          <target>Tilgreinir mesta fjölda beiðna til veitanda (umferða) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað niður í þetta gildi með viðvöruninni clamped:maxRounds.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda beiðna til veitanda (umferða) sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxRounds er lækkað niður í þetta gildi með viðvöruninni clamped:maxRounds.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxRoundsCap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 1200911322 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2195,8 +2195,8 @@
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 3502082298 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the most tool calls one LLM.Prompt.Ask request may use, from 1 to 999. A higher limits.maxToolCalls is cut to this value with a clamped:maxToolCalls warning.</source>
-          <target>Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir flest verkfærakköll sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
+          <target>Tilgreinir mesta fjölda verkfærakalla sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað niður í þetta gildi með viðvöruninni clamped:maxToolCalls.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir mesta fjölda verkfærakalla sem ein LLM.Prompt.Ask beiðni má nota, frá 1 til 999. Hærra limits.maxToolCalls er lækkað niður í þetta gildi með viðvöruninni clamped:maxToolCalls.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Setup ori - Control AskMaxToolCallsCap - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3027829156 - Control 3502082298 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
