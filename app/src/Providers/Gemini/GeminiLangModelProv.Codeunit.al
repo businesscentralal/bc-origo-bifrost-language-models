@@ -14,7 +14,7 @@ codeunit 10035419 "Gemini LangModel Prov. ori" implements "Bifrost LangModel Pro
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         AuthHeaderNameTok: Label 'Authorization', Locked = true;
         DefaultBaseUrlTok: Label 'https://generativelanguage.googleapis.com/v1beta', Locked = true;
-        DefaultModelTok: Label 'gemini-2.5-flash', Locked = true;
+        DefaultModelTok: Label 'gemini-flash-latest', Locked = true;
         ProviderNameTok: Label 'Google', Locked = true;
         ApiKeyLabelLbl: Label 'API Key', Comment = 'is-IS=API-lykill';
         ApiKeyInstructionLbl: Label 'Enter your Google AI API key.', Comment = 'is-IS=Sláðu inn Google AI API-lykilinn þinn.';
