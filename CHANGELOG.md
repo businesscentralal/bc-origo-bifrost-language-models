@@ -10,6 +10,10 @@ All notable changes to Bifrost Language Models are documented here.
 - Changing Chat Provider replaces the previous provider's default Base URL with the selected provider's default. Custom, Azure and proxy endpoints remain configured, preserving #60; selecting the same provider is idempotent. Trailing slash variants count as the same default. A provider without a default URL leaves the inherited URL empty for configuration. Explicit models, paths and limits are preserved.
 - No new product objects or translated labels. New test codeunit **96080** `LangModel 142 Defaults Tests` covers card and table validation, provider pairs, empty/default Google model, custom URLs, trailing slashes and repeated selection.
 
+### Changed (2026-11-16) - Icelandic review of the texts changed since 28.0.2 (#144)
+
+- Reviewed the 148 is-IS units added or changed since 28.0.2 against their English source and the Foundation terms (mállíkan, veitandi, kvaðning, viðhengi). Corrected wrong plural (`verkfærakköll` to `verkfæraköll`), the mistranslated "redacted" (`ritskoðaðri` to a plain description), a wrong participle (`lokið keyrsla` to `lokin keyrsla`), and awkward phrasing in the Ask limit captions and tooltips, the Copilot and file errors, the staging texts and the Ask help. Wording only: no new objects, no change to keys, placeholders, JSON names or Locked labels, no en-US file.
+- The `is-IS=` comments in AL and `Bifrost Language Models.is-IS.xlf` are in sync (`Test-IcelandicXlfInSync`).
 
 ### Fixed (2026-11-16) - sessionTime missing on staged-attachment calls (#136)
 

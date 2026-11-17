@@ -17,7 +17,7 @@ codeunit 10035435 "LLM Staging Files ori"
         BytesExpectedTxt: Label 'at most %1 bytes', Comment = '%1 = model byte limit, is-IS=í mesta lagi %1 bæti';
         FormatErr: Label 'The attachment must contain one stagingId GUID.', Comment = 'is-IS=Viðhengið verður að innihalda eitt stagingId GUID.';
         UnknownErr: Label 'The attachment contains an unknown parameter.', Comment = 'is-IS=Viðhengið inniheldur óþekkta færibreytu.';
-        MissingErr: Label 'The staged upload was not found.', Comment = 'is-IS=Upphlaðna skjalið fannst ekki í biðgeymslu.';
+        MissingErr: Label 'The staged upload was not found.', Comment = 'is-IS=Upphleðsla fannst ekki í biðgeymslu.';
         UploadAgainTxt: Label 'Upload the file again and send its new stagingId.', Comment = 'is-IS=Hladdu skránni upp aftur og sendu nýtt stagingId hennar.';
         InvalidTypeErr: Label 'The attachment content type is not supported.', Comment = 'is-IS=Efnisgerð viðhengisins er ekki studd.';
         AllowedTypesTxt: Label 'text/*, application/pdf, image/png, image/jpeg', Locked = true;
@@ -28,7 +28,7 @@ codeunit 10035435 "LLM Staging Files ori"
         InlineFileFixTxt: Label 'Send file or files with data, mimeType and fileName, or use attachments with a stagingId.', Comment = 'is-IS=Sendu file eða files með data, mimeType og fileName, eða notaðu attachments með stagingId.';
         InlineTypeErr: Label 'The inline file content type is not supported.', Comment = 'is-IS=Efnisgerð innbyggðu skrárinnar er ekki studd.';
         InlineTypeNextTxt: Label 'Send text, PDF, PNG or JPEG. No request was sent.', Comment = 'is-IS=Sendu texta, PDF, PNG eða JPEG. Engin beiðni var send.';
-        InlineCountErr: Label 'Too many files: inline files and staged attachments together exceed the limit.', Comment = 'is-IS=Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu samanlagt fara yfir mörkin.';
+        InlineCountErr: Label 'Too many files: inline files and staged attachments together exceed the limit.', Comment = 'is-IS=Of margar skrár: innbyggðar skrár og viðhengi úr biðgeymslu eru samanlagt yfir mörkunum.';
         InlineCountExpectedTxt: Label 'at most %1 files in total', Comment = '%1 = file count limit, is-IS=í mesta lagi %1 skrár samtals';
         InlineCountNextTxt: Label 'Send fewer files. No request was sent.', Comment = 'is-IS=Sendu færri skrár. Engin beiðni var send.';
         LimitNextTxt: Label 'Send smaller files or ask your administrator to change the model attachment limit.', Comment = 'is-IS=Sendu minni skrár eða biddu kerfisstjóra um að breyta stærðarmörkum viðhengja mállíkansins.';
