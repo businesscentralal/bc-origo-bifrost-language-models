@@ -7,11 +7,10 @@ All notable changes to Bifrost Language Models are documented here.
 ### Fixed (2026-11-18) - Custom LLM: staged attachments on Ask (#156)
 
 - Root cause: the Custom LLM Ask path sent every non-image file as an OpenAI `file` part (`data:text/plain;base64,...`) and returned any failure as a thrown text, so an OpenAI-compatible text model refused the request and the caller saw only "The language model provider could not complete the prompt." with no status or reason.
-- Staged and inline `text/*` files are now text content parts (`Attached file <name>:` plus the decoded text), the same as `LLM.Prompt.Complete` (#133); PNG and JPEG stay image parts. This also holds for the continuation rounds after tool calls.
+- Staged and inline `text/*` and `application/json` files are now text content parts (`Attached file <name>:` plus the decoded text), the same as `LLM.Prompt.Complete` (#133); PNG and JPEG stay image parts. This also holds for the continuation rounds after tool calls.
 - A file type the endpoint cannot take (for example a PDF) is refused before the call with `InvalidParameter` that names the provider (Custom LLM) and the file, parameter `file`/`files[n]`, received = the MIME type. New contract error text on `LLM.Prompt.Ask` and `LLM.Prompt.Complete` (is-IS translated, 4 new labels in the is-IS file). The PDF refusal applies to Ask only; `LLM.Prompt.Complete` on Custom LLM is unchanged.
 - A failed Custom LLM chat call returns the safe prompt error: HTTP status in `received` and a redacted provider reason (4xx other than 401/403), never the provider body, like Gemini (#134).
-- Not changed: `application/json` is still refused by Ask's own staging validation (text/*, PDF, PNG, JPEG) for every provider. Widening that is a separate decision.
-- Tests (mock only): new codeunit **96082** `LLM 156 Custom Ask Tests` (staged text 1033/1039, staged text with html, PNG, PDF refusal 1033/1039, 400 with redacted reason 1033/1039, 401). No new product objects.
+- Tests (mock only): new codeunit **96082** `LLM 156 Custom Ask Tests` (staged text 1033/1039, staged text with html, PNG, PDF refusal 1033/1039, 400 with redacted reason 1033/1039, 401, staged/inline normalized JSON, and inline text with safe failure after a tool continuation). The shared staging suite also verifies JSON on Complete. The existing MCP probe provides bounded mock-only Custom LLM scenarios with owned-data cleanup. No new product objects.
 
 ### Fixed (2026-11-18) - Icelandic full-suite test expectations (#151–#155)
 

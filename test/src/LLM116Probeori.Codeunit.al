@@ -39,6 +39,7 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         Model: Record "Bifrost Language Model ori";
         Tools: Codeunit "LangModel Test Tools";
         XaiTests: Codeunit "LLM 125 xAI Tests";
+        CustomTests: Codeunit "LLM 156 Custom Ask Tests";
         Mock: Codeunit "Mock Bifrost Chat Provider";
         Staging: Codeunit "Blob Staging ori";
         Blob: Codeunit "Temp Blob";
@@ -75,6 +76,13 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
             exit;
         Request := Argument.GetRequestJson();
         Scenario := Tools.GetText(Request, 'scenario');
+        if Scenario = 'custom156' then begin
+            Result := CustomTests.RunScenario(Tools.GetText(Request, 'fixture'), GlobalLanguage());
+            Result.Add('status', 'Success');
+            Argument.SetResponseJson(Result);
+            Argument."Content Type" := Argument.GetContentTypeJson();
+            exit;
+        end;
         if Scenario = 'xai125' then begin
             FixtureStatus := 200;
             if Request.Contains('httpStatus') then
@@ -116,8 +124,13 @@ codeunit 96070 "LLM116 Probe ori" implements "Msg Interface ori"
         ContentType := 'text/plain';
         if Scenario = 'mime' then
             ContentType := 'application/zip';
+        if Scenario = 'json' then
+            ContentType := 'application/json';
         Blob.CreateOutStream(Output, TextEncoding::UTF8);
-        Output.WriteText('LM116 owned fixture');
+        if Scenario = 'json' then
+            Output.WriteText('{"value":156}')
+        else
+            Output.WriteText('LM116 owned fixture');
         Blob.CreateInStream(Input);
         FirstId := Staging.Create(Input, 'lm116.txt', ContentType, 'LM116 MCP');
         Item.Add('stagingId', Format(FirstId, 0, 4));

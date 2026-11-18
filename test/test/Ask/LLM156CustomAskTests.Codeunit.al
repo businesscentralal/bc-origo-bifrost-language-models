@@ -158,6 +158,108 @@ codeunit 96082 "LLM 156 Custom Ask Tests"
         Assert.IsFalse(Body.Contains('is invalid'), 'The authentication sentence is not returned.');
     end;
 
+    /// <summary>AC01: staged JSON is normalized and decoded into a text part in both locales.</summary>
+    [Test]
+    procedure Ask_StagedJson_SentInline()
+    var
+        Result: JsonObject;
+        Locale: Integer;
+        Index: Integer;
+    begin
+        // [GIVEN] A caller-owned JSON upload. [WHEN] Ask runs. [THEN] JSON text reaches the mock and the upload is removed.
+        for Index := 1 to 2 do begin
+            Locale := 1033;
+            if Index = 2 then
+                Locale := 1039;
+            Result := RunScenario('json', Locale);
+            VerifyJsonResult(Result);
+        end;
+    end;
+
+    /// <summary>AC01: inline JSON follows the same acceptance policy as staged JSON.</summary>
+    [Test]
+    procedure Ask_InlineJson_SentInline()
+    var
+        Result: JsonObject;
+    begin
+        // [GIVEN] Inline JSON with MIME parameters. [WHEN] Ask runs. [THEN] It is decoded text, never a file part.
+        Result := RunAsk(InlineFile('fixture.json', ' Application/JSON; charset=utf-8 ', 'eyJtZXNzYWdlIjoiaGVsbG8gY3VzdG9tIDE1NiJ9'), false, '', '', false, 1033, 200, ChatReply());
+        VerifyJsonResult(Result);
+    end;
+
+    /// <summary>Text stays inline over a tool continuation and a later provider failure preserves its safe diagnostics.</summary>
+    [Test]
+    procedure Ask_ToolContinuation_KeepsTextAndSafeFailure()
+    var
+        TempArgument: Record "Bifrost Chat Argument ori" temporary;
+        Mock: Codeunit "LLM 65 HTTP Mock";
+        Provider: Interface "Bifrost LangModel Provider ori";
+        Response: JsonObject;
+        State: Text;
+    begin
+        // [GIVEN] A Custom LLM tool round with a text file. [WHEN] The continuation fails. [THEN] Text remains inline and diagnostics stay redacted.
+        TempArgument."Base URL" := 'https://custom156.invalid';
+        TempArgument.Model := 'fixture-model';
+        TempArgument.SetApiKey(FakeKey());
+        TempArgument.SetPayload('{"messages":[{"role":"user","content":"Read this"}],"files":[{"fileName":"note.txt","mimeType":"text/plain","data":"aGVsbG8gY3VzdG9tIDE1Ng=="}],"allowedTools":["who_am_i"]}');
+        TempArgument."Procedure Type" := TempArgument."Procedure Type"::SendChatMessage;
+        Provider := Enum::"Bifrost LangModel Prov. ori"::"Custom LLM";
+        Mock.Configure(200, '{"choices":[{"finish_reason":"tool_calls","message":{"role":"assistant","content":null,"tool_calls":[{"id":"call156","type":"function","function":{"name":"who_am_i","arguments":"{}"}}]}}]}', false, false);
+        BindSubscription(Mock);
+        Provider.Execute(TempArgument);
+        UnbindSubscription(Mock);
+        Response.ReadFrom(TempArgument.GetResultText());
+        Assert.AreEqual('tool_calls', Response.GetText('type'), 'A real tool continuation is returned.');
+        State := Response.GetText('conversationState');
+        TempArgument.SetConversationState(State);
+        TempArgument.SetToolResults('[{"id":"call156","result":"fixture identity"}]');
+        TempArgument."Procedure Type" := TempArgument."Procedure Type"::ContinueWithToolResults;
+        Mock.Configure(400, ProviderError('Request contains an invalid argument. ' + MarkerTok), false, false);
+        BindSubscription(Mock);
+        Provider.Execute(TempArgument);
+        UnbindSubscription(Mock);
+        Response.ReadFrom(TempArgument.GetResultText());
+        Assert.IsTrue(Mock.GetRequestBody().Contains('Attached file note.txt:'), 'Named text survives into the second round.');
+        Assert.IsTrue(Mock.GetRequestBody().Contains('hello custom 156'), 'Decoded text remains.');
+        Assert.IsTrue(Mock.GetRequestBody().Contains('fixture identity'), 'Tool result included.');
+        Assert.IsFalse(Mock.GetRequestBody().Contains('file_data'), 'No file part on continuation.');
+        Assert.AreEqual(400, Response.GetInteger('chatProviderStatus'), 'Later failure status preserved.');
+        Assert.IsTrue(Response.GetText('chatProviderReason').Contains('invalid'), 'Safe diagnostic retained.');
+        Assert.IsFalse(TempArgument.GetResultText().Contains(MarkerTok), 'Private marker removed.');
+    end;
+
+    local procedure VerifyJsonResult(Result: JsonObject)
+    begin
+        Assert.AreEqual('Success', Result.GetObject('response').GetText('status'), Describe(Result.GetObject('response')));
+        Assert.IsTrue(Result.GetText('request').Contains('Attached file fixture.json:'), 'Named inline text.');
+        Assert.IsTrue(Result.GetText('request').Contains('hello custom 156'), 'Decoded JSON value.');
+        Assert.IsTrue(Result.GetText('request').Contains('message'), 'JSON property preserved.');
+        Assert.IsFalse(Result.GetText('request').Contains('file_data'), 'No provider file part.');
+        Assert.AreEqual(1, Result.GetInteger('calls'), 'One mocked provider call.');
+        Assert.IsTrue(Result.GetBoolean('cleanedUp'), 'Owned fixtures removed.');
+    end;
+
+    /// <summary>Runs a bounded mock-only Custom LLM fixture for the existing MCP probe, with owned data removed.</summary>
+    procedure RunScenario(Scenario: Text; Locale: Integer) Result: JsonObject
+    begin
+        case Scenario of
+            'text':
+                exit(RunAsk(InlineFile('', '', ''), true, 'note.txt', 'text/plain', false, Locale, 200, ChatReply()));
+            'json':
+                exit(RunAsk(InlineFile('', '', ''), true, 'fixture.json', ' Application/JSON; charset=utf-8 ', false, Locale, 200, ChatReply()));
+            'html':
+                exit(RunAsk(InlineFile('', '', ''), true, 'note.txt', 'text/plain', true, Locale, 200, HtmlReplyTok));
+            'refusal':
+                exit(RunAsk(InlineFile('note.pdf', 'application/pdf', PdfBase64Tok), false, '', '', false, Locale, 200, ChatReply()));
+            '400':
+                exit(RunAsk(InlineFile('', '', ''), true, 'note.txt', 'text/plain', false, Locale, 400, ProviderError('Request contains an invalid argument. ' + MarkerTok)));
+            '401':
+                exit(RunAsk(InlineFile('', '', ''), true, 'note.txt', 'text/plain', false, Locale, 401, ProviderError('API key ' + MarkerTok + ' is invalid')));
+            else
+                Error('Unknown Custom LLM fixture scenario.');
+        end;
+    end;
+
     local procedure RunAsk(InlineValue: JsonObject; Staged: Boolean; FileName: Text; FileMime: Text; HtmlMode: Boolean; Locale: Integer; HttpStatus: Integer; ProviderBody: Text) Result: JsonObject
     var
         Model: Record "Bifrost Language Model ori";
@@ -190,7 +292,10 @@ codeunit 96082 "LLM 156 Custom Ask Tests"
             Request.Add('file', InlineValue);
         if Staged then begin
             Blob.CreateOutStream(Output, TextEncoding::UTF8);
-            Output.WriteText('hello custom 156');
+            if FileName = 'fixture.json' then
+                Output.WriteText('{"message":"hello custom 156"}')
+            else
+                Output.WriteText('hello custom 156');
             Blob.CreateInStream(Input);
             StagingId := Staging.Create(Input, FileName, FileMime, 'LM156 owned fixture');
             Request.Add('attachments', StagedItems(StagingId));
