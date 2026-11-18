@@ -16,7 +16,6 @@ codeunit 96082 "LLM 156 Custom Ask Tests"
         FakeKeyTok: Label 'custom156-fixture-key', Locked = true;
         MarkerTok: Label 'Z9Q7lm156', Locked = true;
         PdfBase64Tok: Label 'JVBERi0xLjQK', Locked = true;
-        TextBase64Tok: Label 'aGVsbG8=', Locked = true;
         PngBase64Tok: Label 'iVBORw0KGgo=', Locked = true;
         HtmlReplyTok: Label '{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"<html><body>OK</body></html>"}}]}', Locked = true;
 

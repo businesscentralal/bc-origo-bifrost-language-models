@@ -197,7 +197,7 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
         Response := Dispatch("Message Type ori"::"LLM.Prompt.Ask", Data, LanguageId);
         UnbindSubscription(ChatMock);
         Assert.AreEqual('PreconditionFailed', Response.GetText('code'), Describe(Response));
-        Assert.IsFalse(Response.Contains('parameter'), 'The generic Ask provider failure is unchanged: ' + Describe(Response));
+        Assert.AreEqual('provider', Response.GetText('parameter'), 'The Custom LLM Ask failure names the provider and is not mapped to roleCode (#156): ' + Describe(Response));
         Model.Delete(true);
     end;
 
@@ -356,6 +356,18 @@ codeunit 96077 "LLM 135 Image Refusal Tests"
     local procedure AnswerChatWithMultimodalRefusal(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var HttpStatus: Integer; var ResponseText: Text)
     begin
         Handled := true;
+        HttpStatus := 400;
+        ResponseText := ChatBody;
+        if ResponseText = '' then
+            ResponseText := MultimodalBodyTok;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"LangModel API Client ori", 'OnBeforePromptPost', '', false, false)]
+    local procedure AnswerPromptWithMultimodalRefusal(Url: Text; RequestBody: JsonObject; var Handled: Boolean; var Sent: Boolean; var HttpStatus: Integer; var HttpBlocked: Boolean; var ResponseText: Text)
+    begin
+        // Custom LLM Ask uses the safe prompt transport (#156), which has its own test hook.
+        Handled := true;
+        Sent := true;
         HttpStatus := 400;
         ResponseText := ChatBody;
         if ResponseText = '' then
