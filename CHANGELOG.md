@@ -4,6 +4,10 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Tests (2026-11-18) - Full release verification in Icelandic (#149)
+
+- Added test runner codeunit **96081** `LM Icelandic Test Runner ori`. It starts every test method in LCID 1039 and restores the previous language afterwards, while preserving Microsoft's codeunit isolation, permission mocking and result reporting. The standard runner remains the English full-suite entry point. No product objects or translated strings changed.
+
 ### Fixed (2026-11-16) - Google and provider endpoint defaults (#142)
 
 - New Google model cards and runtime requests without a configured model use `gemini-flash-latest` instead of `gemini-2.5-flash`, which returned 404 with the current key.
