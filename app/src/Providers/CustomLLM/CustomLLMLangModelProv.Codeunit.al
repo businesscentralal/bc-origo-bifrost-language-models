@@ -110,11 +110,53 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
         exit(ConfigText);
     end;
 
+    // Text files are text content parts and PNG/JPEG image parts. Another type (for example a PDF) is refused before the
+    // call, naming the provider and the file. A failed call returns the HTTP status and a redacted reason (#156).
     local procedure DoSendChatMessage(var Argument: Record "Bifrost Chat Argument ori" temporary): Text
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
+        FileHandling: Codeunit "LangModel File Handling ori";
+        Payload: JsonObject;
+        PayloadText: Text;
+        Failure: Text;
     begin
+        LangModelChatProxy.UseSafeInlineTextTransport(Argument);
+        if Payload.ReadFrom(Argument.GetPayload()) then begin
+            if not FileHandling.AcceptFiles(Payload, Failure) then
+                exit(Failure);
+            if not AcceptAttachmentTypes(Payload, Failure) then
+                exit(Failure);
+            Payload.WriteTo(PayloadText);
+            exit(LangModelChatProxy.SendChatMessage(Argument, PayloadText, AuthHeaderNameTok));
+        end;
         exit(LangModelChatProxy.SendChatMessage(Argument, Argument.GetPayload(), AuthHeaderNameTok));
+    end;
+
+    local procedure AcceptAttachmentTypes(Payload: JsonObject; var Failure: Text): Boolean
+    var
+        FileHandling: Codeunit "LangModel File Handling ori";
+        FilesToken: JsonToken;
+        FileToken: JsonToken;
+        FileObject: JsonObject;
+        FileIndex: Integer;
+        FileCount: Integer;
+    begin
+        if not Payload.Get('files', FilesToken) then
+            exit(true);
+        if not FilesToken.IsArray() then
+            exit(true);
+        FileCount := FilesToken.AsArray().Count();
+        foreach FileToken in FilesToken.AsArray() do begin
+            FileIndex += 1;
+            if FileToken.IsObject() then begin
+                FileObject := FileToken.AsObject();
+                if not (FileHandling.IsInlineTextMime(GetJsonText(FileObject, 'mimeType')) or FileHandling.IsInlineImageMime(GetJsonText(FileObject, 'mimeType'))) then begin
+                    ProviderBase.BuildUnsupportedAttachmentRefusal(ProviderNameTok, FileIndex, FileCount, GetJsonText(FileObject, 'fileName'), FileHandling.NormalizeMimeType(GetJsonText(FileObject, 'mimeType'))).WriteTo(Failure);
+                    exit(false);
+                end;
+            end;
+        end;
+        exit(true);
     end;
 
     [NonDebuggable]
@@ -191,6 +233,7 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
     var
         LangModelChatProxy: Codeunit "LangModel Chat Proxy ori";
     begin
+        LangModelChatProxy.UseSafeInlineTextTransport(Argument);
         exit(LangModelChatProxy.ContinueWithToolResults(Argument, Argument.GetConversationState(), Argument.GetToolResults(), AuthHeaderNameTok));
     end;
 

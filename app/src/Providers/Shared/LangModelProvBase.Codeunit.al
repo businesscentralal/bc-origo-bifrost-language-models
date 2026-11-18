@@ -46,6 +46,11 @@ codeunit 10035410 "LangModel Prov. Base ori"
         WrongTypeReceivedTok: Label 'content is not %1', Locked = true;
         WrongTypeExpectedTxt: Label 'content that matches the declared mimeType', Comment = 'is-IS=efni sem passar við uppgefna mimeType';
         WrongTypeNextStepTxt: Label 'Send a file whose content is of the declared type, or correct mimeType. No request was sent.', Comment = 'is-IS=Sendu skrá sem er af uppgefinni gerð, eða leiðréttu mimeType. Engin beiðni var send.';
+        UnsupportedAttachmentErr: Label 'The %1 provider cannot take the attached file %2 (%3).', Comment = '%1 = provider name, %2 = file name, %3 = MIME type, is-IS=Veitandinn %1 getur ekki tekið við viðhengdu skránni %2 (%3).';
+        UnsupportedAttachmentWhenTxt: Label 'The language model uses an OpenAI-compatible endpoint that takes text files, JSON, PNG and JPEG, and the attached file is of another type, for example a PDF. No request is sent.', Comment = 'is-IS=Mállíkanið notar OpenAI-samhæfðan endapunkt sem tekur við textaskrám, JSON, PNG og JPEG og viðhengda skráin er af annarri gerð, til dæmis PDF. Engin beiðni er send.';
+        UnsupportedAttachmentExpectedTxt: Label 'a text file (text/*), application/json, PNG or JPEG', Comment = 'is-IS=textaskrá (text/*), application/json, PNG eða JPEG';
+        UnsupportedAttachmentNextStepTxt: Label 'Send the content as a text file, or use a language model whose provider takes this file type. No request was sent.', Comment = 'is-IS=Sendu efnið sem textaskrá, eða notaðu mállíkan þar sem veitandinn tekur við þessari skráargerð. Engin beiðni var send.';
+        UnsupportedAttachmentKindTok: Label 'unsupportedAttachment', Locked = true;
         FileIndexTok: Label 'files[%1]', Locked = true;
         NotBase64KindTok: Label 'notBase64', Locked = true;
         WrongTypeKindTok: Label 'wrongType', Locked = true;
@@ -199,6 +204,11 @@ codeunit 10035410 "LangModel Prov. Base ori"
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, FileParameterTok, '', OversizeFileExpectedTxt, OversizeFileNextStepTxt);
             exit;
         end;
+        if IsSafeRefusalKind(Response, UnsupportedAttachmentKindTok) then begin
+            ReceivedText := Response.GetText('received');
+            Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, StrSubstNo(UnsupportedAttachmentErr, Response.GetText('provider'), Response.GetText('fileName'), ReceivedText), FileParameterName(Response.GetInteger('fileIndex'), Response.GetInteger('fileCount')), ReceivedText, UnsupportedAttachmentExpectedTxt, UnsupportedAttachmentNextStepTxt);
+            exit;
+        end;
         if IsSafeImageRefusal(Response, ReceivedMime) then begin
             Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, 'mimeType', ReceivedMime, UnsupportedImageExpectedTxt, UnsupportedImageNextStepTxt);
             exit;
@@ -254,6 +264,7 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, HttpClientBlockedMsg, PromptBlockedWhenTxt, PromptBlockedNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::PreconditionFailed, PromptProviderErr, PromptProviderWhenTxt, PromptSetupNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedImageErr, UnsupportedImageWhenTxt, UnsupportedImageNextStepTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, UnsupportedAttachmentErr, UnsupportedAttachmentWhenTxt, UnsupportedAttachmentNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, OversizeFileErr, OversizeFileWhenTxt, OversizeFileNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, TotalOversizeErr, TotalOversizeWhenTxt, TotalOversizeNextStepTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, NotBase64Err, NotBase64WhenTxt, NotBase64NextStepTxt));
@@ -512,6 +523,42 @@ codeunit 10035410 "LangModel Prov. Base ori"
         Response.Add('safeRefusal', true);
         Response.Add('refusalKind', UnsupportedImageKindTok);
         Response.Add('received', SanitizeMimeType(MimeType));
+    end;
+
+    /// <summary>
+    /// Builds the local refusal for an attachment the provider endpoint cannot take (for example a PDF on a text-only
+    /// Custom LLM model). The file name and MIME type are reduced to a safe token set. No provider call is made.
+    /// </summary>
+    procedure BuildUnsupportedAttachmentRefusal(ProviderName: Text; FileIndex: Integer; FileCount: Integer; FileName: Text; MimeType: Text) Response: JsonObject
+    begin
+        Response.Add('error', StrSubstNo(UnsupportedAttachmentErr, ProviderName, SanitizeFileLabel(FileName), SanitizeMimeType(MimeType)));
+        Response.Add('safeRefusal', true);
+        Response.Add('refusalKind', UnsupportedAttachmentKindTok);
+        Response.Add('provider', ProviderName);
+        Response.Add('fileName', SanitizeFileLabel(FileName));
+        Response.Add('fileIndex', FileIndex);
+        Response.Add('fileCount', FileCount);
+        Response.Add('received', SanitizeMimeType(MimeType));
+    end;
+
+    local procedure SanitizeFileLabel(FileName: Text): Text
+    var
+        Index: Integer;
+        Character: Char;
+        Result: Text;
+    begin
+        for Index := 1 to StrLen(FileName) do begin
+            Character := FileName[Index];
+            if IsLatinLetter(Character) or IsDigit(Character) or (Character in ['.', '-', '_']) then
+                Result += Character
+            else
+                Result += '_';
+            if StrLen(Result) >= 60 then
+                break;
+        end;
+        if Result = '' then
+            exit('attachment');
+        exit(Result);
     end;
 
     /// <summary>Builds the local oversize-file refusal. No provider call is made for this answer.</summary>
