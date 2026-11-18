@@ -4,9 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-18) - Icelandic full-suite test expectations (#151–#155)
+
+- The 1039 full-suite run exposed 11 failures in test codeunits 96018, 96034, 96037, 96067 and 96079: one outdated Icelandic success label and English-only expected error/contract text. Updated the test resources to the existing product translations. All assertions, boundary checks, error cases and the 686 test methods remain; tests execute in the selected language. No product behavior, contract or translation changed.
+
 ### Tests (2026-11-18) - Full release verification in Icelandic (#149)
 
-- Added test runner codeunit **96081** `LM Icelandic Test Runner ori`. It starts every test method in LCID 1039 and restores the previous language afterwards, while preserving Microsoft's codeunit isolation, permission mocking and result reporting. The standard runner remains the English full-suite entry point. No product objects or translated strings changed.
+- Added test runner codeunit **96081** `LM Icelandic Test Runner ori`. It starts every test method in LCID 1039 and restores the previous language afterwards, while preserving Microsoft's codeunit isolation, permission mocking and result reporting. The standard runner remains the English full-suite entry point. No product objects or product translations changed.
 
 ### Fixed (2026-11-16) - Google and provider endpoint defaults (#142)
 

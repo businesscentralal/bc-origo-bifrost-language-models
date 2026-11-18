@@ -11,8 +11,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 687115114 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copilot defaults initialized successfully.</source>
-          <target>Copilot sjálfgildi frumstillt.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Copilot sjálfgildi frumstillt.</note>
+          <target>Copilot-sjálfgildi frumstillt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-sjálfgildi frumstillt.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Copilot Install Tests - NamedType DoneMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2603271315 - NamedType 3848368221" size-unit="char" translate="yes" xml:space="preserve">
@@ -32,6 +32,72 @@
           <target>Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Tilgreina verður kóða mállíkans áður en hægt er að geyma API-lykil.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Secrets Tests - NamedType LanguageModelCodeMissingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3498983294 - Method 4217770722 - NamedType 2041448" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Setup is not complete</source>
+          <target>Uppsetningu er ekki lokið</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetningu er ekki lokið</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Setup Wizard Tests - Method Scenario_AC09_NothingConfigured_RefusesCompletion - NamedType SetupIncompleteErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 931873648" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Bifrost Copilot capability is not active.</source>
+          <target>Bifröst Copilot-getan er ekki virk.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Copilot-getan er ekki virk.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType NotActiveErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 180896732" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Bifrost Copilot capability is not registered in this environment.</source>
+          <target>Bifröst Copilot-getan er ekki skráð í þessu umhverfi.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Bifröst Copilot-getan er ekki skráð í þessu umhverfi.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType NotRegisteredErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 805818397" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot cannot run in this session.</source>
+          <target>Copilot getur ekki keyrt í þessari lotu.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot getur ekki keyrt í þessari lotu.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType SessionBlockedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 376675608" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Copilot service could not complete the prompt.</source>
+          <target>Copilot-þjónustan gat ekki afgreitt kvaðninguna.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-þjónustan gat ekki afgreitt kvaðninguna.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType CallFailedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 1898348042" size-unit="char" translate="yes" xml:space="preserve">
+          <source>interactive Business Central client session</source>
+          <target>gagnvirkri biðlaralotu í Business Central</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=gagnvirkri biðlaralotu í Business Central</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType InteractiveSessionTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1533043038 - Method 4212753213 - NamedType 1670957395" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copilot language models are refused.</source>
+          <target>Copilot-mállíkönum er hafnað.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Copilot-mállíkönum er hafnað.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 132 Copilot Tests - Method AC4_ContractDocumentsCopilotLimits - NamedType AskCopilotRefusalTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1053627201 - Method 2041343185 - NamedType 262107740" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allow HttpClient Requests</source>
+          <target>Leyfa HttpClient-beiðnir</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leyfa HttpClient-beiðnir</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM 65 Prompt Tests - Method AC8_ErrorContract - NamedType HttpAllowedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 474816826 - NamedType 2269354204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>cannot be above</source>
+          <target>má ekki vera hærra en</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=má ekki vera hærra en</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Setup Tests - NamedType AboveCapErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 474816826 - NamedType 908720676" size-unit="char" translate="yes" xml:space="preserve">
+          <source>must be from 1 to 999</source>
+          <target>verður að vera frá 1 til 999</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=verður að vera frá 1 til 999</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Setup Tests - NamedType CapRangeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 474816826 - NamedType 446414117" size-unit="char" translate="yes" xml:space="preserve">
+          <source>must be 1 or more</source>
+          <target>verður að vera 1 eða meira</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=verður að vera 1 eða meira</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Ask Setup Tests - NamedType PositiveLimitErr</note>
         </trans-unit>
         <trans-unit id="EnumExtension 3555081229 - EnumValue 1417814126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 3617384391">
           <source>Mock</source>

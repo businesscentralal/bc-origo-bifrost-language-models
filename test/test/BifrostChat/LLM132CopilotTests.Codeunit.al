@@ -217,19 +217,25 @@ codeunit 96079 "LLM 132 Copilot Tests"
         Errors: JsonArray;
         ErrorText: Text;
         Notes: Text;
+        NotActiveErr: Label 'The Bifrost Copilot capability is not active.', Comment = 'is-IS=Bifröst Copilot-getan er ekki virk.';
+        NotRegisteredErr: Label 'The Bifrost Copilot capability is not registered in this environment.', Comment = 'is-IS=Bifröst Copilot-getan er ekki skráð í þessu umhverfi.';
+        SessionBlockedErr: Label 'Copilot cannot run in this session.', Comment = 'is-IS=Copilot getur ekki keyrt í þessari lotu.';
+        CallFailedErr: Label 'The Copilot service could not complete the prompt.', Comment = 'is-IS=Copilot-þjónustan gat ekki afgreitt kvaðninguna.';
+        InteractiveSessionTxt: Label 'interactive Business Central client session', Comment = 'is-IS=gagnvirkri biðlaralotu í Business Central';
+        AskCopilotRefusalTxt: Label 'Copilot language models are refused.', Comment = 'is-IS=Copilot-mállíkönum er hafnað.';
     begin
         // Story #132 AC4 | Time: none | Risk: the help does not say where Copilot can run.
         Assert.IsTrue(Impl.GetErrors(Errors), 'Errors chapter');
         Errors.WriteTo(ErrorText);
-        Assert.IsTrue(ErrorText.Contains('The Bifrost Copilot capability is not active.'), 'Not active row.');
-        Assert.IsTrue(ErrorText.Contains('The Bifrost Copilot capability is not registered in this environment.'), 'Not registered row.');
-        Assert.IsTrue(ErrorText.Contains('Copilot cannot run in this session.'), 'Session row.');
-        Assert.IsTrue(ErrorText.Contains('The Copilot service could not complete the prompt.'), 'Call failure row.');
+        Assert.IsTrue(ErrorText.Contains(NotActiveErr), 'Not active row.');
+        Assert.IsTrue(ErrorText.Contains(NotRegisteredErr), 'Not registered row.');
+        Assert.IsTrue(ErrorText.Contains(SessionBlockedErr), 'Session row.');
+        Assert.IsTrue(ErrorText.Contains(CallFailedErr), 'Call failure row.');
         Assert.IsTrue(Impl.GetNotes(Notes), 'Notes chapter');
         Assert.IsTrue(Notes.Contains('only LLM.Prompt.* type that accepts a Copilot language model'), 'Complete notes name the supported type.');
         Assert.IsTrue(Notes.Contains('interactive Business Central client session'), 'Complete notes name the session limit.');
-        Assert.IsTrue(Impl.GetSelectionDescription().Contains('interactive Business Central client session'), 'Selection description names the limit.');
-        Assert.IsTrue(AskImpl.GetSelectionDescription().Contains('Copilot language models are refused.'), 'Ask selection description.');
+        Assert.IsTrue(Impl.GetSelectionDescription().Contains(InteractiveSessionTxt), 'Selection description names the limit.');
+        Assert.IsTrue(AskImpl.GetSelectionDescription().Contains(AskCopilotRefusalTxt), 'Ask selection description.');
         Clear(Notes);
         Assert.IsTrue(AskImpl.GetNotes(Notes), 'Ask notes chapter');
         Assert.IsTrue(Notes.Contains('LLM.Prompt.Complete accepts a Copilot language model only in an interactive Business Central client session.'), 'Ask notes point to Complete.');

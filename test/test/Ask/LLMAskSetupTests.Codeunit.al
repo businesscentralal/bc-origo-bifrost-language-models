@@ -16,6 +16,9 @@ codeunit 96067 "LLM Ask Setup Tests"
 
     var
         Assert: Codeunit "Library Assert";
+        CapRangeErr: Label 'must be from 1 to 999', Comment = 'is-IS=verður að vera frá 1 til 999';
+        PositiveLimitErr: Label 'must be 1 or more', Comment = 'is-IS=verður að vera 1 eða meira';
+        AboveCapErr: Label 'cannot be above', Comment = 'is-IS=má ekki vera hærra en';
         ModelCodeTok: Label 'ASK-CAPS', Locked = true;
         ReplyTok: Label '{"type":"reply","reply":"%1"}', Locked = true;
         ToolCallTok: Label '{"type":"tool_calls","toolCalls":[%1],"conversationState":"{\"messages\":[],\"model\":\"mock\"}"}', Locked = true;
@@ -101,7 +104,7 @@ codeunit 96067 "LLM Ask Setup Tests"
         Assert.AreEqual(1000000, StoredAskSetup."Ask Max Result Chars Cap", 'a million characters is accepted and stored');
 
         asserterror ValidateInMemory(AskSetup.FieldNo("Ask Max Result Chars Cap"), 0);
-        Assert.ExpectedError('must be 1 or more');
+        Assert.ExpectedError(PositiveLimitErr);
     end;
 
     [Test]
@@ -118,15 +121,15 @@ codeunit 96067 "LLM Ask Setup Tests"
         Assert.AreEqual(40, StoredAskSetup."Ask Default Tool Calls", 'a default equal to its cap is accepted');
 
         asserterror ValidateOnInstallValues(AskSetup.FieldNo("Ask Default Tool Calls"), 41);
-        Assert.ExpectedError('cannot be above');
+        Assert.ExpectedError(AboveCapErr);
         asserterror ValidateOnInstallValues(AskSetup.FieldNo("Ask Default Rounds"), 21);
-        Assert.ExpectedError('cannot be above');
+        Assert.ExpectedError(AboveCapErr);
         asserterror ValidateOnInstallValues(AskSetup.FieldNo("Ask Default Result Chars"), 20001);
-        Assert.ExpectedError('cannot be above');
+        Assert.ExpectedError(AboveCapErr);
         asserterror ValidateOnInstallValues(AskSetup.FieldNo("Ask Max Tool Calls Cap"), 14);
-        Assert.ExpectedError('cannot be above');
+        Assert.ExpectedError(AboveCapErr);
         asserterror ValidateOnInstallValues(AskSetup.FieldNo("Ask Default Tool Calls"), 0);
-        Assert.ExpectedError('must be 1 or more');
+        Assert.ExpectedError(PositiveLimitErr);
     end;
 
     [Test]
@@ -139,7 +142,7 @@ codeunit 96067 "LLM Ask Setup Tests"
         AskSetup.InitSetup();
         AskSetup."Ask Max Rounds Cap" := 1000;
         asserterror AskSetup.Modify(true);
-        Assert.ExpectedError('must be from 1 to 999');
+        Assert.ExpectedError(CapRangeErr);
     end;
 
     [Test]
@@ -389,9 +392,9 @@ codeunit 96067 "LLM Ask Setup Tests"
         Assert.AreEqual(1, ValidateInMemory(FieldNo, 1), '1 is accepted');
         Assert.AreEqual(999, ValidateInMemory(FieldNo, 999), '999 is accepted');
         asserterror ValidateInMemory(FieldNo, 0);
-        Assert.ExpectedError('must be from 1 to 999');
+        Assert.ExpectedError(CapRangeErr);
         asserterror ValidateInMemory(FieldNo, 1000);
-        Assert.ExpectedError('must be from 1 to 999');
+        Assert.ExpectedError(CapRangeErr);
     end;
 
     local procedure ValidateOnInstallValues(FieldNo: Integer; NewValue: Integer)
