@@ -1041,6 +1041,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Impl: Codeunit "LLM Prompt Compl Impl ori";
         Errors: JsonArray;
         ErrorText: Text;
+        HttpAllowedTxt: Label 'Allow HttpClient Requests', Comment = 'is-IS=Leyfa HttpClient-beiðnir';
     begin
         Assert.IsTrue(Impl.GetErrors(Errors), 'Errors chapter');
         Errors.WriteTo(ErrorText);
@@ -1049,7 +1050,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         Assert.IsTrue(ErrorText.Contains('Retryable'), 'Transient code');
         Assert.IsTrue(ErrorText.Contains('401'), 'Authentication status');
         Assert.IsTrue(ErrorText.Contains('429'), 'Rate limit status');
-        Assert.IsTrue(ErrorText.Contains('Allow HttpClient Requests'), 'HTTP refusal');
+        Assert.IsTrue(ErrorText.Contains(HttpAllowedTxt), 'HTTP refusal');
     end;
 
     /// <summary>English auth errors and next steps use the published resources.</summary>

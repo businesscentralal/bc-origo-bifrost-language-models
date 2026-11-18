@@ -219,3 +219,7 @@ Key rules always in effect:
 - `describe_message_type` and `invoke_message_type` on the `origo-bc-bc28-w1` server hit Bifrost Language Models through
   Foundation's route (`origo/bifrost/v1.0`). Keep calls serial - parallel bursts crash the server.
   Test data uses the `BIFT-<letter>` prefix.
+
+### Full-suite release verification (#149)
+
+- Test runner **96081** `LM Icelandic Test Runner ori` runs the suite in LCID 1039, with codeunit isolation. Pass `testRunnerCodeunitId: 96081` to `bc_dev_run_tests`; use the standard 130450 runner for 1033. Tests that explicitly switch language retain their own bilingual assertions.

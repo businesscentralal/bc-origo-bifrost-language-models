@@ -335,6 +335,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         Model: Record "Bifrost Language Model ori";
         LowerPermissions: Codeunit "Library - Lower Permissions";
         GuidedExperience: Codeunit "Guided Experience";
+        SetupIncompleteErr: Label 'Setup is not complete', Comment = 'is-IS=Uppsetningu er ekki lokið';
     begin
         // Story #80, AC09 | Time: independent of Today/WorkDate | Risk: None
         // [GIVEN] Prepare the fixture with test authority before restricting the caller.
@@ -348,7 +349,7 @@ codeunit 96037 "LangModel Setup Wizard Tests"
         LowerPermissions.AddPermissionSet('BIFROST Full ori');
         Assert.IsFalse(WizardMgt.IsHttpEnabled(), 'No readable HTTP prerequisite must be reported as unconfigured.');
         asserterror WizardMgt.Finish();
-        Assert.ExpectedError('Setup is not complete');
+        Assert.ExpectedError(SetupIncompleteErr);
         LowerPermissions.SetOutsideO365Scope();
         // [THEN] Completion remains false.
         Assert.IsFalse(GuidedExperience.IsAssistedSetupComplete(ObjectType::Page, Page::"LangModel Setup Wizard ori"), 'Skipped setup must remain incomplete.');
