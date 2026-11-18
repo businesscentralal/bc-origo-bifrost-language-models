@@ -223,8 +223,9 @@ codeunit 96082 "LLM 156 Custom Ask Tests"
         Assert.IsTrue(Mock.GetRequestBody().Contains('hello custom 156'), 'Decoded text remains.');
         Assert.IsTrue(Mock.GetRequestBody().Contains('fixture identity'), 'Tool result included.');
         Assert.IsFalse(Mock.GetRequestBody().Contains('file_data'), 'No file part on continuation.');
-        Assert.AreEqual(400, Response.GetInteger('chatProviderStatus'), 'Later failure status preserved.');
-        Assert.IsTrue(Response.GetText('chatProviderReason').Contains('invalid'), 'Safe diagnostic retained.');
+        Assert.AreEqual(400, Response.GetInteger('providerStatus'), 'Later failure status preserved.');
+        Assert.IsTrue(Response.GetText('providerReason').Contains('invalid'), 'Safe diagnostic retained.');
+        Assert.IsTrue(Response.GetText('providerReason').Contains('[redacted]'), 'Unknown diagnostic tokens redacted.');
         Assert.IsFalse(TempArgument.GetResultText().Contains(MarkerTok), 'Private marker removed.');
     end;
 
