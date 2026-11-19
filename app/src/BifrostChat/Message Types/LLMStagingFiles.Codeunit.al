@@ -20,7 +20,7 @@ codeunit 10035435 "LLM Staging Files ori"
         MissingErr: Label 'The staged upload was not found.', Comment = 'is-IS=Upphleðsla fannst ekki í biðgeymslu.';
         UploadAgainTxt: Label 'Upload the file again and send its new stagingId.', Comment = 'is-IS=Hladdu skránni upp aftur og sendu nýtt stagingId hennar.';
         InvalidTypeErr: Label 'The attachment content type is not supported.', Comment = 'is-IS=Efnisgerð viðhengisins er ekki studd.';
-        AllowedTypesTxt: Label 'text/*, application/pdf, image/png, image/jpeg', Locked = true;
+        AllowedTypesTxt: Label 'text/*, application/json, application/pdf, image/png, image/jpeg', Locked = true;
         LimitErr: Label 'The total attachment size exceeds the language model limit.', Comment = 'is-IS=Heildarstærð viðhengja er yfir mörkum mállíkansins.';
         InlineFileShapeErr: Label 'The inline file must be an object with data (Base64), mimeType and fileName.', Comment = 'is-IS=Innbyggða skráin verður að vera hlutur með data (Base64), mimeType og fileName.';
         InlineFileShapeExpectedTxt: Label 'an object with data, mimeType and fileName', Comment = 'is-IS=hlutur með data, mimeType og fileName';
@@ -108,7 +108,7 @@ codeunit 10035435 "LLM Staging Files ori"
                 exit(false);
             end;
             ContentType := FileHandling.NormalizeMimeType(ContentType);
-            if not ((ContentType.StartsWith('text/') and (StrLen(ContentType) > 5)) or (ContentType in ['application/pdf', 'image/png', 'image/jpeg'])) then begin
+            if not ((ContentType.StartsWith('text/') and (StrLen(ContentType) > 5)) or (ContentType in ['application/json', 'application/pdf', 'image/png', 'image/jpeg'])) then begin
                 Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, InvalidTypeErr, ParameterName, ContentType, AllowedTypesTxt, UploadAgainTxt);
                 exit(false);
             end;
@@ -199,7 +199,7 @@ codeunit 10035435 "LLM Staging Files ori"
                 exit(false);
             end;
             ContentType := FileHandling.NormalizeMimeType(TextValue(Entry, 'mimeType'));
-            if not ((ContentType.StartsWith('text/') and (StrLen(ContentType) > 5)) or (ContentType in ['application/pdf', 'image/png', 'image/jpeg'])) then begin
+            if not ((ContentType.StartsWith('text/') and (StrLen(ContentType) > 5)) or (ContentType in ['application/json', 'application/pdf', 'image/png', 'image/jpeg'])) then begin
                 Argument.RespondWithError("Bifrost Error Code ori"::InvalidParameter, InlineTypeErr, ParameterName + '.mimeType', ContentType, AllowedTypesTxt, InlineTypeNextTxt);
                 exit(false);
             end;
@@ -250,7 +250,7 @@ codeunit 10035435 "LLM Staging Files ori"
         Parameter: JsonObject;
         Children: JsonArray;
     begin
-        Parameter := ContractMgt.Parameter('attachments', 'array', false, 'Files uploaded to Foundation staging, in order. Each entry has exactly one key, stagingId. The caller-owned upload is consumed in this transaction. Supports text/*, application/pdf, image/png and image/jpeg. Total bytes must fit the language model Attachment Limit Bytes (0 uses 100 MB). Invalid uploads never call the model or incur a provider charge. Upload again after a refusal.');
+        Parameter := ContractMgt.Parameter('attachments', 'array', false, 'Files uploaded to Foundation staging, in order. Each entry has exactly one key, stagingId. The caller-owned upload is consumed in this transaction. Supports text/*, application/json, application/pdf, image/png and image/jpeg. Total bytes must fit the language model Attachment Limit Bytes (0 uses 100 MB). Invalid uploads never call the model or incur a provider charge. Upload again after a refusal.');
         Children.Add(ContractMgt.Parameter('stagingId', 'string', true, 'The GUID returned when the caller uploaded the file to Foundation staging.'));
         Parameter.Add('children', Children);
         Parameters.Add(Parameter);
@@ -266,7 +266,7 @@ codeunit 10035435 "LLM Staging Files ori"
         FileParameter := ContractMgt.Parameter('file', 'object', false, 'Optional inline file sent with the question, for a PDF or picture an earlier playbook step produced. Takes precedence over files. Same shape as LLM.Prompt.Complete. Can be combined with attachments; inline and staged files together are limited to 10 files and to the language model Attachment Limit Bytes (0 uses 100 MB). A value that is not an object is refused with InvalidParameterFormat.');
         FileParameter.Add('children', InlineChildren());
         Parameters.Add(FileParameter);
-        FilesParameter := ContractMgt.Parameter('files', 'array', false, 'Optional inline files sent with the question when file is absent. Each entry is an object with data, mimeType and fileName. Supports text/*, application/pdf, image/png and image/jpeg; another type is refused with InvalidParameter before any provider call. Inline and staged files together are limited to 10 files; a bigger set is refused with LimitExceeded. Provider uploads made for the files are deleted after the call, including when it fails.');
+        FilesParameter := ContractMgt.Parameter('files', 'array', false, 'Optional inline files sent with the question when file is absent. Each entry is an object with data, mimeType and fileName. Supports text/*, application/json, application/pdf, image/png and image/jpeg; another type is refused with InvalidParameter before any provider call. Inline and staged files together are limited to 10 files; a bigger set is refused with LimitExceeded. Provider uploads made for the files are deleted after the call, including when it fails.');
         FilesParameter.Add('children', InlineChildren());
         Parameters.Add(FilesParameter);
     end;
@@ -278,7 +278,7 @@ codeunit 10035435 "LLM Staging Files ori"
     begin
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, InlineFileShapeErr, 'file is not an object, files is not an array, or an entry is not an object.', InlineFileFixTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, InlineFileShapeErr, 'An inline file has no data.', InlineFileFixTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, InlineTypeErr, 'An inline file is not text, PDF, PNG or JPEG.', InlineTypeNextTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, InlineTypeErr, 'An inline file is not text, JSON, PDF, PNG or JPEG.', InlineTypeNextTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::LimitExceeded, InlineCountErr, 'Inline and staged files together are more than 10.', InlineCountNextTxt));
     end;
 
@@ -317,7 +317,7 @@ codeunit 10035435 "LLM Staging Files ori"
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameterFormat, FormatErr, 'attachments is not an array of objects with a stagingId GUID.', UploadAgainTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::MissingParameter, FormatErr, 'An attachments entry has no stagingId.', UploadAgainTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::RecordNotFound, MissingErr, 'An upload is unknown, owned by another user, duplicated or already consumed.', UploadAgainTxt));
-        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, InvalidTypeErr, 'An attachment is not text, PDF, PNG or JPEG.', UploadAgainTxt));
+        Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::InvalidParameter, InvalidTypeErr, 'An attachment is not text, JSON, PDF, PNG or JPEG.', UploadAgainTxt));
         Errors.Add(ContractMgt.ErrorEntry("Bifrost Error Code ori"::LimitExceeded, LimitErr, 'The attachments total exceeds the model attachment byte limit.', LimitNextTxt));
     end;
 

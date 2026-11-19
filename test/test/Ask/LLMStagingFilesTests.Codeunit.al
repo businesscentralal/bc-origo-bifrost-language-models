@@ -27,6 +27,30 @@ codeunit 96071 "LLM Staging Files Tests"
         VerifyText(Enum::"Message Type ori"::"LLM.Prompt.Complete");
     end;
 
+    /// <summary>Shared staging acceptance also allows normalized JSON on Complete and consumes the upload.</summary>
+    [Test]
+    procedure CompleteJson_ConsumedAndSent()
+    var
+        Mock: Codeunit "Mock Bifrost Chat Provider";
+        Staging: Codeunit "Blob Staging ori";
+        Response: JsonObject;
+        Payload: JsonObject;
+        FileToken: JsonToken;
+        StagingId: Guid;
+        EmptyId: Guid;
+    begin
+        // [GIVEN] A JSON upload. [WHEN] Complete runs. [THEN] The provider receives normalized JSON and staging is consumed.
+        Initialize();
+        StagingId := Upload('{"value":156}', 'fixture.json', ' Application/JSON; charset=utf-8 ');
+        Response := Execute(Enum::"Message Type ori"::"LLM.Prompt.Complete", Request(StagingId, EmptyId));
+        Assert.AreEqual('Success', Response.GetText('status'), Describe(Response));
+        Payload.ReadFrom(Mock.GetLastCompletePayload());
+        Payload.GetArray('files').Get(0, FileToken);
+        Assert.AreEqual('application/json', FileToken.AsObject().GetText('mimeType'), 'Normalized JSON MIME.');
+        Assert.AreEqual('eyJ2YWx1ZSI6MTU2fQ==', FileToken.AsObject().GetText('data'), 'Exact JSON bytes.');
+        Assert.IsFalse(Staging.Exists(StagingId), 'Upload consumed.');
+    end;
+
     [Test]
     procedure Scenario_AC03_MultipleFiles_Ordered()
     var

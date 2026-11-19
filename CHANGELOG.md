@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-18) - Custom LLM: staged attachments on Ask (#156)
+
+- Root cause: the Custom LLM Ask path sent every non-image file as an OpenAI `file` part (`data:text/plain;base64,...`) and returned any failure as a thrown text, so an OpenAI-compatible text model refused the request and the caller saw only "The language model provider could not complete the prompt." with no status or reason.
+- Staged and inline `text/*` and `application/json` files are now text content parts (`Attached file <name>:` plus the decoded text), the same as `LLM.Prompt.Complete` (#133); PNG and JPEG stay image parts. This also holds for the continuation rounds after tool calls.
+- A file type the endpoint cannot take (for example a PDF) is refused before the call with `InvalidParameter` that names the provider (Custom LLM) and the file, parameter `file`/`files[n]`, received = the MIME type. New contract error text on `LLM.Prompt.Ask` and `LLM.Prompt.Complete` (is-IS translated, 4 new labels in the is-IS file). The PDF refusal applies to Ask only; `LLM.Prompt.Complete` on Custom LLM is unchanged.
+- A failed Custom LLM chat call returns the safe prompt error: HTTP status in `received` and a redacted provider reason (4xx other than 401/403), never the provider body, like Gemini (#134).
+- Tests (mock only): new codeunit **96082** `LLM 156 Custom Ask Tests` (staged text 1033/1039, staged text with html, PNG, PDF refusal 1033/1039, 400 with redacted reason 1033/1039, 401, staged/inline normalized JSON, and inline text with safe failure after a tool continuation). The shared staging suite also verifies JSON on Complete. The existing MCP probe provides bounded mock-only Custom LLM scenarios with owned-data cleanup. No new product objects.
+
 ### Fixed (2026-11-18) - Icelandic full-suite test expectations (#151–#155)
 
 - The 1039 full-suite run exposed 11 failures in test codeunits 96018, 96034, 96037, 96067 and 96079: one outdated Icelandic success label and English-only expected error/contract text. Updated the test resources to the existing product translations. All assertions, boundary checks, error cases and the 686 test methods remain; tests execute in the selected language. No product behavior, contract or translation changed.

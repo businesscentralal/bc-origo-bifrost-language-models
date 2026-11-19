@@ -993,6 +993,30 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Afkóðuð stærð allra viðhengdra skráa saman er stærri en heildarstærðartakmörkin.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType TotalOversizeWhenTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3067937755" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The %1 provider cannot take the attached file %2 (%3).</source>
+          <target>Veitandinn %1 getur ekki tekið við viðhengdu skránni %2 (%3).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = provider name, %2 = file name, %3 = MIME type, is-IS=Veitandinn %1 getur ekki tekið við viðhengdu skránni %2 (%3).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedAttachmentErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 967285710" size-unit="char" translate="yes" xml:space="preserve">
+          <source>a text file (text/*), application/json, PNG or JPEG</source>
+          <target>textaskrá (text/*), application/json, PNG eða JPEG</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=textaskrá (text/*), application/json, PNG eða JPEG</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedAttachmentExpectedTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 3519448219" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send the content as a text file, or use a language model whose provider takes this file type. No request was sent.</source>
+          <target>Sendu efnið sem textaskrá, eða notaðu mállíkan þar sem veitandinn tekur við þessari skráargerð. Engin beiðni var send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sendu efnið sem textaskrá, eða notaðu mállíkan þar sem veitandinn tekur við þessari skráargerð. Engin beiðni var send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedAttachmentNextStepTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2221206041 - NamedType 1968349404" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The language model uses an OpenAI-compatible endpoint that takes text files, JSON, PNG and JPEG, and the attached file is of another type, for example a PDF. No request is sent.</source>
+          <target>Mállíkanið notar OpenAI-samhæfðan endapunkt sem tekur við textaskrám, JSON, PNG og JPEG og viðhengda skráin er af annarri gerð, til dæmis PDF. Engin beiðni er send.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Mállíkanið notar OpenAI-samhæfðan endapunkt sem tekur við textaskrám, JSON, PNG og JPEG og viðhengda skráin er af annarri gerð, til dæmis PDF. Engin beiðni er send.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LangModel Prov. Base ori - NamedType UnsupportedAttachmentWhenTxt</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2221206041 - NamedType 1700563337" size-unit="char" translate="yes" xml:space="preserve">
           <source>This language model accepts only PNG and JPEG images.</source>
           <target>Þetta mállíkan tekur aðeins við PNG- og JPEG-myndum.</target>

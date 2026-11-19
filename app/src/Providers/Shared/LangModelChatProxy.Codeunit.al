@@ -26,6 +26,7 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         XaiTransport: Boolean;
         GeminiSafeTransport: Boolean;
         GeminiDocumentTransport: Boolean;
+        InlineTextFiles: Boolean;
         MissingMessageErr: Label 'AI model returned a choice without a "message" field. Response snippet: %1', Comment = '%1 = raw response snippet, is-IS=Gervigreindarlíkanið skilaði vali án "message"-reits. Sýnishorn af svari: %1';
 
     /// <summary>Uses safe prompt failures and per-round xAI document uploads for this proxy instance.</summary>
@@ -44,6 +45,17 @@ codeunit 10035412 "LangModel Chat Proxy ori"
         TempGeminiArgument := Argument;
         TempGeminiArgument.SetApiKey(Argument.GetApiKey());
         GeminiSafeTransport := true;
+    end;
+
+    /// <summary>
+    /// Custom LLM (OpenAI-compatible chat API): failures are safe prompt errors (HTTP status and a redacted reason), and text files
+    /// are sent as text content parts. Only PNG and JPEG stay image parts; a text-only endpoint refuses an OpenAI file part (#156).
+    /// </summary>
+    [NonDebuggable]
+    procedure UseSafeInlineTextTransport(var Argument: Record "Bifrost Chat Argument ori" temporary)
+    begin
+        UseGeminiSafeTransport(Argument);
+        InlineTextFiles := true;
     end;
 
     /// <summary>
@@ -97,7 +109,10 @@ codeunit 10035412 "LangModel Chat Proxy ori"
 
         SystemPrompt := BuildSystemPrompt(PayloadObject, Argument);
         ParseMessages(PayloadObject, Messages);
-        ProviderBase.AttachFilesToMessages(PayloadObject, Messages);
+        if InlineTextFiles then
+            ProviderBase.AttachCompletionFilesToMessages(PayloadObject, Messages)
+        else
+            ProviderBase.AttachFilesToMessages(PayloadObject, Messages);
 
         if SystemPrompt <> '' then
             AddSystemMessage(Messages, SystemPrompt);
