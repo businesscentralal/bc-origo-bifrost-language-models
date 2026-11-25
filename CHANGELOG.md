@@ -4,6 +4,17 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-25) - Language model usage and historical cost (#168)
+
+- Each provider request records token counts, cached/reasoning tokens when reported, duration, model, source, user, outcome and a metadata-only Request Log reference. Prompt, response, file and credential content is excluded. Missing usage is marked explicitly. One `ORI-LM-USAGE` telemetry event contains only model, source, token counts and outcome.
+- Set **Input Price per 1M**, **Output Price per 1M**, and **Usage Currency Code** on a Language Model card. Cost is input tokens × input price / 1,000,000 + output tokens × output price / 1,000,000. Each call stores its prices and cost; later changes never recalculate history. Prices are administrator-maintained estimates, not provider invoices.
+- The bilingual **Usage guide** action explains prices, usage flags, company-wide compression, job-queue scheduling and retention directly in the product. The contextual model-card help links remain valid in both languages.
+- Open **Usage log** from the model card to filter recorded calls. **Daily totals** opens compressed history. Card totals combine detail and daily rows for the current month in the selected usage currency; different currencies are never added together.
+- **Compression setup** defaults to 30 days and does not retain user identity. **Compress usage** moves strictly older days into daily totals and deletes only those detail rows in the same transaction. Repeating the action is safe. An optional Job Queue Entry can run codeunit 10035445. Compression applies company-wide regardless of the current list filter.
+- Standard **Retention Policies** recognizes detail (call timestamp) and daily totals (call date). Installation/upgrade creates disabled policies for 90 days of detail and two years of daily history. Administrators choose when to enable them. Schedule compression before retention if daily history must be preserved.
+- Assign **BIFROST LLM UseR ori** for read-only usage access, or **BIFROST LLM Use ori** for compression administration. The Foundation Full role includes administration. Direct log writes are not granted.
+- New objects: tables/pages 10035440 `LLM Usage Log ori`, 10035441 `LLM Usage Daily ori`, 10035442 `LLM Usage Setup ori`; codeunits 10035440 `LLM Usage Recorder ori`, 10035443 `LLM Usage Copilot ori`, 10035444 `LLM Usage Retention ori`, 10035445 `LLM Usage Compression ori`, 10035446 `LLM Usage Help ori`; permission sets 10035440/10035441. Tests: 96083, mock 96084, reserved-endpoint MCP fixture 96085. EN/is-IS captions and tooltips included.
+
 ### Fixed (2026-11-18) - Custom LLM: staged attachments on Ask (#156)
 
 - Root cause: the Custom LLM Ask path sent every non-image file as an OpenAI `file` part (`data:text/plain;base64,...`) and returned any failure as a thrown text, so an OpenAI-compatible text model refused the request and the caller saw only "The language model provider could not complete the prompt." with no status or reason.

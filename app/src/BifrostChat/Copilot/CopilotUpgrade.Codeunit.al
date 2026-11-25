@@ -28,5 +28,6 @@ codeunit 10035391 "Copilot Upgrade ori"
         Install.RegisterSecrets();
         Install.ClaimChatProvider();
         Install.InitAskSetup();
+        Install.InitUsageSetup();
     end;
 }

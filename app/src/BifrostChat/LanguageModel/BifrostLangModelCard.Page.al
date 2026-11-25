@@ -24,6 +24,36 @@ page 10035343 "Bifrost LangModel Card ori"
     {
         area(Content)
         {
+            group(UsagePricing)
+            {
+                Caption = 'Usage and pricing', Comment = 'is-IS=Notkun og verð';
+                field("Input Price per 1M"; Rec."Input Price per 1M") { ApplicationArea = All; }
+                field("Output Price per 1M"; Rec."Output Price per 1M") { ApplicationArea = All; }
+                field("Usage Currency Code"; Rec."Usage Currency Code") { ApplicationArea = All; }
+                field(MonthInputTokens; MonthInputTokens)
+                {
+                    Caption = 'Input tokens this month', Comment = 'is-IS=Inntakstákn þessa mánaðar';
+                    ApplicationArea = All;
+                    Editable = false;
+                    ToolTip = 'Shows input tokens in detail and daily totals for this model and the selected usage currency.', Comment = 'is-IS=Sýnir inntakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.';
+                }
+                field(MonthOutputTokens; MonthOutputTokens)
+                {
+                    Caption = 'Output tokens this month', Comment = 'is-IS=Úttakstákn þessa mánaðar';
+                    ApplicationArea = All;
+                    Editable = false;
+                    ToolTip = 'Shows output tokens in detail and daily totals for this model and the selected usage currency.', Comment = 'is-IS=Sýnir úttakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.';
+                }
+                field(MonthCost; MonthCost)
+                {
+                    Caption = 'Cost this month', Comment = 'is-IS=Kostnaður þessa mánaðar';
+                    ApplicationArea = All;
+                    Editable = false;
+                    DecimalPlaces = 0 : 8;
+                    ToolTip = 'Shows historical cost for this model in the selected usage currency, including compressed daily totals.', Comment = 'is-IS=Sýnir sögulegan kostnað mállíkans í völdum gjaldmiðli, ásamt þjöppuðum dagsamtölum.';
+                }
+            }
+
             group(General)
             {
                 Caption = 'General', Comment = 'is-IS=Almennt';
@@ -214,6 +244,16 @@ page 10035343 "Bifrost LangModel Card ori"
     {
         area(Processing)
         {
+            action(UsageLog)
+            {
+                Caption = 'Usage log', Comment = 'is-IS=Notkunarskrá';
+                ApplicationArea = All;
+                Image = Log;
+                RunObject = page "LLM Usage Log ori";
+                RunPageLink = "Language Model Code" = field(Code);
+                ToolTip = 'Opens the content-free call history for this language model.', Comment = 'is-IS=Opnar kallsögu mállíkans án innihalds skilaboða.';
+            }
+
             action(ImportDefaults)
             {
                 ApplicationArea = All;
@@ -397,6 +437,9 @@ page 10035343 "Bifrost LangModel Card ori"
     }
 
     var
+        MonthInputTokens: BigInteger;
+        MonthOutputTokens: BigInteger;
+        MonthCost: Decimal;
         SkillTextValue: Text;
         KeyMissingHint: Text;
         SkillPlaceholderTxt: Label 'Enter skill instructions in markdown...', Comment = 'is-IS=Sláðu inn hæfnileiðbeiningar á markdown-sniði...';
@@ -418,7 +461,12 @@ page 10035343 "Bifrost LangModel Card ori"
         SkillEditorReady: Boolean;
 
     trigger OnAfterGetCurrRecord()
+    var
+        UsageEntries: Record "LLM Usage Log ori";
+        Compression: Codeunit "LLM Usage Compression ori";
     begin
+        if UsageEntries.ReadPermission() then
+            Compression.MonthTotals(Rec.Code, Rec."Usage Currency Code", MonthInputTokens, MonthOutputTokens, MonthCost);
         SkillTextValue := Rec.GetSkill();
         if SkillEditorReady then begin
             CurrPage.SkillEditor.SetReadOnly(not CurrPage.Editable());

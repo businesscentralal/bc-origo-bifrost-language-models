@@ -285,7 +285,7 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         if AnthropicTools.Count() > 0 then
             RequestBody.Add('tools', AnthropicTools);
 
-        if not TrySendMessages(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response) then begin
+        if not SendMessagesWithUsage(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response) then begin
             // #125 AC03: an HTTP failure keeps its status, a sanitised error code and a redacted 4xx reason, as Complete does.
             if LastHttpStatus <> 0 then begin
                 ClearLastError();
@@ -347,6 +347,18 @@ codeunit 10035417 "Anthropic LangModel Proxy ori"
         LastProviderErrorCode := ProviderBase.SanitizeProviderErrorCode(ResponseText);
         if (HttpStatus >= 400) and (HttpStatus < 500) and not (HttpStatus in [401, 403]) then
             LastProviderReason := ProviderBase.ReadProviderReason(ResponseText);
+    end;
+
+    local procedure SendMessagesWithUsage(BaseUrl: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject): Boolean
+    var
+        TempEntry: Record "LLM Usage Log ori" temporary;
+        Usage: Codeunit "LLM Usage Recorder ori";
+        Succeeded: Boolean;
+    begin
+        Usage.BeginCall(TempEntry);
+        Succeeded := TrySendMessages(BaseUrl, ApiKey, TimeoutMs, RequestBody, Response);
+        Usage.FinishCall(TempEntry, Response, Succeeded, LastHttpStatus);
+        exit(Succeeded);
     end;
 
     [TryFunction]

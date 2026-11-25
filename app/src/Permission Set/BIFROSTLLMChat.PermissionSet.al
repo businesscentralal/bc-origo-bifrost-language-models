@@ -14,6 +14,8 @@ permissionset 10035398 "BIFROST LLM Chat ori"
     Caption = 'Bifrost LLM Chat', MaxLength = 30, Comment = 'is-IS=Bifröst LLM-spjall';
 
     Permissions =
+        codeunit "LLM Usage Recorder ori" = X,
+        codeunit "LLM Usage Copilot ori" = X,
         codeunit "LLM Staging Files ori" = X,
         tabledata "Bifrost Language Model ori" = R,
         tabledata "LangModel Ask Setup ori" = R,

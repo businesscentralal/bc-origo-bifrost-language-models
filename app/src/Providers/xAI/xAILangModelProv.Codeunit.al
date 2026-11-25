@@ -29,9 +29,14 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
     /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
+        Usage: Codeunit "LLM Usage Recorder ori";
         ProcType: Enum "Bifrost Chat Proc. Type ori";
     begin
         ProcType := Argument."Procedure Type";
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then begin
+            Usage.BeginScope();
+            Usage.SetContext(Argument);
+        end;
         case ProcType of
             ProcType::IsConfigured:
                 Argument."Result Boolean" := ProviderBase.IsConfigured(Argument, DefaultBaseUrlTok);
@@ -92,6 +97,8 @@ codeunit 10035418 "xAI LangModel Prov. ori" implements "Bifrost LangModel Provid
             ProcType::GetDefaultSkillText:
                 Argument.SetResultText('');
         end;
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then
+            Usage.EndScope();
     end;
 
     [NonDebuggable]

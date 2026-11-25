@@ -20,9 +20,14 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
     /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
+        Usage: Codeunit "LLM Usage Recorder ori";
         ProcType: Enum "Bifrost Chat Proc. Type ori";
     begin
         ProcType := Argument."Procedure Type";
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then begin
+            Usage.BeginScope();
+            Usage.SetContext(Argument);
+        end;
         case ProcType of
             ProcType::IsConfigured:
                 Argument."Result Boolean" := CheckIsConfigured();
@@ -72,6 +77,8 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
             ProcType::GetDefaultContextTokens:
                 Argument."Result Integer" := 0;
         end;
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then
+            Usage.EndScope();
     end;
 
     local procedure CheckIsConfigured(): Boolean
@@ -147,7 +154,7 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
 
         // Business Central throws for a refused managed call; the error is kept as a redacted reason (#132).
         ClearLastError();
-        if not TryGenerateCompletion(AOAIChatMessages, AOAIOperationResponse) then begin
+        if not GenerateCompletion(AOAIChatMessages, AOAIOperationResponse) then begin
             Failure := ProviderBase.BuildCopilotFailure('', '', -1, GetLastErrorText());
             ClearLastError();
             Failure.WriteTo(ResultText);
@@ -167,18 +174,18 @@ codeunit 10035385 "Copilot LangModel Prov. ori" implements "Bifrost LangModel Pr
         Argument.SetResultText(ResultText);
     end;
 
-    [TryFunction]
     [NonDebuggable]
-    local procedure TryGenerateCompletion(var AOAIChatMessages: Codeunit "AOAI Chat Messages"; var AOAIOperationResponse: Codeunit "AOAI Operation Response")
+    local procedure GenerateCompletion(var AOAIChatMessages: Codeunit "AOAI Chat Messages"; var AOAIOperationResponse: Codeunit "AOAI Operation Response"): Boolean
     var
         AzureOpenAI: Codeunit "Azure OpenAI";
+        UsageCopilot: Codeunit "LLM Usage Copilot ori";
         AOAIDeployments: Codeunit "AOAI Deployments";
         AOAIChatCompletionParams: Codeunit "AOAI Chat Completion Params";
     begin
         AzureOpenAI.SetCopilotCapability(Enum::"Copilot Capability"::"Bifrost Chat ori");
         AzureOpenAI.SetManagedResourceAuthorization(Enum::"AOAI Model Type"::"Chat Completions", AOAIDeployments.GetGPT41Latest());
         AOAIChatCompletionParams.SetMaxTokens(4096);
-        AzureOpenAI.GenerateChatCompletion(AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse);
+        exit(UsageCopilot.Generate(AzureOpenAI, AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse));
     end;
 
     /// <summary>

@@ -29,6 +29,7 @@ codeunit 10035390 "Copilot Install ori"
         RegisterSecrets();
         ClaimChatProvider();
         InitAskSetup();
+        InitUsageSetup();
     end;
 
     /// <summary>
@@ -36,6 +37,21 @@ codeunit 10035390 "Copilot Install ori"
     /// (caps 40 / 20 / 20000, defaults 15 / 10 / 8000), so nothing changes until an administrator raises them.
     /// An existing row is never changed. Called from install and from upgrade.
     /// </summary>
+    /// <summary>Registers standard disabled retention policies and initializes compression defaults.</summary>
+    procedure InitUsageSetup()
+    var
+        UsageSetup: Record "LLM Usage Setup ori";
+        Retention: Codeunit "LLM Usage Retention ori";
+    begin
+        Retention.InstallDefaults();
+        if not UsageSetup.Get() then begin
+            UsageSetup.Init();
+            UsageSetup."Compress After Days" := 30;
+            UsageSetup.Insert(true);
+        end;
+    end;
+
+    /// <summary>Initializes the Ask configuration.</summary>
     procedure InitAskSetup()
     var
         AskSetup: Record "LangModel Ask Setup ori";

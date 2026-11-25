@@ -63,6 +63,30 @@ codeunit 10035411 "LangModel API Client ori"
     [NonDebuggable]
     procedure SendToEndpoint(ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject) Response: JsonObject
     var
+        TempEntry: Record "LLM Usage Log ori" temporary;
+        Usage: Codeunit "LLM Usage Recorder ori";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        FailureText: Text;
+    begin
+        Usage.BeginCall(TempEntry);
+        if not TrySendEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, Response) then begin
+            FailureText := GetLastErrorText();
+            Usage.FinishCall(TempEntry, Response, false, LastChatFailureStatus);
+            Error(FailureText);
+        end;
+        Usage.FinishCall(TempEntry, Response, not ProviderBase.HasProviderError(Response), 200);
+    end;
+
+    [TryFunction]
+    [NonDebuggable]
+    local procedure TrySendEndpoint(ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; var Response: JsonObject)
+    begin
+        Response := DoSendToEndpoint(ChatUrl, AuthHeaderName, ApiKey, TimeoutMs, RequestBody);
+    end;
+
+    [NonDebuggable]
+    local procedure DoSendToEndpoint(ChatUrl: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject) Response: JsonObject
+    var
         HttpClientVar: HttpClient;
         HttpContent: HttpContent;
         HttpResponse: HttpResponseMessage;
@@ -161,6 +185,21 @@ codeunit 10035411 "LangModel API Client ori"
     /// <summary>Sends a prompt with optional protocol headers, discarding failed response bodies before logging.</summary>
     [NonDebuggable]
     procedure SendPromptToEndpoint(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject) Response: JsonObject
+    var
+        TempEntry: Record "LLM Usage Log ori" temporary;
+        Usage: Codeunit "LLM Usage Recorder ori";
+        ProviderBase: Codeunit "LangModel Prov. Base ori";
+        Status: Integer;
+    begin
+        Usage.BeginCall(TempEntry);
+        Response := DoSendPromptToEndpoint(Url, AuthHeaderName, ApiKey, TimeoutMs, RequestBody, ExtraHeaders);
+        if Response.Contains('providerStatus') then
+            Status := Response.GetInteger('providerStatus');
+        Usage.FinishCall(TempEntry, Response, not ProviderBase.HasProviderError(Response), Status);
+    end;
+
+    [NonDebuggable]
+    local procedure DoSendPromptToEndpoint(Url: Text; AuthHeaderName: Text; ApiKey: SecretText; TimeoutMs: Integer; RequestBody: JsonObject; ExtraHeaders: JsonObject) Response: JsonObject
     var
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         ResponseText: Text;

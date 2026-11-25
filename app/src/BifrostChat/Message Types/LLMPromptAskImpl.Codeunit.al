@@ -243,7 +243,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         Preconditions.Add('A language model whose provider runs tools in separate steps is set up, with its API key; Copilot is refused.');
         Preconditions.Add('Outbound HttpClient requests are allowed for the app.');
         Effect.Add('effect', 'read');
-        Effect.Add('changes', 'Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, the deletion of the blobs this run created, and consumption of caller-owned staging uploads supplied in attachments.');
+        Effect.Add('changes', 'Sends the question, the context and the tool results to the external language model provider. The model runs read-only tools only, as the calling user; no Business Central business data is changed. The only writes are the Last Used On stamp of the API key, once after the loop, the deletion of the blobs this run created, and consumption of caller-owned staging uploads supplied in attachments. Usage accounting records one metadata-only token and historical cost row per provider request, including failed requests; usage rows contain no prompt, response, file content or credential.');
         Effect.Add('idempotent', false);
         Effect.Add('permissionSet', 'BIFROST Chat ori; BIFROST LLM Chat ori');
         Effect.Add('preconditions', Preconditions);
@@ -333,6 +333,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     var
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempChatArg: Record "Bifrost Chat Argument ori" temporary;
+        Usage: Codeunit "LLM Usage Recorder ori";
         BifrostChatMgt: Codeunit "Bifrost Chat Mgt ori";
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
@@ -534,7 +535,12 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
 
         AskTelemetry.LogStarted(ProviderName, BifrostLanguageModel.Code, CallerName);
         StartedAt := CurrentDateTime();
+        TempChatArg."Invocation Source" := 'LLM.Prompt.Ask';
+        if CallerName <> 'Direct' then
+            TempChatArg."Invocation Source" := CopyStr('LLM.Prompt.Ask/' + CallerName, 1, MaxStrLen(TempChatArg."Invocation Source"));
+        Usage.BeginScope();
         Completed := Runner.Run(TempChatArg, Runner.BuildSystemSuffix(Instructions), Runner.BuildUserMessage(Question, ContextText), RecordContext, HasRecordContext, ResponseJson);
+        Usage.EndScope();
         // After the loop (R1), also on the error path: one stamp, and this run's blobs only.
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         Runner.DeleteRunBlobs();

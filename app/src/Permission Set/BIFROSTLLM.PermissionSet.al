@@ -13,7 +13,11 @@ permissionset 10035404 "BIFROST LLM ori"
     Assignable = true;
     Caption = 'Bifrost Language Models', MaxLength = 30, Comment = 'is-IS=Bifröst mállíkön';
 
+    IncludedPermissionSets = "BIFROST LLM Use ori";
+
     Permissions =
+        codeunit "LLM Usage Recorder ori" = X,
+        codeunit "LLM Usage Copilot ori" = X,
         codeunit "LLM Staging Files ori" = X,
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = RIMD,

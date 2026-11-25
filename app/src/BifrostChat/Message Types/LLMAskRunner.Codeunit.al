@@ -527,6 +527,8 @@ codeunit 10035433 "LLM Ask Runner ori"
     local procedure SendRound(var TempChatArg: Record "Bifrost Chat Argument ori" temporary; PayloadText: Text; var Answer: JsonObject): Boolean
     begin
         Rounds += 1;
+        if TempChatArg."Invocation Source" = '' then
+            TempChatArg."Invocation Source" := 'LLM.Prompt.Ask';
         TempChatArg.SetPayload(PayloadText);
         TempChatArg.SetResultText('');
         TempChatArg."Procedure Type" := TempChatArg."Procedure Type"::SendChatMessage;
