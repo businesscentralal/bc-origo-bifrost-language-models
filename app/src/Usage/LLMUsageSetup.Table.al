@@ -28,4 +28,14 @@ table 10035442 "LLM Usage Setup ori"
         }
     }
     keys { key(PK; "Primary Key") { Clustered = true; } }
+
+    /// <summary>Creates the company setup with the default compression period when absent.</summary>
+    internal procedure EnsureDefault()
+    begin
+        if Get() then
+            exit;
+        Init();
+        "Compress After Days" := 30;
+        Insert(true);
+    end;
 }

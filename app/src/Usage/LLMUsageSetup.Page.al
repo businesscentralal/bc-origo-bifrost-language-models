@@ -26,10 +26,6 @@ page 10035442 "LLM Usage Setup ori"
     }
     trigger OnOpenPage()
     begin
-        if not Rec.Get() then begin
-            Rec.Init();
-            Rec."Compress After Days" := 30;
-            Rec.Insert(true);
-        end;
+        Rec.EnsureDefault();
     end;
 }

@@ -27,8 +27,10 @@ codeunit 10035445 "LLM Usage Compression ori"
             Setup."Compress After Days" := 30;
         end;
         Setup.TestField("Compress After Days");
+        // Usage is dated by the actual call, independent of the accounting work date.
         CutoffDate := Today() - Setup."Compress After Days";
         UsageLog.LockTable();
+        UsageLog.ReadIsolation := IsolationLevel::UpdLock;
         UsageLog.SetFilter("Call Date", '<%1', CutoffDate);
         if UsageLog.FindSet(true) then
             repeat
@@ -45,6 +47,7 @@ codeunit 10035445 "LLM Usage Compression ori"
         if KeepUser then
             UserID := UsageLog."User Security ID";
         Daily.LockTable();
+        Daily.ReadIsolation := IsolationLevel::UpdLock;
         Daily.SetRange("Call Date", UsageLog."Call Date");
         Daily.SetRange(Company, UsageLog.Company);
         Daily.SetRange("Language Model Code", UsageLog."Language Model Code");
@@ -85,6 +88,7 @@ codeunit 10035445 "LLM Usage Compression ori"
         FirstDay: Date;
         LastDay: Date;
     begin
+        // Report the actual calendar month, not the user's accounting work date.
         FirstDay := CalcDate('<-CM>', Today());
         LastDay := CalcDate('<CM>', Today());
         UsageLog.SetRange("Language Model Code", ModelCode);
