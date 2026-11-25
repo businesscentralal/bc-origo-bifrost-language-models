@@ -6,6 +6,7 @@ table 10035441 "LLM Usage Daily ori"
     Caption = 'LLM Daily Usage', Comment = 'is-IS=Dagleg mállíkananotkun';
     DataClassification = SystemMetadata;
     Extensible = false;
+    AllowInCustomizations = AsReadOnly;
     fields
     {
         field(1; "Entry No."; BigInteger)

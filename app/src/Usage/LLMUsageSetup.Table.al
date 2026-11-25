@@ -6,6 +6,7 @@ table 10035442 "LLM Usage Setup ori"
     Caption = 'LLM Usage Setup', Comment = 'is-IS=Uppsetning mállíkananotkunar';
     DataClassification = SystemMetadata;
     Extensible = false;
+    AllowInCustomizations = AsReadWrite;
     InherentPermissions = r;
     InherentEntitlements = r;
     fields

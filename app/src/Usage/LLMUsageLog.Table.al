@@ -6,6 +6,7 @@ table 10035440 "LLM Usage Log ori"
     Caption = 'LLM Usage Log', Comment = 'is-IS=Notkunarskrá mállíkana';
     DataClassification = SystemMetadata;
     Extensible = false;
+    AllowInCustomizations = AsReadOnly;
     fields
     {
         field(1; "Entry No."; BigInteger)
