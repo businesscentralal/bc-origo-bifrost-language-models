@@ -63,6 +63,11 @@ table 10035337 "Bifrost Chat Argument ori"
             Caption = 'Context Tokens', Comment = 'is-IS=Samhengistákn';
             DataClassification = SystemMetadata;
         }
+        field(17; "Invocation Source"; Text[50])
+        {
+            AllowInCustomizations = Never;
+            Caption = 'Invocation Source', Comment = 'is-IS=Uppruni kalls';
+        }
         field(40; "Debug Mode"; Boolean)
         {
             Caption = 'Debug Mode', Comment = 'is-IS=Villuleitarhamur';

@@ -7,7 +7,11 @@ using Origo.Bifrost;
 /// </summary>
 permissionsetextension 10035426 "BIFROST LLM Full ori" extends "BIFROST Full ori"
 {
+    IncludedPermissionSets = "BIFROST LLM Use ori";
+
     Permissions =
+        codeunit "LLM Usage Recorder ori" = X,
+        codeunit "LLM Usage Copilot ori" = X,
         codeunit "LLM Staging Files ori" = X,
         table "Bifrost Language Model ori" = X,
         tabledata "Bifrost Language Model ori" = RIMD,

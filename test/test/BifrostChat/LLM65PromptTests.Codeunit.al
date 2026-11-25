@@ -1228,6 +1228,7 @@ codeunit 96034 "LLM 65 Prompt Tests"
         RequestLog: Record "Request Log ori";
         Model: Record "Bifrost Language Model ori";
         HttpMock: Codeunit "LLM 65 HTTP Mock";
+        RequestLogReader: Codeunit "Request Log Reader ori";
         Response: JsonObject;
         CountBefore: Integer;
         OriginalDebugMode: Boolean;
@@ -1247,7 +1248,11 @@ codeunit 96034 "LLM 65 Prompt Tests"
         UnbindSubscription(HttpMock);
         AssertCodedError(Response, 'PreconditionFailed');
         AssertSecretAbsent(Response);
-        Assert.AreEqual(CountBefore, RequestLog.Count(), 'No provider text was buffered for logging.');
+        Assert.AreEqual(CountBefore + 1, RequestLog.Count(), 'Only the content-free usage correlation is logged.');
+        RequestLog.FindLast();
+        Assert.AreEqual('LLM usage', RequestLog.Operation, 'No provider debug log was buffered.');
+        Assert.AreEqual('', RequestLog."Service Base URL", 'No provider URL is retained.');
+        Assert.AreEqual('', RequestLogReader.GetRequestBody(RequestLog."Entry No."), 'No prompt or provider content is retained.');
         Model.Delete(true);
         SetupPage.OpenEdit();
         SetupPage."Request Debug Mode".SetValue(OriginalDebugMode);

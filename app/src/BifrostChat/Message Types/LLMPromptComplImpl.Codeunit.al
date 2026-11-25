@@ -193,7 +193,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         Preconditions.Add('A language model with a usable chat provider is set up: the one in roleCode, otherwise the caller''s own or the default language model, with its API key where the provider needs one.');
         Preconditions.Add('Outbound HttpClient requests are allowed for the app; otherwise the call is refused with PreconditionFailed.');
         Effect.Add('effect', 'read');
-        Effect.Add('changes', 'Sends the prompt, the system prompt and any file to the selected external language model provider and returns its answer; the data sent cannot be recalled and the answer can differ between calls. No Business Central business data is changed. Staged uploads supplied in attachments are consumed in the call transaction. The other write is the Last Used On stamp of the language model''s API key, at most once a day, after the provider has answered. The type itself does not commit.');
+        Effect.Add('changes', 'Sends the prompt, the system prompt and any file to the selected external language model provider and returns its answer; the data sent cannot be recalled and the answer can differ between calls. No Business Central business data is changed. Staged uploads supplied in attachments are consumed in the call transaction. The other write is the Last Used On stamp of the language model''s API key, at most once a day, after the provider has answered. The type itself does not commit. Usage accounting records one metadata-only token and historical cost row per provider request, including failed requests; usage rows contain no prompt, response, file content or credential.');
         Effect.Add('idempotent', false);
         Effect.Add('permissionSet', 'BIFROST Chat ori; BIFROST LLM Chat ori for non-Copilot providers');
         Effect.Add('preconditions', Preconditions);
@@ -313,6 +313,8 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
         ChatProvider: Codeunit "LangModel Chat Provider ori";
         CopilotProvider: Codeunit "Copilot LangModel Prov. ori";
         LangModelSecrets: Codeunit "LangModel Secrets ori";
+        Usage: Codeunit "LLM Usage Recorder ori";
+        AskTelemetry: Codeunit "LLM Ask Telemetry ori";
         ProviderBase: Codeunit "LangModel Prov. Base ori";
         SessionTime: Codeunit "LLM Session Time ori";
         StagingFiles: Codeunit "LLM Staging Files ori";
@@ -405,13 +407,19 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
 
         PayloadJson.WriteTo(ResponseText);
         TempChatArg.SetPayload(ResponseText);
+        TempChatArg."Invocation Source" := 'LLM.Prompt.Complete';
+        if Argument.GetInvocationSource() <> Enum::"Invocation Source ori"::Direct then
+            TempChatArg."Invocation Source" := CopyStr('LLM.Prompt.Complete/' + AskTelemetry.GetCallerName(Argument.GetInvocationSource()), 1, MaxStrLen(TempChatArg."Invocation Source"));
         TempChatArg."Procedure Type" := TempChatArg."Procedure Type"::CompletePrompt;
         TempChatArg.SetResultText('');
+        Usage.BeginScope();
         if not TryCompletePrompt(Provider, TempChatArg) then begin
+            Usage.EndScope();
             ClearLastError();
             ProviderBase.RespondPromptError(Argument, ResponseJson);
             exit;
         end;
+        Usage.EndScope();
         ResponseText := TempChatArg.GetResultText();
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
 

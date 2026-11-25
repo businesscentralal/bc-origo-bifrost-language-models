@@ -23,9 +23,14 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
     /// </summary>
     procedure Execute(var Argument: Record "Bifrost Chat Argument ori" temporary)
     var
+        Usage: Codeunit "LLM Usage Recorder ori";
         ProcType: Enum "Bifrost Chat Proc. Type ori";
     begin
         ProcType := Argument."Procedure Type";
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then begin
+            Usage.BeginScope();
+            Usage.SetContext(Argument);
+        end;
         case ProcType of
             ProcType::IsConfigured:
                 Argument."Result Boolean" := CheckIsConfigured(Argument);
@@ -86,6 +91,8 @@ codeunit 10035415 "Custom LLM LangModel Prov. ori" implements "Bifrost LangModel
             ProcType::GetDefaultSkillText:
                 Argument.SetResultText('');
         end;
+        if ProcType in [ProcType::SendChatMessage, ProcType::CompletePrompt, ProcType::ContinueWithToolResults] then
+            Usage.EndScope();
     end;
 
     local procedure CheckIsConfigured(var Argument: Record "Bifrost Chat Argument ori" temporary): Boolean

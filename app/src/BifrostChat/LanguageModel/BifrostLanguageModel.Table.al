@@ -171,6 +171,28 @@ table 10035335 "Bifrost Language Model ori"
             MinValue = 0;
         }
 
+        field(28; "Input Price per 1M"; Decimal)
+        {
+            AllowInCustomizations = AsReadWrite;
+            Caption = 'Input Price per 1M', Comment = 'is-IS=Verð á milljón inntakstákna';
+            ToolTip = 'Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.', Comment = 'is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.';
+            MinValue = 0;
+            DecimalPlaces = 0 : 8;
+        }
+        field(29; "Output Price per 1M"; Decimal)
+        {
+            AllowInCustomizations = AsReadWrite;
+            Caption = 'Output Price per 1M', Comment = 'is-IS=Verð á milljón úttakstákna';
+            ToolTip = 'Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.', Comment = 'is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.';
+            MinValue = 0;
+            DecimalPlaces = 0 : 8;
+        }
+        field(30; "Usage Currency Code"; Code[10])
+        {
+            AllowInCustomizations = AsReadWrite;
+            Caption = 'Usage Currency Code', Comment = 'is-IS=Gjaldmiðill notkunar';
+            ToolTip = 'Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.', Comment = 'is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.';
+        }
     }
 
     keys

@@ -39,6 +39,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Inntakstákn</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Chat Argument ori - Field Input Tokens - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3454536554 - Field 1563256135 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invocation Source</source>
+          <target>Uppruni kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppruni kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Chat Argument ori - Field Invocation Source - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3454536554 - Field 3030464295 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Language Model SystemId</source>
           <target>Kerfiskenni mállíkans</target>
@@ -183,6 +189,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Lýsing</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Description - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 640125924 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.</source>
+          <target>Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Input Price per 1M - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 640125924 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Input Price per 1M</source>
+          <target>Verð á milljón inntakstákna</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Verð á milljón inntakstákna</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Input Price per 1M - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3650785778 - Field 3898104680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Max Tokens</source>
           <target>Hámarksfjöldi tákna</target>
@@ -201,6 +219,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Líkanaslóð</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Models Path - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 4038691915 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.</source>
+          <target>Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Output Price per 1M - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 4038691915 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Output Price per 1M</source>
+          <target>Verð á milljón úttakstákna</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Verð á milljón úttakstákna</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Output Price per 1M - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3650785778 - Field 3454604187 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Skill</source>
           <target>Hæfni</target>
@@ -212,6 +242,18 @@
           <target>Tímamörk (sekúndur)</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Tímamörk (sekúndur)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Timeout Seconds - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 623034481 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the rate or currency used to compute the cost of new calls. Historical costs are unchanged.</source>
+          <target>Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir verð eða gjaldmiðil fyrir kostnað nýrra kalla. Eldri kostnaður breytist ekki.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Usage Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3650785778 - Field 623034481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Usage Currency Code</source>
+          <target>Gjaldmiðill notkunar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gjaldmiðill notkunar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Bifrost Language Model ori - Field Usage Currency Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2666554357 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Chat Service Gate</source>
@@ -332,6 +374,294 @@
           <target>Aðallykill</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Aðallykill</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table LangModel Ask Setup ori - Field Primary Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Daily Usage</source>
+          <target>Dagleg mállíkananotkun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Dagleg mállíkananotkun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 340913431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cache Creation Tokens</source>
+          <target>Tákn við myndun skyndiminnis</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tákn við myndun skyndiminnis</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Cache Creation Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 1632235148 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cached Tokens</source>
+          <target>Tákn úr skyndiminni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tákn úr skyndiminni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Cached Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 1619691195 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Count</source>
+          <target>Fjöldi kalla</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjöldi kalla</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Call Count - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 4154888130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Date</source>
+          <target>Dagsetning kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Dagsetning kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Call Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Fyrirtæki</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirtæki</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 4231510117 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cost</source>
+          <target>Kostnaður</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kostnaður</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Cost - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <target>Gjaldmiðilskóði</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gjaldmiðilskóði</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <target>Færslunr.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Færslunr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 264920029 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Count</source>
+          <target>Fjöldi villna</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fjöldi villna</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Error Count - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 2719666954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Input Tokens</source>
+          <target>Inntakstákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Inntakstákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Input Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 1563256135 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invocation Source</source>
+          <target>Uppruni kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppruni kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Invocation Source - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 1760402076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language Model Code</source>
+          <target>Kóði mállíkans</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kóði mállíkans</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Language Model Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 4202864534 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Model ID</source>
+          <target>Líkankenni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Líkankenni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Model ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 1678292497 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Output Tokens</source>
+          <target>Úttakstákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úttakstákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Output Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 297635827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Provider</source>
+          <target>Veitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Provider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 3766001456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reasoning Tokens</source>
+          <target>Röksemdafærslutákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Röksemdafærslutákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field Reasoning Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4139598071 - Field 3021697414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Security ID</source>
+          <target>Öryggiskenni notanda</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Öryggiskenni notanda</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Daily ori - Field User Security ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Usage Log</source>
+          <target>Notkunarskrá mállíkana</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notkunarskrá mállíkana</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 340913431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cache Creation Tokens</source>
+          <target>Tákn við myndun skyndiminnis</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tákn við myndun skyndiminnis</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Cache Creation Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 1632235148 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cached Tokens</source>
+          <target>Tákn úr skyndiminni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tákn úr skyndiminni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Cached Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 4154888130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Date</source>
+          <target>Dagsetning kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Dagsetning kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Call Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 18345306 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Called At</source>
+          <target>Tími kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tími kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Called At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Fyrirtæki</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Fyrirtæki</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 4231510117 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cost</source>
+          <target>Kostnaður</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kostnaður</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Cost - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <target>Gjaldmiðilskóði</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Gjaldmiðilskóði</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3346431308 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Duration Ms</source>
+          <target>Lengd í ms</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lengd í ms</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Duration Ms - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <target>Færslunr.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Færslunr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3676003639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Code</source>
+          <target>Villukóði</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Villukóði</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Error Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 640125924 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Input Price per 1M</source>
+          <target>Verð á milljón inntakstákna</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Verð á milljón inntakstákna</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Input Price per 1M - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 2719666954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Input Tokens</source>
+          <target>Inntakstákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Inntakstákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Input Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 1563256135 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invocation Source</source>
+          <target>Uppruni kalls</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppruni kalls</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Invocation Source - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 1760402076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language Model Code</source>
+          <target>Kóði mállíkans</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kóði mállíkans</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Language Model Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 4202864534 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Model ID</source>
+          <target>Líkankenni</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Líkankenni</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Model ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 4038691915 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Output Price per 1M</source>
+          <target>Verð á milljón úttakstákna</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Verð á milljón úttakstákna</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Output Price per 1M - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 1678292497 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Output Tokens</source>
+          <target>Úttakstákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úttakstákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Output Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 297635827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Provider</source>
+          <target>Veitandi</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Veitandi</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Provider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3766001456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reasoning Tokens</source>
+          <target>Röksemdafærslutákn</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Röksemdafærslutákn</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Reasoning Tokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 2274578874 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Request Log Entry No.</source>
+          <target>Færslunr. beiðniskrár</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Færslunr. beiðniskrár</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Request Log Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3878926381 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Success</source>
+          <target>Tókst</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tókst</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Success - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 17281345 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Usage Not Reported</source>
+          <target>Táknanotkun ekki tilkynnt</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Táknanotkun ekki tilkynnt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field Usage Not Reported - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 503294060 - Field 3021697414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Security ID</source>
+          <target>Öryggiskenni notanda</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Öryggiskenni notanda</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Log ori - Field User Security ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Usage Setup</source>
+          <target>Uppsetning mállíkananotkunar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetning mállíkananotkunar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Field 931358383 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies how many days of detailed calls to keep before compression.</source>
+          <target>Tilgreinir hversu marga daga á að geyma nákvæmar kallfærslur fyrir þjöppun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hversu marga daga á að geyma nákvæmar kallfærslur fyrir þjöppun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Field Compress After Days - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Field 931358383 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compress After Days</source>
+          <target>Þjappa eftir daga</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þjappa eftir daga</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Field Compress After Days - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Field 3730990391 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether compressed rows retain the user identity. Off by default.</source>
+          <target>Tilgreinir hvort þjappaðar færslur geymi auðkenni notanda. Sjálfgefið er slökkt.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hvort þjappaðar færslur geymi auðkenni notanda. Sjálfgefið er slökkt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Field Keep User in Daily Totals - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Field 3730990391 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Keep User in Daily Totals</source>
+          <target>Geyma notanda í dagsamtölum</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Geyma notanda í dagsamtölum</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Field Keep User in Daily Totals - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3643768765 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <target>Aðallykill</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Aðallykill</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table LLM Usage Setup ori - Field Primary Key - Property Caption</note>
         </trans-unit>
         <trans-unit id="Codeunit 3867329394 - NamedType 1415688405" size-unit="char" translate="yes" xml:space="preserve">
           <source>Get key from Anthropic Console</source>
@@ -1689,6 +2019,12 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Hladdu skránni upp aftur og sendu nýtt stagingId hennar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Staging Files ori - NamedType UploadAgainTxt</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2803024799 - Method 366713437 - NamedType 3457356330" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set input and output prices per million tokens and the usage currency on the Language Model card. Costs are estimates at the prices in force for each call; changing a price never changes history. Missing usage is flagged, and failed calls have zero tokens.\Filter the usage log by date, model, user or source. Monthly card totals combine detail and daily history in the selected currency.\Compression setup keeps 30 days of detail by default. Compress usage applies to the entire company, even when this list is filtered. It aggregates older days and removes their detail in one transaction. Keep user in daily totals is off by default. To automate compression, schedule codeunit 10035445 in Job Queue Entries.\Standard Retention Policies contains disabled defaults: 90 days for detail, two years for daily totals. Enable and adjust them there. Schedule compression before retention to keep daily history. No prompt, response, file content or API key is stored in usage data.</source>
+          <target>Stilltu verð á milljón inntaks- og úttakstákna ásamt gjaldmiðli á mállíkanaspjaldinu. Kostnaður miðast við verð kalls; verðbreyting breytir ekki sögunni. Vöntun táknanotkunar er merkt og misheppnuð köll hafa engin tákn.\Síaðu notkunarskrána eftir dagsetningu, mállíkani, notanda eða uppruna. Mánaðarsamtöl á spjaldinu leggja saman nákvæmar færslur og dagsamtöl í völdum gjaldmiðli.\Uppsetning þjöppunar geymir sjálfgefið 30 daga af nákvæmum færslum. Þjappa notkun nær yfir allt fyrirtækið þótt listinn sé síaður. Aðgerðin leggur eldri daga saman og eyðir nákvæmum færslum þeirra í einni færslu. Sjálfgefið er ekki geymt auðkenni notanda í dagsamtölum. Tímasettu kóðaeiningu 10035445 í verkröð til sjálfvirkrar þjöppunar.\Staðlaðar varðveislureglur innihalda óvirkar sjálfgefnar reglur: 90 dagar fyrir nákvæmar færslur og tvö ár fyrir dagsamtöl. Virkjaðu og breyttu þeim þar. Tímasettu þjöppun á undan varðveislu til að halda dagsögu. Engar kvaðningar, svör, skráainnihald eða API-lyklar eru geymd í notkunargögnum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stilltu verð á milljón inntaks- og úttakstákna ásamt gjaldmiðli á mállíkanaspjaldinu. Kostnaður miðast við verð kalls; verðbreyting breytir ekki sögunni. Vöntun táknanotkunar er merkt og misheppnuð köll hafa engin tákn.\Síaðu notkunarskrána eftir dagsetningu, mállíkani, notanda eða uppruna. Mánaðarsamtöl á spjaldinu leggja saman nákvæmar færslur og dagsamtöl í völdum gjaldmiðli.\Uppsetning þjöppunar geymir sjálfgefið 30 daga af nákvæmum færslum. Þjappa notkun nær yfir allt fyrirtækið þótt listinn sé síaður. Aðgerðin leggur eldri daga saman og eyðir nákvæmum færslum þeirra í einni færslu. Sjálfgefið er ekki geymt auðkenni notanda í dagsamtölum. Tímasettu kóðaeiningu 10035445 í verkröð til sjálfvirkrar þjöppunar.\Staðlaðar varðveislureglur innihalda óvirkar sjálfgefnar reglur: 90 dagar fyrir nákvæmar færslur og tvö ár fyrir dagsamtöl. Virkjaðu og breyttu þeim þar. Tímasettu þjöppun á undan varðveislu til að halda dagsögu. Engar kvaðningar, svör, skráainnihald eða API-lyklar eru geymd í notkunargögnum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Usage Help ori - Method Show - NamedType UsageGuideMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1571639434 - NamedType 1415688405" size-unit="char" translate="yes" xml:space="preserve">
           <source>Get key from OpenAI Platform</source>
           <target>Sækja lykil á OpenAI Platform</target>
@@ -1941,6 +2277,48 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Hæfni</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control SkillContent - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 271331631 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Usage and pricing</source>
+          <target>Notkun og verð</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notkun og verð</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control UsagePricing - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 2124213285 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows historical cost for this model in the selected usage currency, including compressed daily totals.</source>
+          <target>Sýnir sögulegan kostnað mállíkans í völdum gjaldmiðli, ásamt þjöppuðum dagsamtölum.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir sögulegan kostnað mállíkans í völdum gjaldmiðli, ásamt þjöppuðum dagsamtölum.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthCost - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 2124213285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cost this month</source>
+          <target>Kostnaður þessa mánaðar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Kostnaður þessa mánaðar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthCost - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 2877053826 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows input tokens in detail and daily totals for this model and the selected usage currency.</source>
+          <target>Sýnir inntakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir inntakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthInputTokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 2877053826 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Input tokens this month</source>
+          <target>Inntakstákn þessa mánaðar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Inntakstákn þessa mánaðar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthInputTokens - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 306079457 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows output tokens in detail and daily totals for this model and the selected usage currency.</source>
+          <target>Sýnir úttakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Sýnir úttakstákn í nákvæmum færslum og dagsamtölum fyrir mállíkanið og valinn gjaldmiðil.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthOutputTokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Control 306079457 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Output tokens this month</source>
+          <target>Úttakstákn þessa mánaðar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Úttakstákn þessa mánaðar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Control MonthOutputTokens - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3015956304 - Action 3826974722 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Remove your personal API key for this language model. Chat requests then fall back to the shared key.</source>
           <target>Fjarlægja persónulegan API-lykil fyrir þetta mállíkan. Spjallbeiðnir nota þá sameiginlega lykilinn.</target>
@@ -2054,6 +2432,18 @@
           <target>Prófa</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Prófa</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Action TryIt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Action 416738827 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opens the content-free call history for this language model.</source>
+          <target>Opnar kallsögu mállíkans án innihalds skilaboða.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnar kallsögu mállíkans án innihalds skilaboða.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Action UsageLog - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3015956304 - Action 416738827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Usage log</source>
+          <target>Notkunarskrá</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notkunarskrá</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Bifrost LangModel Card ori - Action UsageLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3015956304 - Action 1396632029 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Keys</source>
@@ -2925,6 +3315,294 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Notandi</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page LangModel Wizard Users ori - Control UserName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 4139598071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Daily Usage</source>
+          <target>Dagleg mállíkananotkun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Dagleg mállíkananotkun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 1632235148 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies cached tokens for the recorded calls.</source>
+          <target>Tilgreinir tákn úr skyndiminni fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir tákn úr skyndiminni fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Cached Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 1619691195 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies call count for the recorded calls.</source>
+          <target>Tilgreinir fjölda kalla fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda kalla fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Call Count - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 4154888130 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies call date for the recorded calls.</source>
+          <target>Tilgreinir dagsetningu kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir dagsetningu kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Call Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies company for the recorded calls.</source>
+          <target>Tilgreinir fyrirtæki fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fyrirtæki fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 4231510117 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies cost for the recorded calls.</source>
+          <target>Tilgreinir kostnað fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir kostnað fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Cost - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 4198939294 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies currency code for the recorded calls.</source>
+          <target>Tilgreinir gjaldmiðil fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir gjaldmiðil fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 264920029 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies error count for the recorded calls.</source>
+          <target>Tilgreinir fjölda villna fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fjölda villna fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Error Count - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 2719666954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies input tokens for the recorded calls.</source>
+          <target>Tilgreinir inntakstákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir inntakstákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Input Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 1563256135 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies invocation source for the recorded calls.</source>
+          <target>Tilgreinir uppruna kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir uppruna kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Invocation Source - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 1760402076 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies language model code for the recorded calls.</source>
+          <target>Tilgreinir kóða mállíkans fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir kóða mállíkans fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Language Model Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 4202864534 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies model id for the recorded calls.</source>
+          <target>Tilgreinir líkankenni fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir líkankenni fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Model ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 1678292497 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies output tokens for the recorded calls.</source>
+          <target>Tilgreinir úttakstákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir úttakstákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Output Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 297635827 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies provider for the recorded calls.</source>
+          <target>Tilgreinir veitanda fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir veitanda fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Provider - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 3766001456 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies reasoning tokens for the recorded calls.</source>
+          <target>Tilgreinir röksemdafærslutákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir röksemdafærslutákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control Reasoning Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4139598071 - Control 3021697414 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies user security id for the recorded calls.</source>
+          <target>Tilgreinir öryggiskenni notanda fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir öryggiskenni notanda fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Daily ori - Control User Security ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Usage Log</source>
+          <target>Notkunarskrá mállíkana</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Notkunarskrá mállíkana</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 1632235148 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies cached tokens for the recorded calls.</source>
+          <target>Tilgreinir tákn úr skyndiminni fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir tákn úr skyndiminni fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Cached Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 4154888130 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies call date for the recorded calls.</source>
+          <target>Tilgreinir dagsetningu kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir dagsetningu kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Call Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 18345306 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies called at for the recorded calls.</source>
+          <target>Tilgreinir tíma kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir tíma kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Called At - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies company for the recorded calls.</source>
+          <target>Tilgreinir fyrirtæki fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir fyrirtæki fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 4231510117 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies cost for the recorded calls.</source>
+          <target>Tilgreinir kostnað fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir kostnað fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Cost - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 4198939294 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies currency code for the recorded calls.</source>
+          <target>Tilgreinir gjaldmiðil fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir gjaldmiðil fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3346431308 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies duration ms for the recorded calls.</source>
+          <target>Tilgreinir lengd kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir lengd kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Duration Ms - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3676003639 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies error code for the recorded calls.</source>
+          <target>Tilgreinir villukóða fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir villukóða fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Error Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 2719666954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies input tokens for the recorded calls.</source>
+          <target>Tilgreinir inntakstákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir inntakstákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Input Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 1563256135 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies invocation source for the recorded calls.</source>
+          <target>Tilgreinir uppruna kalls fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir uppruna kalls fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Invocation Source - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 1760402076 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies language model code for the recorded calls.</source>
+          <target>Tilgreinir kóða mállíkans fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir kóða mállíkans fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Language Model Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 4202864534 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies model id for the recorded calls.</source>
+          <target>Tilgreinir líkankenni fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir líkankenni fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Model ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 1678292497 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies output tokens for the recorded calls.</source>
+          <target>Tilgreinir úttakstákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir úttakstákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Output Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 297635827 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies provider for the recorded calls.</source>
+          <target>Tilgreinir veitanda fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir veitanda fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Provider - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3766001456 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies reasoning tokens for the recorded calls.</source>
+          <target>Tilgreinir röksemdafærslutákn fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir röksemdafærslutákn fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Reasoning Tokens - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 2274578874 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies request log entry no. for the recorded calls.</source>
+          <target>Tilgreinir færslunúmer beiðniskrár fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir færslunúmer beiðniskrár fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Request Log Entry No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3878926381 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies success for the recorded calls.</source>
+          <target>Tilgreinir hvort kall tókst fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hvort kall tókst fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Success - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 17281345 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies usage not reported for the recorded calls.</source>
+          <target>Tilgreinir hvort notkun vanti fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir hvort notkun vanti fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control Usage Not Reported - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Control 3021697414 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies user security id for the recorded calls.</source>
+          <target>Tilgreinir öryggiskenni notanda fyrir skráð köll.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir öryggiskenni notanda fyrir skráð köll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Control User Security ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 1529465421 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Aggregates calls older than the configured period into daily totals and removes those detail rows.</source>
+          <target>Leggur eldri köll saman í dagsamtöl og fjarlægir nákvæmar færslur þeirra.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leggur eldri köll saman í dagsamtöl og fjarlægir nákvæmar færslur þeirra.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action CompressUsage - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 1529465421 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compress usage</source>
+          <target>Þjappa notkun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þjappa notkun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action CompressUsage - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 4221377020 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opens compressed daily usage, separated by model and currency.</source>
+          <target>Opnar þjappaða daglega notkun eftir mállíkani og gjaldmiðli.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnar þjappaða daglega notkun eftir mállíkani og gjaldmiðli.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action DailyTotals - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 4221377020 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Daily totals</source>
+          <target>Dagsamtöl</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Dagsamtöl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action DailyTotals - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 2158597206 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opens standard retention policies. Default usage policies are disabled until an administrator enables them.</source>
+          <target>Opnar staðlaðar varðveislureglur. Sjálfgefnar reglur notkunar eru óvirkar þar til stjórnandi virkjar þær.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opnar staðlaðar varðveislureglur. Sjálfgefnar reglur notkunar eru óvirkar þar til stjórnandi virkjar þær.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action RetentionPolicies - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 2158597206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retention policies</source>
+          <target>Varðveislureglur</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Varðveislureglur</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action RetentionPolicies - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 722073121 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Explains prices, missing usage, compression and standard retention policies.</source>
+          <target>Útskýrir verð, vöntun táknanotkunar, þjöppun og staðlaðar varðveislureglur.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Útskýrir verð, vöntun táknanotkunar, þjöppun og staðlaðar varðveislureglur.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action UsageGuide - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 722073121 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Usage guide</source>
+          <target>Leiðbeiningar um notkun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Leiðbeiningar um notkun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action UsageGuide - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 680912190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the age and user-identity options for compression.</source>
+          <target>Tilgreinir aldur og varðveislu notanda við þjöppun.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Tilgreinir aldur og varðveislu notanda við þjöppun.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action UsageSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 503294060 - Action 680912190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compression setup</source>
+          <target>Uppsetning þjöppunar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetning þjöppunar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Log ori - Action UsageSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3643768765 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LLM Usage Setup</source>
+          <target>Uppsetning mállíkananotkunar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetning mállíkananotkunar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Setup ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3643768765 - Control 2901901922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compression</source>
+          <target>Þjöppun</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Þjöppun</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page LLM Usage Setup ori - Control Compression - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 518916197 - Action 639024038 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2901867346">
           <source>Chat about this customer in Business Central.</source>
           <target>Spjalla um þennan viðskiptamann í Business Central.</target>
@@ -3410,6 +4088,18 @@
           <target>Bifröst mállíkön - Lesaðgangur</target>
           <note from="Developer" annotates="general" priority="2">is-IS=Bifröst mállíkön - Lesaðgangur</note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST LLM Rd ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PermissionSet 3052691199 - Property 2879900210" maxwidth="30" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost LLM usage admin</source>
+          <target>Stýra mállíkananotkun Bifrastar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Stýra mállíkananotkun Bifrastar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST LLM Use ori - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PermissionSet 3089904001 - Property 2879900210" maxwidth="30" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bifrost LLM usage read</source>
+          <target>Lesa mállíkananotkun Bifrastar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Lesa mállíkananotkun Bifrastar</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PermissionSet BIFROST LLM UseR ori - Property Caption</note>
         </trans-unit>
       </group>
     </body>

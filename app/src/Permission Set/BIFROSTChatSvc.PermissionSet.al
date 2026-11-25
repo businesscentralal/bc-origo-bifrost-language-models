@@ -14,6 +14,8 @@ permissionset 10035407 "BIFROST ChatSvc ori"
     Caption = 'Chat Service Gate', MaxLength = 30, Comment = 'is-IS=Spjallþjónustuhlið';
 
     Permissions =
+        codeunit "LLM Usage Recorder ori" = X,
+        codeunit "LLM Usage Copilot ori" = X,
         table "Chat Svc Gate ori" = X,
         tabledata "Chat Svc Gate ori" = RIMD;
 }

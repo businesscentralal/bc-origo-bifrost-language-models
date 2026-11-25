@@ -238,6 +238,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         LangModelSecrets: Codeunit "LangModel Secrets ori";
+        Usage: Codeunit "LLM Usage Recorder ori";
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
         if not ResolveChatLanguageModel(BifrostLanguageModel) then
@@ -245,8 +246,10 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         Provider := BifrostLanguageModel."Chat Provider";
         BuildArgument(BifrostLanguageModel, TempArgument);
         TempArgument.SetPayload(PayloadJson);
+        Usage.BeginScope();
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::SendChatMessage);
         // After the provider call: the stamp is a write, and Bootstrap runs message types through Codeunit.Run.
+        Usage.EndScope();
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         exit(TempArgument.GetResultText());
     end;
@@ -260,6 +263,7 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BifrostLanguageModel: Record "Bifrost Language Model ori";
         TempArgument: Record "Bifrost Chat Argument ori" temporary;
         LangModelSecrets: Codeunit "LangModel Secrets ori";
+        Usage: Codeunit "LLM Usage Recorder ori";
         Provider: Interface "Bifrost LangModel Provider ori";
     begin
         if not ResolveChatLanguageModel(BifrostLanguageModel) then
@@ -268,7 +272,9 @@ codeunit 10035382 "LangModel Chat Provider ori" implements "Chat Provider ori"
         BuildArgument(BifrostLanguageModel, TempArgument);
         TempArgument.SetConversationState(ConversationState);
         TempArgument.SetToolResults(ToolResultsJson);
+        Usage.BeginScope();
         ExecuteProvider(Provider, TempArgument, TempArgument."Procedure Type"::ContinueWithToolResults);
+        Usage.EndScope();
         LangModelSecrets.MarkApiKeyUsed(BifrostLanguageModel.Code);
         exit(TempArgument.GetResultText());
     end;

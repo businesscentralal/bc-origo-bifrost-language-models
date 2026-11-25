@@ -20,6 +20,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
         ChatUtils: Codeunit "Bifrost Chat Utils ori";
         TurnGuard: Codeunit "LangModel Turn Guard ori";
         RequestLogger: Codeunit "Request Logger ori";
+        UsageCopilot: Codeunit "LLM Usage Copilot ori";
         UnexpectedErrorLbl: Label 'An unexpected error occurred while calling the Copilot model.', Comment = 'is-IS=Óvænt villa kom upp við kall á Copilot-líkanið.';
         MissingMessagesLbl: Label 'Payload must contain a messages array with at least one entry.', Comment = 'is-IS=Inntak verður að innihalda skilaboðalista með að minnsta kosti einu atriði.';
 
@@ -67,9 +68,7 @@ codeunit 10035393 "Copilot Chat Proxy ori"
 
         MaxIterations := 25;
         for Iteration := 1 to MaxIterations do begin
-            AzureOpenAI.GenerateChatCompletion(AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse);
-
-            if not AOAIOperationResponse.IsSuccess() then begin
+            if not UsageCopilot.Generate(AzureOpenAI, AOAIChatMessages, AOAIChatCompletionParams, AOAIOperationResponse) then begin
                 ResponseJson := BuildErrorResponse(GetErrorOrFallback(AOAIOperationResponse));
                 LogRequest('ChatCompletion', SystemPrompt, ResponseJson, false, GetErrorOrFallback(AOAIOperationResponse), StartTime);
                 exit(ResponseJson);
