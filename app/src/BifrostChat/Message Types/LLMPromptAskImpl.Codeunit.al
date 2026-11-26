@@ -313,7 +313,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         AskSetup.GetSetup();
         Notes := 'Read-only by policy: write tools and message types whose effect is not read are not offered, and a call the model makes to one anyway is denied and counted in deniedToolCalls. ' +
             StrSubstNo(CompanyCapsTxt, Format(AskSetup."Ask Default Tool Calls", 0, 9), Format(AskSetup."Ask Max Tool Calls Cap", 0, 9), Format(AskSetup."Ask Default Rounds", 0, 9), Format(AskSetup."Ask Max Rounds Cap", 0, 9), Format(AskSetup."Ask Default Result Chars", 0, 9), Format(AskSetup."Ask Max Result Chars Cap", 0, 9)) +
-            ' At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported: the Copilot provider cannot run tools in separate steps, and Business Central runs Microsoft-managed Copilot only in an interactive client session, never over MCP, API or in the background. LLM.Prompt.Complete accepts a Copilot language model only in an interactive Business Central client session. xAI documents are uploaded to its Responses API for each round and deleted after the request; images remain inline. xAI provider 4xx errors retain HTTP metadata and may include a redacted reason containing only diagnostic vocabulary and protocol field names. Authentication bodies and other tokens are discarded. Google sends a text or PDF document on Ask through generateContent as inline data, the same way Complete does; a PNG or JPEG stays on the OpenAI-compatible chat endpoint. A Google provider error on Ask keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. Inline file or files (a PDF or picture from an earlier step) work like attachments: up to 10 files in all, within the model attachment limit; any file a provider uploads for the call is deleted after it, and every round uploads again from the local input.';
+            ' At a cap the model gets one last round without tools to answer. There is no timeout: the caps bound the run, and a provider request has the language model''s own HTTP timeout. The trace is returned only when includeTrace is true and is never stored by Language Models; Bifrost''s message log keeps what was sent and returned until its retention removes it. Every tool call is a Bifrost message that counts against the monthly quota like any other; a quota refusal comes back to the model as a tool error. A tool that fails with a runtime error, and a tool argument or result that is not a JSON object, never end the run: the model gets a tool error (counted in toolErrors) or the value as it is. Error codes the tool loop can return once it has started: Retryable (a provider round timed out or answered HTTP 408, 429 or 5xx; send again later), PreconditionFailed (provider authentication failed, the HTTP client is blocked, the provider could not complete the prompt or its answer could not be read) and InvalidParameter (the provider refused an attached file). Such an error answer also carries stopReason providerError, rounds, toolCalls, toolErrors, deniedToolCalls, warnings and the usage so far; usage values are summed as decimals, so large token or cost-tick counts (such as xAI cost_in_usd_ticks) do not overflow. The answer is from an external model: validate it before it is used to change anything. Copilot is not supported: the Copilot provider cannot run tools in separate steps, and Business Central runs Microsoft-managed Copilot only in an interactive client session, never over MCP, API or in the background. LLM.Prompt.Complete accepts a Copilot language model only in an interactive Business Central client session. xAI documents are uploaded to its Responses API for each round and deleted after the request; images remain inline. xAI provider 4xx errors retain HTTP metadata and may include a redacted reason containing only diagnostic vocabulary and protocol field names. Authentication bodies and other tokens are discarded. Google sends a text or PDF document on Ask through generateContent as inline data, the same way Complete does; a PNG or JPEG stays on the OpenAI-compatible chat endpoint. A Google provider error on Ask keeps the HTTP status and, for a non-authentication 4xx, a redacted reason. Inline file or files (a PDF or picture from an earlier step) work like attachments: up to 10 files in all, within the model attachment limit; any file a provider uploads for the call is deleted after it, and every round uploads again from the local input.';
         exit(true);
     end;
 
@@ -560,9 +560,9 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
             exit;
         end;
         if not Completed then begin
-            if ProviderBase.RespondImageNotSupported(Argument, Runner.GetProviderFailure(), StagedFiles, BifrostLanguageModel) then
-                exit;
-            ProviderBase.RespondPromptError(Argument, Runner.GetProviderFailure());
+            if not ProviderBase.RespondImageNotSupported(Argument, Runner.GetProviderFailure(), StagedFiles, BifrostLanguageModel) then
+                ProviderBase.RespondPromptError(Argument, Runner.GetProviderFailure());
+            AddRunStateToError(Argument, Runner, StopReasonText);
             exit;
         end;
 
@@ -573,6 +573,25 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
         SessionTime.AddToResponse(ResponseJson, SessionTimeBlock);
         Argument.SetResponseJson(ResponseJson);
         Argument."Content Type" := Argument.GetContentTypeJson();
+    end;
+
+    local procedure AddRunStateToError(var Argument: Record "Message Argument ori"; var Runner: Codeunit "LLM Ask Runner ori"; StopReasonText: Text)
+    var
+        ResponseJson: JsonObject;
+        Counters: JsonObject;
+        Token: JsonToken;
+        KeyName: Text;
+    begin
+        // #171: a failed run still tells the caller where it stopped and what it used so far.
+        ResponseJson := Argument.GetResponseJson();
+        if not ResponseJson.Contains('stopReason') then
+            ResponseJson.Add('stopReason', StopReasonText);
+        Runner.AddCounters(Counters);
+        foreach KeyName in Counters.Keys() do
+            if not ResponseJson.Contains(KeyName) then
+                if Counters.Get(KeyName, Token) then
+                    ResponseJson.Add(KeyName, Token);
+        Argument.SetResponseJson(ResponseJson);
     end;
 
     local procedure GetProviderName(BifrostLanguageModel: Record "Bifrost Language Model ori"): Text
