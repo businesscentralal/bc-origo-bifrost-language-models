@@ -87,6 +87,7 @@ Each provider answers `GetDefaultContextTokens` (32,000 Custom LLM, 128,000 Open
   Issue #120: table **10035434** `LangModel Ask Setup ori` (fields 1-7), test codeunit **96067** `LLM Ask Setup Tests`.
   Issue #125: **96072** `LLM 125 xAI Tests` (mock-only provider request shapes, error redaction and per-round cleanup).
   Issue #132: **96079** `LLM 132 Copilot Tests` (coded Copilot capability, session and managed-call failures).
+  Issue #171: codeunit **10035447** `LLM Ask Tool Call ori` (one Ask tool call under `if not Codeunit.Run`), test codeunit **96086** `LLM 171 Ask Loop Error Tests`, MCP fixture **96087** `LLM 171 MCP Fixture` (reserved `example.invalid/x171-fixture/` endpoint).
   Issue #133: **96078** `LLM 133 Text File Tests` (non-PDF text as a chat-completions text part on OpenAI, Azure OpenAI and Custom LLM).
   Issue #134: **96076** `LLM 134 Gemini Ask Tests` (Gemini Ask documents on generateContent, and provider status plus a redacted reason).
   Issue #135: **96077** `LLM 135 Image Refusal Tests` (an image refused by a model that cannot read images is a coded InvalidParameter naming the model and a roleCode that takes images).

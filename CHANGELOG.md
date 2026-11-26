@@ -4,6 +4,14 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-26) - LLM.Prompt.Ask: no uncoded runtime errors from the tool loop (#171)
+
+- Root cause 1 (`Arithmetic operation resulted in an overflow.`): the runner summed the provider `usage` values as Integer. xAI reports `cost_in_usd_ticks` near 10^9 per round, so a few tool rounds passed 2^31 and the sum overflowed outside any error handling. Usage values are now read and summed as Decimal; a single value above 2^31 is kept instead of being dropped. Non-number usage entries (objects, text, null) are still left out.
+- Root cause 2 (`Unable to convert from NavJsonToken to NavJsonObject.`): a runtime error inside a tool call (for example Foundation's table/csv formatting casting a non-object array item) ended the whole run with `{"status":"Error","error":"<runtime text>"}`. Each tool call now runs through the new codeunit **10035447** `LLM Ask Tool Call ori` with `if not Codeunit.Run`: the model gets `{"error":"the tool <name> failed: <text>"}` as a tool error, counted in `toolErrors`, and the run goes on. Tool arguments and results of any JSON type (array, string, number, null) are handled without a cast.
+- A provider failure during the loop still answers with its stable code (`Retryable` or `PreconditionFailed`, or `InvalidParameter` for a refused file) and now also carries `stopReason` `providerError`, `rounds`, `toolCalls`, `toolErrors`, `deniedToolCalls`, `warnings` and the `usage` so far.
+- Help (notes) for `LLM.Prompt.Ask` lists the error codes the tool loop can return.
+- Tests: new codeunit **96086** `LLM 171 Ask Loop Error Tests` (non-object arguments, results and toolCalls entries, a JSON cast error inside a tool in 1033/1039, usage above 2^31 over three rounds, non-number usage, provider failure after a tool round in 1033/1039, non-JSON provider answer, help). New objects: codeunit 10035447 (in permission set `BIFROST LLM Chat ori`), test codeunit 96086, and test-app codeunit **96087** `LLM 171 MCP Fixture` (answers only the reserved `https://example.invalid/x171-fixture/` endpoint: two tool rounds with xAI-sized usage, then a reply, or HTTP 503 on `/fail/`; no outbound request). No new labels to translate (the tool error text is Locked; it is read by the model).
+
 ### Added (2026-11-25) - Language model usage and historical cost (#168)
 
 - Each provider request records token counts, cached/reasoning tokens when reported, duration, model, source, user, outcome and a metadata-only Request Log reference. Prompt, response, file and credential content is excluded. Missing usage is marked explicitly. One `ORI-LM-USAGE` telemetry event contains only model, source, token counts and outcome.

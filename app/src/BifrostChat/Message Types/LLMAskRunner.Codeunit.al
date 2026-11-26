@@ -46,6 +46,7 @@ codeunit 10035433 "LLM Ask Runner ori"
         InstructionsHeaderTxt: Label 'CALLER INSTRUCTIONS:', Locked = true;
         OutputFormatTxt: Label 'OUTPUT FORMAT:\Answer with one JSON value only, with no prose and no code fence, that matches this JSON schema:', Locked = true;
         LimitReachedTxt: Label '{"error":"limit reached: this tool call was not run. Answer now from the results you already have, without tools."}', Locked = true;
+        ToolFailedTxt: Label 'the tool %1 failed: %2', Comment = '%1 = tool name, %2 = error text', Locked = true;
         DeniedResultTxt: Label '{"error":"%1"}', Comment = '%1 = reason', Locked = true;
         AnswerNowTxt: Label 'The tool limit of this session is reached. Answer the question now from the tool results you already have. Do not call any tool.', Locked = true;
         SchemaRetryTxt: Label 'Your answer did not match the required JSON schema: %1 Answer again with one JSON value only that matches the schema.', Comment = '%1 = validation errors', Locked = true;
@@ -458,7 +459,7 @@ codeunit 10035433 "LLM Ask Runner ori"
                                 DeniedCount += 1;
                                 ToolResultText := StrSubstNo(DeniedResultTxt, Reason.Replace('"', '\"'));
                             end else begin
-                                ToolServer.CallTool(ToolName, Arguments, ToolResultText, IsError);
+                                RunToolCall(ToolName, Arguments, ToolResultText, IsError);
                                 if not IsError then
                                     IsError := IsErrorResult(ToolResultText);
                                 CollectBlobRefs(ToolResultText);
@@ -475,6 +476,24 @@ codeunit 10035433 "LLM Ask Runner ori"
         if (not CapReached) and (ToolCallCount >= MaxToolCalls) then
             CapReached := true;
         Results.WriteTo(ResultsText);
+    end;
+
+    local procedure RunToolCall(ToolName: Text; Arguments: JsonObject; var ToolResultText: Text; var IsError: Boolean)
+    var
+        ToolCall: Codeunit "LLM Ask Tool Call ori";
+        ErrorObject: JsonObject;
+    begin
+        // A runtime error inside a tool (a JSON cast, an overflow) must not end the run without a code (#171):
+        // the model gets it as a tool error and may answer from the other results.
+        ToolCall.SetCall(ToolName, Arguments);
+        if ToolCall.Run() then begin
+            ToolCall.GetResult(ToolResultText, IsError);
+            exit;
+        end;
+        ErrorObject.Add('error', StrSubstNo(ToolFailedTxt, ToolName, GetLastErrorText()));
+        ClearLastError();
+        ErrorObject.WriteTo(ToolResultText);
+        IsError := true;
     end;
 
     local procedure IsErrorResult(ResultText: Text): Boolean
@@ -515,6 +534,8 @@ codeunit 10035433 "LLM Ask Runner ori"
         if Results.Count() = 0 then
             exit(ResultsText);
         Results.Get(Results.Count() - 1, LastToken);
+        if not LastToken.IsObject() then
+            exit(ResultsText);
         LastResult := LastToken.AsObject();
         ResultText := GetText(LastResult, 'result') + ' ' + AnswerNowTxt;
         LastResult.Replace('result', ResultText);
@@ -601,29 +622,40 @@ codeunit 10035433 "LLM Ask Runner ori"
         ValueToken: JsonToken;
         ExistingToken: JsonToken;
         KeyName: Text;
-        Value: Integer;
-        Existing: Integer;
+        Value: Decimal;
+        Existing: Decimal;
     begin
+        // Decimal, not Integer (#171): xAI cost_in_usd_ticks reaches 10^9 per round and token sums pass 2^31.
         if not Answer.Get('usage', UsageToken) then
             exit;
         if not UsageToken.IsObject() then
             exit;
         foreach KeyName in UsageToken.AsObject().Keys() do
             if UsageToken.AsObject().Get(KeyName, ValueToken) then
-                if TryReadInteger(ValueToken, Value) then begin
+                if TryReadNumber(ValueToken, Value) then begin
                     Existing := 0;
                     if Usage.Get(KeyName, ExistingToken) then
-                        if TryReadInteger(ExistingToken, Existing) then;
+                        if TryReadNumber(ExistingToken, Existing) then;
                     Usage.Remove(KeyName);
                     Usage.Add(KeyName, Existing + Value);
                     HasUsage := true;
                 end;
     end;
 
-    [TryFunction]
-    local procedure TryReadInteger(Token: JsonToken; var Value: Integer)
+    local procedure TryReadNumber(Token: JsonToken; var Value: Decimal): Boolean
     begin
-        Value := Token.AsValue().AsInteger();
+        Value := 0;
+        if not Token.IsValue() then
+            exit(false);
+        if Token.AsValue().IsNull() then
+            exit(false);
+        exit(TryAsDecimal(Token, Value));
+    end;
+
+    [TryFunction]
+    local procedure TryAsDecimal(Token: JsonToken; var Value: Decimal)
+    begin
+        Value := Token.AsValue().AsDecimal();
     end;
 
     local procedure AddTrace(ToolName: Text; Arguments: JsonObject; IsError: Boolean; Denied: Boolean; Duration: Duration; ResultText: Text)
