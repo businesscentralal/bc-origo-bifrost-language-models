@@ -4,6 +4,13 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Added (2026-11-27) - Setup from the Bifrost Related menu (#175)
+
+- Open **Bifrost Language Models Setup** directly from **Bifröst → Related**, immediately after **Bifrost Setup**. The action uses the existing setup page and its permissions, with English and Icelandic captions and tooltips.
+- Requires Bifrost Foundation **28.0.17.0**, which supplies the extensible Bifröst page and its setup action.
+- New page extension **10035448** `Bifrost LangModel ori`; new navigation test codeunit **96088** `LangModel 175 Navigation Tests` invokes the action in English and Icelandic and verifies that the setup page opens.
+
+
 ### Fixed (2026-11-27) - Icelandic catalogue search (#173)
 
 - `LLM.Prompt.Ask` and `LLM.Prompt.Complete` include every localized search phrase in their Icelandic catalogue description, within 250 characters. Examples: `spyrja mállíkan`, `búa til texta`, `draga saman texta` and `lesa skjal`. English descriptions and keywords are unchanged.

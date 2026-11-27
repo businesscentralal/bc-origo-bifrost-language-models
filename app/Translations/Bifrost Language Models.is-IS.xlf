@@ -3771,6 +3771,18 @@
           <note from="Developer" annotates="general" priority="2">is-IS=Spjalla með Bifröst</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Bifrost Chat VendorList ori - Action ori_BifrostChat - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 3241892420 - Action 4150131648 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 859178725">
+          <source>Open the setup page of Bifrost Language Models, with the models, the MCP tool server and the provider API keys.</source>
+          <target>Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP-verkfæraþjóni og API-lyklum veitenda.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP-verkfæraþjóni og API-lyklum veitenda.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Bifrost LangModel ori - Action LangModelSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3241892420 - Action 4150131648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 859178725">
+          <source>Bifrost Language Models Setup</source>
+          <target>Uppsetning Bifröst mállíkana</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Uppsetning Bifröst mállíkana</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Bifrost LangModel ori - Action LangModelSetup - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2188717972 - Action 4150131648 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1243421685">
           <source>Open the setup page of Bifrost Language Models, with the models, the MCP tool server and the provider API keys.</source>
           <target>Opna uppsetningarsíðu Bifröst mállíkana, með líkönunum, MCP-verkfæraþjóni og API-lyklum veitenda.</target>
