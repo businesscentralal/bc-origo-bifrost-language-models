@@ -5,7 +5,7 @@ using Origo.Bifrost;
 /// <summary>
 /// Opens Language Models setup from the Related menu of the Bifrost page.
 /// </summary>
-pageextension 10035448 "Bifrost LangModel ori" extends "Bifrost ori"
+pageextension 10035448 "LangModel Bifrost ori" extends "Bifrost ori"
 {
     ContextSensitiveHelpPage = 'language-models-setup';
 

@@ -8,7 +8,7 @@ All notable changes to Bifrost Language Models are documented here.
 
 - Open **Bifrost Language Models Setup** directly from **Bifröst → Related**, immediately after **Bifrost Setup**. The action uses the existing setup page and its permissions, with English and Icelandic captions and tooltips.
 - Requires Bifrost Foundation **28.0.17.0**, which supplies the extensible Bifröst page and its setup action.
-- New page extension **10035448** `Bifrost LangModel ori`; new navigation test codeunit **96088** `LangModel 175 Navigation Tests` invokes the action in English and Icelandic and verifies that the setup page opens.
+- New page extension **10035448** `LangModel Bifrost ori`; new navigation test codeunit **96088** `LangModel 175 Navigation Tests` invokes the action in English and Icelandic and verifies that the setup page opens.
 
 
 ### Fixed (2026-11-27) - Icelandic catalogue search (#173)
