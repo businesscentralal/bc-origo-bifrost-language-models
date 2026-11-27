@@ -78,7 +78,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     /// </summary>
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.', Comment = 'is-IS=Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.';
+        DescriptionLbl: Label 'Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.', Comment = 'is-IS=Svarar spurningu með lesaðgangi að Business Central. Leitarorð: spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan.';
     begin
         exit(DescriptionLbl);
     end;
@@ -88,7 +88,7 @@ codeunit 10035432 "LLM Prompt Ask Impl ori" implements "Msg Interface ori", "Msg
     /// </summary>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering', Comment = 'is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum';
+        KeywordsLbl: Label 'ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering', Comment = 'is-IS=spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan';
     begin
         exit(KeywordsLbl);
     end;
