@@ -55,7 +55,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetDescription() Description: Text[250]
     var
-        DescriptionLbl: Label 'Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.', Comment = 'is-IS=Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.';
+        DescriptionLbl: Label 'Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.', Comment = 'is-IS=Skilar textasvari við einni kvaðningu án verkfæra eða samtals. Leitarorð: búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar.';
     begin
         exit(DescriptionLbl);
     end;
@@ -65,7 +65,7 @@ codeunit 10035396 "LLM Prompt Compl Impl ori" implements "Msg Interface ori", "M
     /// </summary>
     procedure GetKeywords(): Text
     var
-        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI, language model, LLM, ask AI, read document with AI, read image with AI', Comment = 'is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind';
+        KeywordsLbl: Label 'one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI, language model, LLM, ask AI, read document with AI, read image with AI', Comment = 'is-IS=búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar';
     begin
         exit(KeywordsLbl);
     end;

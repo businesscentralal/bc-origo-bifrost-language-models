@@ -1751,14 +1751,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Answers a question with a language model that reads Business Central data through read-only Bifrost tools, with no human in the loop.</source>
-          <target>Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Svarar spurningu með mállíkani sem les gögn úr Business Central með Bifröst-verkfærum sem aðeins lesa, án mannlegrar aðkomu.</note>
+          <target>Svarar spurningu með lesaðgangi að Business Central. Leitarorð: spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Svarar spurningu með lesaðgangi að Business Central. Leitarorð: spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>ask AI, ask a language model, headless AI, AI check step, playbook check, verify setup with AI, read-only tools, tool loop, LLM, language model, question answering</source>
-          <target>spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=spyrja gervigreind, spyrja mállíkan, gervigreind í bakgrunni, athugunarskref með gervigreind, athugun í verkferli, sannreyna uppsetningu með gervigreind, verkfæri sem aðeins lesa, verkfæralykkja, LLM, mállíkan, svara spurningum</note>
+          <target>spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=spyrja gervigreind, spyrja mállíkan, svara spurningum, lesa gögn, fletta upp gögnum, athuga gögn, sannreyna uppsetningu, verkferill, bakgrunnur, verkfæri, mállíkan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Ask Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1468868992 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">
@@ -1877,14 +1877,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 4077369804 - NamedType 3569966352" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sends one prompt to a language model and returns its text answer, with no tools, record context or conversation.</source>
-          <target>Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=Sendir eina kvaðningu til mállíkans og skilar textasvari þess, án verkfæra, færslusamhengis eða samtals.</note>
+          <target>Skilar textasvari við einni kvaðningu án verkfæra eða samtals. Leitarorð: búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar.</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=Skilar textasvari við einni kvaðningu án verkfæra eða samtals. Leitarorð: búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetDescription - NamedType DescriptionLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 1027590672 - NamedType 1290244428" size-unit="char" translate="yes" xml:space="preserve">
           <source>one-shot AI completion, prompt completion, generate text, transform text, classify text, extract data, summarize text, playbook reasoning, scheduled task AI, language model, LLM, ask AI, read document with AI, read image with AI</source>
-          <target>einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind</target>
-          <note from="Developer" annotates="general" priority="2">is-IS=einskots gervigreindarúrvinnsla, úrvinnsla kvaðningar, búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, röksemdafærsla í verkferli, gervigreind í tímasettu bakgrunnsverkefni, mállíkan, LLM, spyrja gervigreind, lesa skjal með gervigreind, lesa mynd með gervigreind</note>
+          <target>búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar</target>
+          <note from="Developer" annotates="general" priority="2">is-IS=búa til texta, umbreyta texta, flokka texta, draga gögn út, draga saman texta, lesa skjal, lesa mynd, kvaðning, úrvinnsla, samantekt, gervigreind, mállíkan, LLM, textasvar</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit LLM Prompt Compl Impl ori - Method GetKeywords - NamedType KeywordsLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 250906932 - Method 79446908 - NamedType 3491368912" size-unit="char" translate="yes" xml:space="preserve">

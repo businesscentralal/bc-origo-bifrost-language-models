@@ -4,6 +4,11 @@ All notable changes to Bifrost Language Models are documented here.
 
 ## [Unreleased]
 
+### Fixed (2026-11-27) - Icelandic catalogue search (#173)
+
+- `LLM.Prompt.Ask` and `LLM.Prompt.Complete` include every localized search phrase in their Icelandic catalogue description, within 250 characters. Examples: `spyrja mállíkan`, `búa til texta`, `draga saman texta` and `lesa skjal`. English descriptions and keywords are unchanged.
+- Extended catalogue parity tests in codeunit **96036** to reject missing/untranslated Icelandic keywords, phrases absent from the description and descriptions over the catalogue limit; regression cases cover empty entries, whole phrases and the 250-character boundary. Updated implementation codeunits **10035396** and **10035432**; no new objects.
+
 ### Fixed (2026-11-26) - LLM.Prompt.Ask: no uncoded runtime errors from the tool loop (#171)
 
 - Root cause 1 (`Arithmetic operation resulted in an overflow.`): the runner summed the provider `usage` values as Integer. xAI reports `cost_in_usd_ticks` near 10^9 per round, so a few tool rounds passed 2^31 and the sum overflowed outside any error handling. Usage values are now read and summed as Decimal; a single value above 2^31 is kept instead of being dropped. Non-number usage entries (objects, text, null) are still left out.

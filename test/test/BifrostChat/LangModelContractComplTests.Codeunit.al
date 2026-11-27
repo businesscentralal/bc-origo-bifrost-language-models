@@ -184,6 +184,57 @@ codeunit 96036 "LangModel Contract Compl Tests"
         Assert.IsFalse(NamesAppObjectNumber('table 112 and 10035334 and 10035485 and 100353960'), 'Business Central numbers, neighbours and longer numbers pass');
     end;
 
+    /// <summary>
+    /// AC01/AC03: empty, whitespace-only and English keyword lists cannot pass Icelandic parity.
+    /// </summary>
+    [Test]
+    procedure AC01_Search_RejectsMissingOrEnglishKeywords()
+    var
+        Found: List of [Text];
+    begin
+        // [SCENARIO] #173: an untranslated or empty keyword list must fail even if a description exists.
+        CheckIcelandicSearch('Empty', 'ask AI', '', 'Svarar spurningu.', Found);
+        CheckIcelandicSearch('Whitespace', 'ask AI', ' ,  , ', 'Svarar spurningu.', Found);
+        CheckIcelandicSearch('English', 'ask AI', 'ask AI', 'ask AI', Found);
+
+        Assert.IsTrue(Found.Contains('Empty|Icelandic keywords missing'), 'Empty keywords fail.');
+        Assert.IsTrue(Found.Contains('Whitespace|Icelandic keywords missing'), 'Empty comma-separated entries fail.');
+        Assert.IsTrue(Found.Contains('English|Keywords not translated'), 'English fallback fails.');
+    end;
+
+    /// <summary>
+    /// AC02/AC03: whole search phrases must occur in the catalogue description, not just individual words.
+    /// </summary>
+    [Test]
+    procedure AC02_Search_RejectsMissingWholePhrase()
+    var
+        Found: List of [Text];
+    begin
+        // [SCENARIO] #173: split words and a matching generic keyword do not hide a missing search phrase.
+        CheckIcelandicSearch('Ask', 'ask AI, model', 'spyrja mállíkan, LLM', 'LLM: mállíkan sem hægt er að spyrja.', Found);
+
+        Assert.AreEqual(1, Found.Count(), 'Only the absent whole phrase is reported.');
+        Assert.IsTrue(Found.Contains('Ask|Icelandic keyword absent from description: spyrja mállíkan'), 'Whole phrase is required.');
+    end;
+
+    /// <summary>
+    /// AC02/AC03: every phrase is found with whitespace and case normalization at the 250-character boundary.
+    /// </summary>
+    [Test]
+    procedure AC02_Search_AcceptsBoundaryAndRejectsOverflow()
+    var
+        Found: List of [Text];
+        Description: Text;
+    begin
+        // [SCENARIO] #173: a 250-character description passes, but the next character exceeds the catalogue limit.
+        Description := PadStr('Spyrja mállíkan; svara spurningum.', 250, '.');
+        CheckIcelandicSearch('Ask', 'ask AI, answer questions', ' SPYRJA MÁLLÍKAN , svara spurningum ', Description, Found);
+        Assert.AreEqual(0, Found.Count(), 'Every normalized phrase fits and is discoverable.');
+
+        CheckIcelandicSearch('Ask', 'ask AI, answer questions', 'spyrja mállíkan, svara spurningum', Description + '.', Found);
+        Assert.IsTrue(Found.Contains('Ask|Icelandic description too long'), '251 characters fail.');
+    end;
+
     local procedure CollectCatalogueProblems(var Found: List of [Text]; var TypesChecked: Integer)
     var
         ContractMgt: Codeunit "Msg Contract Mgt ori";
@@ -385,6 +436,27 @@ codeunit 96036 "LangModel Contract Compl Tests"
         exit((FirstWord[1] in ['A' .. 'Z']) and FirstWord.EndsWith('s'));
     end;
 
+    local procedure CheckIcelandicSearch(TypeName: Text; EnglishKeywords: Text; IcelandicKeywords: Text; Description: Text; var Found: List of [Text])
+    var
+        Keyword: Text;
+        HasKeyword: Boolean;
+    begin
+        if StrLen(Description) > 250 then
+            AddOnce(Found, TypeName + '|Icelandic description too long');
+        if LowerCase(IcelandicKeywords.Trim()) = LowerCase(EnglishKeywords.Trim()) then
+            AddOnce(Found, TypeName + '|Keywords not translated');
+        foreach Keyword in IcelandicKeywords.Split(',') do begin
+            Keyword := LowerCase(Keyword.Trim());
+            if Keyword <> '' then begin
+                HasKeyword := true;
+                if not LowerCase(Description).Contains(Keyword) then
+                    AddOnce(Found, TypeName + '|Icelandic keyword absent from description: ' + Keyword);
+            end;
+        end;
+        if not HasKeyword then
+            AddOnce(Found, TypeName + '|Icelandic keywords missing');
+    end;
+
     local procedure CheckDiscovery(MessageType: Enum "Message Type ori"; TypeName: Text; var Found: List of [Text])
     var
         EnglishDescription: Text;
@@ -415,8 +487,7 @@ codeunit 96036 "LangModel Contract Compl Tests"
             Found.Add(TypeName + '|Selection description equals description');
         if IcelandicDescription = EnglishDescription then
             Found.Add(TypeName + '|Description not translated');
-        if IcelandicKeywords = EnglishKeywords then
-            Found.Add(TypeName + '|Keywords not translated');
+        CheckIcelandicSearch(TypeName, EnglishKeywords, IcelandicKeywords, IcelandicDescription, Found);
         if IcelandicSelection = EnglishSelection then
             Found.Add(TypeName + '|Selection description not translated');
         if IcelandicKeywords.Split(',').Count() < EnglishKeywords.Split(',').Count() then
