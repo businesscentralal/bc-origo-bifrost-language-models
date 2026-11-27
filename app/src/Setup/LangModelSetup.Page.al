@@ -3,7 +3,7 @@ namespace Origo.Bifrost.LanguageModels;
 using Origo.Bifrost;
 
 /// <summary>
-/// Setup page of Bifrost Language Models, opened from the Apps group on the Bifrost Setup page.
+/// Setup page of Bifrost Language Models, opened from Bifrost Related or the Apps group on Bifrost Setup.
 /// It shows the state of the language models, of the MCP tool server and of the API keys
 /// Bifrost Language Models keeps in the Bifrost Foundation secret store.
 /// Setup notifications - including the one about blocked HttpClient requests - are raised by
